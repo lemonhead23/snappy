@@ -5,13 +5,24 @@
 SuperNET_api_controller_doku = """
 
 
+
+acts as a relay that receives and relays commands to SuperNET:
+
 This SuperNET api controller his started with
-
-
 
 ./snApi17a.py start
 ./snApi17a.py stop
-./snApi17a.py startTests
+
+
+General command format:
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
+
+
+Launches scripts in UseCase classes:
+
+./snApi17a.py runUC1
+
 
 
 

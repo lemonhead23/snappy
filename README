@@ -1,9 +1,19 @@
 
-./snAppy17a.py start
 
-./snAppy17a.py stop
+acts as a relay that receives and relays commands to SuperNET:
 
-./snAppy17a.py runUC1
+This SuperNET api controller his started with
+
+./snApi17a.py start
+./snApi17a.py stop
 
 
+General command format:
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
+
+
+Launches scripts in UseCase classes:
+
+./snApi17a.py runUC1
 
