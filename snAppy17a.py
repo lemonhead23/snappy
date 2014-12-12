@@ -520,7 +520,7 @@ class SuperNETApiD(Daemon3): #object):
         log.startLogging(sys.stdout)
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        print(1*"\ninitUC1")
+        print(1*"\ninitUC2")
         #
         #  here we can build as many different schedulers as we want!
         #

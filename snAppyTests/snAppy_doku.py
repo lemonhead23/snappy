@@ -59,6 +59,9 @@ This instantiates a scheduler that runs the designated script/test class
 
     ./BitcoinDarkd  SuperNET '{"requestType":"start"}'
 
+    ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
+
+
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/stop?'
 

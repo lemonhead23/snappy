@@ -86,8 +86,14 @@ class Parser_RPC(object):
 
 class Parser_JL777_Base(object):
     """ this wrapper class can provide generic functionality for the
-     individual API Parser classes""" #
-    pass
+     individual API Parser classes
+
+     Most of these responses from the SuperNET server are returned as is.
+     Some of them are internal, and have to fetched from the GUIlopp with GUIpoll.
+     These need special parsing.
+     eg PONG, havenode and some others
+     """ #
+
 
 # 48 api.h xyz_func calls here + 1 pBET unfinished
 # This is from api.h in libjl777 111314

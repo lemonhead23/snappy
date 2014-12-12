@@ -15,10 +15,11 @@ environ = {}
 # SuperNET configuration
 
 STONEFISH_IP = '178.62.185.131'   #
-BOXFISH_IP   = '85.178.202.108'   #
+BOXFISH_IP   = '85.xx'   #
 
-SERVER_ADDR_jl777 = 'localhost'
-#SERVER_ADDR_jl777 =  STONEFISH_IP
+#SERVER_ADDR_jl777 = 'localhost'
+SERVER_ADDR_jl777 =  STONEFISH_IP
+
 #SERVER_ADDR_jl777 = BOXFISH_IP #STONEFISH_IP
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
@@ -65,37 +66,50 @@ environ['CACHE_FILENAMES'] = {
 ###################################################################
 # TESTS scheduler
 #
-
+# main scheduler container Number One
 sched_Test_1={}
 
-SERVER_ADDR_TEST_1 = SERVER_ADDR_jl777 #"localhost"
-SERVER_PORT_TEST_1 = 7776
-FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
 
-TIMER2_Freq = 4
+#SERVER_ADDR_TEST_1 = SERVER_ADDR_jl777 #"localhost"
+#SERVER_PORT_TEST_1 = 7776
+#FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
 
-sched1={}
-sched1['schedName'] = 'settingsForPing'
-sched1['callFreq'] = 1500               # ms!!
-#
-#
-#
+TIMER2_Freq = 0.8
+
+sched_GUIpoll ={}
+
+sched_GUIpoll={}
+sched_GUIpoll['schedName'] = 'GUIpoll'
+sched_GUIpoll['callFreq'] = 900               # ms!!
 
 SNreqTypes={}
+SNreqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+sched_GUIpoll['SNreqTypes']  = SNreqTypes
+sched_GUIpoll['target'] = 'this Uses requests!'
 
+#----------------------------------------
+sched1={}
+sched1['schedName'] = 'settingsForPing'
+sched1['callFreq'] = 6500               # ms!!
+
+SNreqTypes={}
 SNreqTypes['uc1Start_settings'] = {'requestType':'settings'}
 SNreqTypes['ping'] = {'requestType':'ping'}
-SNreqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+
 
 sched1['SNreqTypes']  = SNreqTypes
-sched1['target'] = 'GET /nxt?requestType=settings HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: 127.0.0.1:7800\r\nAccept: */*\r\ncontent-type: text/plain;\r\n\r\n'
-
+#  legacy: sched1['target'] = 'GET /nxt?requestType=settings HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: 127.0.0.1:7800\r\nAccept: */*\r\ncontent-type: text/plain;\r\n\r\n'
+sched1['target'] = 'this Uses requests!'
+##
+# plug the schedules into the environment
+sched_Test_1[sched_GUIpoll['schedName']] = sched_GUIpoll
 sched_Test_1[sched1['schedName']] = sched1
+
 
 environ['UCTEST_1_ping_whitelist_777'] = sched_Test_1
 
 
-## HAVE THE REQUESTS ASSEMBLED BY REQUETSTS, BUT SEND IT VIA WRITE RANSPIRT!!
+
 
 ##################################################################
 
@@ -147,9 +161,6 @@ sched3['target'] = 'http://api.sportsdatallc.org/soccer-t2/eu/matches/2014/08/21
 
 sched3['SNreqTypes']  = SNreqTypes
 schedSportsData[sched3['schedName']] = sched3
-
-
-
 
 
 environ['envSportsData'] = schedSportsData
