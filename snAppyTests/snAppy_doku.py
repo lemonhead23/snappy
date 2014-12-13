@@ -71,6 +71,10 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/start?'
 
 #########################################################
 
+
+
+
+
 Adding of test cases and scripts:
 
 activation with def t1_whitePings():
@@ -469,12 +473,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pla
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUIpoll'
 
 
-
-
-
-but, really no need to do this all the time, just when you have command pending
-
-
 I do assume only one external caller. There are some calls that return a "result":"pending" with a "txid", when you get such a response,
 
 you need to call GUIpoll {"requestType":"GUIpoll"} until it gets a JSON return:
@@ -570,8 +568,6 @@ I had to do this due to too many levels of stringification and different paths, 
 
 
 
-
-NEWNEWNENW!!!
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
 
@@ -666,6 +662,13 @@ cosign just has "otheracct", "seed", "text"
 
 
 
+
+
+    // Kademlia DHT 8
+
+
+
+
 ./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
 
 
@@ -673,12 +676,6 @@ Returns:
 
 
 GETDB.({"requestType":"dbret","NXT":"6249611027680999354","key":"1031470952125437106","data":"c0ffee"})
-nxtip.(167.114.2.94) {"requestType":"findnode","NXT":"11910135804814382998","time":1417778040,"key":"6249611027680999354"}
-search n.16 sorted mydist.0 remoteflag.0 remoteaccess.1
-send_kademlia_cmd.havenode srvpubaddr or cp.0x246ab60 dest.7108754351996134253
-len.826 -> 1396
-send back.([["6249611027680999354", "80.41.56.181", "7777", "0"], ["8894667849638377372", "209.126.70.156", "7777", "1417655983"], ["5624143003089008155", "192.99.212.250", "7777", "1417621062"], ["2131686659786462901", "178.62.185.131", "7777", "1417701576"], ["7067340061344084047", "94.102.50.70", "7777", "1417621060"], ["2278910666471639688", "167.114.2.204", "7777", "1417621061"], ["16193842359787719847", "110.159.238.254", "54433", "1417660922"]]) to 7108754351996134253
-FIND.({"result":"kademlia_findnode from.(7108754351996134253) previp.(167.114.2.171) key.(6249611027680999354) datalen.0 txid.5658681211156582719"})
 
 
 
@@ -701,17 +698,9 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sto
 
 
 
-
-
 ./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"3571143576961987768"}'
 
 
-
-
-
-
-
-    // Kademlia DHT 8
 
 
 
@@ -857,52 +846,100 @@ PONG from deactivated GUIpoll with PONG:
 This is what the PINGer receives back from the PONGer
 {'result': '{"result":"kademlia_store","key":"1888203822199063024","data":"deadbeef","len":4,"txid":"16715866481694536540"}', 'from': '62.194.6.163', 'args': '[{"requestType":"store","NXT":"7837143510182070614","time":1417681759,"key":"1888203822199063024","data":4},{"token":"vrg8fulem0b0os32n0p3elmtt7p16nqsbkjfcb5u1n340v25tooi0gan4rvgrbg18rt6oq3d9m82nttaoeghkbtp0jjpalsh4miuir8s31bgo5hkmr0qih6skf785dghq6rjh9hvbvcoj350vge59cp197g0kjho"}]', 'port': 0}
 
-DECONSTRUCTION of pong
-------------------------
 
-{'args':
+@l8orre: if you get a findnode you will send the findnode to the nodes that are closer to dest
 
-'[
-{
-"requestType":"pong",
-"NXT":"3571143576961987768",
-"time":1417689858,
-"yourip":"85.178.200.167",
-"yourport":61398,
-"ipaddr":"89.212.19.49",
-"pubkey":"30d02aec153a5b7c4e606c2f50b7ac9e71ca814328189cac288650af3d114c30",
-"ver":"0.199"
-}
-,
-{
-"token":"2nm2lk1gc177ompqlirl0brc8e0skscu52m9o61824uquk46tp8c4c2c8qh2tj01dohmji19fplfo4re8njljsgulnrk4gacnfmg0et0gq6gmt8neha0fue6p88a931iosggjh9794j0qro3cec21orkqud9fonk"
-}
-]'
-,
- 'from': '89.212.19.49',
- 'port': 0,
+jl777 [12:10 PM]
+all the samples are in the list
 
- 'result':
+jl777 [12:10 PM]
+this is the raw data
 
- '{"result":"kademlia_pong",
- "NXT":"3571143576961987768",
- "ipaddr":"89.212.19.49",
- "port":0",
- "lag":3782.000,
- "numpings":29,
- "numpongs":7,
- "ave":8382.919"
- }'
- }
+I will add a field so you can get the open/high/low/close/ave per time period minute, 2 min, 5 min, 1hr etc
 
 
-this is what the PINGed sends BACK:
 
-usual console output:
+findnodes spawn more findnodes and also sends back a havenode
 
-PONG.({"result":"kademlia_pong","NXT":"6249611027680999354","ipaddr":"80.41.56.181","port":0","lag":253.000,"numpings":3,"numpongs":3,"ave":4710499.714"})
+so 1 findnode can cascade through the network
 
-------------------------
+@l8orre: now imagine the attacker's predicament!
+
+only seeing 1400 byte encrypted packets without any visibility into the internals
+
+
+args ok  [{'key': '6216883599460291148', 'requestType': 'havenode', 'data': [['6216883599460291148', '192.99.246.126', '7777', '0'], ['7067340061344084047', '94.102.50.70', '7777', '1418360786'], ['10694781281555936856', '209.126.70.170', '7777', '1418355574'], ['1978065578067355462', '89.212.19.49', '7777', '1418355275'], ['17265504311777286118', '184.175.25.117', '7777', '1418357608'], ['7108754351996134253', '167.114.2.171', '7777', '1418355385'], ['5624143003089008155', '192.99.212.250', '7777', '1418355291']], 'NXT': '6216883599460291148', 'time': 1418380319}, {'token': '7meqnnpffqh9272utch79ra8rvlih9mevl901qhml0phabmmv3cu07blu76g1681id5qgp3k8lsf9tqhv9glkk6i9u1fluohu919kb6qm8d0kpuk9af13dp684jud4u10iriovu36q2kj21l2js923v7tu6i02gf'}] <class 'list'>
+
+
+confetti in a blizzard
+
+
+
+that is the reeturn data
+
+
+the nodes closest to the key you are searching for
+
+
+maybe sender and receiver differences
+
+the findnode call that is received by a node can be locally initiated or remotely
+
+
+if locally started it is treated differently
+
+
+for a remote, if it finds it, it returns a store for findvalue
+
+
+
+otherwise it is sending back havenode or havenodeB
+
+now when it sends back this havenode or havenodeB, it arrives back at the node that sent the find
+
+so for the recipient of the find node, the result is havenode
+
+to the sender of the find, it comes back as a new havenode command
+
+
+----------------------
+ GUIpoll ---> kademlia_pong
+
+ {'result': '{"result":"kademlia_pong","tag":"","NXT":"10694781281555936856","ipaddr":"209.126.70.170","port":0,"lag":"408186.000","numpings":104,"numpongs":45,"ave":"122765.867"}', 'from': '209.126.70.170', 'port': 0, 'args': '[{"requestType":"pong","NXT":"10694781281555936856","time":1418318212,"yourip":"178.62.185.131","yourport":7777,"ipaddr":"209.126.70.170","pubkey":"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18","ver":"0.256"},{"token":"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2uvjka61u4eqtstg1n7q903t7cjoh0f1fr1shlrful8aeajc7o2dvm5grlg2ghl87jqafadd4nt7fup0kf6i0vat4nonj9cqj1kdf46ej8f62luvd"}]'} <class 'dict'>
+
+
+ {'result':
+ '{"result":"kademlia_pong","tag":"","NXT":"10694781281555936856","ipaddr":"209.126.70.170","port":0,"lag":"408186.000","numpings":104,"numpongs":45,"ave":"122765.867"}',
+  'from': '209.126.70.170',
+   'port': 0,
+   'args': '[{"requestType":"pong","NXT":"10694781281555936856","time":1418318212,"yourip":"178.62.185.131","yourport":7777,"ipaddr":"209.126.70.170","pubkey":"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18","ver":"0.256"},{"token":"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2uvjka61u4eqtstg1n7q903t7cjoh0f1fr1shlrful8aeajc7o2dvm5grlg2ghl87jqafadd4nt7fup0kf6i0vat4nonj9cqj1kdf46ej8f62luvd"}]'} <class 'dict'>
+
+
+# b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"10694781281555936856\\",\\"ipaddr\\":\\"209.126.70.170\\",\\"port\\":0,\\"lag\\":\\"284.500\\",\\"numpings\\":118,\\"numpongs\\":75,\\"ave\\":\\"14973.824\\"}","from":"209.126.70.170","port":0,"args":"[{\\"requestType\\":\\"pong\\",\\"NXT\\":\\"10694781281555936856\\",\\"time\\":1417959171,\\"yourip\\":\\"178.62.185.131\\",\\"yourport\\":7777,\\"ipaddr\\":\\"209.126.70.170\\",\\"pubkey\\":\\"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18\\",\\"ver\\":\\"0.256\\"},{\\"token\\":\\"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2u9mc861u5kkts0o1rlq86puqhi744tsfvkt9qj1lo8hn1ujkn1vjavnc4um0vd1map6pi0qh92u107vm0bja5gtqqehn0etpn13e1e59tglb25gh\\"}]"}'
+
+This contains FOUR / FIVE top components:
+
+from
+port
+args [request,token]
+result
+
+
+request
+{'requestType': 'pong', 'NXT': '1978065578067355462', 'yourip': '85.178.204.233', 'ipaddr': '89.212.19.49', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'time': 1418376753, 'ver': '0.256', 'yourport': 63929} <class 'dict'>
+2014-12-12 10:57:48+0100 [-] {'token': 'aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67v35v4g2rsabl7d81uqdsm3grj4us9gef6vtlef9i4gtasb8726mgkdh8q040g1of6221f9bp5i58v5op9ifckla9ng8c268lm7m25i4lte2tdupd'} <class 'dict'>
+
+
+token
+ {'token': 'aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67v35v4g2rsabl7d81uqdsm3grj4us9gef6vtlef9i4gtasb8726mgkdh8q040g1of6221f9bp5i58v5op9ifckla9ng8c268lm7m25i4lte2tdupd'} <class 'dict'>
+
+
+result
+ 'result': '{"result":"kademlia_pong","tag":"","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"72083.500","numpings":58,"numpongs":38,"ave":"161029.515"}',
+
+
+b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"10694781281555936856\\",\\"ipaddr\\":\\"209.126.70.170\\",\\"port\\":0,\\"lag\\":\\"1381.000\\",\\"numpings\\":168,\\"numpongs\\":118,\\"ave\\":\\"10356.752\\"}","from":"209.126.70.170","port":0,"args":"[{\\"requestType\\":\\"pong\\",\\"NXT\\":\\"10694781281555936856\\",\\"time\\":1417959371,\\"yourip\\":\\"178.62.185.131\\",\\"yourport\\":7777,\\"ipaddr\\":\\"209.126.70.170\\",\\"pubkey\\":\\"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18\\",\\"ver\\":\\"0.256\\"},{\\"token\\":\\"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2u9moo61u66cdnr81muu5ang1cls58asvepjvttc9jei8h3j109bbdu0qgktg9lhimu1iimnomhun082es94raqm7vl1ej8ij31qjbuela8iqrljs\\"}]"}' <class 'bytes'>
+
 
 
 
@@ -989,6 +1026,8 @@ basically a low level way to do a findvalue
 ./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
 ./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
 
+
+
 ./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
 {"result":"kademlia_store","key":"116876777391303227","data":"deadbee32f","len":5,"txid":"9319704392032681039"}
 
@@ -1057,51 +1096,6 @@ to find the value for a symbolic name (max 64 bytes for now):
 
 
 
->>>>>>>> directsend.[[{"requestType":"findnode","NXT":"2131686659786462901","time":1417797624,"key":"15178638394924629506"},{"token":"m7ipf7444gkg9hf8sluodvsu6iet7nn65r2cjj56k4jti857tvqri61dmbjkou01ibridgslo7hpvqqeak1rjrjkjec83f9g7ac36u5q4iigv7oein592rdmpd2rt9i81djd8dbchrc727obpksrd1mcbu2e76b7"}]] encrypted.2 -> (167.114.2.206)
-add_random_onionlayers 2 of 3 *srcp 0x7f90c5cb29b0
-
-
-DIRECT udpsend {15178638394924629506} to 167.114.2.206/7777 finalbuf.1400
-portable_udpwrite Q.1 1400 to (167.114.2.206:7777)
-call_SuperNET_broadcast.0x7f90c00079f0 0x7f90c5cae8b0 len.1400
->>>>>>>> directsend.[[{"requestType":"findnode","NXT":"2131686659786462901","time":1417797624,"key":"5624143003089008155"},{"token":"m7ipf7444gkg9hf8sluodvsu6iet7nn65r2cjj56k4jti857tvqri61d806uet0123169bo328s2h10vjo7qofmpc9kg90iebeapch8g007ga6gjakji6qv7945hdv1f9m9in0esbg22qta66g4dgi9j198tibbh"}]] encrypted.2 -> (192.99.212.250)
-add_random_onionlayers 2 of 3 *srcp 0x7f90c5cb29b0
-
-
-
-DIRECT udpsend {5624143003089008155} to 192.99.212.250/7777 finalbuf.1400
-portable_udpwrite Q.1 1400 to (192.99.212.250:7777)
-call_SuperNET_broadcast.0x7f90c0016630 0x7f90c5cae8b0 len.1400
->>>>>>>> directsend.[[{"requestType":"findnode","NXT":"2131686659786462901","time":1417797624,"key":"7067340061344084047"},{"token":"m7ipf7444gkg9hf8sluodvsu6iet7nn65r2cjj56k4jti857tvqri61df9h9n8o1kjii9in5f254ct3map5542q2g78j51lagkrrs8ip9k50lih9tbmto0jq5sq7c4tcm68a8ugusmmuqombgom9i97tre9uv3qh"}]] encrypted.2 -> (94.102.50.70)
-add_random_onionlayers 2 of 3 *srcp 0x7f90c5cb29b0
-len.374 -> 1396
-DIRECT udpsend {7067340061344084047} to 94.102.50.70/7777 finalbuf.1400
-portable_udpwrite Q.1 1400 to (94.102.50.70:7777)
-call_SuperNET_broadcast.0x7f90c0016b70 0x7f90c5cae8b0 len.1400
-Update nodestats.13594896385051583735 (192.99.246.20) lastcontact 1417777066
-Update nodestats.7067340061344084047 (94.102.50.70) lastcontact 1417777069
-Update nodestats.5624143003089008155 (192.99.212.250) lastcontact 1417777072
-Update nodestats.15178638394924629506 (167.114.2.206) lastcontact 1417777076
-Update nodestats.11910135804814382998 (167.114.2.94) lastcontact 1417777086
-Update nodestats.3571143576961987768 (89.212.19.49) lastcontact 1417782696
- BTCD avail 0.00000000, maturing 0.00000000, inbound 0.00000000, outbound 0.00000000, doublespent 0.00000000, cancelled 0.00000000 | set nump.0
- BTC avail 0.00000000, maturing 0.00000000, inbound 0.00000000, outbound 0.00000000, doublespent 0.00000000, cancelled 0.00000000 | set nump.0
-uv_udp_send 1400 bytes to 94.102.50.70/7777 crx.750a1464
-findnode.(null) (2131686659786462901) () (3571143576961987768) ()
-myNXT.(2131686659786462901) kademlia_find.(findnode) (3571143576961987768) data.() is_remote_access.0 ()
-search n.7 sorted mydist.26 remoteflag.0 remoteaccess.0
-
-call 3571143576961987768 (findnode) dist.0 mydist.26 ipbits.3113d459 vs 100007f
-
-
->>>>>>>> directsend.[[{"requestType":"findnode","NXT":"2131686659786462901","time":1417797629,"key":"3571143576961987768"},{"token":"m7ipf7444gkg9hf8sluodvsu6iet7nn65r2cjj56k4jti857tvqrs61dc8juo701r2kq3pjlsjn8746li0c3l6rgomsbco8lf1be6f2o9o20fenevld4k8ki1864dm4clq5tuf77eaugfirjtnkepc5iqmlslq7k"}]] encrypted.2 -> (89.212.19.49)
-add_random_onionlayers 89.212.19.49 NARROWCAST.(�S�����)@�1jŃ���BBֺ]��) txid.15861595699923624187 (89.212.19.49:14631)
-192.99.246.20 NARROWCAST.({>A#��=�;ƪ�}�.&�      �OǊ��q
-                                                      �P���'�!�j�D[     �=J�.|�▒��W=V�y[�7R1��M�<) txid.8858970877042696058 (192.99.246.20:14631)
-
-
-
-
 
 
 
@@ -1125,12 +1119,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
 
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
 
-
-FIND.({"result":"kademlia_findnode from.(7108754351996134253) previp.(167.114.2.171) key.(2131686659786462901) datalen.0 txid.4507047958305266570"})
-uv_udp_send 1400 bytes to 167.114.2.171/7777 crx.c52ced24
-
-
-
  curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=8894667849638377372'
 
 {'result': 'kademlia_findnode from.(2131686659786462901) previp.() key.(16259399811509347173) datalen.0 txid.2674373594642163630'}
@@ -1139,8 +1127,6 @@ uv_udp_send 1400 bytes to 167.114.2.171/7777 crx.c52ced24
 OKOK :
  curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=8894667849638377372'
 {'result': 'kademlia_findnode from.(2131686659786462901) previp.() key.(8894667849638377372) datalen.0 txid.5440276930011618566'}
-
-
 
 
 to find a node given NXT address:
@@ -1207,7 +1193,7 @@ NOPE!
 
 
 
-16 call_TESTED # probably not user callable
+16
 
     static char *havenodeB[] = { (char *)havenodeB_func, "havenodeB", "V", "pubkey", "key", "name", "data", 0 };
 
@@ -1633,13 +1619,39 @@ findvalue -> havenodeB
 
 
 
-I think I just finished coding low level Telepathy transport layer. Since I am using UDP and many things can go wrong due to no fault of anybody (nodes dropping out, onion hopping to a node that is gone, etc) it is quite likely that a packet sent to a destination might not get there, but ones after it could. So I need to implement some sort of TCP like retry layer on top of UDP. Good thing I already did this earlier this year!
+I think I just finished coding low level Telepathy transport layer.
+
+Since I am using UDP and many things can go wrong due to no fault of anybody
+
+(nodes dropping out, onion hopping to a node that is gone, etc)
+
+it is quite likely that a packet sent to a destination might not get there, but ones after it could.
+
+So I need to implement some sort of TCP like retry layer on top of UDP.
+
 
 Due to the way the packets are sent, it is quite tricky to get it to work, but finally I managed to achieve this as follows:
 
-When a contact is added (happens every init), the published public key from the NXT blockchain is used to create a shared secret between two accounts. These accounts are totally abstract and are not tied to any IP address at all and it also happens to be the key I use for the DHT traversal.
 
-Now I could send an encrypted message between nodes to exchange the dead drop addresses, but I think using a non-predictable (to anybody else) but deterministically calculated address that only the two nodes can calculate is safe enough. Even if this is somehow compromised, it is only for a bootstrap to get a decent deaddrop address to use. Once the comms are established, then the deaddrop address to use can be updated at anytime and there is a way to get it to the other side.
+When a contact is added (happens every init),
+
+the published public key from the NXT blockchain is used to create a shared secret between two accounts.
+
+These accounts are totally abstract and are not tied to any IP address at all and it also happens to be the key I use for the DHT traversal.
+
+
+Now I could send an encrypted message between nodes to exchange the dead drop addresses,
+
+but I think using a non-predictable (to anybody else) but deterministically calculated address
+
+that only the two nodes can calculate is safe enough.
+
+Even if this is somehow compromised, it is only for a bootstrap to get a decent deaddrop address to use.
+
+Once the comms are established,
+then the deaddrop address to use can be updated at anytime and there is a way to get it to the other side.
+
+
 
 Each message between the two nodes will get a sequence number and each also gets its own onetime AESpassword that is calculated as follows:
 
@@ -1650,21 +1662,60 @@ Each message between the two nodes will get a sequence number and each also gets
 
 sha256cat is H(m || sharedsecret) where m is the acct number of the sender with the sequenceid
 
-So, this means the password can only be created by the two nodes who know the shared secret. I ran into a problem that the piggyback attachment was a totally encrypted blob with no header info at all. I could have put a onetime pubkey, but since I am using the sharedsecret for AES cipher I didnt want to venture into unsure crypto things. So to keep things totally encapsulated in the onetime AES cipher, I needed some other way to let the receiving end know who was sending it.
 
-Remember that in Telepathy, there is no destination address that is actually real. It is an equidistant (in DHT space) address to N public IP privacyServers. N will hopefully be 20+ and one of these IP addresses is the actual destinations, but it can never divulge which one, so the bootstrap was tricky enough, but I solved that by putting it into the cloud at a location that is the curve25519 pubkey of the AES cipher. Another oneway function and this also combined with the need to protect the sender. After all if the sender is making DHT calls with his address in the JSON, even though it is protected by encryption, the DHT node that handles the hop has to decrypt it and if the attacker is controlling the node, then this leaks the fact that the sender sent to a specific deaddrop address. Far more leakage than I am comfortable with.
 
-I just used the same address for all such Telepathy payload packets. But that is quite redundant and wastes precious space. Also, I use the sender's address as an authentication method and using a static address loses that. Luckily, this protection of the sender can be achieved while also providing authentication by using the "location" of the packet's sequenceid!
+So, this means the password can only be created by the two nodes who know the shared secret.
 
-Now without modifying the encrpted attachment and without leaking any info, the receiver can use the "sender" field to figure out if a Telepathy packet is meant for him and most importantly what AES password to use. No need to brute force try all the possible contacts sequence id passwords, as we know what the "location"/"sender" will be for all the expected sequence ids from all the contacts.
+I ran into a problem that the piggyback attachment was a totally encrypted blob with no header info at all.
 
-Still have a few small issues like how to send back retry requests safely, but I am quite pleased at how all the pieces came together. I think I will be able to debug this tomorrow and at that point I will be able to send sequences of packets between any two contacts and have it reliably get there, well, assuming I can get all the bugs fixed. Realistically in complex network topologies there will be bugs, but so far so good.
+I could have put a onetime pubkey, but since I am using the sharedsecret for AES cipher I didnt want to venture into unsure crypto things.
 
-As you can see, with a reliable low level packet transport, all sorts of things become very simple to do. Like file transfer (say telepod files!) or even low bandwidth audio. That would be cool, to be able to stream voice over Telepathy connection
+ So to keep things totally encapsulated in the onetime AES cipher,
 
-I know this might seem like a lot of tech babble, so if you dont understand it, just ignore it. If you do understand it, plz feel free to point out any flaws. I tried hard to make sure there arent any, but with something like this it always helps to get as many eyes on the issue as possible
+ I needed some other way to let the receiving end know who was sending it.
 
-James
+Remember that in Telepathy, there is no destination address that is actually real.
+
+It is an equidistant (in DHT space) address to N public IP privacyServers.
+
+N will hopefully be 20+ and one of these IP addresses is the actual destinations, but it can never divulge which one,
+
+so the bootstrap was tricky enough, but I solved that by putting it into the cloud at a location that is the curve25519 pubkey of the AES cipher.
+
+Another oneway function and this also combined with the need to protect the sender. After all if the sender is making DHT calls with his address in the JSON, even though it is protected by encryption, the DHT node that handles the hop has to decrypt it and if the attacker is controlling the node, then this leaks the fact that the sender sent to a specific deaddrop address. Far more leakage than I am comfortable with.
+
+I just used the same address for all such Telepathy payload packets.
+
+But that is quite redundant and wastes precious space.
+
+Also, I use the sender's address as an authentication method and using a static address loses that.
+
+ Luckily, this protection of the sender can be achieved while also providing authentication by using the "location" of the packet's sequenceid!
+
+Now without modifying the encrpted attachment and without leaking any info,
+
+the receiver can use the "sender" field to figure out if a Telepathy packet is meant for him and most importantly
+
+what AES password to use.
+
+No need to brute force try all the possible contacts sequence id passwords,
+
+as we know what the "location"/"sender" will be for all the expected sequence ids from all the contacts.
+
+Still have a few small issues like how to send back retry requests safely,
+but I am quite pleased at how all the pieces came together.
+
+I think I will be able to debug this tomorrow and at that point I will be able to send sequences of packets
+between any two contacts and have it reliably get there, well, assuming I can get all the bugs fixed.
+
+Realistically in complex network topologies there will be bugs, but so far so good.
+
+As you can see, with a reliable low level packet transport,
+
+all sorts of things become very simple to do. Like file transfer (say telepod files!) or even low bandwidth audio.
+
+That would be cool, to be able to stream voice over Telepathy connection
+
 
 #### The following are the externally visible actions:
 1. sending out a 1400 byte packet to a random node for the onion layered packet that contains the DHT storedata of the encrypted deaddrop address.
@@ -1801,19 +1852,6 @@ Report to moderator   Logged
 21
 
     static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
-
-{
-'Numnxtaccts': 1,
-'Numpservers': 4,
-'peers':
-[
-{'RS': 'NXT-8AF7-ESB7-GHFM-896JY', 'pubkey': '05a7612d54d14c21be9baa654ad50b4ba423eea0735185ac732ada2332315c3f', 'privateNXT': '8016556209183334821'},
-
-{'recv': 2, 'pubkey': '849c97e5b1e8c50429249eff867de5e6ded39d34a6ccc9c42ea720d927a12d18', 'pserver': {'recv': 2, 'pings': 1, 'sent': 1, 'port': 64199, 'lastrecv': 129.29259744, 'lastsent': 129.29699597}, 'sent': 1, 'srvipaddr': '85.178.209.32', 'RS': 'NXT-7PPP-R6AJ-VSJ7-37C7V', 'srvNXT': '2131686659786462901', 'srvport': '64199'},
-
-{'recv': 2, 'pubkey': 'b8a1e20dc92914c5ed8a23eae004508da818c0ca376b3ea20c05e622b5217556', 'pserver': {'recv': 2, 'pings': 1, 'avetime': 502.87304688, 'sent': 121, 'pongs': 1, 'lastrecv': 129.28962868, 'pingtime': 502.87304688, 'lastsent': 0.09139508}, 'sent': 121, 'srvipaddr': '94.102.50.71', 'RS': 'NXT-4SV7-ZG73-ZF8S-GX9B5', 'srvNXT': '16259399811509347173'},
-
-{'recv': 9, 'pubkey': '30d02aec153a5b7c4e606c2f50b7ac9e71ca814328189cac288650af3d114c30', 'pserver': {'recv': 9, 'pings': 14, 'avetime': 88642.40972222, 'sent': 26, 'pongs': 4, 'lastrecv': 64.94537125, 'pingtime': -3350414.5, 'lastsent': 0.09232125}, 'sent': 26, 'srvipaddr': '89.212.19.49', 'RS': 'NXT-TF7S-78FD-UWAG-52U55', 'srvNXT': '3571143576961987768'}], 'num': 3}
 
 
 

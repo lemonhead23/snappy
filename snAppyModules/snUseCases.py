@@ -218,6 +218,7 @@ each t
 
 class UCTEST_1_ping_whitelist_777(object):
 
+
     """
 
 
@@ -232,21 +233,6 @@ this also documents the api call params and return values
 
 
     def __init__(self, serverFactory , environ = {} ): # prepSchedules = {},
-
-        ptt_PONGstringStage1 = {
-                        'args': '[ {"requestType":"pong", "NXT":"","time":,"yourip":"","yourport":,"ipaddr":"","pubkey":"","ver":"0.199"} , {"token":"" }]' ,\
-                        'result': '{"result":"kademlia_pong","NXT":"","ipaddr":"","port":0","lag":0,"numpings":0,"numpongs":0,"ave":0}',\
-                        'port':0,\
-                        'from' : ''
-                        }
-
-        ptt_PONG = {
-                        'fullRequest': {"requestType":"pong", "NXT":"","time":"","yourip":"","yourport":"","ipaddr":"","pubkey":"","ver":"0.199"} , \
-                        "token":""  ,\
-                        'result': {"result":"kademlia_pong","NXT":"","ipaddr":"","port":0 ,"lag":0,"numpings":0,"numpongs":0,"ave":0},\
-                        'fromPort':0,\
-                        'from' : ''
-                        }
 
 
 
@@ -503,6 +489,7 @@ this also documents the api call params and return values
 
 class Parser(object):
 
+
     ptt_PONGstringStage1 = {
                     'args': '[ {"requestType":"pong", "NXT":"","time":,"yourip":"","yourport":,"ipaddr":"","pubkey":"","ver":"0.199"} , {"token":"" }]' ,\
                     'result': '{"result":"kademlia_pong","NXT":"","ipaddr":"","port":0","lag":0,"numpings":0,"numpongs":0,"ave":0}',\
@@ -557,6 +544,7 @@ differentiate two types of replies:
         self.schedules = {}    # this contains the schedules
 
         self.nodeDi = {}
+        self.peers = {}
 
         prepSchedules = environ['UCTEST_1_ping_whitelist_777'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
@@ -567,11 +555,13 @@ differentiate two types of replies:
 
 
     def periodic(self, ):
-        """ this is the method that is called periodically by the twisted loopingTask.
-         This contains the UseCase logic, ie needs to check what to do, and then do it. """#
+        """ This is the method that is called periodically by the twisted loopingTask.
+         It iterates over all schedules in the UseCase class, checks if they are due to be called,
+         adds the ones due to a list and passes that list on to runSchedules(). """#
 
         schedulesDue =[]
-        #print( "Scheduler ", self, " MAIN scheduled Heartbeat: ", datetime.now())
+
+
 
         for schedule in self.schedules.keys():
             schedule = self.schedules[schedule]
@@ -589,14 +579,21 @@ differentiate two types of replies:
 
         for schedDue in schedulesDue:
             if 'uc1Start_settings' in schedDue.SNrequests.keys():
-                log.msg("ping: IPs ", self.nodeDi.keys())
-                log.msg("ping: NXTs", self.nodeDi.values())
+                log.msg("nodeDi: IPs ", self.nodeDi.keys())
+                log.msg("nodeDi: NXTs", self.nodeDi.values())
 
-
-                reqData = schedDue.SNrequests['uc1Start_settings']
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                reqData1 = schedDue.SNrequests['uc1Start_settings']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_settings_df1)
                 self.deferred.addErrback(self.rpl777ERR)
+
+                reqData2 = {"requestType":"getpeers"}
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData2), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_getpeers_df1) #rpl777_pingDB_df1
+                self.deferred.addErrback(self.rpl777ERR)
+
+                #self.rpl777_pingDB_df1() # ping all peers collected here!
+
 
             elif 'GUIpoll' in schedDue.SNrequests.keys():
                 log.msg("do GUIpoll")
@@ -623,27 +620,7 @@ differentiate two types of replies:
 kademlia_store
 
 
-
-
-2014-12-12 15:01:06+0100 [-] do GUIpoll
-2014-12-12 15:01:06+0100 [-] GUIpoll ---> kademlia_store {'result': '{"result":"kademlia_store","key":"5420018378925390393","data":"489b81f54869a9bd7986d5e938fecc5677fdd3f8d389ce2f5616f1927f602a725038a2457abd5ff58aa3b3245bbaf3342b6cf9dd08ea93a721727aac165a77c0b79c0b28080440350af365aa","len":76,"txid":"3283676187569738843"}', 'port': 0, 'from': '184.175.25.117', 'args': '[{"requestType":"store","NXT":"17265504311777286118","time":1418334721,"key":"5420018378925390393","data":76},{"token":"4sjc45u1mu6lfbkt4crqchc8440s7coei94dt438hvsn919qv0js487fatka3981br5ro6n0gcq4nq8b9c4q2ioj8d33sggln4uo7kafj61gf7nr5rp5q8q5o49becep1sjr6atj9ih4vhto8jfrn68vd24g6iol"}]'} <class 'dict'>
-
-
-
-
-dataFrom777.json()
-
- {'from': '192.99.212.250', 'port': 0, 'result': '{"result":"kademlia_store","key":"9939847310395454864","data":"755bf9a38466d016c9874e8203bffe0886d1c2fdbaa97e2fe178d295107c684286e0bfdc21e713a63b149202752ad7a404e4e93800ee611514cce90ff79c6339c5b06516b23fdd746a8bd7cb","len":76,"txid":"0"}', 'args': '[{"requestType":"store","NXT":"5624143003089008155","time":1418374116,"key":"9939847310395454864","data":76},{"token":"vgh0rqnc1ggigvl7nms0aj0bsk1o1vomsvq0in066673i19hv30q83s4p1nbsgo18jalqgivg3561nrdnbm418ru848p3it67681citv13hg6i06stbon01l63o6pcnrivfnaiu19s1adscfqmbd70b8fvpfsnor"}]'} <class 'dict'>
-
-
-replRes_kademlia_store = 'result': '{"result":"kademlia_store","key":"6714102804552450255","data":"1234","len":2,"txid":"0"}', 'args': '[{"requestType":"store","NXT":"104575166425568823","time":1418299946,"key":"6714102804552450255","data":2},{"token":"accfcmm2avpcc6155tba1pacdmamqnjiq07abeh8uqomcomtuufuk3gtm7rrkvo1f081du5lofoqdnal2rtq70ir6sp510thb2mo018nmsrg57k9fdl4ma77lq07up2l4jhj1328keng15rtuilpl9vp92mantdc"}]'
-
-repl_1 = {
-             'port': 0,
-             'from': '184.175.25.117',
-             'result': '{"result":"kademlia_store","key":"6714102804552450255","data":"1234","len":2,"txid":"0"}', 'args': '[{"requestType":"store","NXT":"104575166425568823","time":1418299946,"key":"6714102804552450255","data":2},{"token":"accfcmm2avpcc6155tba1pacdmamqnjiq07abeh8uqomcomtuufuk3gtm7rrkvo1f081du5lofoqdnal2rtq70ir6sp510thb2mo018nmsrg57k9fdl4ma77lq07up2l4jhj1328keng15rtuilpl9vp92mantdc"}]'
-
-         }
+GUIpoll ---> kademlia_store {'result': '{"result":"kademlia_store","key":"5420018378925390393","data":"489b81f54869a9bd7986d5e938fecc5677fdd3f8d389ce2f5616f1927f602a725038a2457abd5ff58aa3b3245bbaf3342b6cf9dd08ea93a721727aac165a77c0b79c0b28080440350af365aa","len":76,"txid":"3283676187569738843"}', 'port': 0, 'from': '184.175.25.117', 'args': '[{"requestType":"store","NXT":"17265504311777286118","time":1418334721,"key":"5420018378925390393","data":76},{"token":"4sjc45u1mu6lfbkt4crqchc8440s7coei94dt438hvsn919qv0js487fatka3981br5ro6n0gcq4nq8b9c4q2ioj8d33sggln4uo7kafj61gf7nr5rp5q8q5o49becep1sjr6atj9ih4vhto8jfrn68vd24g6iol"}]'} <class 'dict'>
 
 
 -----------------------
@@ -655,17 +632,11 @@ GUIpoll ---> kademlia_havenode {'result': '{"result":"kademlia_havenode from NXT
 
 
 
-
-
-
-
 ----------------------
 
+If findnode is in the GUIpoll internally, that means that the findnode came form another node!
+
 GUIpoll ---> findnode {'result': '{"result":"kademlia_findnode from.(7108754351996134253) previp.(167.114.2.171) key.(2131686659786462901) datalen.0 txid.4621598500260051131"}', 'from': '167.114.2.171', 'port': 0, 'args': '[{"requestType":"findnode","NXT":"7108754351996134253","time":1418318210,"key":"2131686659786462901"},{"token":"j8edkcsu69k3e3e0ru9p4f6fepega7dijt24dh71h9kfqsg6uvjk4vp3jm6i0m0101ag1me1dubc7cere1tmhahvcc11scjkbmv37ql6gm40vr3gem13gt7jt33l71ro32eu3c37kd90e51cddlb9tnb9eacmgu9"}]'} <class 'dict'>
-
-
-
-
 
 
 parsing the GUIpoll is a two step process:
@@ -751,118 +722,11 @@ details
 
 
 
-# INTERESTING!!
-
-            # !! this seems to be a FINDNODE THAT HAS BEEN SENT BY ANOTHER NODE!!!!!!!
-# 2014-12-12 11:11:56+0100 [-] GUIpoll ---> findnode {'port': 0, 'args': '[{"requestType":"findnode","NXT":"7067340061344084047","time":1418385386,"key":"2131686659786462901"},{"token":"197njl2bp54ijkjnfadmvua4irii342267l8taa4n53vqhg5v3mqkg34apub5o81hn53tomkpanlirnf8iabbf053v857igan717aumatom0ii2u9c0l5knsffje7n8ade3c3fn9i8eudqi9v3vimgovlquocbn2"}]', 'result': '{"result":"kademlia_findnode from.(7067340061344084047) previp.(94.102.50.70) key.(2131686659786462901) datalen.0 txid.6517719273900935436"}', 'from': '94.102.50.70'} <class 'dict'>
-#
-
-
-
 
     def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
         """
         Note : Use python assert in the future
-                Use parse and format for the strings!
-
-
-@l8orre: if you get a findnode you will send the findnode to the nodes that are closer to dest
-
-jl777 [12:10 PM]
-all the samples are in the list
-
-jl777 [12:10 PM]
-this is the raw data
-
-l8orre [12:11 PM]
-ah ok so this is autonomous SUperNET server behaviour?
-
-jl777 [12:11 PM]
-I will add a field so you can get the open/high/low/close/ave per time period minute, 2 min, 5 min, 1hr etc
-
-
-
-findnodes spawn more findnodes and also sends back a havenode
-
-so 1 findnode can cascade through the network
-
-@l8orre: now imagine the attacker's predicament!
-
-only seeing 1400 byte encrypted packets without any visibility into the internals
-
-args ok  [{'key': '6216883599460291148', 'requestType': 'havenode', 'data': [['6216883599460291148', '192.99.246.126', '7777', '0'], ['7067340061344084047', '94.102.50.70', '7777', '1418360786'], ['10694781281555936856', '209.126.70.170', '7777', '1418355574'], ['1978065578067355462', '89.212.19.49', '7777', '1418355275'], ['17265504311777286118', '184.175.25.117', '7777', '1418357608'], ['7108754351996134253', '167.114.2.171', '7777', '1418355385'], ['5624143003089008155', '192.99.212.250', '7777', '1418355291']], 'NXT': '6216883599460291148', 'time': 1418380319}, {'token': '7meqnnpffqh9272utch79ra8rvlih9mevl901qhml0phabmmv3cu07blu76g1681id5qgp3k8lsf9tqhv9glkk6i9u1fluohu919kb6qm8d0kpuk9af13dp684jud4u10iriovu36q2kj21l2js923v7tu6i02gf'}] <class 'list'>
-
-confetti in a blizzard
-
-
-
-that is the reeturn data
-
-
-the nodes closest to the key you are searching for
-
-
-maybe sender and receiver differences
-
-the findnode call that is received by a node can be locally initiated or remotely
-
-
-if locally started it is treated differently
-
-
-for a remote, if it finds it, it returns a store for findvalue
-
-
-
-otherwise it is sending back havenode or havenodeB
-
-now when it sends back this havenode or havenodeB, it arrives back at the node that sent the find
-
-so for the recipient of the find node, the result is havenode
-
-to the sender of the find, it comes back as a new havenode command
-
-
-----------------------
- GUIpoll ---> kademlia_pong
-
- {'result': '{"result":"kademlia_pong","tag":"","NXT":"10694781281555936856","ipaddr":"209.126.70.170","port":0,"lag":"408186.000","numpings":104,"numpongs":45,"ave":"122765.867"}', 'from': '209.126.70.170', 'port': 0, 'args': '[{"requestType":"pong","NXT":"10694781281555936856","time":1418318212,"yourip":"178.62.185.131","yourport":7777,"ipaddr":"209.126.70.170","pubkey":"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18","ver":"0.256"},{"token":"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2uvjka61u4eqtstg1n7q903t7cjoh0f1fr1shlrful8aeajc7o2dvm5grlg2ghl87jqafadd4nt7fup0kf6i0vat4nonj9cqj1kdf46ej8f62luvd"}]'} <class 'dict'>
-
-
- {'result':
- '{"result":"kademlia_pong","tag":"","NXT":"10694781281555936856","ipaddr":"209.126.70.170","port":0,"lag":"408186.000","numpings":104,"numpongs":45,"ave":"122765.867"}',
-  'from': '209.126.70.170',
-   'port': 0,
-   'args': '[{"requestType":"pong","NXT":"10694781281555936856","time":1418318212,"yourip":"178.62.185.131","yourport":7777,"ipaddr":"209.126.70.170","pubkey":"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18","ver":"0.256"},{"token":"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2uvjka61u4eqtstg1n7q903t7cjoh0f1fr1shlrful8aeajc7o2dvm5grlg2ghl87jqafadd4nt7fup0kf6i0vat4nonj9cqj1kdf46ej8f62luvd"}]'} <class 'dict'>
-
-
-# b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"10694781281555936856\\",\\"ipaddr\\":\\"209.126.70.170\\",\\"port\\":0,\\"lag\\":\\"284.500\\",\\"numpings\\":118,\\"numpongs\\":75,\\"ave\\":\\"14973.824\\"}","from":"209.126.70.170","port":0,"args":"[{\\"requestType\\":\\"pong\\",\\"NXT\\":\\"10694781281555936856\\",\\"time\\":1417959171,\\"yourip\\":\\"178.62.185.131\\",\\"yourport\\":7777,\\"ipaddr\\":\\"209.126.70.170\\",\\"pubkey\\":\\"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18\\",\\"ver\\":\\"0.256\\"},{\\"token\\":\\"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2u9mc861u5kkts0o1rlq86puqhi744tsfvkt9qj1lo8hn1ujkn1vjavnc4um0vd1map6pi0qh92u107vm0bja5gtqqehn0etpn13e1e59tglb25gh\\"}]"}'
-
-
-
-This contains FOUR / FIVE top components:
-
-from
-port
-args [request,token]
-result
-
-
-request
-{'requestType': 'pong', 'NXT': '1978065578067355462', 'yourip': '85.178.204.233', 'ipaddr': '89.212.19.49', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'time': 1418376753, 'ver': '0.256', 'yourport': 63929} <class 'dict'>
-2014-12-12 10:57:48+0100 [-] {'token': 'aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67v35v4g2rsabl7d81uqdsm3grj4us9gef6vtlef9i4gtasb8726mgkdh8q040g1of6221f9bp5i58v5op9ifckla9ng8c268lm7m25i4lte2tdupd'} <class 'dict'>
-
-
-token
- {'token': 'aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67v35v4g2rsabl7d81uqdsm3grj4us9gef6vtlef9i4gtasb8726mgkdh8q040g1of6221f9bp5i58v5op9ifckla9ng8c268lm7m25i4lte2tdupd'} <class 'dict'>
-
-
-result
- 'result': '{"result":"kademlia_pong","tag":"","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"72083.500","numpings":58,"numpongs":38,"ave":"161029.515"}',
-
-
-b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"10694781281555936856\\",\\"ipaddr\\":\\"209.126.70.170\\",\\"port\\":0,\\"lag\\":\\"1381.000\\",\\"numpings\\":168,\\"numpongs\\":118,\\"ave\\":\\"10356.752\\"}","from":"209.126.70.170","port":0,"args":"[{\\"requestType\\":\\"pong\\",\\"NXT\\":\\"10694781281555936856\\",\\"time\\":1417959371,\\"yourip\\":\\"178.62.185.131\\",\\"yourport\\":7777,\\"ipaddr\\":\\"209.126.70.170\\",\\"pubkey\\":\\"603043fc438bb7047fe4a0bc3734ccc56ca34a1e5db1d7b4b702eff3e0fc3e18\\",\\"ver\\":\\"0.256\\"},{\\"token\\":\\"8fu46c30shvg9dsbpgq3ff503p5a6r65muqdfcatvjgf7ro2u9moo61u66cdnr81muu5ang1cls58asvepjvttc9jei8h3j109bbdu0qgktg9lhimu1iimnomhun082es94raqm7vl1ej8ij31qjbuela8iqrljs\\"}]"}' <class 'bytes'>
-
+see PONG details in snAppy_doku
 
 
         """#
@@ -886,11 +750,6 @@ b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"106
         rplArgs = json.loads(args) # <class 'list'> !!
         rplArgsRQ = rplArgs[0] # <class 'dict'>
         rplArgsTK = rplArgs[1]   #<class 'dict'>
-
-
-        #log.msg(rplArgsTK, type(rplArgsTK))
-        #log.msg(1*"kademlia_pong ",rpl777, type(rpl777))
-
 
 
         try:
@@ -939,8 +798,6 @@ b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"106
         self.deferred.addErrback(self.rpl777ERR)
 
 
-        self.nodesDi = {}
-
 
 
 
@@ -957,19 +814,14 @@ b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"106
  GUIpoll ---> kademlia_havenode {'args': '[{"requestType":"havenode","NXT":"11910135804814382998","time":1418378252,"key":"11910135804814382998","data":[["11910135804814382998", "167.114.2.94", "7777", "0"], ["2131686659786462901", "85.178.204.233", "61312", "1418374115"], ["11634703838614499263", "69.90.132.106", "7777", "1418355887"], ["10694781281555936856", "209.126.70.170", "7777", "1418355569"], ["17265504311777286118", "184.175.25.117", "7777", "1418355277"], ["5624143003089008155", "192.99.212.250", "7777", "1418355253"], ["8894667849638377372", "209.126.70.156", "7777", "1418355643"]]},{"token":"crhllp9ko5ehtcf8j46plskln4hn2lkp2ph4kbm0e9edtp00v38sqttrls1eh801smc20bj8ebllvob2qn9vnotj5i4952fl450o08pmsbr03liiaftu4ljmbh7ofajod0tvl87edal1k5drbeemj4ul4b42j99c"}]', 'result': '{"result":"kademlia_havenode from NXT.11910135804814382998 key.(11910135804814382998) value.([["11910135804814382998", "167.114.2.94", "7777", "0"], ["2131686659786462901", "85.178.204.233", "61312", "1418374115"], ["11634703838614499263", "69.90.132.106", "7777", "1418355887"], ["10694781281555936856", "209.126.70.170", "7777", "1418355569"], ["17265504311777286118", "184.175.25.117", "7777", "1418355277"], ["5624143003089008155", "192.99.212.250", "7777", "1418355253"], ["8894667849638377372", "209.126.70.156", "7777", "1418355643"]])"}', 'port': 0, 'from': '167.114.2.94'} <class 'dict'>
 
 
-
- #{"result":"kademlia_havenode from NXT.5624143003089008155 key.(5624143003089008155) value.([["5624143003089008155", "192.99.212.250", "7777", "0"], ["15178638394924629506", "167.114.2.206", "7777", "1417435953"], ["6249611027680999354", "80.41.56.181", "7777", "1417449705"], ["11910135804814382998", "167.114.2.94", "7777", "1417435991"], ["7581814105672729429", "187.153.194.200", "29693", "1417652256"], ["7108754351996134253", "167.114.2.171", "7777", "1417435991"], ["16196432036059823401", "167.114.2.203", "7777", "1417435957"]])"}
-
-# {"result":"kademlia_havenode from NXT.5624143003089008155 key.(5624143003089008155) value.([["5624143003089008155", "192.99.212.250", "7777", "0"], ["15178638394924629506", "167.114.2.206", "7777", "1417435953"], ["6249611027680999354", "80.41.56.181", "7777", "1417449705"], ["11910135804814382998", "167.114.2.94", "7777", "1417435991"], ["7581814105672729429", "187.153.194.200", "29693", "1417652256"], ["16196432036059823401", "167.114.2.203", "7777", "1417435957"], ["7108754351996134253", "167.114.2.171", "7777", "1417435991"]])"}
+  {"result":"kademlia_havenode from NXT.5624143003089008155 key.(5624143003089008155) value.([["5624143003089008155", "192.99.212.250", "7777", "0"], ["15178638394924629506", "167.114.2.206", "7777", "1417435953"], ["6249611027680999354", "80.41.56.181", "7777", "1417449705"], ["11910135804814382998", "167.114.2.94", "7777", "1417435991"], ["7581814105672729429", "187.153.194.200", "29693", "1417652256"], ["7108754351996134253", "167.114.2.171", "7777", "1417435991"], ["16196432036059823401", "167.114.2.203", "7777", "1417435957"]])"}
 
 
-#{"result":"kademlia_havenode from NXT.12315166155634751985 key.(12315166155634751985) value.([["12315166155634751985", "167.114.2.205", "7777", "0"], ["13594896385051583735", "192.99.246.20", "7777", "1418309439"], ["16196432036059823401", "167.114.2.203", "7777", "1418308928"], ["8923034930361863607", "192.99.246.33", "7777", "1418308929"], ["7581814105672729429", "187.153.143.36", "27190", "1418308969"], ["7108754351996134253", "167.114.2.171", "7777", "1418308950"], ["11634703838614499263", "69.90.132.106", "7777", "1418308973"]])"} <class 'str'>
-#{"result":"kademlia_havenode from NXT.12315166155634751985 key.(12315166155634751985) value.([["12315166155634751985", "167.114.2.205", "7777", "0"], ["13594896385051583735", "192.99.246.20", "7777", "1418309439"], ["16196432036059823401", "167.114.2.203", "7777", "1418308928"], ["8923034930361863607", "192.99.246.33", "7777", "1418308929"], ["7581814105672729429", "187.153.143.36", "27190", "1418308969"], ["7108754351996134253", "167.114.2.171", "7777", "1418308950"], ["11634703838614499263", "69.90.132.106", "7777", "1418308973"]])"} <class 'str'>
+  {"result":"kademlia_havenode from NXT.12315166155634751985 key.(12315166155634751985) value.([["12315166155634751985", "167.114.2.205", "7777", "0"], ["13594896385051583735", "192.99.246.20", "7777", "1418309439"], ["16196432036059823401", "167.114.2.203", "7777", "1418308928"], ["8923034930361863607", "192.99.246.33", "7777", "1418308929"], ["7581814105672729429", "187.153.143.36", "27190", "1418308969"], ["7108754351996134253", "167.114.2.171", "7777", "1418308950"], ["11634703838614499263", "69.90.132.106", "7777", "1418308973"]])"} <class 'str'>
+
 
 # make ad hoc here, put into nice class later.
-        # b'{"result":"kademlia_findnode from.(2131686659786462901) previp.() key.(3571143576961987768) datalen.0 txid.1496458648985206585"}'
-
-
+# b'{"result":"kademlia_findnode from.(2131686659786462901) previp.() key.(3571143576961987768) datalen.0 txid.1496458648985206585"}'
 
 
 GUIpoll ---> kademlia_havenode
@@ -979,15 +831,17 @@ GUIpoll ---> kademlia_havenode
 {'port': 0, 'args': '[{"requestType":"havenode","NXT":"11910135804814382998","time":1418378474,"key":"11910135804814382998","data":[["11910135804814382998", "167.114.2.94", "7777", "0"], ["2131686659786462901", "85.178.204.233", "61312", "1418374115"], ["11634703838614499263", "69.90.132.106", "7777", "1418355887"], ["10694781281555936856", "209.126.70.170", "7777", "1418355569"], ["17265504311777286118", "184.175.25.117", "7777", "1418355277"], ["5624143003089008155", "192.99.212.250", "7777", "1418355253"], ["8894667849638377372", "209.126.70.156", "7777", "1418355643"]]},{"token":"crhllp9ko5ehtcf8j46plskln4hn2lkp2ph4kbm0e9edtp00v39akttr3oogmkg1nadgia072k06a9nggjaab7fj8mkhl0bqr364sskelrk0gihn85f3rqlriekbdub8vudcs1k27kkgetsmq8u53qoedjgaujep"}]', 'result': '{"result":"kademlia_havenode from NXT.11910135804814382998 key.(11910135804814382998) value.([["11910135804814382998", "167.114.2.94", "7777", "0"], ["2131686659786462901", "85.178.204.233", "61312", "1418374115"], ["11634703838614499263", "69.90.132.106", "7777", "1418355887"], ["10694781281555936856", "209.126.70.170", "7777", "1418355569"], ["17265504311777286118", "184.175.25.117", "7777", "1418355277"], ["5624143003089008155", "192.99.212.250", "7777", "1418355253"], ["8894667849638377372", "209.126.70.156", "7777", "1418355643"]])"}', 'from': '167.114.2.94'} <class 'dict'>
 
 
-
 so for the recipient of the find node, the result is havenode
 
-jl777 [12:19 PM]12:19
 to the sender of the find, it comes back as a new havenode command
+
+
+ {'args': '[{"requestType":"havenode","NXT":"7108754351996134253","time":1418479724,"key":"5624143003089008155","data":[["5624143003089008155", "192.99.212.250", "7777", "1418404010"], ["15178638394924629506", "167.114.2.206", "7777", "1418404020"], ["11910135804814382998", "167.114.2.94", "7777", "1418404026"], ["6216883599460291148", "192.99.246.126", "7777", "1418404037"], ["7108754351996134253", "167.114.2.171", "7777", "0"], ["16196432036059823401", "167.114.2.203", "7777", "1418404056"], ["10694781281555936856", "209.126.70.170", "7777", "1418404083"]]},{"token":"j8edkcsu69k3e3e0ru9p4f6fepega7dijt24dh71h9kfqsg6v9f2qvp32o45gi01i19t5ioutef3te5fccvmnb91tuv0edt4tm2t4oq5ba9gfllceq7v3i63qptb79nbsfta194mr47nftrkgs257oimekhcmmtb"}]', 'from': '167.114.2.171', 'result': '{"result":"kademlia_havenode from NXT.7108754351996134253 key.(5624143003089008155) value.([["5624143003089008155", "192.99.212.250", "7777", "1418404010"], ["15178638394924629506", "167.114.2.206", "7777", "1418404020"], ["11910135804814382998", "167.114.2.94", "7777", "1418404026"], ["6216883599460291148", "192.99.246.126", "7777", "1418404037"], ["7108754351996134253", "167.114.2.171", "7777", "0"], ["16196432036059823401", "167.114.2.203", "7777", "1418404056"], ["10694781281555936856", "209.126.70.170", "7777", "1418404083"]])"}', 'port': 0} <class 'dict'>
+
 
     """#
 
-        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
+        log.msg("\nGUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
 
         try:
             fromIp = rpl777['from']
@@ -999,13 +853,9 @@ to the sender of the find, it comes back as a new havenode command
             except Exception as e:
                 log.msg("Error args {0}".format(str(e)))
                 log.msg("args NOT ok",rplArgs, type(rplArgs))
-            #log.msg(12*"\nargs ok ",rplArgs, type(rplArgs))
-            # [{"requestType":"havenode","NXT":"7067340061344084047","time":1418387237,"key":"7067340061344084047","data":[["7067340061344084047", "94.102.50.70", "7777", "0"], ["5624143003089008155", "192.99.212.250", "7777", "1417906278"], ["7108754351996134253", "167.114.2.171", "7777", "1417855494"], ["7837143510182070614", "62.194.6.163", "7777", "1417012372"], ["7422772935859746536", "184.175.25.117", "55045", "1417951862"], ["8923034930361863607", "192.99.246.33", "7777", "1418263800"], ["11634703838614499263", "69.90.132.106", "7777", "1418231950"]]},{"token":"197njl2bp54ijkjnfadmvua4irii342267l8taa4n53vqhg5v3qeag341hfbkf81p042d8ap8pqtqabfc1u0pn38tiiob79ltvf4utt207dg81r8992jlkovj4b8q84bnln14esjbktd81phnhs51taogbajptre"}]
-            #<class 'str'>
+
             rpl777 = rpl777['result'] # this is a string!
-            #log.msg("2",rpl777, type(rpl777))
-            #{"result":"kademlia_havenode from NXT.7067340061344084047 key.(7067340061344084047) value.([["7067340061344084047", "94.102.50.70", "7777", "0"], ["5624143003089008155", "192.99.212.250", "7777", "1417906278"], ["7108754351996134253", "167.114.2.171", "7777", "1417855494"], ["7837143510182070614", "62.194.6.163", "7777", "1417012372"], ["7422772935859746536", "184.175.25.117", "55045", "1417951862"], ["8923034930361863607", "192.99.246.33", "7777", "1418263800"], ["11634703838614499263", "69.90.132.106", "7777", "1418231950"]])"}
-            #<class 'str'>
+
             try:
                 #print(5*"\n~rpl777_GUIpoll_kademlia_havenode ~+>", rpl777, type(rpl777))
                 rpl777SPL=rpl777.split('([')
@@ -1034,17 +884,16 @@ to the sender of the find, it comes back as a new havenode command
             #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
             log.msg("Error rpl777_GUIpoll_kademlia_havenode {0}".format(str(e)))
 
-        rplArgsRQ = rplArgs[0] # <class 'dict'>
-        rplArgsTK = rplArgs[1]   #<class 'dict'>
+        rplArgsRQ = rplArgs[0]
+        rplArgsTK = rplArgs[1]
         #log.msg(5*"\nargs ----> ",rplArgsRQ, type(rplArgsRQ))
 
         # There are two types of havendoe
 
-        #
         # for key in rplArgsRQ.keys():
         #     print(key, " - " , rplArgsRQ[key])
 
- #{'time': 1418380620, 'requestType': 'havenode', 'NXT': '5624143003089008155', 'key': '5624143003089008155', 'data': [['5624143003089008155', '192.99.212.250', '7777', '0'], ['7067340061344084047', '94.102.50.70', '7777', '1418355322'], ['15178638394924629506', '167.114.2.206', '7777', '1418355261'], ['6249611027680999354', '80.41.56.181', '7777', '1418375808'], ['11910135804814382998', '167.114.2.94', '7777', '1418355255'], ['6216883599460291148', '192.99.246.126', '7777', '1418355291'], ['16196432036059823401', '167.114.2.203', '7777', '1418355258']]}
+         #{'time': 1418380620, 'requestType': 'havenode', 'NXT': '5624143003089008155', 'key': '5624143003089008155', 'data': [['5624143003089008155', '192.99.212.250', '7777', '0'], ['7067340061344084047', '94.102.50.70', '7777', '1418355322'], ['15178638394924629506', '167.114.2.206', '7777', '1418355261'], ['6249611027680999354', '80.41.56.181', '7777', '1418375808'], ['11910135804814382998', '167.114.2.94', '7777', '1418355255'], ['6216883599460291148', '192.99.246.126', '7777', '1418355291'], ['16196432036059823401', '167.114.2.203', '7777', '1418355258']]}
 
         try:
             data = rplArgsRQ['data']
@@ -1057,35 +906,24 @@ to the sender of the find, it comes back as a new havenode command
         #log.msg(5*"\n++++++++++++++++kademlia_havenode",rpl777, type(rpl777))
         #log.msg(1*"\n              data",data, type(data))
 
-# THIS MAYB EBE BG ACTIVITY
-#
-# {'havenodes': (['7067340061344084047', '94.102.50.70', '7777', '0'], ['5624143003089008155', '192.99.212.250', '7777', '1417906278'], ['7108754351996134253', '167.114.2.171', '7777', '1417855494'], ['7837143510182070614', '62.194.6.163', '7777', '1417012372'], ['7422772935859746536', '184.175.25.117', '55045', '1417951862'], ['8923034930361863607', '192.99.246.33', '7777', '1418263800'], ['11634703838614499263', '69.90.132.106', '7777', '1418231950'])} <class 'dict'>
-#
-#              [['7067340061344084047', '94.102.50.70', '7777', '0'], ['5624143003089008155', '192.99.212.250', '7777', '1417906278'], ['7108754351996134253', '167.114.2.171', '7777', '1417855494'], ['7837143510182070614', '62.194.6.163', '7777', '1417012372'], ['7422772935859746536', '184.175.25.117', '55045', '1417951862'], ['8923034930361863607', '192.99.246.33', '7777', '1418263800'], ['11634703838614499263', '69.90.132.106', '7777', '1418231950']] <class 'list'>
-#
         reqPing = {'requestType':'ping'}
         reqFindnode = {'requestType':'findnode'}
         log.msg(1*"\n FINDNODE & PING all:", rpl777Li)
         for node in rpl777Li:
-#            ping and findnode!
+        #            ping and findnode!
 
             if node[1] not in self.nodeDi.keys():
-                self.nodeDi[node[1]] = node[0]
+                self.nodeDi[node[1]] = node[0] # add this to the internal list of known nodes
 
-            reqPing['destip']=node[1]
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
-            self.deferred.addCallback(self.rpl777_df2_ping)
-            self.deferred.addErrback(self.rpl777ERR)
+        reqPing['destip']=node[1]
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df2_ping)
+        self.deferred.addErrback(self.rpl777ERR)
 
-            reqFindnode['key']=node[0]
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
-            self.deferred.addCallback(self.rpl777_df2_ping)
-            self.deferred.addErrback(self.rpl777ERR)
-
-
-
-
-
+        reqFindnode['key']=node[0]
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df2_ping)
+        self.deferred.addErrback(self.rpl777ERR)
 
 
         note=""" data in RQ is the same as in havenodes! ?!?!?! : now do the findonde and poing thing fronm here! """
@@ -1111,6 +949,67 @@ to the sender of the find, it comes back as a new havenode command
         #
         #
 
+
+    def rpl777_getpeers_df1(self, dataFrom777): #these are the basic pings from the whitlist
+        """
+
+         peers [{'pubkey': '05a7612d54d14c21be9baa654ad50b4ba423eea0735185ac732ada2332315c3f', 'RS': 'NXT-8AF7-ESB7-GHFM-896JY', 'privateNXT': '8016556209183334821'}, {'RS': 'NXT-7PPP-R6AJ-VSJ7-37C7V', 'pserver': {'recv': 8, 'lastrecv': 14.0111578, 'lastsent': 14.01127447, 'pings': 1, 'sent': 8}, 'srvipaddr': '178.62.185.131', 'recv': 8, 'srvNXT': '2131686659786462901', 'pubkey': '849c97e5b1e8c50429249eff867de5e6ded39d34a6ccc9c42ea720d927a12d18', 'sent': 8}, {'RS': 'NXT-EZJ4-8F5T-8VX4-FVCB7', 'pserver': {'lastrecv': 0.6551996, 'lastsent': 0.06295793, 'pingtime': 231, 'avetime': 3893.46431672, 'recv': 155, 'pings': 63, 'pongs': 63, 'sent': 178}, 'srvipaddr': '167.114.2.206', 'recv': 155, 'srvNXT': '15178638394924629506', 'pubkey': '52e3524b5392a2ecba9e702a0c9c04d3d73dc4f93008977e1bcd15ea5bd5b376', 'sent': 178}, {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ', 'pserver': {'lastrecv': 0.07671293, 'lastsent': 0.00977127, 'pingtime': 176.5, 'avetime': 18793.97457429, 'recv': 188, 'pings': 83, 'pongs': 84, 'sent': 205}, 'srvipaddr': '89.212.19.49', 'recv': 188, 'srvNXT': '1978065578067355462', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'sent': 205}, {'RS': 'NXT-A4NA-7P8Y-MDMZ-3K4AZ', 'pserver': {'lastrecv': 0.07303403, 'lastsent': 0.07965903, 'pingtime': 327.75, 'avetime': 33324.18828125, 'recv': 35, 'pings': 9, 'pongs': 11, 'sent': 81}, 'srvipaddr': '167.114.2.204', 'recv': 35, 'srvNXT': '2278910666471639688', 'pubkey': '47faa8a876ae56be36a1d214515d0ef3f9ff99b06f4d2702acf0380cab7ccc5e', 'sent': 81}, {'RS': 'NXT-JNLE-Q9XW-MG8P-7GQKE', 'pserver': {'lastrecv': 0.05130237, 'lastsent': 0.0543357, 'pingtime': 36882.25, 'avetime': 13861.70690789, 'recv': 127, 'pings': 47, 'pongs': 48, 'sent': 174}, 'srvipaddr': '192.99.246.126', 'recv': 127, 'srvNXT': '6216883599460291148', 'pubkey': '2fdfab9d3d5e1c91a27e48ed7422ebcea628ebdf36ea0052fdd62e1533a8751d', 'sent': 174}, {'RS': 'NXT-YPWQ-F7SB-WCD7-CFCLC', 'pserver': {'lastrecv': 0.01943838, 'lastsent': 0.02329255, 'pingtime': 295, 'avetime': 7594.5688101, 'recv': 104, 'pings': 38, 'pongs': 40, 'sent': 131}, 'srvipaddr': '167.114.2.94', 'recv': 104, 'srvNXT': '11910135804814382998', 'pubkey': '34e55ae366e8b11e5dc195f29a0d9999567123b9c02e4a621600e4de5c72bb77', 'sent': 131}, {'RS': 'NXT-NHBB-5ZF3-4WTB-GBCK3', 'pserver': {'lastrecv': 2.37580073, 'lastsent': 0.0236049, 'pingtime': 52420.75, 'avetime': 7924.83104292, 'recv': 193, 'pings': 84, 'pongs': 82, 'sent': 181}, 'srvipaddr': '167.114.2.203', 'recv': 193, 'srvNXT': '16196432036059823401', 'pubkey': 'be3db1badadb0e95b8afd2f1f5f53df7837de15c14f09f7a531c489a3f470543', 'sent': 181}, {'RS': 'NXT-Y5FR-ZSRB-BQWC-9W9PR', 'pserver': {'lastrecv': 1.36517293, 'lastsent': 0.03602293, 'pingtime': 93572, 'avetime': 20840.15337171, 'recv': 96, 'pings': 37, 'pongs': 39, 'sent': 104}, 'srvipaddr': '192.99.246.33', 'recv': 96, 'srvNXT': '8923034930361863607', 'pubkey': 'ea83e39d553470725960180afb25afffe3de1fe0019979236b96536e22e1ed29', 'sent': 104}, {'RS': 'NXT-VSVF-FFF5-M4EX-8YUB7', 'pserver': {'lastrecv': 0.04354165, 'lastsent': 0.00936665, 'pingtime': 36595.5, 'avetime': 9679.23729884, 'recv': 188, 'pings': 90, 'pongs': 77, 'sent': 224}, 'srvipaddr': '167.114.2.171', 'recv': 188, 'srvNXT': '7108754351996134253', 'pubkey': '9e33da1c9ac00d376832cf3c9293dfb21d055d76e1c446449f0672fd688a237f', 'sent': 224}, {'RS': 'NXT-DGHK-DUWA-2MRL-C44UP', 'pserver': {'lastrecv': 1.73030202, 'lastsent': 0.00871452, 'pingtime': 45173.25, 'avetime': 9300.74114583, 'recv': 134, 'pings': 62, 'pongs': 58, 'sent': 130}, 'srvipaddr': '167.114.2.205', 'recv': 134, 'srvNXT': '12315166155634751985', 'pubkey': 'eef155b7c8c50dc62ae45f40c30d2b1a0874ca5f5f11adeef7637933d863583b', 'sent': 130}, {'RS': 'NXT-WXJV-AFNK-YW5D-6S95W', 'pserver': {'lastrecv': 1.77902338, 'lastsent': 0.02744422, 'pingtime': -156179, 'avetime': 10604.32024083, 'recv': 114, 'pings': 63, 'pongs': 46, 'sent': 157}, 'srvipaddr': '192.99.212.250', 'recv': 114, 'srvNXT': '5624143003089008155', 'pubkey': 'ecea0d22fca77e28210c0b4c05b8bd16ff8003e5065c09f4e73105398e31840f', 'sent': 157}, {'RS': 'NXT-VT9R-9GYM-YLJF-D8QCT', 'pserver': {'lastrecv': 1.15555233, 'lastsent': 0.01185233, 'pingtime': 223334, 'avetime': 39925.74770221, 'recv': 123, 'pings': 50, 'pongs': 52, 'sent': 134}, 'srvipaddr': '192.99.246.20', 'recv': 123, 'srvNXT': '13594896385051583735', 'pubkey': '430695694b02bb71e8222e1e5d20b1c985afd9ba899e25fe2d52ee1be92f532c', 'sent': 134}, {'RS': 'NXT-UE4H-CXMN-HR75-8W376', 'pserver': {'lastrecv': 4.86252565, 'lastsent': 0.02568398, 'pingtime': -3670675.75, 'avetime': 12546.13709677, 'recv': 14, 'pings': 30, 'pongs': 1, 'sent': 158}, 'srvipaddr': '94.102.50.70', 'recv': 14, 'srvNXT': '7067340061344084047', 'pubkey': '4bd4794f0a77d22949c944f96f9b7a429021e59644a98eea310546fd47b96440', 'sent': 158}, {'RS': 'NXT-XSQA-YBXH-CW2M-93QSF', 'pserver': {'lastrecv': 1.1530546, 'lastsent': 0.05522543, 'pingtime': 371363.25, 'avetime': 83528.03227459, 'recv': 54, 'pings': 41, 'pongs': 20, 'sent': 143}, 'srvipaddr': '37.59.108.92', 'recv': 54, 'srvNXT': '8566622688401875656', 'pubkey': '5a1c33c1e00cec3beecb9a9fcd8379fe61d6a661566875cf0cff89726b27b76f', 'sent': 143}]
+         peers is a LIST!
+
+         [
+
+         {'pubkey': '05a7612d54d14c21be9baa654ad50b4ba423eea0735185ac732ada2332315c3f', 'RS': 'NXT-8AF7-ESB7-GHFM-896JY', 'privateNXT': '8016556209183334821'},
+
+         {'RS': 'NXT-7PPP-R6AJ-VSJ7-37C7V', 'pserver': {'recv': 8, 'lastrecv': 14.0111578, 'lastsent': 14.01127447, 'pings': 1, 'sent': 8},
+         'srvipaddr': '178.62.185.131', 'recv': 8, 'srvNXT': '2131686659786462901', 'pubkey': '849c97e5b1e8c50429249eff867de5e6ded39d34a6ccc9c42ea720d927a12d18', 'sent': 8},
+
+         {'RS': 'NXT-EZJ4-8F5T-8VX4-FVCB7', 'pserver': {'lastrecv': 0.6551996, 'lastsent': 0.06295793, 'pingtime': 231, 'avetime': 3893.46431672, 'recv': 155, 'pings': 63, 'pongs': 63, 'sent': 178},
+          'srvipaddr': '167.114.2.206', 'recv': 155, 'srvNXT': '15178638394924629506', 'pubkey': '52e3524b5392a2ecba9e702a0c9c04d3d73dc4f93008977e1bcd15ea5bd5b376', 'sent': 178},
+
+          {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ', 'pserver': {'lastrecv': 0.07671293, 'lastsent': 0.00977127, 'pingtime': 176.5, 'avetime': 18793.97457429, 'recv': 188, 'pings': 83, 'pongs': 84, 'sent': 205}, 'srvipaddr': '89.212.19.49', 'recv': 188, 'srvNXT': '1978065578067355462', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'sent': 205},
+          {'RS': 'NXT-A4NA-7P8Y-MDMZ-3K4AZ', 'pserver': {'lastrecv': 0.07303403, 'lastsent': 0.07965903, 'pingtime': 327.75, 'avetime': 33324.18828125, 'recv': 35, 'pings': 9, 'pongs': 11, 'sent': 81}, 'srvipaddr': '167.114.2.204', 'recv': 35, 'srvNXT': '2278910666471639688', 'pubkey': '47faa8a876ae56be36a1d214515d0ef3f9ff99b06f4d2702acf0380cab7ccc5e', 'sent': 81},
+          {'RS': 'NXT-JNLE-Q9XW-MG8P-7GQKE', 'pserver': {'lastrecv': 0.05130237, 'lastsent': 0.0543357, 'pingtime': 36882.25, 'avetime': 13861.70690789, 'recv': 127, 'pings': 47, 'pongs': 48, 'sent': 174}, 'srvipaddr': '192.99.246.126', 'recv': 127, 'srvNXT': '6216883599460291148', 'pubkey': '2fdfab9d3d5e1c91a27e48ed7422ebcea628ebdf36ea0052fdd62e1533a8751d', 'sent': 174},
+        {'RS': 'NXT-YPWQ-F7SB-WCD7-CFCLC', 'pserver': {'lastrecv': 0.01943838, 'lastsent': 0.02329255, 'pingtime': 295, 'avetime': 7594.5688101, 'recv': 104, 'pings': 38, 'pongs': 40, 'sent': 131}, 'srvipaddr': '167.114.2.94', 'recv': 104, 'srvNXT': '11910135804814382998', 'pubkey': '34e55ae366e8b11e5dc195f29a0d9999567123b9c02e4a621600e4de5c72bb77', 'sent': 131},
+        {'RS': 'NXT-NHBB-5ZF3-4WTB-GBCK3', 'pserver': {'lastrecv': 2.37580073, 'lastsent': 0.0236049, 'pingtime': 52420.75, 'avetime': 7924.83104292, 'recv': 193, 'pings': 84, 'pongs': 82, 'sent': 181}, 'srvipaddr': '167.114.2.203', 'recv': 193, 'srvNXT': '16196432036059823401', 'pubkey': 'be3db1badadb0e95b8afd2f1f5f53df7837de15c14f09f7a531c489a3f470543', 'sent': 181},
+         {'RS': 'NXT-Y5FR-ZSRB-BQWC-9W9PR', 'pserver': {'lastrecv': 1.36517293, 'lastsent': 0.03602293, 'pingtime': 93572, 'avetime': 20840.15337171, 'recv': 96, 'pings': 37, 'pongs': 39, 'sent': 104}, 'srvipaddr': '192.99.246.33', 'recv': 96, 'srvNXT': '8923034930361863607', 'pubkey': 'ea83e39d553470725960180afb25afffe3de1fe0019979236b96536e22e1ed29', 'sent': 104},
+         {'RS': 'NXT-VSVF-FFF5-M4EX-8YUB7', 'pserver': {'lastrecv': 0.04354165, 'lastsent': 0.00936665, 'pingtime': 36595.5, 'avetime': 9679.23729884, 'recv': 188, 'pings': 90, 'pongs': 77, 'sent': 224}, 'srvipaddr': '167.114.2.171', 'recv': 188, 'srvNXT': '7108754351996134253', 'pubkey': '9e33da1c9ac00d376832cf3c9293dfb21d055d76e1c446449f0672fd688a237f', 'sent': 224},
+          {'RS': 'NXT-DGHK-DUWA-2MRL-C44UP', 'pserver': {'lastrecv': 1.73030202, 'lastsent': 0.00871452, 'pingtime': 45173.25, 'avetime': 9300.74114583, 'recv': 134, 'pings': 62, 'pongs': 58, 'sent': 130}, 'srvipaddr': '167.114.2.205', 'recv': 134, 'srvNXT': '12315166155634751985', 'pubkey': 'eef155b7c8c50dc62ae45f40c30d2b1a0874ca5f5f11adeef7637933d863583b', 'sent': 130},
+         {'RS': 'NXT-WXJV-AFNK-YW5D-6S95W', 'pserver': {'lastrecv': 1.77902338, 'lastsent': 0.02744422, 'pingtime': -156179, 'avetime': 10604.32024083, 'recv': 114, 'pings': 63, 'pongs': 46, 'sent': 157}, 'srvipaddr': '192.99.212.250', 'recv': 114, 'srvNXT': '5624143003089008155', 'pubkey': 'ecea0d22fca77e28210c0b4c05b8bd16ff8003e5065c09f4e73105398e31840f', 'sent': 157},
+         {'RS': 'NXT-VT9R-9GYM-YLJF-D8QCT', 'pserver': {'lastrecv': 1.15555233, 'lastsent': 0.01185233, 'pingtime': 223334, 'avetime': 39925.74770221, 'recv': 123, 'pings': 50, 'pongs': 52, 'sent': 134}, 'srvipaddr': '192.99.246.20', 'recv': 123, 'srvNXT': '13594896385051583735', 'pubkey': '430695694b02bb71e8222e1e5d20b1c985afd9ba899e25fe2d52ee1be92f532c', 'sent': 134},
+         {'RS': 'NXT-UE4H-CXMN-HR75-8W376', 'pserver': {'lastrecv': 4.86252565, 'lastsent': 0.02568398, 'pingtime': -3670675.75, 'avetime': 12546.13709677, 'recv': 14, 'pings': 30, 'pongs': 1, 'sent': 158}, 'srvipaddr': '94.102.50.70', 'recv': 14, 'srvNXT': '7067340061344084047', 'pubkey': '4bd4794f0a77d22949c944f96f9b7a429021e59644a98eea310546fd47b96440', 'sent': 158},
+         {'RS': 'NXT-XSQA-YBXH-CW2M-93QSF', 'pserver': {'lastrecv': 1.1530546, 'lastsent': 0.05522543, 'pingtime': 371363.25, 'avetime': 83528.03227459, 'recv': 54, 'pings': 41, 'pongs': 20, 'sent': 143}, 'srvipaddr': '37.59.108.92', 'recv': 54, 'srvNXT': '8566622688401875656', 'pubkey': '5a1c33c1e00cec3beecb9a9fcd8379fe61d6a661566875cf0cff89726b27b76f', 'sent': 143}
+
+          ]
+
+
+        """#
+        repl=dataFrom777.json()
+        #log.msg(1*"\nrpl777_getpeers_df1", type(repl))
+        #log.msg(repl.keys())
+
+        Numnxtaccts = repl['Numnxtaccts']
+        peers = repl['peers']
+        Numpservers = repl['Numpservers']
+        num = repl['num']
+        log.msg("Numnxtaccts", Numnxtaccts)
+        #log.msg("peers", peers)
+        log.msg("Numpservers", Numpservers)
+        log.msg("num", num)
+
+
+        #print(12*"\ncollected here: ", self.nodeDi)
+
+
+
+        for peer in peers:
+            pass#print(peer)
+        #
+        # for peer in repl.keys():
+        #     log.msg(peer , " - ", repl[peer], "\n")
+        #print("+++++++++++++++++++")
+
+
+
     def rpl777_settings_df1(self, dataFrom777): #these are the basic pings from the whitlist
         """"""#
         repl=dataFrom777.json()
@@ -1128,7 +1027,9 @@ to the sender of the find, it comes back as a new havenode command
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
 
-        self.rpl777_pingDB_df1()
+#        self.rpl777_pingDB_df1()
+
+
 
 
     def rpl777_pingDB_df1(self, ):#dataFrom777):
@@ -1179,11 +1080,6 @@ to the sender of the find, it comes back as a new havenode command
 
 
 
-
-
-
-
-
     def rpl777ERR(self, ERR777):
 
         print(ERR777)
@@ -1193,6 +1089,11 @@ to the sender of the find, it comes back as a new havenode command
 
 
 
+
+
+#./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
+#./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
+# havenodeB ???
 
 
 
