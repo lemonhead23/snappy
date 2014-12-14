@@ -80,7 +80,7 @@ TIMER2_Freq = 0.850 # how ofthe the base timer is called for loopedCall
 #----------------------------------------
 sched_GUIpoll ={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
-sched_GUIpoll['callFreq'] = 900               # ms!!
+sched_GUIpoll['callFreq'] = 1500               # ms!!
 
 SNreqTypes={}
 SNreqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
@@ -90,7 +90,7 @@ sched_GUIpoll['target'] = 'this Uses requests!'
 #----------------------------------------
 sched1={}
 sched1['schedName'] = 'settingsForPing'
-sched1['callFreq'] = 8500               # ms!!
+sched1['callFreq'] =13500               # ms!!
 
 SNreqTypes={}
 SNreqTypes['uc1Start_settings'] = {'requestType':'settings'}
@@ -102,13 +102,13 @@ sched1['target'] = 'this Uses requests!'
 
 #----------------------------------------
 sched_findnodePeers ={}
-sched_GUIpoll['schedName'] = 'findnodePeers'
-sched_GUIpoll['callFreq'] = 6500               # ms!!
+sched_findnodePeers['schedName'] = 'findnodePeers'
+sched_findnodePeers['callFreq'] = 11500               # ms!!
 
 SNreqTypes={}
 SNreqTypes['findnodePeers'] = {'requestType':'findnode'}
-sched_GUIpoll['SNreqTypes']  = SNreqTypes
-sched_GUIpoll['target'] = 'this Uses requests!'
+sched_findnodePeers['SNreqTypes']  = SNreqTypes
+sched_findnodePeers['target'] = 'this Uses requests!'
 
 
 ### ++++++
@@ -116,6 +116,7 @@ sched_GUIpoll['target'] = 'this Uses requests!'
 
 # plug the schedules into the environment
 sched_Test_1[sched_GUIpoll['schedName']] = sched_GUIpoll
+sched_Test_1[sched_findnodePeers['schedName']] = sched_findnodePeers
 sched_Test_1[sched1['schedName']] = sched1
 
 
