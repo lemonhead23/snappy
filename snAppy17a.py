@@ -476,8 +476,8 @@ class SuperNETApiD(Daemon3): #object):
             self.initUC1()
         elif UC == 'UC2':
             self.initUC2()
-
-
+        elif UC == 'UC3':
+            self.initUC3()
         print("going hot: reactor.run()")
         reactor.run()
 
@@ -501,13 +501,9 @@ class SuperNETApiD(Daemon3): #object):
         ucTEST_1_pingWhtList = UCTEST_1_ping_whitelist_777(serverFactory,  self.environ )
         timer2 = task.LoopingCall(ucTEST_1_pingWhtList.periodic,  )
         timer2.start( TIMER2_Freq , now=True )
-
         #
         reactor.suggestThreadPoolSize(500) # should be ok
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
-
-
 
     def initUC2(self):
         """
@@ -532,6 +528,30 @@ class SuperNETApiD(Daemon3): #object):
         reactor.suggestThreadPoolSize(500) # should be ok
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
+
+
+    def initUC3(self):
+        """
+        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
+        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
+        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
+        Factory is somewhat flexible as to what argument types it gets!
+        """#
+
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        print(1*"\ninitUC3")
+        #
+        #  here we can build as many different schedulers as we want!
+        #
+        ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
+        timer3 = task.LoopingCall(ucTEST_3.periodic,  )
+        timer3.start( TIMER3_Freq , now=True )
+
+        #
+        reactor.suggestThreadPoolSize(500) # should be ok
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
 
 
@@ -559,10 +579,13 @@ if __name__ == "__main__":
             superNetApiD.stop()
         elif 'restart' == sys.argv[1]:
             superNetApiD.restart()
-        elif 'runUC1' == sys.argv[1]:
+        elif 'UC1' == sys.argv[1]:
             superNetApiD.startUC('UC1')
-        elif 'runUC2' == sys.argv[1]:
+        elif 'UC2' == sys.argv[1]:
             superNetApiD.startUC('UC2')
+        elif 'UC3' == sys.argv[1]:
+            superNetApiD.startUC('UC3')
+
         #...
         else:
             print("Unknown command")

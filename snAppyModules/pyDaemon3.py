@@ -108,16 +108,12 @@ class Daemon3:
 
     def startUC(self, UC = None):
         """Start the daemon."""
-
-
         # Check for a pidfile to see if the daemon already runs
         try:
             with open(self.pidfile,'r') as pf:
-
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
-
         if pid:
             message = "pidfile {0} already exist. " + \
                     "Daemon already running?\n"

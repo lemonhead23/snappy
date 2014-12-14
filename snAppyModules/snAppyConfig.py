@@ -66,7 +66,8 @@ environ['CACHE_FILENAMES'] = {
 ###################################################################
 # TESTS scheduler
 #
-# main scheduler container Number One
+#
+#
 sched_Test_1={}
 
 
@@ -74,11 +75,10 @@ sched_Test_1={}
 #SERVER_PORT_TEST_1 = 7776
 #FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
 
-TIMER2_Freq = 0.8
+TIMER2_Freq = 0.850 # how ofthe the base timer is called for loopedCall
 
+#----------------------------------------
 sched_GUIpoll ={}
-
-sched_GUIpoll={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
 sched_GUIpoll['callFreq'] = 900               # ms!!
 
@@ -90,17 +90,30 @@ sched_GUIpoll['target'] = 'this Uses requests!'
 #----------------------------------------
 sched1={}
 sched1['schedName'] = 'settingsForPing'
-sched1['callFreq'] = 6500               # ms!!
+sched1['callFreq'] = 8500               # ms!!
 
 SNreqTypes={}
 SNreqTypes['uc1Start_settings'] = {'requestType':'settings'}
 SNreqTypes['ping'] = {'requestType':'ping'}
 
-
 sched1['SNreqTypes']  = SNreqTypes
 #  legacy: sched1['target'] = 'GET /nxt?requestType=settings HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: 127.0.0.1:7800\r\nAccept: */*\r\ncontent-type: text/plain;\r\n\r\n'
 sched1['target'] = 'this Uses requests!'
-##
+
+#----------------------------------------
+sched_findnodePeers ={}
+sched_GUIpoll['schedName'] = 'findnodePeers'
+sched_GUIpoll['callFreq'] = 6500               # ms!!
+
+SNreqTypes={}
+SNreqTypes['findnodePeers'] = {'requestType':'findnode'}
+sched_GUIpoll['SNreqTypes']  = SNreqTypes
+sched_GUIpoll['target'] = 'this Uses requests!'
+
+
+### ++++++
+
+
 # plug the schedules into the environment
 sched_Test_1[sched_GUIpoll['schedName']] = sched_GUIpoll
 sched_Test_1[sched1['schedName']] = sched1
@@ -111,7 +124,66 @@ environ['UCTEST_1_ping_whitelist_777'] = sched_Test_1
 
 
 
+
+
+
 ##################################################################
+
+
+sched_Test_3={}
+
+
+#SERVER_ADDR_TEST_1 = SERVER_ADDR_jl777 #"localhost"
+#SERVER_PORT_TEST_1 = 7776
+#FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
+
+TIMER3_Freq = 0.850 # how ofthe the base timer is called for loopedCall
+
+#----------------------------------------
+sched_GUIpoll ={}
+sched_GUIpoll['schedName'] = 'GUIpoll'
+sched_GUIpoll['callFreq'] = 900               # ms!!
+
+SNreqTypes={}
+SNreqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+sched_GUIpoll['SNreqTypes']  = SNreqTypes
+sched_GUIpoll['target'] = 'this Uses requests!'
+
+
+#----------------------------------------
+sched_findvalue ={}
+sched_findvalue['schedName'] = 'sched_findvalue'
+sched_findvalue['callFreq'] = 4500               # ms!!
+
+SNreqTypes={}
+SNreqTypes['sched_findvalue'] = {'requestType':'findvalue'}
+sched_findvalue['SNreqTypes']  = SNreqTypes
+sched_findvalue['target'] = 'this Uses requests!'
+### ++++++
+#----------------------------------------
+sched_store ={}
+sched_store['schedName'] = 'sched_store'
+sched_store['callFreq'] = 6500               # ms!!
+
+SNreqTypes={}
+SNreqTypes['sched_store'] = {'requestType':'store'}
+sched_store['SNreqTypes']  = SNreqTypes
+sched_store['target'] = 'this Uses requests!'
+### ++++++
+
+
+# plug the schedules into the environment
+
+sched_Test_3[sched_GUIpoll['schedName']] = sched_GUIpoll
+sched_Test_3[sched_findvalue['schedName']] = sched_findvalue
+sched_Test_3[sched_store['schedName']] = sched_store
+
+
+
+environ['UCTEST_3_store_findvalue'] = sched_Test_3
+
+
+
 
 
 

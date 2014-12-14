@@ -688,8 +688,8 @@ cassius [12:32 PM]
 
 ./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
 
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name&starbucks&data&c0ffee}'    '
 
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
 
 ./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
 
