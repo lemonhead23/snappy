@@ -478,6 +478,8 @@ class SuperNETApiD(Daemon3): #object):
             self.initUC2()
         elif UC == 'UC3':
             self.initUC3()
+        elif UC == 'UC4':
+            self.initUC4()
         print("going hot: reactor.run()")
         reactor.run()
 
@@ -554,6 +556,28 @@ class SuperNETApiD(Daemon3): #object):
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
 
+    def initUC4(self):
+        """
+        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
+        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
+        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
+        Factory is somewhat flexible as to what argument types it gets!
+        """#
+
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        print(1*"\ninitUC4")
+        #
+        #  here we can build as many different schedulers as we want!
+        #
+        ucTEST_4 = UCTEST_4_sendMSGs(serverFactory,  self.environ )
+        timer4 = task.LoopingCall(ucTEST_4.periodic,  )
+        timer4.start( TIMER3_Freq , now=True )
+
+        #
+        reactor.suggestThreadPoolSize(500) # should be ok
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
 
 
@@ -585,7 +609,8 @@ if __name__ == "__main__":
             superNetApiD.startUC('UC2')
         elif 'UC3' == sys.argv[1]:
             superNetApiD.startUC('UC3')
-
+        elif 'UC4' == sys.argv[1]:
+            superNetApiD.startUC('UC4')
         #...
         else:
             print("Unknown command")

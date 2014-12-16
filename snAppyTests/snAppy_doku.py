@@ -6,7 +6,11 @@ SuperNET_api_controller_doku = """
 
 
 
-acts as a relay that receives and relays commands to SuperNET:
+Snappy acts as a relay that receives and relays commands to SuperNET.
+
+It also provides scripting facilities that are running on timers.
+
+
 
 This SuperNET api controller his started with
 
@@ -31,8 +35,6 @@ Launches scripts in UseCase classes:
 
 -dedicated logfile (currently enter in pyDaemon3.py)
 -logging can be done 'silent' = no outputs,
-
-
 
 
 
@@ -72,13 +74,16 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/start?'
 #########################################################
 
 
+Running use cases and scripts:
 
+ ./snappy.py UCxyz
 
 
 Adding of test cases and scripts:
 
-activation with def t1_whitePings():
-
+- make a class
+- make schedule(s)
+- add launch param in init functions
 
 
 ##########################################################
@@ -116,16 +121,19 @@ Currently:
 
 ###########################################################
 
-6 steps to include new API calls into this api controller
 
+
+--------->         6 steps to include new API calls into this api controller
 
 
 ~~~~~~~~~~~~~~~~~~~
 in file Parsers.py:
 ~~~~~~~~~~~~~~~~~~~
 
+
 1 make class for api call
 -------------------------
+
 
 eg 'settings':
 
@@ -142,6 +150,7 @@ subclassing Parser_JL777_Base
 2 register this class in Parser777
 ----------------------------------
 
+
 class Parser_777(object):
     "" Parser_777
     // # privatebet
@@ -152,11 +161,16 @@ class Parser_777(object):
 
 
 
+
+
+
 3 add elif case for requestType in def parse_777()
 --------------------------------------------------
 
     elif requestType2Parse == 'settings':
         parsed = self.ql777_settings.parse(data_result)
+
+
 
 
 
@@ -177,12 +191,18 @@ class QueryComposer_777(QC_777Base):
 
 
 
+
+
+
 5 add elif case for requestType in def lookUpQuery of class QueryComposer_777
 -----------------------------------------------------------------------------
 
 
         elif reqDict['requestType'] == 'gotjson':
             jsonSpecs = self.jl777_aAll.gotjson(reqDict)
+
+
+
 
 
 
@@ -200,6 +220,9 @@ class QueryComposer_777(QC_777Base):
             P1 = reqDict['field']
         except:
             P1 = ''
+
+
+
 
 ------------------------------------------------------------
 ------------------------------------------------------------
@@ -1955,6 +1978,10 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
 
 
 
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sendmessage&dest=8894667849638377372&msg="THREE..TWO..ONE..LIFTOFF!!"'
+
+
+./BitcoinDarkd SuperNET '{"requestType":"sendmessage","6216883599460291148":" ,"msg":"THREE..TWO..ONE..LIFTOFF!!","L":3}'
 
 
 ------------------------------------------------------------------------------------------
@@ -1968,7 +1995,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
     static char *sendmsg[] = { (char *)sendmsg_func, "sendmessage", "V", "dest", "msg", "L", 0 };
 
 
-./BitcoinDarkd SuperNET '{"requestType":"sendmessage","2131686659786462901":" ,"msg":"ffffffffffffff","L":3}'
+./BitcoinDarkd SuperNET '{"requestType":"sendmessage","6216883599460291148":" ,"msg":"THREE..TWO..ONE..LIFTOFF!!","L":3}'
 
 
 ./BitcoinDarkd SuperNET '{"requestType":"sendmessage","6249611027680999354":" ,"msg":"THREE..TWO..ONE..LIFTOFF!!!","L":3}'
@@ -2409,10 +2436,19 @@ api.h: list of all calls. date: 120714
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
 
-    // Kademlia DHT
 
+
+
+    // IP comms
     static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", 0 };
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", "tag", 0 };
+    static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
+ *   static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
+ *   static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
+
+
+    // Kademlia DHT
+
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
     static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
@@ -2479,6 +2515,9 @@ api.h: list of all calls. date: 120714
      findaddress,
      ping,
      pong,
+     sendfrag
+     gotfrag
+     startxfer
      store,
      findnode,
      havenode,

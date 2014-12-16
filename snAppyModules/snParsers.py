@@ -190,7 +190,7 @@ class Parser_jl777_cosigned(Parser_JL777_Base):
         return data2parse
 
 
-# Kademlia DHT
+ #   // IP comms
 
 
 class Parser_jl777_ping(Parser_JL777_Base):
@@ -198,11 +198,30 @@ class Parser_jl777_ping(Parser_JL777_Base):
     def parse(self, data2parse):
         return data2parse
 
-
 class Parser_jl777_pong(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
+
+class Parser_jl777_sendfrag(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_gotfrag(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_startxfer(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
+# Kademlia DHT
+
+
 
 
 class Parser_jl777_store(Parser_JL777_Base):
@@ -442,9 +461,16 @@ class Parser_777(object):
     ql777_cosign = Parser_jl777_cosign()
     ql777_cosigned = Parser_jl777_cosigned()
 
-    # // Kademlia DHT
+    # // IPcomms
+
     ql777_ping = Parser_jl777_ping()
     ql777_pong = Parser_jl777_pong()
+    ql777_sendfrag = Parser_jl777_sendfrag()
+    ql777_gotfrag = Parser_jl777_gotfrag()
+    ql777_startxfer = Parser_jl777_startxfer()
+
+    # // Kademlia DHT
+
     ql777_store = Parser_jl777_store()
     ql777_findvalue = Parser_jl777_findvalue()
     ql777_findnode = Parser_jl777_findnode()
@@ -592,14 +618,28 @@ class Parser_777(object):
             parsed = self.ql777_cosigned.parse(data2parse)
 
 
-
-    # // Kademlia DHT 8
+    # // IPcomms
 
         elif requestType2Parse == 'ping':
             parsed = self.ql777_ping.parse(data2parse)
 
         elif requestType2Parse == 'pong':
             parsed = self.ql777_pong.parse(data2parse)
+
+
+        elif requestType2Parse == 'sendfrag':
+            parsed = self.ql777_sendfrag.parse(data2parse)
+
+        elif requestType2Parse == 'gotfrag':
+            parsed = self.ql777_gotfrag.parse(data2parse)
+
+        elif requestType2Parse == 'startxfer':
+            parsed = self.ql777_startxfer.parse(data2parse)
+
+
+
+    # // Kademlia DHT 8
+
 
         elif requestType2Parse == 'store':
             parsed = self.ql777_store.parse(data2parse)

@@ -237,7 +237,8 @@ class QC_777_aAll(QC_777Base):
         // glue 7
         // passthru 2
         // MGW 7
-        // Kademlia DHT  8
+        // IPcomms 5
+        // Kademlia DHT  6
         // MofNfs 3
         // Telepathy 9
         // Teleport 3
@@ -842,9 +843,12 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
 
 
 
-    #     // Kademlia DHT  8
+    #     // IPcomms 5
 
     #########################
+
+
+
 
 
 
@@ -918,7 +922,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
         """#
 
         K0 = 'requestType'
-        P0 = 'ping'
+        P0 = 'pong'
         try:
             K1 = 'pubkey'
             P1 = reqDict['pubkey']
@@ -956,6 +960,233 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
+
+
+
+    def sendfrag(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+*   static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
+
+
+        """#
+
+
+        K0 = 'requestType'
+        P0 = 'sendfrag'
+
+        try:
+            K1 = 'pubkey'
+            P1 = reqDict['pubkey']
+        except:
+            P1= ''
+        try:
+            K2 = 'name'
+            P2 = reqDict['name']
+        except:
+            P2= ''
+        try:
+            K3 = 'fragi'
+            P3 = reqDict['fragi']
+        except:
+            P3= ''
+        try:
+            K4 = 'numfrags'
+            P4 = reqDict['numfrags']
+        except:
+            P4= ''
+        try:
+            K5 = 'ipaddr'
+            P5 = reqDict['ipaddr']
+        except:
+            P5= ''
+        try:
+            K6 = 'totalcrc'
+            P6 = reqDict['totalcrc']
+        except:
+            P6= ''
+        try:
+            K7 = 'datacrc'
+            P7 = reqDict['datacrc']
+        except:
+            P7= ''
+        try:
+            K8 = 'data'
+            P8 = reqDict['data']
+        except:
+            P8= ''
+        try:
+            K9 = 'totallen'
+            P9 = reqDict['totallen']
+        except:
+            P9= ''
+        try:
+            K10 = 'blocksize'
+            P10 = reqDict['blocksize']
+        except:
+            P10= ''
+        try:
+            K11 = 'handler'
+            P11 = reqDict['handler']
+        except:
+            P11= ''
+
+
+        retVal =  {
+                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
+                    K8 : P8 , K9 : P9 , K10 : P10, K11 : P11
+                    }
+
+        return retVal
+
+############
+
+
+
+    def gotfrag(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+    *   static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
+
+
+        """#
+
+
+        K0 = 'requestType'
+        P0 = 'sendfrag'
+
+        try:
+            K1 = 'pubkey'
+            P1 = reqDict['pubkey']
+        except:
+            P1= ''
+        try:
+            K2 = 'name'
+            P2 = reqDict['name']
+        except:
+            P2= ''
+        try:
+            K3 = 'fragi'
+            P3 = reqDict['fragi']
+        except:
+            P3= ''
+        try:
+            K4 = 'numfrags'
+            P4 = reqDict['numfrags']
+        except:
+            P4= ''
+        try:
+            K5 = 'ipaddr'
+            P5 = reqDict['ipaddr']
+        except:
+            P5= ''
+        try:
+            K6 = 'totalcrc'
+            P6 = reqDict['totalcrc']
+        except:
+            P6= ''
+        try:
+            K7 = 'datacrc'
+            P7 = reqDict['datacrc']
+        except:
+            P7= ''
+        try:
+            K8 = 'count'
+            P8 = reqDict['count']
+        except:
+            P8= ''
+        try:
+            K9 = 'totallen'
+            P9 = reqDict['totallen']
+        except:
+            P9= ''
+        try:
+            K10 = 'blocksize'
+            P10 = reqDict['blocksize']
+        except:
+            P10= ''
+        try:
+            K11 = 'handler'
+            P11 = reqDict['handler']
+        except:
+            P11= ''
+
+
+        retVal =  {
+                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
+                    K8 : P8 , K9 : P9 , K10 : P10, K11 : P11
+                    }
+
+        return retVal
+
+
+    def startxfer(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+ *   static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
+
+
+        """#
+
+        K0 = 'requestType'
+        P0 = 'startxfer'
+        try:
+            K1 = 'timeout'
+            P1 = reqDict['timeout']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'fname'
+            P2 = reqDict['fname']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'dest'
+            P3 = reqDict['dest']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'data'
+            P4 = reqDict['data']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'handler'
+            P5 = reqDict['handler']
+        except:
+            P5 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
+
+
+
+
+
+
+
+
+
+
+    #########################
+
+
+
+
+    #     // Kademlia DHT  8
+
+    #########################
+
 
 
 
@@ -2231,9 +2462,13 @@ This is the wrapper class
                    'MGWdeposits',\
                    'cosign',\
                    'cosigned',\
-                   '                 Kademlia DHT 8',\
+                   '                   IPcomms',\
                    'ping',\
                    'pong',\
+                   'sendfrag',\
+                   'gotfrag',\
+                   'startxfer',\
+                   '                   Kademlia DHT 8',\
                    'store',\
                    'findvalue',\
                    'findnode',\
@@ -2358,9 +2593,7 @@ This is the wrapper class
             return jsonSpecs
 
 
-
-
-        #     // Kademlia DHT  8
+        #     // IPcomms 5
 
         elif reqDict['requestType'] == 'ping':
             jsonSpecs = self.jl777_aAll.ping(reqDict)
@@ -2368,6 +2601,19 @@ This is the wrapper class
         elif reqDict['requestType'] == 'pong':
             jsonSpecs = self.jl777_aAll.pong(reqDict)
             return jsonSpecs
+
+        elif reqDict['requestType'] == 'sendfrag':
+            jsonSpecs = self.jl777_aAll.sendfrag(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'gotfrag':
+            jsonSpecs = self.jl777_aAll.gotfrag(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'startxfer':
+            jsonSpecs = self.jl777_aAll.startxfer(reqDict)
+            return jsonSpecs
+
+        #     // Kademlia DHT  6
+
         elif reqDict['requestType'] == 'store':
             jsonSpecs = self.jl777_aAll.store(reqDict)
             return jsonSpecs

@@ -676,7 +676,7 @@ differentiate two types of replies:
         #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
 
         if 'nothing pending' in str(rpl777):
-            log.msg("GUIpoll --->  ",rpl777, type(rpl777))
+            pass#log.msg("GUIpoll --->  ",rpl777, type(rpl777))
 
         elif 'kademlia_store' in str(rpl777):
             self.rpl777_GUIpoll_kademlia_store(rpl777)
@@ -1128,7 +1128,7 @@ differentiate two types of replies:
                     self.deferred.addErrback(self.rpl777ERR)
 
             elif 'GUIpoll' in schedDue.SNrequests.keys():
-                log.msg("do GUIpoll")
+                #log.msg("do GUIpoll")
                 reqData = schedDue.SNrequests['GUIpoll'] # this has 0.9 sec
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df0_GUIpoll)
@@ -1184,7 +1184,7 @@ differentiate two types of replies:
         #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
 
         if 'nothing pending' in str(rpl777):
-            log.msg("GUIpoll --->  ",rpl777, type(rpl777),"\n")
+            pass#log.msg("GUIpoll --->  ",rpl777, type(rpl777),"\n")
 
         elif 'kademlia_store' in str(rpl777):
             self.rpl777_GUIpoll_kademlia_store(rpl777)
@@ -1349,9 +1349,7 @@ I also seem to catch this when someone else pings me
         log.msg("peersList", peersList)
 
         for peer in peersList:
-        #            ping and findnode!
 
-#            if peer[1] not in self.peersDiLoc.keys():
             self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
             log.msg(1*"\n NEW msg FOR LOCAL LIST:", peer)
 
