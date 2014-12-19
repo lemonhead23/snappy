@@ -71,16 +71,12 @@ environ['CACHE_FILENAMES'] = {
 sched_Test_1={}
 
 
-#SERVER_ADDR_TEST_1 = SERVER_ADDR_jl777 #"localhost"
-#SERVER_PORT_TEST_1 = 7776
-#FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
-
 TIMER2_Freq = 0.850 # how ofthe the base timer is called for loopedCall
 
 #----------------------------------------
 sched_GUIpoll ={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
-sched_GUIpoll['callFreq'] = 1500               # ms!!
+sched_GUIpoll['callFreq'] = 900               # ms!!
 
 SNreqTypes={}
 SNreqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
@@ -90,7 +86,7 @@ sched_GUIpoll['target'] = 'this Uses requests!'
 #----------------------------------------
 sched1={}
 sched1['schedName'] = 'settingsForPing'
-sched1['callFreq'] =13500               # ms!!
+sched1['callFreq'] =23500               # ms!!
 
 SNreqTypes={}
 SNreqTypes['uc1Start_settings'] = {'requestType':'settings'}
@@ -103,7 +99,7 @@ sched1['target'] = 'this Uses requests!'
 #----------------------------------------
 sched_findnodePeers ={}
 sched_findnodePeers['schedName'] = 'findnodePeers'
-sched_findnodePeers['callFreq'] = 11500               # ms!!
+sched_findnodePeers['callFreq'] = 25500               # ms!!
 
 SNreqTypes={}
 SNreqTypes['findnodePeers'] = {'requestType':'findnode'}

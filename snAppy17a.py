@@ -12,6 +12,10 @@ from twisted.internet import reactor
 
 from twisted.internet import task
 
+from twisted.python import threadpool as tp
+
+
+
 import sys, time
 import os
 from snAppyModules.snUseCases import *
@@ -328,6 +332,20 @@ class ProxyClientProtocol777(protocol.Protocol):
         self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(preppedReq777), headers= POSTHEADERS)
         self.deferred.addCallback(self.rcvPOST)
         self.deferred.addErrback(self.rcvPOSTERR)
+
+        #
+        #
+        #
+        # stat1 = reactor.threadpool.waiters
+        # stat2 = reactor.threadpool.workers
+        # stat3 = reactor.threadpool.threads
+        # stat4 = reactor.threadpool.q.queue
+        #
+        # log.msg("waiters: ", stat1)
+        # log.msg("workers: ", stat2)
+        # log.msg("threads: ", stat3)
+        # log.msg("queue: ", stat4)
+
         # putting this into a Session() object fails miserabley due to some threading!
         # this is for raw transport level bytes writing!
         # self.transport.write(requestOUT)
@@ -450,12 +468,41 @@ class SuperNETApiD(Daemon3): #object):
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
 
+
+        reactor.suggestThreadPoolSize(500) # should be ok
+        log.msg("stats: ",reactor.threadpool.dumpStats())
+        log.msg("workers: ", tp.ThreadPool.workers)
+
+        serverFactory.reactor = reactor
+
         uc_scd_XML_SportsdataLLC = UC_Scheduler_XML(serverFactory,  self.environ ) # environ has the credentials and all
         timer1 = task.LoopingCall(uc_scd_XML_SportsdataLLC.periodic,  )
         timer1.start( TIMER1_SportsdataLLC_SECS, now=True ) # slow heartbeat, start now TODO: the NOW does not seem to work!
         # can make as many as we want here with specific timers and tasks
 
-        reactor.suggestThreadPoolSize(500) # should be ok
+        # reactor.suggestThreadPoolSize(500) # should be ok
+        #
+        # log.msg("stats: ",reactor.threadpool.dumpStats())
+        # log.msg("workers: ", tp.ThreadPool.workers)
+
+
+
+#tp.Queue.empty
+#tp.Queue.full
+#tp.ThreadPool.adjustPoolsize
+# In [4]: rc.threadCallQueue.
+# rc.threadCallQueue.append   rc.threadCallQueue.count    rc.threadCallQueue.insert   rc.threadCallQueue.reverse
+# rc.threadCallQueue.clear    rc.threadCallQueue.extend   rc.threadCallQueue.pop      rc.threadCallQueue.sort
+# rc.threadCallQueue.copy     rc.threadCallQueue.index    rc.threadCallQueue.remove
+#
+#  tp.
+# tp.Queue            tp.WorkerStop       tp.context          tp.copy             tp.failure          tp.threading
+# tp.ThreadPool       tp.absolute_import  tp.contextlib       tp.division         tp.log
+#
+# tp.log.startLogging('tpLogFile')
+# from twisted.python import threadpool as tp
+
+
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
         # a scheduler for statusInfo
@@ -552,6 +599,7 @@ class SuperNETApiD(Daemon3): #object):
         timer3.start( TIMER3_Freq , now=True )
 
         #
+
         reactor.suggestThreadPoolSize(500) # should be ok
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
@@ -571,13 +619,48 @@ class SuperNETApiD(Daemon3): #object):
         #
         #  here we can build as many different schedulers as we want!
         #
+
+
+
+        reactor.suggestThreadPoolSize(500) # should be ok
+
+        #stat = reactor.threadpool.dumpStats()
+        #
+        # stat1 = reactor.threadpool.waiters
+        # stat2 = reactor.threadpool.workers
+        # stat3 = reactor.threadpool.threads
+        # stat4 = reactor.threadpool.q.queue
+        #
+        # log.msg("waiters: ", stat1)
+        # log.msg("workers: ", stat2)
+        # log.msg("threads: ", stat3)
+        # log.msg("queue: ", stat4)
+        #
+        # log.msg("workers: ", tp.ThreadPool.workers)
+
+        serverFactory.reactor = reactor
+
+        #queue: deque([({<class 'twisted.python.log.ILogContext'>: {'isError': 0, 'system': '-'}}, <function post at 0x7f1d6e4fce18>, ('http://178.62.185.131:7778',), {'data': '{"destip": "128.199.183.249", "requestType": "ping"}', 'headers': {'Content-type': 'application/json', 'Accept': 'text/plain'}}, <function deferToThreadPool.<locals>.onResult at 0x7f1d6cc82f28>)])
+
+
+        #waiters: [<Thread(PoolThread-twisted.internet.reactor-3, started 139764275607296)>, <Thread(PoolThread-twisted.internet.reactor-2, started 139764355786496)>, <Thread(PoolThread-twisted.internet.reactor-1, started 139764364441344)>]
+#  stats:  None
+# 2014-12-19 11:43:25+0100 [-] workers:  0
+# 2014-12-19 11:43:26+0100 [-] ping to whitelist: 23.97.66.164
+# 2014-12-19 11:43:26+0100 [-] queue: deque([({<class 'twisted.python.log.ILogContext'>: {'isError': 0, 'system': '-'}}, <function post at 0x7f1a57053e18>, ('http://178.62.185.131:7778',), {'headers': {'Content-type': 'application/json', 'Accept': 'text/plain'}, 'data': '{"destip": "23.97.66.164", "requestType": "ping"}'}, <function deferToThreadPool.<locals>.onResult at 0x7f1a5b741ea0>)])
+# 2014-12-19 11:43:26+0100 [-] waiters: [<Thread(PoolThread-twisted.internet.reactor-1, started 139751088772864)>]
+# 2014-12-19 11:43:26+0100 [-] workers: [<Thread(PoolThread-twisted.internet.reactor-2, started 139751080118016)>]
+# 2014-12-19 11:43:26+0100 [-] total: [<Thread(PoolThread-twisted.internet.reactor-1, started 139751088772864)>, <Thread(PoolThread-twisted.internet.reactor-2, started 139751080118016)>]
+#
+
+
         ucTEST_4 = UCTEST_4_sendMSGs(serverFactory,  self.environ )
         timer4 = task.LoopingCall(ucTEST_4.periodic,  )
         timer4.start( TIMER3_Freq , now=True )
 
         #
-        reactor.suggestThreadPoolSize(500) # should be ok
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+        #reactor.suggestThreadPoolSize(500) # should be ok
+        #reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
 
 

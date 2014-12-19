@@ -52,10 +52,7 @@ This instantiates a scheduler that runs the designated script/test class
 
  List of manual commands for quick function tests // often used
 
-
-
-
-    ./BitcoinDarkd  SuperNET '{"requestType":"stop"}'
+cd
 
     ./BitcoinDarkd  stop
 
@@ -307,9 +304,6 @@ Output of 'settings' command:
 
 
 
-
-
-
 SuperNET.conf
 
 
@@ -346,6 +340,9 @@ in some cases much better, so that is the preferred coin to Teleport
 
 
 
+the privkey to the BTCD addresses you put in the SuperNET.conf file are the NXT passwords
+
+
 ##############################################################
 
 
@@ -355,11 +352,6 @@ ot BTCD start also starts SuperNET
 
 
 ########################################################################################
-
-
-UDP RECEIVEDnxtip.(85.178.207.74) ä"requestType":"ping","NXT":"2131686659786462901","time":1417272875,"pubkey":"849c97e5b1e8c50429249eff867de5e6ded39d34a6ccc9c42ea720d927a12d18","ipaddr":"85.178.207.74","ver":"0.199"ü
-85.178.207.74 NARROWCAST.(Ø) txid.18150580569882602490 (85.178.207.74:14631)
-PING.(ä"result":"kademliaèpong to (85.178.207.74/0)","txid":"5805403063085832746"ü)
 
 
 
@@ -396,7 +388,23 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sta
 
 
 
-    // multisig 2 MGW
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=209.126.70.156'
+
+
+
+    // MGW 6
+
+./.
+
+
+
+              // IPcomms',\
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=178.62.185.131'
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pong'
 
 
 
@@ -406,10 +414,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sta
 
 
 
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=178.62.185.131'
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pong'
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=LUMBERJACK&data=FEEEEE123443534425AABB'
 
@@ -424,13 +428,17 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
 
 
 
+
     // MofNfs 3
+
 
 
     // Telepathy 9
 
 
+
     // Teleport 3
+
 
 
     // InstantDEX 6
@@ -445,6 +453,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pla
 
     // Tradebot 3
 
+
     // # privatebet 1
 
 
@@ -456,37 +465,51 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pla
 ##################################################################################################
   // glue 7
 
-##################################################################################################
-------------------------------------------------------------------------------------------
+                  'gotjson',\
+                   'gotpacket',\
+                   'gotnewpeer',\
+                   'BTCDpoll',\
+                   'GUIpoll',\
+                   'stopDummy',\
+                   'startDummy',\
+                   'settings',\
 
 
-1 call_NOT_TESTED
+
+
+1
     static char *gotjson[] = { (char *)gotjson_func, "BTCDjson", "", "json", 0 };
     ./BitcoinDarkd SuperNET '{"requestType":"BTCDjson", "json":""}'
 
 ------------------------------------------------------------------------------------------
 
-2 call_NOT_TESTED
+
+
+2
     static char *gotpacket[] = { (char *)gotpacket_func, "gotpacket", "", "msg", "dur", "ip_port", 0 };
 ./BitcoinDarkd SuperNET '{"requestType":"gotpacket"}'
 ------------------------------------------------------------------------------------------
 
 
-3 call_NOT_TESTED
+
+
+3
     static char *gotnewpeer[] = { (char *)gotnewpeer_func, "gotnewpeer", "", "ip_port", 0 };
 ./BitcoinDarkd SuperNET '{"requestType":"gotnewpeer"}'
 ------------------------------------------------------------------------------------------
 
 
 
-4 call_NOT_TESTED
+
+4
     static char *BTCDpoll[] = { (char *)BTCDpoll_func, "BTCDpoll", "", 0 };
 ./BitcoinDarkd SuperNET '{"requestType":"BTCDpoll"}'
 ------------------------------------------------------------------------------------------
 
 
 
-5 call_TESTED
+
+5
 
     static char *GUIpoll[] = { (char *)GUIpoll_func, "GUIpoll", "", 0 };
 
@@ -507,7 +530,7 @@ you need to destringify the result and that will be like the return result had t
 
 ------------------------------------------------------------------------------------------
 
-6  call_part_TESTED
+6
 
     static char *stop[] = { (char *)stop_func, "stop", "", 0 };
 
@@ -519,7 +542,7 @@ you need to destringify the result and that will be like the return result had t
 
 
 
-7 call_TESTED_NEEDS_PARMS_DOKU
+7
 
 
     static char *settings[] = { (char *)settings_func, "settings", "", "field", "value", "reinit", 0 };
@@ -533,9 +556,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 {'active': ['BTCD'], 'MIN_NXTCONFIRMS': 13, 'debug': 2, 'LIBTEST': '1', 'whitelist': ['209.126.70.156', '209.126.70.159', '209.126.70.170', '104.40.137.20', '104.41.129.107', '162.248.163.43', '23.97.66.164', '100.79.14.220', '137.116.193.215', '80.82.64.135', '185.21.192.9', '94.102.63.149', '37.187.200.156', '199.193.252.103', '89.212.19.49', '128.199.183.249', '190.10.10.145'], 'coins': [{'pubaddr': 'RHwBRZzbETNR3nyQjuVWgaLdaBNBu3gwbw', 'maxevolveiters': 10, 'privacyServer': '127.0.0.1', 'clonesmear': 1, 'minconfirms': 3, 'nohexout': 1, 'estblocktime': 60, 'backupdir': '/home/azure/backups', 'conf': '/home/azure/.BitcoinDark/BitcoinDark.conf', 'asset': '11060861818140490423', 'name': 'BTCD', 'Lfactor': 3, 'ciphers': [{'skipjack': 'RNmF5YmUY81wWu1njRiYvJRoKMf1Ms9kN3'}, {'aes': 'RXcpYBAWbbNgNBSnr8kB9sufSfZDwttXwC'}, {'blowfish': 'RJgoTjReeE2ZKbymx4PyiyXmgsbTkW9sds'}], 'srvpubaddr': 'RWfwbc25mPTcSN4WgDXZeMnf3SFT1rN8tM', 'useaddmultisig': 1, 'rpc': '127.0.0.1:14632'}], 'MAINNET': 1}
 
 
-
-
-
   ./BitcoinDarkd SuperNET '{"requestType":"settings","field":"LIBTEST","value":"2"}'
   ./BitcoinDarkd SuperNET '{"requestType":"settings","value":"{\"LIBTEST\":\"1\"}"}'
   ./BitcoinDarkd SuperNET '{"requestType":"settings","value":"deadbeef"}'
@@ -543,32 +563,26 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 
 "settings" has three modes. if you just call it without any fields, it will return the current SuperNET.conf
-
 this way you can display to the user the current settings
 
 now there is a replace mode, which is indicated by having a "field" parameter, eg. ./BitcoinDarkd SuperNET '{"requestType":"settings","field":"debug"}'
-
 if you have no "value" field, the specified field will be deleted from the SuperNET.conf and it will be saved to HDD
 
-
 an automatic backup is made to SuperNET.conf.old
-
 also SuperNET.conf.old is copied to the backups directory, so this way there are the last two versions available,
-
 but no provision to access them for now. will have to manually retrieve them
 
 if you have a value field specified, it replaces the existing value or creates a new entry:
 
 ./BitcoinDarkd SuperNET '{"requestType":"settings","field":"debug","value":"3"}'
 
-
 the final variation is if you have "value" but no "field" specified and if the value is a hexstr,
-
 then this is converted to binary and the entire SuperNET.conf file is replaced with this
-
 to use this, you probably have to create the desired JSON for the SuperNET.conf and convert to hex.
-
 I had to do this due to too many levels of stringification and different paths, some having one less level. just too confusing.
+
+
+
 
 
 
@@ -583,13 +597,15 @@ I had to do this due to too many levels of stringification and different paths, 
 
 
 
+                 'passthru',\
+                   'remote',\
 
-!!! new 112614 ok
+ call_NOT_TESTED
 
   static char *passthru[] = { (char *)passthru_func, "passthru", "", "coin", "method", "params", 0 };
 
 
-
+call_NOT_TESTED
 
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
@@ -601,14 +617,21 @@ I had to do this due to too many levels of stringification and different paths, 
 
 
 ##################################################################################################
-    // multisig 2  // MGW   7
+
+    //     MGW   7
 
 ##################################################################################################
 ------------------------------------------------------------------------------------------
 
 
 
-
+                 'genmultisig',\
+                   'getmsigpubkey',\
+                   'MGWaddr',\
+                   'setmsigpubkey',\
+                   'MGWdeposits',\
+                   'cosign',\
+                   'cosigned',\
 
 
 
@@ -674,73 +697,17 @@ cosign just has "otheracct", "seed", "text"
 
 
 
+ '                   IPcomms',\
 
 
 
 
 
-
-##################################################################################################
-
-
-
-
-
-
-    // Kademlia DHT 8
-
-
-
-
-./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
-
-
-Returns:
-
-
-GETDB.({"requestType":"dbret","NXT":"6249611027680999354","key":"1031470952125437106","data":"c0ffee"})
-
-
-
-
-cassius [12:32 PM]
-So what am I looking at here? Is this the contact list held by the node that's storing  that value?
-
-cassius [12:32 PM]
-
-
-./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
-
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
-
-./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
-
-{"result":"kademlia_store","key":"1031470952125437106","data":"c0ffee","len":3,"txid":"1782911352449719975"}
-
-
-
-
-./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"3571143576961987768"}'
-
-
-
-
-
-
-
-
-updated.nodestats.db (13434315136155299987) hp.0x7fb86001dfb0 data.data 0x7fb86001dfb0
-do_localstore(9245776713305854803) <- (FAAA976987695876585875BBBBBBBBBBB)
-updated.public.db (9245776713305854803) hp.0x7fb8666f2610 data.
-
-./BitcoinDarkd SuperNET '{"requestType":"findvalue","name":"TEEESTDATA"}'
-
-{"result":"kademlia_findvalue from.(2131686659786462901) previp.() key.(12834072467348571675) datalen.0 txid.265657934412272939"}
-
-
-
-
+                   'ping',\
+                   'pong',\
+                   'sendfrag',\
+                   'gotfrag',\
+                   'startxfer',\
 
 
 
@@ -769,7 +736,6 @@ I am also sending along the session based nacl pubkey that allows encrypted comm
 
 
 a lot of the fields are optional and/or internally generated, the following are the allowed fields for each command:
-
 
 I had to tweak some things so that users can pass in "name" but internally it is mapped to a 64bit key (hashkey)
 
@@ -857,72 +823,14 @@ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET",
 
 
 
-11 call_internal_ONLY "pong" is not for users to generate
+11
 
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", 0 };
-
-
-
 
 PONG from deactivated GUIpoll with PONG:
 
 This is what the PINGer receives back from the PONGer
-{'result': '{"result":"kademlia_store","key":"1888203822199063024","data":"deadbeef","len":4,"txid":"16715866481694536540"}', 'from': '62.194.6.163', 'args': '[{"requestType":"store","NXT":"7837143510182070614","time":1417681759,"key":"1888203822199063024","data":4},{"token":"vrg8fulem0b0os32n0p3elmtt7p16nqsbkjfcb5u1n340v25tooi0gan4rvgrbg18rt6oq3d9m82nttaoeghkbtp0jjpalsh4miuir8s31bgo5hkmr0qih6skf785dghq6rjh9hvbvcoj350vge59cp197g0kjho"}]', 'port': 0}
 
-
-@l8orre: if you get a findnode you will send the findnode to the nodes that are closer to dest
-
-jl777 [12:10 PM]
-all the samples are in the list
-
-jl777 [12:10 PM]
-this is the raw data
-
-I will add a field so you can get the open/high/low/close/ave per time period minute, 2 min, 5 min, 1hr etc
-
-
-
-findnodes spawn more findnodes and also sends back a havenode
-
-so 1 findnode can cascade through the network
-
-@l8orre: now imagine the attacker's predicament!
-
-only seeing 1400 byte encrypted packets without any visibility into the internals
-
-
-args ok  [{'key': '6216883599460291148', 'requestType': 'havenode', 'data': [['6216883599460291148', '192.99.246.126', '7777', '0'], ['7067340061344084047', '94.102.50.70', '7777', '1418360786'], ['10694781281555936856', '209.126.70.170', '7777', '1418355574'], ['1978065578067355462', '89.212.19.49', '7777', '1418355275'], ['17265504311777286118', '184.175.25.117', '7777', '1418357608'], ['7108754351996134253', '167.114.2.171', '7777', '1418355385'], ['5624143003089008155', '192.99.212.250', '7777', '1418355291']], 'NXT': '6216883599460291148', 'time': 1418380319}, {'token': '7meqnnpffqh9272utch79ra8rvlih9mevl901qhml0phabmmv3cu07blu76g1681id5qgp3k8lsf9tqhv9glkk6i9u1fluohu919kb6qm8d0kpuk9af13dp684jud4u10iriovu36q2kj21l2js923v7tu6i02gf'}] <class 'list'>
-
-
-confetti in a blizzard
-
-
-
-that is the reeturn data
-
-
-the nodes closest to the key you are searching for
-
-
-maybe sender and receiver differences
-
-the findnode call that is received by a node can be locally initiated or remotely
-
-
-if locally started it is treated differently
-
-
-for a remote, if it finds it, it returns a store for findvalue
-
-
-
-otherwise it is sending back havenode or havenodeB
-
-now when it sends back this havenode or havenodeB, it arrives back at the node that sent the find
-
-so for the recipient of the find node, the result is havenode
-
-to the sender of the find, it comes back as a new havenode command
 
 
 ----------------------
@@ -969,11 +877,46 @@ b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"106
 
 
 
+
+
+
+
+
+
+##################################################################################################
+
+
+
+
+
+
+  '                   Kademlia DHT 8',\
+                   'store',\
+                   'findvalue',\
+                   'findnode',\
+                   'havenode',\
+                   'havenodeB',\
+                   'findaddress',\
+
+
+
+
 ------------------------------------------------------------------------------------------
 
                                                 store
 
 12  OK
+
+DATA MUST BE HEX!
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=star2&data=deadbeef'
+
+
+
+
+
+
 
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
 
@@ -985,25 +928,92 @@ b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"106
 
 
 
+
+
+-----> {'data': 'deadbeef', 'result': 'kademlia_store', 'txid': '11658441434268696835', 'len': 4, 'key': '12827560090541683855'}
+
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getdb&key=4960459668609431904'
+
+
+-----> {'data': 'deadbeef', 'NXT': '2131686659786462901', 'requestType': 'dbret', 'key': '12827560090541683855'}
+
+
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findvalue&name=star2'
+
+
+-------> {'data': 'deadbeef', 'len': '4', 'key': '12827560090541683855'}
+
+
+
+
+FULLRESULT?
+{'result': '{"result":"kademlia_store","key":"1888203822199063024","data":"deadbeef","len":4,"txid":"16715866481694536540"}', 'from': '62.194.6.163', 'args': '[{"requestType":"store","NXT":"7837143510182070614","time":1417681759,"key":"1888203822199063024","data":4},{"token":"vrg8fulem0b0os32n0p3elmtt7p16nqsbkjfcb5u1n340v25tooi0gan4rvgrbg18rt6oq3d9m82nttaoeghkbtp0jjpalsh4miuir8s31bgo5hkmr0qih6skf785dghq6rjh9hvbvcoj350vge59cp197g0kjho"}]', 'port': 0}
+
+
+
+
+
+./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
+
+{"result":"kademlia_store","key":"1031470952125437106","data":"c0ffee","len":3,"txid":"1782911352449719975"}
+
+./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
+{"result":"kademlia_store","key":"1031470952125437106","data":"c0ffee","len":3,"txid":"0"}
+
+
+{"requestType":"dbret","NXT":"2131686659786462901","key":"1031470952125437106","data":"c0ffee"}
+
+./BitcoinDarkd SuperNET '{"requestType":"findvalue","name":"starbucks"}'
+{"key":"1031470952125437106","data":"c0ffee","len":"3"}
+
+./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"1031470952125437106"}'
+{"key":"1031470952125437106","data":"c0ffee","len":"3"}
+
+
+
+
+
+
+
+updated.nodestats.db (13434315136155299987) hp.0x7fb86001dfb0 data.data 0x7fb86001dfb0
+do_localstore(9245776713305854803) <- (FAAA976987695876585875BBBBBBBBBBB)
+updated.public.db (9245776713305854803) hp.0x7fb8666f2610 data.
+
+{"result":"kademlia_findvalue from.(2131686659786462901) previp.() key.(12834072467348571675) datalen.0 txid.265657934412272939"}
+
+
+
+
+
+
 ./BitcoinDarkd SuperNET '{"requestType":"store","name":"jl777","data":"deadbeef"}'
-
-
 
 ./BitcoinDarkd SuperNET '{"requestType":"store","name":"TEEESTDATA","data":"FAAA976987695876585875BBBBBBBBBBB"}'
 {"result":"kademlia_store","key":"9245776713305854803","data":"FAAA976987695876585875BBBBBBBBBBB","len":16,"txid":"16975292071954015358"}
 
-
-
 do_localstore(9245776713305854803) <- (FAAA976987695876585875BBBBBBBBBBB)
 (9245776713305854803) <- (FAAA976987695876585875BBBBBBBBBBB) already there
 
+
+REPLIES at command line are longer than from snappy! check!
 ./BitcoinDarkd SuperNET '{"requestType":"store","name":"TEEESTDATA","data":"FAAA976987695876585875BBBBBBBBBBB"}'
 {"result":"kademlia_store","key":"9245776713305854803","data":"FAAA976987695876585875BBBBBBBBBBB","len":16,"txid":"6917103578949200575"}
+{"result":"kademlia_store","key":"9245776713305854803","data":"fffff97698769587658587ffffffffffff","len":17,"txid":"5089905564731578754"}
 
 
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=LUMBERJACK&data=FEEEEE123443534425AABB'
 {'key': '130410257679301898', 'len': 11, 'txid': '7320311997847871185', 'result': 'kademlia_store', 'data': 'FEEEEE123443534425AABB'}
+
+
 
 
 ------------------------------------------------------------------------------------------
@@ -1121,11 +1131,8 @@ to find the value for a symbolic name (max 64 bytes for now):
 
 
 
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=6249611027680999354'
 
-14 call_TESTED
-
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=3571143576961987768'
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUIpoll'
 
@@ -1133,6 +1140,8 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
 
 
 {'result': 'kademlia_findnode from.(2131686659786462901) previp.() key.(3571143576961987768) datalen.0 txid.15660482336477682725'}
+
+
 
 
 
@@ -1158,10 +1167,6 @@ to find a node given NXT address:
 {"result":"kademlia_findnode from.(2131686659786462901) previp.() key.(3571143576961987768) datalen.0 txid.10630886535006363570"}
 
 
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=6249611027680999354'
-
-
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=6249611027680999354'
 {'result': 'kademlia_findnode from.(2131686659786462901) previp.() key.(6249611027680999354) datalen.0 txid.5604720478451918878'}
 
@@ -1170,6 +1175,57 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=fin
 
 
 
+
+
+@l8orre: if you get a findnode you will send the findnode to the nodes that are closer to dest
+
+all the samples are in the list
+
+this is the raw data
+
+I will add a field so you can get the open/high/low/close/ave per time period minute, 2 min, 5 min, 1hr etc
+
+
+
+
+findnodes spawn more findnodes and also sends back a havenode
+
+so 1 findnode can cascade through the network
+
+@l8orre: now imagine the attacker's predicament!
+
+only seeing 1400 byte encrypted packets without any visibility into the internals -confetti in a blizzard
+
+
+
+args ok  [{'key': '6216883599460291148', 'requestType': 'havenode', 'data': [['6216883599460291148', '192.99.246.126', '7777', '0'], ['7067340061344084047', '94.102.50.70', '7777', '1418360786'], ['10694781281555936856', '209.126.70.170', '7777', '1418355574'], ['1978065578067355462', '89.212.19.49', '7777', '1418355275'], ['17265504311777286118', '184.175.25.117', '7777', '1418357608'], ['7108754351996134253', '167.114.2.171', '7777', '1418355385'], ['5624143003089008155', '192.99.212.250', '7777', '1418355291']], 'NXT': '6216883599460291148', 'time': 1418380319}, {'token': '7meqnnpffqh9272utch79ra8rvlih9mevl901qhml0phabmmv3cu07blu76g1681id5qgp3k8lsf9tqhv9glkk6i9u1fluohu919kb6qm8d0kpuk9af13dp684jud4u10iriovu36q2kj21l2js923v7tu6i02gf'}] <class 'list'>
+
+
+that is the reeturn data
+
+
+the nodes closest to the key you are searching for
+
+
+maybe sender and receiver differences
+
+the findnode call that is received by a node can be locally initiated or remotely
+
+
+if locally started it is treated differently
+
+
+for a remote, if it finds it, it returns a store for findvalue
+
+
+
+otherwise it is sending back havenode or havenodeB
+
+now when it sends back this havenode or havenodeB, it arrives back at the node that sent the find
+
+so for the recipient of the find node, the result is havenode
+
+to the sender of the find, it comes back as a new havenode command
 
 
 
@@ -1252,7 +1308,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=hav
 
                                             findaddress
 
-17 call_NOT_TESTED
+17
 
 
 
@@ -1265,19 +1321,22 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=hav
 
 
 
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&key=8894667849638377372'
-13434315136155299987
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&      '
 
 
 
 
-I pushed a new version with findaddress API
+
 
 ./BitcoinDarkd SuperNET '{"requestType":"findaddress","refaddr":"2131686659786462901","dist":24,"numthreads":20,"duration":6000,"list":["13434315136155299987","8894667849638377372","10694781281555936856","18429876966171494368","16163006958863727986","1838354277347686608","17572279667799017517","14815310753561302584"]}'
 
 
 
+
+
 The refaddr is your privacyServer's NXT address, dist is the distance in bits (after xor),
+
+
 
 numthreads is the number of parallel tasks doing the search, duration is in seconds and list is the reference list of public server addressees
 
@@ -1383,6 +1442,13 @@ James
 
 ##################################################################################################
     // MofNfs 3
+
+
+                  'savefile',\
+                   'restorefile',\
+                   'publish',\
+
+
 
 
 I changed the name of "usbdir" to "backup" just because it is unlikely to actually be a usb
@@ -1582,7 +1648,7 @@ James
 
 
 
-18 call_NOT_TESTED
+18
 
     static char *savefile[] = { (char *)savefile_func, "savefile", "V", "filename", "L", "M", "N", "backup", "password", "pin", 0 };
 
@@ -1596,7 +1662,7 @@ James
                                                 restorefile
 
 
-19 call_NOT_TESTED
+19
 
     static char *restorefile[] = { (char *)restorefile_func, "restorefile", "V", "filename", "L", "M", "N", "backup", "password", "destfile", "sharenrs", "txids", "pin", 0 };
 
@@ -1607,7 +1673,7 @@ James
                                                 sendfile
 
 
-20 call_NOT_TESTED
+20
 
     static char *sendfile[] = { (char *)sendfile_func, "sendfile", "V", "filename", "dest", "L", 0 };
 
@@ -1630,15 +1696,33 @@ jl777 [8:22 AM]
 meaning they are ways to access DB, but different DB's
 
 
+
+
+
 findnode -> havenode
 
 jl777 [8:15 AM]8:15
 findvalue -> havenodeB
 
 
+
+
 ##################################################################################################
 
+
     // Telepathy 9
+
+
+                 'getpeers',\
+                   'addcontact',\
+                   'removecontact',\
+                   'dispcontact',\
+                   'telepathy',\
+                   'getdb',\
+                   'sendmessage',\
+                   'sendbinary',\
+                   'checkmsg',\
+
 
 
 
@@ -1755,12 +1839,10 @@ That would be cool, to be able to stream voice over Telepathy connection
 
 James
 #
-#
-				# 	telepathy encapsulates a JSON attachment
-				# 	inside the attachment can be anything for a telepathy API processor to deal with
-				# 	it is similar to protocol stack
-				# at the API level, you just need to issue and interpret the JSON fields you create
-				# and all of the SuperNET core API is fully accessible via http, https, curl, wget
+# telepathy encapsulates a JSON attachment
+ # 	it is similar to protocol stack
+  at the API level, you just need to issue and interpret the JSON fields you create
+ # and all of the SuperNET core API is fully accessible via http, https, curl, wget
 				# so SuperNET apps can be written in any language
 				# accessing standa
 
@@ -1794,9 +1876,19 @@ To prevent the spoofing, I added a contacts list:
 ./BitcoinDarkd SuperNET '{"requestType":"dispcontact","handle":"jl777"}'
 
 
-These are basically a way of mapping long acct numbers to easy to remember handles for use in other API calls. Nothing fancy. Since they are not stored on HDD you need to put a "contacts":[{"jl777":""}....] field in SuperNET.conf or have the GUI do it on startup.
 
-calling addcontact again will just update the acct. These accts have to be funded with at least 1 NXT I will add a display handle API with a special handle called "me" that shows your private acct and public key.
+
+These are basically a way of mapping long acct numbers to easy to remember handles for use in other API calls.
+
+Nothing fancy. Since they are not stored on HDD you need to put a "contacts":[{"jl777":""}....] field in SuperNET.conf
+
+or have the GUI do it on startup.
+
+calling addcontact again will just update the acct.
+
+These accts have to be funded with at least 1 NXT I will add a display handle API
+
+with a special handle called "me" that shows your private acct and public key.
 
 
 
@@ -1936,6 +2028,9 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
 ------------------------------------------------------------------------------------------
 
 
+
+
+
                                                 telepathy
 
 
@@ -1962,6 +2057,27 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
 
 
 
+
+
+
+./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
+
+
+Returns:
+
+
+GETDB.({"requestType":"dbret","NXT":"6249611027680999354","key":"1031470952125437106","data":"c0ffee"})
+
+
+
+
+cassius [12:32 PM]
+So what am I looking at here? Is this the contact list held by the node that's storing  that value?
+
+cassius [12:32 PM]
+
+
+
 26 call_NOT_TESTED
 
     static char *getdb[] = { (char *)getdb_func, "getdb", "V",  "contact", "id", "key", "dir", "destip", 0 };
@@ -1972,16 +2088,16 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
 
 ./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"8894667849638377372"}'
 
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getdb&key=8894667849638377372'
+{'error': 'cant find key', 'requestType': 'dbret', 'key': '8894667849638377372'}
 
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getdb&key=8894667849638377372'
 
 
 
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sendmessage&dest=8894667849638377372&msg="THREE..TWO..ONE..LIFTOFF!!"'
 
 
-./BitcoinDarkd SuperNET '{"requestType":"sendmessage","6216883599460291148":" ,"msg":"THREE..TWO..ONE..LIFTOFF!!","L":3}'
 
 
 ------------------------------------------------------------------------------------------
@@ -1990,37 +2106,22 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-27 call_NOT_TESTED
 
-    static char *sendmsg[] = { (char *)sendmsg_func, "sendmessage", "V", "dest", "msg", "L", 0 };
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sendmessage&dest=8894667849638377372&msg="THREE..TWO..ONE..LIFTOFF!!"'
 
 
 ./BitcoinDarkd SuperNET '{"requestType":"sendmessage","6216883599460291148":" ,"msg":"THREE..TWO..ONE..LIFTOFF!!","L":3}'
 
+    static char *sendmsg[] = { (char *)sendmsg_func, "sendmessage", "V", "dest", "msg", "L", 0 };
 
-./BitcoinDarkd SuperNET '{"requestType":"sendmessage","6249611027680999354":" ,"msg":"THREE..TWO..ONE..LIFTOFF!!!","L":3}'
-
-6249611027680999354
-
-./BitcoinDarkd SuperNET '{"requestType":"sendmessage","dest":"6249611027680999354","msg":"HREE..TWO..ONE..LIFTOFF!!!!"}'
-./BitcoinDarkd SuperNET '{"requestType":"sendmessage","dest":"<nxtaddress>,"msg":"<text of message>","L":<maxonionlayers>}'
-
-
-I have spot tested a few of the functions, but the easiest to use is the "sendmessage"
-./BitcoinDarkd SuperNET '{"requestType":"sendmessage","dest":"<your srvpubaddr>","msg":"hello"}'
-
-
-at the end of a bunch of printouts you should see a:
-0 >>>>>>>>>>>>> received message.(hello) NXT.<your pubaddr> from hop.<random node's IP>/6777
-
-
-./BitcoinDarkd  SuperNET '{"requestType":"sendmessage","dest":"2131686659786462901","msg":"hello---------------------------******************************"}'
-
-./BitcoinDarkd  SuperNET '{"requestType":"sendmessage","dest":"3571143576961987768","msg":"THREE- TWO -ONE- LIFTOFF ********************"}'
-
-
-./BitcoinDarkd  SuperNET '{"requestType":"sendmessage","dest":"2131686659786462901","msg":"hello---------------------------******************************"}'
+ ./BitcoinDarkd  SuperNET '{"requestType":"sendmessage","dest":"2131686659786462901","msg":"hello---------------------------******************************"}'
 {"status":"2131686659786462901 sends encrypted sendmessage to 3571143576961987768 pending via.(3571143576961987768), len.1396"}
+
+
+
 
 
 ------------------------------------------------------------------------------------------
@@ -2051,15 +2152,19 @@ at the end of a bunch of printouts you should see a:
 
 
 
+
+
+##################################################################################################
+
 ##################################################################################################
 
 
 
     // Teleport 3
-
-#
-#
-##################################################################################################
+ Teleport 3',\
+                   'maketelepods',\
+                   'telepodacct',\
+                   'teleport',\
 
 
                                                 maketelepods
@@ -2112,10 +2217,20 @@ got JSON.({"requestType":"maketelepods","coin":"BTCD","amount":".005"})
 
 
 
+
+
+
 ##################################################################################################
 
+                    'InstantDEX 6',\
 
-    // InstantDEX 6
+
+                   'orderbook',\
+                   'placebid',\
+                   'placeask',\
+                   'makeoffer',\
+                   'respondtx',\
+                   'processutx',\
 
 
 
@@ -2293,10 +2408,10 @@ adding allfields will show more info on each orderbook entry, including the NXT 
 
 
 
-
-
-    // Tradebot 3
-
+   Tradebot 3',\
+                   'pricedb',\
+                   'getquotes',\
+                   'tradebot',\
 
 
 

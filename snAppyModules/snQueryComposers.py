@@ -2493,8 +2493,7 @@ This is the wrapper class
                    'maketelepods',\
                    'telepodacct',\
                    'teleport',\
-
-                   'InstantDEX 6',\
+                                       'InstantDEX 6',\
                    'orderbook',\
                    'placebid',\
                    'placeask',\

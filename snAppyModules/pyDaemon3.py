@@ -146,7 +146,15 @@ class Daemon3:
         try:
             while 1:
                 os.kill(pid, signal.SIGTERM)
+                print(type(signal))
+                print(type(signal.SIGTERM))
+                print(signal)
+
+
+                print("trying to kill: ", str(pid), str(signal.SIGTERM))
+
                 time.sleep(0.1)
+
         except OSError as err:
             e = str(err.args)
             if e.find("No such process") > 0:
