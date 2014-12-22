@@ -8,13 +8,6 @@
 """#
 
 from twisted.internet import reactor
-#from twisted.internet.protocol import ClientFactory, ServerFactory
-
-from twisted.internet import task
-
-from twisted.python import threadpool as tp
-
-
 
 import sys, time
 import os
@@ -23,6 +16,9 @@ from snAppyModules.snQueryComposers import *
 from snAppyModules.snParsers import *
 from snAppyModules.snAppyConfig import *
 from snAppyModules.pyDaemon3 import Daemon3
+
+from twisted.internet import task
+from twisted.python import threadpool as tp
 
 #from snAppyModules.snApiConfig import environ
 #import requests
@@ -419,6 +415,8 @@ class SuperNETApiD(Daemon3): #object):
          This is supposed to be a singleton,
         and so are the class objects that are declared up here.  """#
 
+
+
     # instead of doing this in the class head here, we could also make a local method 'def makeContext'
     environ['snApiDir'] = os.getcwd()
     environ['localCacheDir'] = os.getcwd() + environ['CACHE_DIR']
@@ -455,6 +453,87 @@ class SuperNETApiD(Daemon3): #object):
         super(SuperNETApiD, self).__init__(pidfile)
 
 
+
+
+    def run(self):
+        print("calling init")
+        self.init()
+        print("going hot: reactor.run()")
+        reactor.run()
+
+    def runUC(self, UC):
+        print(1*"\ncalling initTests", UC)
+
+
+        if UC == 'UC1':
+            self.initUC(UC)
+        elif UC == 'UC2':
+            self.initUC(UC)
+        elif UC == 'UC3':
+            self.initUC(UC)
+        elif UC == 'UC4':
+            self.initUC(UC)
+
+        print("going hot: reactor.run()")
+        reactor.run()
+
+
+
+    def initUC(self, UC):
+        """
+        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
+        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
+        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
+        Factory is somewhat flexible as to what argument types it gets!
+        """#
+
+        if UC == 'UC1':
+            log.startLogging(sys.stdout)
+            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+            print(1*"\ninitUC1")
+            ucTEST_1_pingWhtList = UCTEST_1_ping_whitelist_777(serverFactory,  self.environ )
+            timer2 = task.LoopingCall(ucTEST_1_pingWhtList.periodic,  )
+            timer2.start( TIMER2_Freq , now=True )
+            reactor.suggestThreadPoolSize(500) # should be ok
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+        elif UC == 'UC2':
+            log.startLogging(sys.stdout)
+            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+            print(1*"\ninitUC2")
+            ucTEST_2 = UCTEST_2_ping_findnode(serverFactory,  self.environ )
+            timer2 = task.LoopingCall(ucTEST_2.periodic,  )
+            timer2.start( TIMER2_Freq , now=True )
+            reactor.suggestThreadPoolSize(500) # should be ok
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+        elif UC == 'UC3':
+            log.startLogging(sys.stdout)
+            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+            print(1*"\ninitUC3")
+            ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
+            timer3 = task.LoopingCall(ucTEST_3.periodic,  )
+            timer3.start( TIMER3_Freq , now=True )
+            reactor.suggestThreadPoolSize(500) # should be ok
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+        elif UC == 'UC4':
+            log.startLogging(sys.stdout)
+            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+            print(1*"\ninitUC4")
+            reactor.suggestThreadPoolSize(500) # should be ok
+            serverFactory.reactor = reactor
+            ucTEST_4 = UCTEST_4_sendMSGs(serverFactory,  self.environ )
+            timer4 = task.LoopingCall(ucTEST_4.periodic,  )
+            timer4.start( TIMER3_Freq , now=True )
+
+
+
+
     def init(self):
         """
         serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
@@ -462,12 +541,10 @@ class SuperNETApiD(Daemon3): #object):
         The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
         Factory is somewhat flexible as to what argument types it gets! """#
 
-
         log.startLogging(sys.stdout) # check: logfile or other output ?
         # factory for ad hoc requests received from external sources
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-
 
         reactor.suggestThreadPoolSize(500) # should be ok
         log.msg("stats: ",reactor.threadpool.dumpStats())
@@ -478,189 +555,9 @@ class SuperNETApiD(Daemon3): #object):
         uc_scd_XML_SportsdataLLC = UC_Scheduler_XML(serverFactory,  self.environ ) # environ has the credentials and all
         timer1 = task.LoopingCall(uc_scd_XML_SportsdataLLC.periodic,  )
         timer1.start( TIMER1_SportsdataLLC_SECS, now=True ) # slow heartbeat, start now TODO: the NOW does not seem to work!
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
         # can make as many as we want here with specific timers and tasks
-
-        # reactor.suggestThreadPoolSize(500) # should be ok
-        #
-        # log.msg("stats: ",reactor.threadpool.dumpStats())
-        # log.msg("workers: ", tp.ThreadPool.workers)
-
-
-
-#tp.Queue.empty
-#tp.Queue.full
-#tp.ThreadPool.adjustPoolsize
-# In [4]: rc.threadCallQueue.
-# rc.threadCallQueue.append   rc.threadCallQueue.count    rc.threadCallQueue.insert   rc.threadCallQueue.reverse
-# rc.threadCallQueue.clear    rc.threadCallQueue.extend   rc.threadCallQueue.pop      rc.threadCallQueue.sort
-# rc.threadCallQueue.copy     rc.threadCallQueue.index    rc.threadCallQueue.remove
-#
-#  tp.
-# tp.Queue            tp.WorkerStop       tp.context          tp.copy             tp.failure          tp.threading
-# tp.ThreadPool       tp.absolute_import  tp.contextlib       tp.division         tp.log
-#
-# tp.log.startLogging('tpLogFile')
-# from twisted.python import threadpool as tp
-
-
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
-        # a scheduler for statusInfo
-
-
-
-
-    def run(self):
-        print("calling init")
-        self.init()
-        print("going hot: reactor.run()")
-        reactor.run()
-
-    def runUC(self, UC):
-        print(1*"\ncalling initTests")
-
-        if UC == 'UC1':
-            self.initUC1()
-        elif UC == 'UC2':
-            self.initUC2()
-        elif UC == 'UC3':
-            self.initUC3()
-        elif UC == 'UC4':
-            self.initUC4()
-        print("going hot: reactor.run()")
-        reactor.run()
-
-
-
-    def initUC1(self):
-        """
-        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
-        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
-        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
-        Factory is somewhat flexible as to what argument types it gets!
-        """#
-
-        log.startLogging(sys.stdout)
-        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        print(1*"\ninitUC1")
-        #
-        #  here we can build as many different schedulers as we want!
-        #
-        ucTEST_1_pingWhtList = UCTEST_1_ping_whitelist_777(serverFactory,  self.environ )
-        timer2 = task.LoopingCall(ucTEST_1_pingWhtList.periodic,  )
-        timer2.start( TIMER2_Freq , now=True )
-        #
-        reactor.suggestThreadPoolSize(500) # should be ok
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
-    def initUC2(self):
-        """
-        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
-        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
-        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
-        Factory is somewhat flexible as to what argument types it gets!
-        """#
-
-        log.startLogging(sys.stdout)
-        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        print(1*"\ninitUC2")
-        #
-        #  here we can build as many different schedulers as we want!
-        #
-        ucTEST_2 = UCTEST_2_ping_findnode(serverFactory,  self.environ )
-        timer2 = task.LoopingCall(ucTEST_2.periodic,  )
-        timer2.start( TIMER2_Freq , now=True )
-
-        #
-        reactor.suggestThreadPoolSize(500) # should be ok
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
-
-
-    def initUC3(self):
-        """
-        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
-        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
-        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
-        Factory is somewhat flexible as to what argument types it gets!
-        """#
-
-        log.startLogging(sys.stdout)
-        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        print(1*"\ninitUC3")
-        #
-        #  here we can build as many different schedulers as we want!
-        #
-        ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
-        timer3 = task.LoopingCall(ucTEST_3.periodic,  )
-        timer3.start( TIMER3_Freq , now=True )
-
-        #
-
-        reactor.suggestThreadPoolSize(500) # should be ok
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
-
-    def initUC4(self):
-        """
-        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
-        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
-        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
-        Factory is somewhat flexible as to what argument types it gets!
-        """#
-
-        log.startLogging(sys.stdout)
-        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        print(1*"\ninitUC4")
-        #
-        #  here we can build as many different schedulers as we want!
-        #
-
-
-
-        reactor.suggestThreadPoolSize(500) # should be ok
-
-        #stat = reactor.threadpool.dumpStats()
-        #
-        # stat1 = reactor.threadpool.waiters
-        # stat2 = reactor.threadpool.workers
-        # stat3 = reactor.threadpool.threads
-        # stat4 = reactor.threadpool.q.queue
-        #
-        # log.msg("waiters: ", stat1)
-        # log.msg("workers: ", stat2)
-        # log.msg("threads: ", stat3)
-        # log.msg("queue: ", stat4)
-        #
-        # log.msg("workers: ", tp.ThreadPool.workers)
-
-        serverFactory.reactor = reactor
-
-        #queue: deque([({<class 'twisted.python.log.ILogContext'>: {'isError': 0, 'system': '-'}}, <function post at 0x7f1d6e4fce18>, ('http://178.62.185.131:7778',), {'data': '{"destip": "128.199.183.249", "requestType": "ping"}', 'headers': {'Content-type': 'application/json', 'Accept': 'text/plain'}}, <function deferToThreadPool.<locals>.onResult at 0x7f1d6cc82f28>)])
-
-
-        #waiters: [<Thread(PoolThread-twisted.internet.reactor-3, started 139764275607296)>, <Thread(PoolThread-twisted.internet.reactor-2, started 139764355786496)>, <Thread(PoolThread-twisted.internet.reactor-1, started 139764364441344)>]
-#  stats:  None
-# 2014-12-19 11:43:25+0100 [-] workers:  0
-# 2014-12-19 11:43:26+0100 [-] ping to whitelist: 23.97.66.164
-# 2014-12-19 11:43:26+0100 [-] queue: deque([({<class 'twisted.python.log.ILogContext'>: {'isError': 0, 'system': '-'}}, <function post at 0x7f1a57053e18>, ('http://178.62.185.131:7778',), {'headers': {'Content-type': 'application/json', 'Accept': 'text/plain'}, 'data': '{"destip": "23.97.66.164", "requestType": "ping"}'}, <function deferToThreadPool.<locals>.onResult at 0x7f1a5b741ea0>)])
-# 2014-12-19 11:43:26+0100 [-] waiters: [<Thread(PoolThread-twisted.internet.reactor-1, started 139751088772864)>]
-# 2014-12-19 11:43:26+0100 [-] workers: [<Thread(PoolThread-twisted.internet.reactor-2, started 139751080118016)>]
-# 2014-12-19 11:43:26+0100 [-] total: [<Thread(PoolThread-twisted.internet.reactor-1, started 139751088772864)>, <Thread(PoolThread-twisted.internet.reactor-2, started 139751080118016)>]
-#
-
-
-        ucTEST_4 = UCTEST_4_sendMSGs(serverFactory,  self.environ )
-        timer4 = task.LoopingCall(ucTEST_4.periodic,  )
-        timer4.start( TIMER3_Freq , now=True )
-
-        #
-        #reactor.suggestThreadPoolSize(500) # should be ok
-        #reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
 
 

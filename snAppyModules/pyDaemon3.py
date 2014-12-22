@@ -6,12 +6,17 @@
 import sys, os, time, atexit, signal
 import copy
 
+from twisted.python import log
+
+
 class Daemon3:
     """A generic daemon class.
 
     Usage: subclass the daemon class and override the run() method. """#
 
-    def __init__(self, pidfile): self.pidfile = pidfile
+    def __init__(self, pidfile):
+        self.stopAttempts=0
+        self.pidfile = pidfile
 
     def daemonize(self):
         """Deamonize class. UNIX double fork mechanism."""
@@ -54,7 +59,6 @@ class Daemon3:
         logOutputs = 'console'
         #logOutputs = 'noOutput'
         #logOutputs = 'logFile'
-
         #noConsolOutput = False #True # for NO console diags
         #outputToFile = True
 
@@ -107,7 +111,7 @@ class Daemon3:
 
 
     def startUC(self, UC = None):
-        """Start the daemon."""
+        """Start the daemon."""#
         # Check for a pidfile to see if the daemon already runs
         try:
             with open(self.pidfile,'r') as pf:
@@ -146,14 +150,17 @@ class Daemon3:
         try:
             while 1:
                 os.kill(pid, signal.SIGTERM)
-                print(type(signal))
-                print(type(signal.SIGTERM))
+                #print(type(signal))
+                #print(type(signal.SIGTERM))
                 print(signal)
-
-
-                print("trying to kill: ", str(pid), str(signal.SIGTERM))
-
+                self.stopAttempts+=1
+                print(self.stopAttempts ," tries to stop: ", str(pid), str(signal.SIGTERM))
                 time.sleep(0.1)
+                if self.stopAttempts > 100:
+                    print(self.stopAttempts ," trying kill now: ", str(pid), str(signal.SIGKILL))
+                    os.kill(pid, signal.SIGKILL)
+
+
 
         except OSError as err:
             e = str(err.args)

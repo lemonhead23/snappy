@@ -2454,7 +2454,7 @@ This is the wrapper class
                    '                   passthru 2'
                    'passthru',\
                    'remote',\
-                   '                   MGW 6',\
+                   '                   MGW 7',\
                    'genmultisig',\
                    'getmsigpubkey',\
                    'MGWaddr',\

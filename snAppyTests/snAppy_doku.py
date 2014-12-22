@@ -56,6 +56,9 @@ cd
 
     ./BitcoinDarkd  stop
 
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"stop"}'
+
     ./BitcoinDarkd  SuperNET '{"requestType":"start"}'
 
     ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
@@ -964,7 +967,6 @@ FULLRESULT?
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
 
 {"result":"kademlia_store","key":"1031470952125437106","data":"c0ffee","len":3,"txid":"1782911352449719975"}
-
 ./BitcoinDarkd SuperNET '{"requestType":"store","name":"starbucks","data":"c0ffee"}'
 {"result":"kademlia_store","key":"1031470952125437106","data":"c0ffee","len":3,"txid":"0"}
 
@@ -2437,7 +2439,6 @@ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET",
 curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"pricedb\",\"exchange\":\"bittrex\",\"base\":\"BTCD\",\"rel\":\"BTC\",\"stop\":1}"]  }' -H 'content-type: text/plain;' https://127.0.0.1:7777/
 
 
-
 curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"pricedb\",\"exchange\":\"nxtae\",\"base\":\"BTC\",\"rel\":\"NXT\"}"]  }' -H 'content-type: text/plain;' https://127.0.0.1:7777/
 
 
@@ -2520,152 +2521,6 @@ calls only as inventory
 
 
 api.h: list of all calls. date: 120714
-
-
-
-
-
-{
-    // local glue
-
-    static char *gotjson[] = { (char *)gotjson_func, "BTCDjson", "V", "json", 0 };
-    static char *gotpacket[] = { (char *)gotpacket_func, "gotpacket", "V", "msg", "dur", "ip_port", 0 };
-    static char *gotnewpeer[] = { (char *)gotnewpeer_func, "gotnewpeer", "V", "ip_port", 0 };
-    static char *BTCDpoll[] = { (char *)BTCDpoll_func, "BTCDpoll", "V", 0 };
-    static char *GUIpoll[] = { (char *)GUIpoll_func, "GUIpoll", "V", 0 };
-    static char *stop[] = { (char *)stop_func, "stop", "V", 0 };
-    static char *settings[] = { (char *)settings_func, "settings", "V", "field", "value", "reinit", 0 };
-
-    // passthru
-
-    static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
-    static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
-
-    // MGW
-
-    static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "V", "coin", "refcontact", "M", "N", "contacts", "destip", 0 };
-    static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
-    static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
-    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "pubkey", 0 };
-    static char *MGWdeposits[] = { (char *)MGWdeposits_func, "MGWdeposits", "V", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", 0 };
-    static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
-    static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
-
-
-
-
-    // IP comms
-    static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", 0 };
-    static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", "tag", 0 };
-    static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
- *   static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
- *   static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
-
-
-    // Kademlia DHT
-
-    static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
-    static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
-    static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
-    static char *havenode[] = { (char *)havenode_func, "havenode", "V", "pubkey", "key", "name", "data", 0 };
-    static char *havenodeB[] = { (char *)havenodeB_func, "havenodeB", "V", "pubkey", "key", "name", "data", 0 };
-    static char *findaddress[] = { (char *)findaddress_func, "findaddress", "V", "refaddr", "list", "dist", "duration", "numthreads", 0 };
-
-    // MofNfs
-
-    static char *savefile[] = { (char *)savefile_func, "savefile", "V", "fname", "L", "M", "N", "backup", "password", "pin", 0 };
-    static char *restorefile[] = { (char *)restorefile_func, "restorefile", "V", RESTORE_ARGS, 0 };
-    static char *publish[] = { (char *)publish_func, "publish", "V", "files", "L", "M", "N", "backup", "password", "pin", 0  };
-
-    // Telepathy
-
-    static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
-    static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V",  "handle", "acct", 0 };
-    static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V",  "contact", 0 };
-    static char *dispcontact[] = { (char *)dispcontact_func, "dispcontact", "V",  "contact", 0 };
-    static char *telepathy[] = { (char *)telepathy_func, "telepathy", "V",  "contact", "id", "type", "attach", 0 };
-    static char *getdb[] = { (char *)getdb_func, "getdb", "V",  "contact", "id", "key", "dir", "destip", 0 };
-    static char *sendmsg[] = { (char *)sendmsg_func, "sendmessage", "V", "dest", "msg", "L", 0 };
-    static char *sendbinary[] = { (char *)sendbinary_func, "sendbinary", "V", "dest", "data", "L", 0 };
-    static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "sender", 0 };
-
-    // Teleport
-
-    static char *maketelepods[] = { (char *)maketelepods_func, "maketelepods", "V", "amount", "coin", 0 };
-    static char *telepodacct[] = { (char *)telepodacct_func, "telepodacct", "V", "amount", "contact", "coin", "comment", "cmd", "withdraw", 0 };
-    static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
-
-    // InstantDEX
-
-    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
-    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
-    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
-    static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
-    static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
-    static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
-
-    // Tradebot
-
-    static char *pricedb[] = { (char *)pricedb_func, "pricedb", "V", "exchange", "base", "rel", "stop", 0 };
-    static char *getquotes[] = { (char *)getquotes_func, "getquotes", "V", "exchange", "base", "rel", "oldest", 0 };
-    static char *tradebot[] = { (char *)tradebot_func, "tradebot", "V", "code", 0 };
-
-
-
-     static char **commands[] = {
-     stop,
-     GUIpoll,
-     BTCDpoll,
-     settings,
-     gotjson,
-     gotpacket,
-     gotnewpeer,
-     getdb,
-     cosign,
-     cosigned,
-     telepathy,
-     addcontact,
-     dispcontact,
-     removecontact,
-     findaddress,
-     ping,
-     pong,
-     sendfrag
-     gotfrag
-     startxfer
-     store,
-     findnode,
-     havenode,
-     havenodeB,
-     findvalue,
-     publish,
-     getpeers,
-     maketelepods,
-     tradebot,
-     respondtx,
-     processutx,
-     checkmsg,
-     placebid,
-     placeask,
-      makeoffer,
-      sendmsg,
-      sendbinary,
-      orderbook,
-      teleport,
-      telepodacct,
-      savefile,
-      restorefile,
-      pricedb,
-      getquotes,
-      passthru,
-      remote,
-      genmultisig,
-      getmsigpubkey,
-      setmsigpubkey,
-      MGWdeposits,
-      MGWaddr };
-
-
 
 
 
