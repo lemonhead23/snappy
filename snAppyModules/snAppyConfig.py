@@ -8,7 +8,14 @@ to be placed in order to NOT hardcode it into the code.
 LISTEN_PORT_SNT = 7800 #
 
 environ = {}
-
+# Note: this dict has currently four levels of nesting.
+# The top level contains immediate configuraiton informatin for launching the app,
+#
+# It also contains UC_schedules that contain info for timer driven looping calls.
+# These Have three nesting levels to accommodate flexibility in UC design.
+#
+# This dict can also contain informatin on XML data sources.
+# It can be extended t use an sqlite db later.
 
 ##################################################################
 #
@@ -69,15 +76,29 @@ environ['CACHE_FILENAMES'] = {
 #
 # Each UC scheduler has three levels of dict:
 #
-# UC_scheduler_xy
+# UC_scheduler_xy {}  <------ is the master scheduler for the whole UseCase.
+#  TIMER_Freq inits the UC class
 #   
-#     schedFrequency
+#     UC_schedule_1 - one Frequency {}
+#          schedRequestTypes          {}
 #
-#          schedRequestTypes
 #
+#     UC_schedule_2 - one Frequency {}
+#          schedRequestTypes          {}
 #
+#     ....
+
 # These triplets are cointained in the top environ dict
 
+
+
+TIMER_850 = 0.850 # how often the the base timer is called for loopedCall
+TIMER_5000 = 5000.0
+TIMER_15000 = 15000 # how ofthe the base timer is called for loopedCall
+
+
+
+TIMER1_SportsdataLLC_SECS = 5000.0
 
 ###################################################################
 ###################################################################
@@ -89,10 +110,7 @@ environ['CACHE_FILENAMES'] = {
 
 UC_sched_1={}
 
-
 # Three schedules here
-
-TIMER2_Freq = 0.850 # how often the the base timer is called for loopedCall
 
 #----------------------------------------
 sched_GUIpoll ={}
@@ -137,7 +155,7 @@ UC_sched_1[sched_findnodePeers['schedName']] = sched_findnodePeers
 UC_sched_1[sched1['schedName']] = sched1
 
 
-environ['UCTEST_1_ping_whitelist_777'] = UC_sched_1
+environ['UC_sched_1'] = UC_sched_1
 
 
 
@@ -154,8 +172,6 @@ UC_sched_3={}
 #SERVER_ADDR_TEST_1 = SERVER_ADDR_jl777 #"localhost"
 #SERVER_PORT_TEST_1 = 7776
 #FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
-
-TIMER3_Freq = 0.850 # how ofthe the base timer is called for loopedCall
 
 #----------------------------------------
 sched_GUIpoll ={}
@@ -213,8 +229,6 @@ schedSportsData={}
 SERVER_ADDR_xmlFeed1 = "api.sportsdatallc.org"
 SERVER_PORT_xmlFeed1 = 80
 
-TIMER1_SportsdataLLC_SECS = 5000.0
-
 
 
 schedReqTypes={}
@@ -255,16 +269,4 @@ schedSportsData[sched3['schedName']] = sched3
 
 environ['envSportsData'] = schedSportsData
 
-
-
-
-# 8)
-# In [16]: r.content
-# Out[16]: b'<h1>Developer Over Rate</h1>'
-# In [17]: r=requests.get(url)
-# In [18]: r.headers
-# Out[18]: CaseInsensitiveDict({'date': 'Sun, 30 Nov 2014 12:04:47 GMT', 'connection': 'keep-alive', 'server': 'Mashery Proxy', 'content-type': 'text/xml', 'content-length': '28', 'x-mashery-responder': 'prod-j-worker-us-east-1e-75.mashery.com', 'x-mashery-error-code': 'ERR_403_DEVELOPER_OVER_RATE'})
-# In [19]: r.history
-# In [20]: r.url
-# Out[20]: 'http://api.sportsdatallc.org/soccer-t2/eu/matches/2014/08/21/summary.xml?api_key=fv37s4rd2arqqxav774wb2kc'
 

@@ -35,9 +35,10 @@ class Schedule(object):
         This gets the simpl dicts from the snApiConfig module"""#
     def __init__(self, schedule, ):
 
+        print(schedule)
         self.schedule = schedule
         self.callFreq = schedule['callFreq']
-        self.SNrequests = schedule['SNreqTypes']
+        self.SNrequests = schedule['schedReqTypes']
 
         self.name = schedule['schedName']  # sched_GUIpoll['schedName']
 
@@ -207,7 +208,7 @@ differentiate two types of replies:
         self.peersDiLoc = {}
         self.peers = {}
 
-        prepSchedules = environ['UCTEST_1_ping_whitelist_777'] # can use same as UC1 for now- extends it
+        prepSchedules = environ['UC_sched_1'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
             sched = prepSchedules[sched]
             self.schedules[ sched['schedName']] = Schedule( sched )
@@ -924,7 +925,7 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 
 
 
-class UCTEST_4_sendMSGs(object):
+class UC_4_sendMSGs(object):
 
     """
 differentiate two types of replies:
@@ -970,7 +971,7 @@ differentiate two types of replies:
         # can collect the RQs used here for neatness
         self.RQsendmsg =  {'requestType':'sendmessage'}
         # each UC only has one ONE master schedule, and the sub-schedules are contained in that
-        prepSchedules = environ['UCTEST_1_ping_whitelist_777'] # can use same as UC1 for now- extends it
+        prepSchedules = environ['UC_sched_1'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
             sched = prepSchedules[sched]
             self.schedules[ sched['schedName']] = Schedule( sched )
@@ -1009,7 +1010,7 @@ differentiate two types of replies:
                 self.deferred.addCallback(self.rpl777_df1_settings)
                 self.deferred.addErrback(self.rpl777ERR)
 
-
+                #
                 #
                 # reqData2 = {"requestType":"getpeers"}
                 # self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData2), headers=POSTHEADERS)
@@ -1141,7 +1142,7 @@ differentiate two types of replies:
 
         ipsToPing = repl['whitelist']
 
-        ipsToPing=20*["69.90.132.106"]
+        #ipsToPing=20*['85.178.197.125']  #['178.62.185.131'] # ["69.90.132.106"]
 
         log.msg("ping to whitelist:", len(ipsToPing))
 
@@ -1329,7 +1330,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             self.RQsendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
 
 
-            if peer[1] == '62.194.6.163':
+            if peer[1] == '178.62.185.131': #'62.194.6.163':
                 for sp in range(10):
                     log.msg(1*"\n NEW msg FOR LOCAL peer:", peer)
 
@@ -1554,7 +1555,7 @@ class SchedulerProtocol_XML(protocol.Protocol):
 #
 #
 #
-# class UCTEST_1_ping_whitelist_777(object):
+# class UC_sched_1(object):
 #
 #
 #     """
@@ -1577,7 +1578,7 @@ class SchedulerProtocol_XML(protocol.Protocol):
 #         self.environ = environ
 #         self.schedules = {}    # this contains the schedules
 #
-#         prepSchedules = environ['UCTEST_1_ping_whitelist_777'] # create a schedule in snAppyConfig.py !!!
+#         prepSchedules = environ['UC_sched_1'] # create a schedule in snAppyConfig.py !!!
 #         for sched in prepSchedules.keys():
 #             sched = prepSchedules[sched]
 #             self.schedules[ sched['schedName']] = Schedule( sched )

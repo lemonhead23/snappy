@@ -456,15 +456,14 @@ class SuperNETApiD(Daemon3): #object):
 
 
     def run(self):
-        print("calling init")
+        log.msg("calling init")
         self.init()
-        print("going hot: reactor.run()")
+        log.msg("init() done. starting reactor.run()")
         reactor.run()
 
+
     def runUC(self, UC):
-        print(1*"\ncalling initTests", UC)
-
-
+        log.msg(1*"\nstart UC: ", UC)
         if UC == 'UC1':
             self.initUC(UC)
         elif UC == 'UC2':
@@ -474,7 +473,7 @@ class SuperNETApiD(Daemon3): #object):
         elif UC == 'UC4':
             self.initUC(UC)
 
-        print("going hot: reactor.run()")
+        log.msg("initUC() done. starting reactor.run()")
         reactor.run()
 
 
@@ -492,10 +491,10 @@ class SuperNETApiD(Daemon3): #object):
             serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
             serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
             print(1*"\ninitUC1")
-            ucTEST_1_pingWhtList = UCTEST_1_ping_whitelist_777(serverFactory,  self.environ )
+            ucTEST_1_pingWhtList = UC_sched_1(serverFactory,  self.environ )
             timer2 = task.LoopingCall(ucTEST_1_pingWhtList.periodic,  )
-            timer2.start( TIMER2_Freq , now=True )
-            reactor.suggestThreadPoolSize(500) # should be ok
+            timer2.start( TIMER_850 , now=True )
+            reactor.suggestThreadPoolSize(500)
             reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
         elif UC == 'UC2':
@@ -505,8 +504,8 @@ class SuperNETApiD(Daemon3): #object):
             print(1*"\ninitUC2")
             ucTEST_2 = UCTEST_2_ping_findnode(serverFactory,  self.environ )
             timer2 = task.LoopingCall(ucTEST_2.periodic,  )
-            timer2.start( TIMER2_Freq , now=True )
-            reactor.suggestThreadPoolSize(500) # should be ok
+            timer2.start( TIMER_850 , now=True )
+            reactor.suggestThreadPoolSize(500)
             reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
         elif UC == 'UC3':
@@ -516,9 +515,10 @@ class SuperNETApiD(Daemon3): #object):
             print(1*"\ninitUC3")
             ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
             timer3 = task.LoopingCall(ucTEST_3.periodic,  )
-            timer3.start( TIMER3_Freq , now=True )
-            reactor.suggestThreadPoolSize(500) # should be ok
+            timer3.start( TIMER_850 , now=True )
+            reactor.suggestThreadPoolSize(500)
             reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
 
         elif UC == 'UC4':
             log.startLogging(sys.stdout)
@@ -526,10 +526,12 @@ class SuperNETApiD(Daemon3): #object):
             serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
             print(1*"\ninitUC4")
             reactor.suggestThreadPoolSize(500) # should be ok
-            serverFactory.reactor = reactor
-            ucTEST_4 = UCTEST_4_sendMSGs(serverFactory,  self.environ )
-            timer4 = task.LoopingCall(ucTEST_4.periodic,  )
-            timer4.start( TIMER3_Freq , now=True )
+            serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+
+            uc_4_sendMSGs = UC_4_sendMSGs(serverFactory,  self.environ )
+            timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
+            timer4.start( TIMER_850 , now=True )
 
 
 
@@ -554,7 +556,7 @@ class SuperNETApiD(Daemon3): #object):
 
         uc_scd_XML_SportsdataLLC = UC_Scheduler_XML(serverFactory,  self.environ ) # environ has the credentials and all
         timer1 = task.LoopingCall(uc_scd_XML_SportsdataLLC.periodic,  )
-        timer1.start( TIMER1_SportsdataLLC_SECS, now=True ) # slow heartbeat, start now TODO: the NOW does not seem to work!
+        timer1.start( TIMER_15000, now=True ) # slow heartbeat, start now TODO: the NOW does not seem to work!
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
         # can make as many as we want here with specific timers and tasks

@@ -32,7 +32,7 @@ Launches scripts in UseCase classes:
 
 -console
 - nohup ./snApi17a.py start  + tail -f nohup.txt
-
+http://www.nxtfans.net/
 -dedicated logfile (currently enter in pyDaemon3.py)
 -logging can be done 'silent' = no outputs,
 
@@ -50,7 +50,11 @@ This instantiates a scheduler that runs the designated script/test class
 
 
 
+
+
  List of manual commands for quick function tests // often used
+
+
 
 cd
 
@@ -62,6 +66,19 @@ cd
     ./BitcoinDarkd  SuperNET '{"requestType":"start"}'
 
     ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
+
+
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=stop'
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=start'
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
+
 
 
 
