@@ -236,7 +236,7 @@ class QC_777_aAll(QC_777Base):
         //  privatebet 1
         // glue 7
         // passthru 2
-        // MGW 7
+        // MGW 8
         // IPcomms 5
         // Kademlia DHT  6
         // MofNfs 3
@@ -244,6 +244,7 @@ class QC_777_aAll(QC_777Base):
         // Teleport 3
         // InstantDEX 6
         // Tradebot 3
+        // privatebet 1
 
 
 Parameters of api calls as extracted from api.h:
@@ -255,19 +256,6 @@ so skip the first three and the zero at the end
 
 can use more soph. exception handling later
     """
-    #
-    #     // # privatebet 1
-
-
-    def placeLay(self, reqDict):
-        """ individual treatment of requests and their parms here """#
-        K0 = 'requestType'
-        P0 = 'placeLay'
-
-        #parms = ( (K0,P0), )
-        #jsonSpecs = self.assembleQuery(parms)
-        return  { K0 : P0 ,   }
-
 
     #########################
 
@@ -538,8 +526,10 @@ static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method",
 
 
 
-    #     // MGW 7
+    #     // MGW 8
     #########################
+
+
 
 
 
@@ -641,6 +631,23 @@ static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
 
 
 
+
+
+
+    def MGWresponse(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };
+
+ """#
+        K0 = 'requestType'
+        P0 = 'MGWresponse'
+
+
+        return  { K0 : P0 ,  }
+
+
+
     def setmsigpubkey(self, reqDict):
         """ individual treatment of requests and their parms here
 static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "pubkey", 0 };
@@ -678,13 +685,15 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
 
 
 
-
-    def MGWdeposits(self, reqDict):
+    def MGW(self, reqDict):
         """ individual treatment of requests and their parms here
- static char *MGWdeposits[] = { (char *)MGWdeposits_func, "MGWdeposits", "V", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", 0 };
+
+
+   static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
+
  """#
         K0 = 'requestType'
-        P0 = 'MGWdeposits'
+        P0 = 'MGW'
 
         try:
             K1 = 'NXT0'
@@ -751,13 +760,46 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
             P13 = reqDict['exclude1']
         except:
             P13= ''
+        try:
+            K14 = 'exclude2'
+            P14 = reqDict['exclude2']
+        except:
+            P14 = ''
+        try:
+            K15 = 'destip'
+            P15 = reqDict['destip']
+        except:
+            P15 = ''
+        try:
+            K16 = 'destport'
+            P16 = reqDict['destport']
+        except:
+            P16 = ''
+        try:
+            K17 = 'userpubkey'
+            P17 = reqDict['userpubkey']
+        except:
+            P17 = ''
+        try:
+            K18 = 'email'
+            P18 = reqDict['email']
+        except:
+            P18 = ''
+        try:
+            K19 = 'destNXT'
+            P19 = reqDict['destNXT']
+        except:
+            P19 = ''
 
         retVal =  {
                     K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
                     K8 : P8 , K9 : P9 , K10 : P10, K11 : P11, K12 : P12,  K13 : P13, \
+                     K14 : P14 , K15 : P15 , K16 : P16, K17 : P17, K18 : P18,  K19 : P19,
                     }
 
         return retVal
+
+
 
 
 
@@ -1183,7 +1225,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
 
-    #     // Kademlia DHT  8
+    #     // Kademlia DHT  6
 
     #########################
 
@@ -2380,9 +2422,34 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
         return  { K0 : P0 , K1 : P1 , }
 
+
+    #########################
+ #
+    #     // # privatebet 1
+
+
+    def lotto(self, reqDict):
+        """ individual treatment of requests and their parms here
+  static char *lotto[] = { (char *)lotto_func, "lotto", "V", "refacct", "asset", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'lotto'
+        try:
+            K1 = 'refacct'
+            P1 = reqDict['refacct']
+        except:
+            P1 = ''
+        try:
+            K2 = 'asset'
+            P2 = reqDict['asset']
+        except:
+            P2 = ''
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2 , }
+
     #
-
-
 ##########################
 ##########################
 ##########################
@@ -2454,12 +2521,13 @@ This is the wrapper class
                    '                   passthru 2'
                    'passthru',\
                    'remote',\
-                   '                   MGW 7',\
+                   '                   MGW 8',\
                    'genmultisig',\
                    'getmsigpubkey',\
                    'MGWaddr',\
+                   'MGWresponse',\
                    'setmsigpubkey',\
-                   'MGWdeposits',\
+                   'MGW',\
                    'cosign',\
                    'cosigned',\
                    '                   IPcomms',\
@@ -2504,6 +2572,8 @@ This is the wrapper class
                    'pricedb',\
                    'getquotes',\
                    'tradebot',\
+                    '                     Privatebet',\
+                    'lotto'
                    ]
 
     def __init__(self, environ = {}):
@@ -2522,10 +2592,10 @@ This is the wrapper class
 
     def lookUpQuery(self, reqDict):
 
-        if reqDict['requestType'] == 'placeLay':
+        if reqDict['requestType'] == 'lotto':
         #     // # privatebet 1
 
-            jsonSpecs = self.jl777_aAll.getpeers(reqDict)
+            jsonSpecs = self.jl777_aAll.lotto(reqDict)
             return jsonSpecs
 
         # // glue 8 ! 'start' is routed through BTCD, not supernet core
@@ -2578,11 +2648,14 @@ This is the wrapper class
         elif reqDict['requestType'] == 'MGWaddr':
             jsonSpecs = self.jl777_aAll.MGWaddr(reqDict)
             return jsonSpecs
+        elif reqDict['requestType'] == 'MGWresponse':
+            jsonSpecs = self.jl777_aAll.MGWresponse(reqDict)
+            return jsonSpecs
         elif reqDict['requestType'] == 'setmsigpubkey':
             jsonSpecs = self.jl777_aAll.setmsigpubkey(reqDict)
             return jsonSpecs
-        elif reqDict['requestType'] == 'MGWdeposits':
-            jsonSpecs = self.jl777_aAll.MGWdeposits(reqDict)
+        elif reqDict['requestType'] == 'MGW':
+            jsonSpecs = self.jl777_aAll.MGW(reqDict)
             return jsonSpecs
         elif reqDict['requestType'] == 'cosign':
             jsonSpecs = self.jl777_aAll.cosign(reqDict)

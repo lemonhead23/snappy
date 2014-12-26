@@ -1142,7 +1142,9 @@ differentiate two types of replies:
 
         ipsToPing = repl['whitelist']
 
-        #ipsToPing=20*['85.178.197.125']  #['178.62.185.131'] # ["69.90.132.106"]
+
+
+        ipsToPing = 10*['79.245.52.39']  #[ STONEFISH_IP] #['88.179.105.82']  #['178.62.185.131'] # ["69.90.132.106"]
 
         log.msg("ping to whitelist:", len(ipsToPing))
 
@@ -1330,7 +1332,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             self.RQsendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
 
 
-            if peer[1] == '178.62.185.131': #'62.194.6.163':
+            if peer[1] == '79.245.52.39':  # '88.179.105.82': # '178.62.185.131': #'62.194.6.163': '88.179.105.82
                 for sp in range(10):
                     log.msg(1*"\n NEW msg FOR LOCAL peer:", peer)
 
