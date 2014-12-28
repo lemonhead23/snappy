@@ -847,13 +847,17 @@ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET",
 
 
 
-11
+
+        GUIpoll ---> kademlia_pong
+
+        {'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1419772744,"MMatrix":0,"yourip":"178.62.185.131","yourport":54640,"ipaddr":"89.212.19.49","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.399"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd671ocgig2ru5ilgeo2i8mh9bi74a535tcsldc6v2g2mcmsrfi8b3rffigj21p0g2g572u31d1qdpq16oggc8qvqj22j4hcj0ahaa9toshhek4ci18m"}]', 'port': 0, 'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"185.188","numpings":16,"numpongs":19,"ave":"3817.958"}', 'from': '89.212.19.49'}
+
+        <class 'dict'>
+
+
+
 
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", 0 };
-
-PONG from deactivated GUIpoll with PONG:
-
-This is what the PINGer receives back from the PONGer
 
 
 
@@ -1259,11 +1263,21 @@ to the sender of the find, it comes back as a new havenode command
 reply to findnode
 
 
+ CONTENT: GUIpoll ---> kademlia_havenode
+
+ {'port': 0, 'result': '{"result":"kademlia_havenode from NXT.6216883599460291148 key.(6216883599460291148) value.([["6216883599460291148", "192.99.246.126", "7777", "0"], ["1785551413655174233", "192.99.151.160", "7777", "1419650453"], ["1978065578067355462", "89.212.19.49", "7777", "1419650429"], ["7108754351996134253", "167.114.2.171", "7777", "1419650429"], ["5624143003089008155", "192.99.212.250", "7777", "1419650428"], ["15178638394924629506", "167.114.2.206", "7777", "1419650459"], ["5499072856752811721", "88.179.105.82", "7777", "1419679664"]])"}', 'args': '[{"requestType":"havenode","NXT":"6216883599460291148","time":1419759443,"key":"6216883599460291148","data":[["6216883599460291148", "192.99.246.126", "7777", "0"], ["1785551413655174233", "192.99.151.160", "7777", "1419650453"], ["1978065578067355462", "89.212.19.49", "7777", "1419650429"], ["7108754351996134253", "167.114.2.171", "7777", "1419650429"], ["5624143003089008155", "192.99.212.250", "7777", "1419650428"], ["15178638394924629506", "167.114.2.206", "7777", "1419650459"], ["5499072856752811721", "88.179.105.82", "7777", "1419679664"]]},{"token":"7meqnnpffqh9272utch79ra8rvlih9mevl901qhml0phabmm1nih87blka41rfo2obvq4ask646v48guv5185cplefdi723u5qmd7mbo6hqgompsvl71o3po8ft9mg15icqkeekacuse36hlnfjgol4eipvpfu0n"}]', 'from': '192.99.246.126'}
+ <class 'dict'>
+
+# peersList =  kademlia_havenode['data']   [['6216883599460291148', '192.99.246.126', '7777', '0'], ['1785551413655174233', '192.99.151.160', '7777', '1419650453'], ['1978065578067355462', '89.212.19.49', '7777', '1419650429'], ['7108754351996134253', '167.114.2.171', '7777', '1419650429'], ['5624143003089008155', '192.99.212.250', '7777', '1419650428'], ['15178638394924629506', '167.114.2.206', '7777', '1419650459'], ['5499072856752811721', '88.179.105.82', '7777', '1419679664']]
+
+
 
 
 
                                             havenode
-15 call_TESTED INTERNAL CALL
+
+
+
 
 sn log:
 HAVENODE.0 {"result":"kademlia_havenode from NXT.16196432036059823401 key.(16196432036059823401) value.([["16196432036059823401", "167.114.2.203", "7777", "0"], ["3571143576961987768", "89.212.19.49", "7777", "1416011411"], ["15178638394924629506", "167.114.2.206", "7777", "1415986068"], ["7108754351996134253", "167.114.2.171", "7777", "1415986068"], ["8923034930361863607", "192.99.246.33", "7777", "1415986069"], ["2131686659786462901", "178.62.185.131", "7777", "1415986805"], ["6216883599460291148", "192.99.246.126", "7777", "1415986069"]])"}
@@ -1283,9 +1297,11 @@ havenode
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=havenode&key=6249611027680999354'
 {'result': 'kademlia_havenode from NXT.2131686659786462901 key.(6249611027680999354) value.()'}
 
-did PING->PONG, FINDNODE(key(PONG)) - NOPE
 
-NOPE!
+
+
+
+
 
 ------------------------------------------------------------------------------------------
 
@@ -2534,9 +2550,26 @@ calls only as inventory
 // Teleport 3
 // InstantDEX 6
 // Tradebot 3
+// privatebet 1
 
-// # privatebet 1
 
+
+http://jnxt.org/init/?requestType=status&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&coin=BTCD
+http://jnxt.org/init/?requestType=newbie&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&email=&lt;emailaddr&gt;&convertNXT=1000
+
+requestType=status
+&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656
+&NXT=NXT-MEXA-RJSP-NKDU-FWWHM
+&coin=BTCD
+
+
+
+requestType=newbie
+&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656
+&NXT=NXT-MEXA-RJSP-NKDU-FWWHM
+&email=&lt;emailaddr
+&gt;
+&convertNXT=1000
 
 
 
@@ -2563,9 +2596,9 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
     static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
     static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
- **    static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };
+    static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };
     static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
-** ?    static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
+    static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
 

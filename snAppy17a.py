@@ -431,7 +431,7 @@ class SuperNETApiD(Daemon3): #object):
 
     parser_XML = Parser_XML(environ)
     parser_777 = Parser_777(environ)
-    parser_RPC = Parser_RPC(environ) #TODO
+    parser_RPC = Parser_RPC(environ)
     parser_LOC = Parser_LOC(environ)
 
     parsers = {
@@ -463,7 +463,7 @@ class SuperNETApiD(Daemon3): #object):
 
 
     def runUC(self, UC):
-        log.msg(1*"\nstart UC: ", UC)
+        log.msg( 1 * "start UC: ", UC)
         if UC == 'UC1':
             self.initUC(UC)
         elif UC == 'UC2':
@@ -491,9 +491,9 @@ class SuperNETApiD(Daemon3): #object):
             serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
             serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
             print(1*"\ninitUC1")
-            ucTEST_1_pingWhtList = UC_sched_1(serverFactory,  self.environ )
-            timer2 = task.LoopingCall(ucTEST_1_pingWhtList.periodic,  )
-            timer2.start( TIMER_850 , now=True )
+            uc1_pingPong = UC1_pingPong(serverFactory,  self.environ ) # also hand in 'self' here as a means to stop self
+            timer1 = task.LoopingCall(uc1_pingPong.periodic,  )
+            timer1.start( TIMER_850 , now=True )
             reactor.suggestThreadPoolSize(500)
             reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 

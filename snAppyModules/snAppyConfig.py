@@ -25,8 +25,8 @@ STONEFISH_IP = '178.62.185.131'   #
 BOXFISH_IP   = '85.xx'   #
 
 
-#SERVER_ADDR_jl777 = 'localhost'
-SERVER_ADDR_jl777 =  STONEFISH_IP
+SERVER_ADDR_jl777 = 'localhost'
+#SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 
@@ -113,6 +113,58 @@ TIMER1_SportsdataLLC_SECS = 5000.0
 #
 #
 
+
+UC_PingPong_1={}
+
+
+sched_GUIpoll ={}
+sched_GUIpoll['schedName'] = 'GUIpoll'
+sched_GUIpoll['callFreq'] = 900               # ms!!
+
+schedReqTypes={}
+schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+sched_GUIpoll['schedReqTypes']  = schedReqTypes
+sched_GUIpoll['target'] = 'this Uses requests!'
+
+
+#----------------------------------------
+sched_settings={}
+sched_settings['schedName'] = 'uc_settings'
+sched_settings['callFreq'] = 7500               # ms!!
+
+schedReqTypes={}
+schedReqTypes['uc_settings'] = {'requestType':'settings'}
+schedReqTypes['ping'] = {'requestType':'ping'}
+
+sched_settings['schedReqTypes']  = schedReqTypes
+sched_settings['target'] = 'this Uses requests!'
+
+#----------------------------------------
+sched_getPeers ={}
+sched_getPeers['schedName'] = 'uc_getpeers'
+sched_getPeers['callFreq'] = 5500               # ms!!
+
+schedReqTypes={}
+schedReqTypes['uc_getpeers'] = {'requestType':'getpeers'}
+sched_getPeers['schedReqTypes']  = schedReqTypes
+sched_getPeers['target'] = 'this Uses requests!'
+
+# plug the schedules into the environment
+UC_PingPong_1[sched_GUIpoll['schedName']] = sched_GUIpoll
+UC_PingPong_1[sched_settings['schedName']] = sched_settings
+UC_PingPong_1[sched_getPeers['schedName']] = sched_getPeers
+
+
+environ['UC_PingPong_1'] = UC_PingPong_1
+
+
+
+################################################################
+
+
+
+
+
 UC_sched_1={}
 
 # Three schedules here
@@ -129,7 +181,7 @@ sched_GUIpoll['target'] = 'this Uses requests!'
 
 #----------------------------------------
 sched1={}
-sched1['schedName'] = 'settingsForPing'
+sched1['schedName'] = 'uc_settings'
 sched1['callFreq'] = 13500               # ms!!
 
 schedReqTypes={}
@@ -143,7 +195,7 @@ sched1['target'] = 'this Uses requests!'
 #----------------------------------------
 sched_findnodePeers ={}
 sched_findnodePeers['schedName'] = 'findnodePeers'
-sched_findnodePeers['callFreq'] = 15500               # ms!!
+sched_findnodePeers['callFreq'] = 25500               # ms!!
 
 schedReqTypes={}
 schedReqTypes['findnodePeers'] = {'requestType':'findnode'}
@@ -156,8 +208,8 @@ sched_findnodePeers['target'] = 'this Uses requests!'
 
 # plug the schedules into the environment
 UC_sched_1[sched_GUIpoll['schedName']] = sched_GUIpoll
-UC_sched_1[sched_findnodePeers['schedName']] = sched_findnodePeers
 UC_sched_1[sched1['schedName']] = sched1
+UC_sched_1[sched_findnodePeers['schedName']] = sched_findnodePeers
 
 
 environ['UC_sched_1'] = UC_sched_1
