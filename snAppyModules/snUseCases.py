@@ -1260,6 +1260,7 @@ differentiate two types of replies:
         self.peersDiLoc = {}
         self.peers = {}
 
+        self.numCalls = 0
         # can collect the RQs used here for neatness
         self.RQsendmsg =  {'requestType':'sendmessage'}
         # each UC only has one ONE master schedule, and the sub-schedules are contained in that
@@ -1292,6 +1293,7 @@ differentiate two types of replies:
         """ here we get through all the due schedules and call them on SuperNET server
              Here we explicitly check the name and send them to the first callback of their callback sequence."""#
 
+        self.numCalls+=1
         for schedDue in schedulesDue:
             if 'uc_settings' in schedDue.SNrequests.keys():
                 log.msg("peersDiLoc: IPs ", self.peersDiLoc.keys())
@@ -1618,37 +1620,37 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
 
 
 
-        #
-        # for peer in peersList:
-        #
-        #     self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
-        #     #log.msg(1*"\n NEW msg FOR LOCAL peer:", peer)
-        #     self.RQsendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
-        #
-        #
-        #   #  if peer[1] == '79.245.52.39':  # '88.179.105.82': # '178.62.185.131': #'62.194.6.163': '88.179.105.82
-        #   #      for sp in range(10):
-        #     log.msg(1*"\n NEW msg FOR LOCAL peer:", peer)
-        #
-        #     spam = msg()
-        #
-        #     self.RQsendmsg['msg'] = spam
-        #
-        #     stat1 = len(self.serverFactory.reactor.threadpool.waiters)
-        #     stat2 = self.serverFactory.reactor.threadpool.workers
-        #     stat3 = len(self.serverFactory.reactor.threadpool.threads)
-        #     stat4 = len(self.serverFactory.reactor.threadpool.q.queue)
-        #
-        #     log.msg("waiters: ", stat1)
-        #     log.msg("workers1: ", stat2)
-        #     log.msg("threads: ", stat3)
-        #     log.msg("queue: ", stat4)
-        #     log.msg("workers2: ", tp.ThreadPool.workers)
-        #
-        #     sleep(0.2)
-        #     self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.RQsendmsg), headers=POSTHEADERS)
-        #     self.deferred.addCallback(self.rpl777_sndMSG ) # this is just for conf that we sent it
-        #     self.deferred.addErrback(self.rpl777ERR)
+
+        for peer in peersList:
+
+            self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
+            #log.msg(1*"\n NEW msg FOR LOCAL peer:", peer)
+            self.RQsendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
+
+
+          #  if peer[1] == '79.245.52.39':  # '88.179.105.82': # '178.62.185.131': #'62.194.6.163': '88.179.105.82
+          #      for sp in range(10):
+            log.msg(1*"\n NEW msg FOR LOCAL peer:", peer)
+
+            spam = msg()
+
+            self.RQsendmsg['msg'] = spam
+
+            stat1 = len(self.serverFactory.reactor.threadpool.waiters)
+            stat2 = self.serverFactory.reactor.threadpool.workers
+            stat3 = len(self.serverFactory.reactor.threadpool.threads)
+            stat4 = len(self.serverFactory.reactor.threadpool.q.queue)
+
+            log.msg("waiters: ", stat1)
+            log.msg("workers1: ", stat2)
+            log.msg("threads: ", stat3)
+            log.msg("queue: ", stat4)
+            log.msg("workers2: ", tp.ThreadPool.workers)
+
+            sleep(0.2)
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.RQsendmsg), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_sndMSG ) # this is just for conf that we sent it
+            self.deferred.addErrback(self.rpl777ERR)
 
 
 
@@ -1657,6 +1659,10 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
     def rpl777_sndMSG(self, dataFrom777):
         rpl777=dataFrom777.json()
         print("rpl777_sndMSG SENT!!!", rpl777, type(rpl777))
+
+        if self.numCalls > 5:
+            self.superNET_daemon.stopUC4(True)
+
 
     def rpl777ERR(self, ERR777):
         log.msg("ERR777 1", ERR777, type(ERR777)) #.printDetailedTraceback())

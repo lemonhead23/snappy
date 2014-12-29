@@ -568,9 +568,9 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
-    def stopUC4(self):
-        log.msg("STOP TIMER41")
-        self.timer41.stop( )
+    def stopUC4(self,result):
+        log.msg("STOP UC4 with result:", result)
+        self.timer4.stop( )
         log.msg("STOP snappyDaemon")
         self.stop()
 

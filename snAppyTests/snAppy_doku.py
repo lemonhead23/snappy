@@ -25,7 +25,12 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 Launches scripts in UseCase classes:
 
-./snApi17a.py runUC1
+
+UC1_pingPong
+
+./snApi17a.py UC1
+
+
 
 
 
