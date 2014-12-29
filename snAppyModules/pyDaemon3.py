@@ -156,7 +156,7 @@ class Daemon3:
                 self.stopAttempts+=1
                 print(self.stopAttempts ," tries to stop: ", str(pid), str(signal.SIGTERM))
                 time.sleep(0.1)
-                if self.stopAttempts > 100:
+                if self.stopAttempts > 10:
                     print(self.stopAttempts ," trying kill now: ", str(pid), str(signal.SIGKILL))
                     os.kill(pid, signal.SIGKILL)
 

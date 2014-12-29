@@ -185,14 +185,20 @@ class UC_TEMPLATE(object):
 class UC1_pingPong(object):
 
 
-    def __init__(self, serverFactory , environ = {} ): # prepSchedules = {},
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ): # prepSchedules = {},
 
+#
+ #           uc1_pingPong = UC1_pingPong(serverFactory,  self.environ ,  self ) # also hand in 'self' here as a means to stop self
+#
         self.environ = environ
         self.schedules = {}    # this contains the schedules
 
+        print(superNET_daemon)
+
+        self.superNET_daemon = superNET_daemon
+
         # local state information UC dependent
-        self.spec1 = {}
-        self.spec2 = {} # etc..
+        self.pongers =  {} # etc..
 
         prepSchedules = environ['UC_PingPong_1'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
@@ -229,13 +235,11 @@ class UC1_pingPong(object):
                 self.deferred.addCallback(self.rpl777_df1_settings)
                 self.deferred.addErrback(self.rpl777ERR)
 
-
             elif 'uc_getpeers' in schedDue.SNrequests.keys():
                 reqData1 = schedDue.SNrequests['uc_getpeers']
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_getpeers)
                 self.deferred.addErrback(self.rpl777ERR)
-
 
             elif 'GUIpoll' in schedDue.SNrequests.keys():
                 reqData = schedDue.SNrequests['GUIpoll']
@@ -316,14 +320,33 @@ class UC1_pingPong(object):
         except Exception as e:
             #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
             log.msg("Error rpl777 {0}".format(str(e)))
-        #
-        # # further ACTION from here
-        # note= """ from here, we can go the next step, which is the findnode   """
-        # reqFindnode = {'requestType':'findnode'}
-        # reqFindnode['key']= NXT # the rea conf will be the havenode in uipoll
-        # self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
-        # self.deferred.addCallback(self.rpl777_df3_findnode ) # this is just for conf that we sent it
-        # self.deferred.addErrback(self.rpl777ERR)
+
+        ponger = rpl777['ipaddr']
+
+        #log.msg("pongers: ", (self.pongers),"\n")
+
+        if not ponger  in self.pongers.keys():
+            log.msg(ponger)
+
+            self.pongers[ponger] =  rpl777
+
+        log.msg("pongers: ", len(self.pongers))
+
+        numPongers =  len(self.pongers)
+
+        for pongerr in self.pongers:
+            log.msg(self.pongers[pongerr]['ipaddr'])
+
+        if numPongers >3:
+            self.superNET_daemon.stopUC1(True)
+
+
+#3
+# 2014-12-29 12:10:41+0100 [-] GUIpoll ---> rpl777 {'tag': '', 'numpongs': 144, 'lag': '344.375', 'ave': '1259.662', 'numpings': 143, 'result': 'kademlia_pong', 'isMM': '0', 'ipaddr': '<nullstr>', 'NXT': '15178638394924629506', 'port': 0} <class 'dict'>
+
+
+# kademlia_pong {'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1419845114,"MMatrix":0,"yourip":"79.245.5.160","yourport":34365,"ipaddr":"89.212.19.49","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.399"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd671sprkg2r7qe3r1821bfds7marsagn15srbn8p447s8oqon5r6a38r21j9q205fiai54r7dtjdfjongdrpp2gsgopa8f7cum3999h5q1t0jl6fjhb"}]', 'from': '89.212.19.49', 'port': 0, 'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"630.578","numpings":63,"numpongs":65,"ave":"1026.539"}'} <class 'dict'>
+# GUIpoll ---> rpl777 {'ave': '1026.539', 'lag': '630.578', 'NXT': '1978065578067355462', 'port': 0, 'result': 'kademlia_pong', 'ipaddr': '89.212.19.49', 'numpings': 63, 'numpongs': 65, 'tag': '', 'isMM': '0'} <class 'dict'>
 
 
 
@@ -351,7 +374,7 @@ class UC1_pingPong(object):
 
             sleep(0.15)
 
-            log.msg("ping to whitelist:", reqPing['destip'])
+            #log.msg("ping to whitelist:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
@@ -408,7 +431,7 @@ class UC1_pingPong(object):
 
             sleep(0.2)
 
-            log.msg("ping to peer:", reqPing['destip'])
+            #log.msg("ping to peer:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
@@ -420,7 +443,6 @@ class UC1_pingPong(object):
 
 
 
-
     def rpl777_df2_ping(self, dataFrom777):
         """
 
@@ -429,7 +451,7 @@ class UC1_pingPong(object):
         repl=dataFrom777.json()
         repl=dataFrom777.content.decode("utf-8")
         repl=eval(repl)
-        log.msg( 1 * "ping sent", repl)
+        #log.msg( 1 * "ping sent", repl)
 
 
 

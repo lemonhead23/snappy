@@ -44,7 +44,7 @@ class nxtClientFactory(ClientFactory):
 
 class nxtServerFactory(ServerFactory):
 
-    def __init__(self,queryComposers, parsers, environ):
+    def __init__(self, queryComposers, parsers, environ):
         super(nxtServerFactory, self).__init__()
         self.ok=True
         #print(environ)
@@ -477,7 +477,6 @@ class SuperNETApiD(Daemon3): #object):
         reactor.run()
 
 
-
     def initUC(self, UC):
         """
         serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
@@ -487,51 +486,95 @@ class SuperNETApiD(Daemon3): #object):
         """#
 
         if UC == 'UC1':
-            log.startLogging(sys.stdout)
-            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-            print(1*"\ninitUC1")
-            uc1_pingPong = UC1_pingPong(serverFactory,  self.environ ) # also hand in 'self' here as a means to stop self
-            timer1 = task.LoopingCall(uc1_pingPong.periodic,  )
-            timer1.start( TIMER_850 , now=True )
-            reactor.suggestThreadPoolSize(500)
-            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+            self.startUC1()
 
         elif UC == 'UC2':
-            log.startLogging(sys.stdout)
-            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-            print(1*"\ninitUC2")
-            ucTEST_2 = UCTEST_2_ping_findnode(serverFactory,  self.environ )
-            timer2 = task.LoopingCall(ucTEST_2.periodic,  )
-            timer2.start( TIMER_850 , now=True )
-            reactor.suggestThreadPoolSize(500)
-            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+            self.startUC2()
 
         elif UC == 'UC3':
-            log.startLogging(sys.stdout)
-            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-            print(1*"\ninitUC3")
-            ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
-            timer3 = task.LoopingCall(ucTEST_3.periodic,  )
-            timer3.start( TIMER_850 , now=True )
-            reactor.suggestThreadPoolSize(500)
-            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
+            self.startUC3()
 
         elif UC == 'UC4':
-            log.startLogging(sys.stdout)
-            serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-            serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-            print(1*"\ninitUC4")
-            reactor.suggestThreadPoolSize(500) # should be ok
-            serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
-            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+            self.startUC4()
 
-            uc_4_sendMSGs = UC_4_sendMSGs(serverFactory,  self.environ )
-            timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
-            timer4.start( TIMER_850 , now=True )
+
+    def startUC1(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC1")
+        uc1_pingPong = UC1_pingPong(serverFactory,  self, self.environ ,  ) # also hand in 'self' here as a means to stop self
+        self.timer1 = task.LoopingCall(uc1_pingPong.periodic,  )
+        self.timer1.start( TIMER_850 , now=True )
+        reactor.suggestThreadPoolSize(500)
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+    def stopUC1(self, result):
+        log.msg(10*"\nSTOP UC1 with result: ", result)
+        self.timer1.stop( )
+        # self.stop()
+        self.startUC4()
+
+
+    def startUC2(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC2")
+        ucTEST_2 = UCTEST_2_ping_findnode(serverFactory,  self.environ )
+        timer2 = task.LoopingCall(ucTEST_2.periodic,  )
+        timer2.start( TIMER_850 , now=True )
+        reactor.suggestThreadPoolSize(500)
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+    def stopUC2(self):
+        log.msg("STOP TIMER2")
+        self.timer2.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+    def startUC3(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC3")
+        ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
+        timer3 = task.LoopingCall(ucTEST_3.periodic,  )
+        timer3.start( TIMER_850 , now=True )
+        reactor.suggestThreadPoolSize(500)
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+    def stopUC3(self):
+        log.msg("STOP TIMER31")
+        self.timer3.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+    def startUC4(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC4")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc_4_sendMSGs = UC_4_sendMSGs(serverFactory,  self.environ )
+        timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
+        timer4.start( TIMER_850 , now=True )
+
+
+
+    def stopUC4(self):
+        log.msg("STOP TIMER41")
+        self.timer41.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+
 
 
 
