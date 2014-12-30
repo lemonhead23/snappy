@@ -329,9 +329,6 @@ class ProxyClientProtocol777(protocol.Protocol):
         self.deferred.addCallback(self.rcvPOST)
         self.deferred.addErrback(self.rcvPOSTERR)
 
-        #
-        #
-        #
         # stat1 = reactor.threadpool.waiters
         # stat2 = reactor.threadpool.workers
         # stat3 = reactor.threadpool.threads
@@ -462,6 +459,35 @@ class SuperNETApiD(Daemon3): #object):
         reactor.run()
 
 
+
+    def init(self):
+        """
+        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
+        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
+        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
+        Factory is somewhat flexible as to what argument types it gets! """#
+
+        log.startLogging(sys.stdout) # check: logfile or other output ?
+        # factory for ad hoc requests received from external sources
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+
+        reactor.suggestThreadPoolSize(500) # should be ok
+        log.msg("stats: ",reactor.threadpool.dumpStats())
+        log.msg("workers: ", tp.ThreadPool.workers)
+
+        serverFactory.reactor = reactor
+
+        uc_scd_XML_SportsdataLLC = UC_Scheduler_XML(serverFactory,  self.environ ) # environ has the credentials and all
+        timer1 = task.LoopingCall(uc_scd_XML_SportsdataLLC.periodic,  )
+        timer1.start( TIMER_15000, now=True ) # slow heartbeat, start now TODO: the NOW does not seem to work!
+        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+
+        # can make as many as we want here with specific timers and tasks
+
+
+
+
     def runUC(self, UC):
         log.msg( 1 * "start UC: ", UC)
         if UC == 'UC1':
@@ -510,10 +536,10 @@ class SuperNETApiD(Daemon3): #object):
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
     def stopUC1(self, result):
-        log.msg(10*"\nSTOP UC1 with result: ", result)
+        log.msg(5*"\nSTOP UC1 with result: ", result, "\n")
         self.timer1.stop( )
         # self.stop()
-        self.startUC4()
+        self.startUC2()
 
 
     def startUC2(self):
@@ -521,30 +547,42 @@ class SuperNETApiD(Daemon3): #object):
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
         log.msg(1*"initUC2")
-        ucTEST_2 = UCTEST_2_ping_findnode(serverFactory,  self.environ )
-        timer2 = task.LoopingCall(ucTEST_2.periodic,  )
-        timer2.start( TIMER_850 , now=True )
-        reactor.suggestThreadPoolSize(500)
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
-    def stopUC2(self):
-        log.msg("STOP TIMER2")
-        self.timer2.stop( )
-        log.msg("STOP snappyDaemon")
-        self.stop()
+        uc2_havenode = UC2_havenode(serverFactory, self, self.environ )
+
+        reactor.suggestThreadPoolSize(500)
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        timer2 = task.LoopingCall(uc2_havenode.periodic,  )
+        timer2.start( TIMER_850 , now=True )
+
+
+
+
+    def stopUC2(self, result):
+        log.msg(5*"\nSTOP UC2 with result: ", result, "\n")
+        self.timer1.stop( )
+        # self.stop()
+        #self.startUC2()
+        stopApp
+
 
     def startUC3(self):
         log.startLogging(sys.stdout)
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
         log.msg(1*"initUC3")
-        ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ )
+        ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ ) #self,
         timer3 = task.LoopingCall(ucTEST_3.periodic,  )
         timer3.start( TIMER_850 , now=True )
         reactor.suggestThreadPoolSize(500)
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
-    def stopUC3(self):
+    def stopUC3(self, result):
         log.msg("STOP TIMER31")
         self.timer3.stop( )
         log.msg("STOP snappyDaemon")
@@ -562,7 +600,8 @@ class SuperNETApiD(Daemon3): #object):
         except Exception as e:
             log.msg("already listening, continue.{0}".format(str(e)))
 
-        uc_4_sendMSGs = UC_4_sendMSGs(serverFactory,  self.environ )
+        uc_4_sendMSGs = UC_4_sendMSGs(serverFactory,  self.environ )     #  self,
+
         timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
         timer4.start( TIMER_850 , now=True )
 
@@ -575,34 +614,6 @@ class SuperNETApiD(Daemon3): #object):
         self.stop()
 
 
-
-
-
-
-    def init(self):
-        """
-        serverfactory gets all parsers and qcomps, and builds the clientFactories according to what is supposed to happen
-        name scoping is very tricky here. In case of problems, check the object instance identities by print(self) here!
-        The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
-        Factory is somewhat flexible as to what argument types it gets! """#
-
-        log.startLogging(sys.stdout) # check: logfile or other output ?
-        # factory for ad hoc requests received from external sources
-        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
-        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-
-        reactor.suggestThreadPoolSize(500) # should be ok
-        log.msg("stats: ",reactor.threadpool.dumpStats())
-        log.msg("workers: ", tp.ThreadPool.workers)
-
-        serverFactory.reactor = reactor
-
-        uc_scd_XML_SportsdataLLC = UC_Scheduler_XML(serverFactory,  self.environ ) # environ has the credentials and all
-        timer1 = task.LoopingCall(uc_scd_XML_SportsdataLLC.periodic,  )
-        timer1.start( TIMER_15000, now=True ) # slow heartbeat, start now TODO: the NOW does not seem to work!
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
-
-        # can make as many as we want here with specific timers and tasks
 
 
 

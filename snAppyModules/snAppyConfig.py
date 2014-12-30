@@ -25,12 +25,8 @@ STONEFISH_IP = '178.62.185.131'   #
 BOXFISH_IP   = '85.xx'   #
 
 
-SERVER_ADDR_jl777 = 'localhost'
-#SERVER_ADDR_jl777 =  STONEFISH_IP
-
-
-
-
+#SERVER_ADDR_jl777 = 'localhost'
+SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
@@ -47,8 +43,6 @@ POSTHEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 SERVER_PORT_BTCD_RPC = 14632    # going thorugh BTCT RPC
 BitcoinDarkRPCCreds = {'user' : 'azure', 'rpcPw' : 'Ir9qDmicntTxH8C'}
 environ['BitcoinDarkRPCCreds'] = BitcoinDarkRPCCreds
-
-
 
 
 ###################################################################
@@ -98,10 +92,8 @@ environ['CACHE_FILENAMES'] = {
 
 
 TIMER_850 = 0.850 # how often the the base timer is called for loopedCall
-TIMER_5000 = 5000.0
-TIMER_15000 = 15000 # how ofthe the base timer is called for loopedCall
-
-
+TIMER_5000 = 5.0
+TIMER_15000 = 15.0  #  beware of millisec vs. secs !
 
 TIMER1_SportsdataLLC_SECS = 5000.0
 
@@ -113,9 +105,7 @@ TIMER1_SportsdataLLC_SECS = 5000.0
 #
 #
 
-
-UC_PingPong_1={}
-
+UCsched_1={}
 
 sched_GUIpoll ={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
@@ -126,11 +116,10 @@ schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
 sched_GUIpoll['schedReqTypes']  = schedReqTypes
 sched_GUIpoll['target'] = 'this Uses requests!'
 
-
 #----------------------------------------
 sched_settings={}
 sched_settings['schedName'] = 'uc_settings'
-sched_settings['callFreq'] = 7500               # ms!!
+sched_settings['callFreq'] = 12500               # ms!!
 
 schedReqTypes={}
 schedReqTypes['uc_settings'] = {'requestType':'settings'}
@@ -142,93 +131,37 @@ sched_settings['target'] = 'this Uses requests!'
 #----------------------------------------
 sched_getPeers ={}
 sched_getPeers['schedName'] = 'uc_getpeers'
-sched_getPeers['callFreq'] = 5500               # ms!!
+sched_getPeers['callFreq'] = 16500               # ms!!
 
 schedReqTypes={}
 schedReqTypes['uc_getpeers'] = {'requestType':'getpeers'}
 sched_getPeers['schedReqTypes']  = schedReqTypes
 sched_getPeers['target'] = 'this Uses requests!'
+#
+# #----------------------------------------
+# sched_uc_findnode ={}
+# sched_uc_findnode['schedName'] = 'uc_findnode'
+# sched_uc_findnode['callFreq'] = 5500               # ms!!
+#
+# schedReqTypes={}
+# schedReqTypes['uc_findnode'] = {'requestType':'findnode'}
+# sched_uc_findnode['schedReqTypes']  = schedReqTypes
+# sched_uc_findnode['target'] = 'this Uses requests!'
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++
 # plug the schedules into the environment
-UC_PingPong_1[sched_GUIpoll['schedName']] = sched_GUIpoll
-UC_PingPong_1[sched_settings['schedName']] = sched_settings
-UC_PingPong_1[sched_getPeers['schedName']] = sched_getPeers
+UCsched_1[sched_GUIpoll['schedName']] = sched_GUIpoll
+UCsched_1[sched_settings['schedName']] = sched_settings
+UCsched_1[sched_getPeers['schedName']] = sched_getPeers
 
 
-environ['UC_PingPong_1'] = UC_PingPong_1
-
-
-
-################################################################
-
-
-
-
-
-UC_sched_1={}
-
-# Three schedules here
-
-#----------------------------------------
-sched_GUIpoll ={}
-sched_GUIpoll['schedName'] = 'GUIpoll'
-sched_GUIpoll['callFreq'] = 900               # ms!!
-
-schedReqTypes={}
-schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
-sched_GUIpoll['schedReqTypes']  = schedReqTypes
-sched_GUIpoll['target'] = 'this Uses requests!'
-
-#----------------------------------------
-sched1={}
-sched1['schedName'] = 'uc_settings'
-sched1['callFreq'] = 13500               # ms!!
-
-schedReqTypes={}
-schedReqTypes['uc_settings'] = {'requestType':'settings'}
-schedReqTypes['ping'] = {'requestType':'ping'}
-
-sched1['schedReqTypes']  = schedReqTypes
-#  legacy: sched1['target'] = 'GET /nxt?requestType=settings HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: 127.0.0.1:7800\r\nAccept: */*\r\ncontent-type: text/plain;\r\n\r\n'
-sched1['target'] = 'this Uses requests!'
-
-#----------------------------------------
-sched_findnodePeers ={}
-sched_findnodePeers['schedName'] = 'findnodePeers'
-sched_findnodePeers['callFreq'] = 25500               # ms!!
-
-schedReqTypes={}
-schedReqTypes['findnodePeers'] = {'requestType':'findnode'}
-sched_findnodePeers['schedReqTypes']  = schedReqTypes
-sched_findnodePeers['target'] = 'this Uses requests!'
-
-
-### ++++++
-
-
-# plug the schedules into the environment
-UC_sched_1[sched_GUIpoll['schedName']] = sched_GUIpoll
-UC_sched_1[sched1['schedName']] = sched1
-UC_sched_1[sched_findnodePeers['schedName']] = sched_findnodePeers
-
-
-environ['UC_sched_1'] = UC_sched_1
-
-
-
-
-
+environ['UCsched_1'] = UCsched_1
 
 
 ##################################################################
 
 
 UC_sched_3={}
-
-
-#SERVER_ADDR_TEST_1 = SERVER_ADDR_jl777 #"localhost"
-#SERVER_PORT_TEST_1 = 7776
-#FULL_URL_TEST1 = SCHEME + SERVER_ADDR_TEST_1 + ":" + str(SERVER_PORT_TEST_1)
 
 #----------------------------------------
 sched_GUIpoll ={}
@@ -326,4 +259,66 @@ schedSportsData[sched3['schedName']] = sched3
 
 environ['envSportsData'] = schedSportsData
 
+
+
+
+
+################################################################
+
+
+
+#
+#
+# UCsched_1={}
+#
+# # Three schedules here
+#
+# #----------------------------------------
+# sched_GUIpoll ={}
+# sched_GUIpoll['schedName'] = 'GUIpoll'
+# sched_GUIpoll['callFreq'] = 900               # ms!!
+#
+# schedReqTypes={}
+# schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+# sched_GUIpoll['schedReqTypes']  = schedReqTypes
+# sched_GUIpoll['target'] = 'this Uses requests!'
+#
+# #----------------------------------------
+# sched1={}
+# sched1['schedName'] = 'uc_settings'
+# sched1['callFreq'] = 13500               # ms!!
+#
+# schedReqTypes={}
+# schedReqTypes['uc_settings'] = {'requestType':'settings'}
+# schedReqTypes['ping'] = {'requestType':'ping'}
+#
+# sched1['schedReqTypes']  = schedReqTypes
+# #  legacy: sched1['target'] = 'GET /nxt?requestType=settings HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: 127.0.0.1:7800\r\nAccept: */*\r\ncontent-type: text/plain;\r\n\r\n'
+# sched1['target'] = 'this Uses requests!'
+#
+# #----------------------------------------
+# sched_uc_findnode ={}
+# sched_uc_findnode['schedName'] = 'uc_findnode'
+# sched_uc_findnode['callFreq'] = 12500               # ms!!
+#
+# schedReqTypes={}
+# schedReqTypes['uc_findnode'] = {'requestType':'findnode'}
+# sched_uc_findnode['schedReqTypes']  = schedReqTypes
+# sched_uc_findnode['target'] = 'this Uses requests!'
+#
+#
+# ### ++++++
+#
+#
+# # plug the schedules into the environment
+# UCsched_1[sched_GUIpoll['schedName']] = sched_GUIpoll
+# UCsched_1[sched1['schedName']] = sched1
+# UCsched_1[sched_uc_findnode['schedName']] = sched_uc_findnode
+#
+#
+# environ['UCsched_1'] = UCsched_1
+#
+#
+#
+#
 

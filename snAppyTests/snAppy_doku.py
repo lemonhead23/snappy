@@ -28,7 +28,8 @@ Launches scripts in UseCase classes:
 
 UC1_pingPong
 
-./snApi17a.py UC1
+
+./snAppy17c.py UC1
 
 
 
