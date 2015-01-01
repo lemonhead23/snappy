@@ -100,10 +100,16 @@ class Daemon3:
             pid = None
 
         if pid:
-            message = "pidfile {0} already exist. " + \
-                    "Daemon already running?\n"
+            message = "pidfile {0} already exists. Daemon already running??\n"
             sys.stderr.write(message.format(self.pidfile))
-            sys.exit(1)
+
+            try:
+                sys.stderr.write("trying to remove pidfile", self.pidfile)
+
+                os.remove(self.pidfile)
+            except:
+
+                sys.exit(1)
 
         # Start the daemon
         self.daemonize()
@@ -118,14 +124,24 @@ class Daemon3:
                 pid = int(pf.read().strip())
         except IOError:
             pid = None
+
         if pid:
-            message = "pidfile {0} already exist. " + \
-                    "Daemon already running?\n"
+            message = "pidfile {0} already exists. Daemon already running??\n"
             sys.stderr.write(message.format(self.pidfile))
-            sys.exit(1)
+            #sys.stdout.write(message.format(self.pidfile))
+
+            try:
+                sys.stdout.write("trying to remove pidfile" + self.pidfile)
+                os.remove(self.pidfile)
+
+            except Exception as e:
+                sys.stdout.write("exiting.err {0}".format(str(e)))
+                sys.exit(1)
+
         # Start the daemon
         self.daemonize()
-        self.runUC(UC) # UC is the argSTr that denotes the UC
+        self.runUC(UC)
+
 
 
 
@@ -141,8 +157,7 @@ class Daemon3:
             pid = None
 
         if not pid:
-            message = "pidfile {0} does not exist. " + \
-                    "Daemon not running?\n"
+            message = "pidfile {0} does not exist. Daemon not running?\n"
             sys.stderr.write(message.format(self.pidfile))
             return # not an error in a restart
 

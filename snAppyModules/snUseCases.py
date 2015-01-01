@@ -250,6 +250,7 @@ class UC1_pingPong(object):
 
          """#
         rpl777=dataFrom777.json()
+        log.msg("UC1 tests for pongers: ", len(self.pongers))
         if 'nothing pending' in str(rpl777):
             log.msg(1*"GUIpoll : ",rpl777  ) #pass#
         elif 'kademlia_pong' in str(rpl777):
@@ -364,7 +365,7 @@ class UC1_pingPong(object):
         log.msg(1*"ping to whitelist:")#, reqPing['destip'])
         for node in ipsToPing:
             reqPing['destip']=node
-            sleep(0.15)
+            sleep(0.25)
             #log.msg("ping to whitelist:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
@@ -420,7 +421,7 @@ class UC1_pingPong(object):
             reqPing['destip'] = ipaddr
             #log.msg(1*"peer:", ipaddr)
 
-            sleep(0.2)
+            sleep(0.25)
 
             #log.msg("ping to peer:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
@@ -698,7 +699,7 @@ kademlia_havenode
             self.havenoders[fromNXT] =  rpl777
 
         if  num_havenoders > 4:
-            log.msg(12*"\nhavenode finsish OK")
+            log.msg(1*"\nhavenode finsish OK")
             self.superNET_daemon.stopUC2(True)
 
 
@@ -757,34 +758,29 @@ kademlia_havenode
             result =   rpl777['result']
             ave  =  rpl777['ave']
             NXT  = rpl777['NXT']
+            #
             #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
 
         except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
             log.msg("Error rpl777 {0}".format(str(e)))
-
-        ponger = rpl777['ipaddr']
 
         #log.msg("pongers: ", (self.pongers),"\n")
 
-        if not ponger  in self.pongers.keys():
-            log.msg(ponger)
+        if not ipaddr  in self.pongers.keys():
+            log.msg(ipaddr)
+            log.msg(type(ipaddr))
 
-            self.pongers[ponger] =  rpl777
+            if ipaddr == '<nullstr':
+                print(12*"\n###########", rpl777)
 
-        log.msg("pongers: ", len(self.pongers))
+            self.pongers[ipaddr] =  rpl777
 
-        numPongers =  len(self.pongers)
+        log.msg("pongers: ", len(self.ipaddr))
+
+        numPongers =  len(self.ipaddr)
 
 
-
-
-        #
-        # for pongerr in self.pongers:
-        #     log.msg(self.pongers[pongerr]['ipaddr'])
-
-        # if numPongers >3:
-        #     self.superNET_daemon.stopUC1(True)
 
         # 2014-12-29 12:10:41+0100 [-] GUIpoll ---> rpl777 {'tag': '', 'numpongs': 144, 'lag': '344.375', 'ave': '1259.662', 'numpings': 143, 'result': 'kademlia_pong', 'isMM': '0', 'ipaddr': '<nullstr>', 'NXT': '15178638394924629506', 'port': 0} <class 'dict'>
 
@@ -814,7 +810,7 @@ kademlia_havenode
         log.msg(1*"ping to whitelist:")#, reqPing['destip'])
         for node in ipsToPing:
             reqPing['destip']=node
-            sleep(0.2)
+            sleep(0.25)
             #log.msg("ping to whitelist:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
@@ -859,25 +855,21 @@ kademlia_havenode
 
         reqFindnode = {'requestType':'findnode'}
 
-        #log.msg(1*" rpl777_df1_getpeers  :",repl)
-
         reqPing = {'requestType':'ping'}
 
         for peer in peers[2:]:
             #log.msg(1*"\n\npeer:", peer, type(peer))
             ipaddr = peer['srvipaddr']
             reqPing['destip'] = ipaddr
-            #log.msg(1*"peer:", ipaddr)
-            #
+
             # #log.msg("ping to peer:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
-            #
 
             pserv = peer['pserver']
             srvNXT = peer['srvNXT']
-            sleep(0.2)
+            sleep(0.25)
             reqFindnode['key']=srvNXT
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_findnode )
@@ -907,10 +899,9 @@ kademlia_havenode
 
 
 
-    def rpl777ERR(self, ERR777):
+    def rpl777ERR(self, ERR777): # ERR777 is of type exception
 
-        log.msg("ERR777 1", ERR777, type(ERR777)) #.printDetailedTraceback())
-        log.msg("ERR777 2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
+        log.msg("ERR777 UC2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
         raise RuntimeError(ERR777.printDetailedTraceback())
 
 
@@ -922,7 +913,7 @@ kademlia_havenode
 
 
 
-######################   UC2_havenode
+######################   UC2_havenode fin
 ######################
 ######################
 ######################
@@ -1310,7 +1301,7 @@ differentiate two types of replies:
                 log.msg(1*"\n reqFindnode all local peers:", self.peersDiLoc, type(self.peersDiLoc))
                 for peer in self.peersDiLoc.keys():
                     reqFindnode['key']=self.peersDiLoc[peer]
-                    sleep(0.2)
+                    sleep(0.25)
                     self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
                     self.deferred.addCallback(self.rpl777_df3_findnode )
                     self.deferred.addErrback(self.rpl777ERR)
@@ -1403,7 +1394,7 @@ differentiate two types of replies:
             #log.msg(1*"\n FINDNODE peer:", srvNXT)
             reqFindnode['key']=srvNXT
 
-            sleep(0.1)
+            sleep(0.25)
 
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df3_findnode )
@@ -1451,7 +1442,7 @@ differentiate two types of replies:
             # log.msg("queue: ", stat4)
             # log.msg("workers2: ", tp.ThreadPool.workers)
 
-            sleep(0.2)
+            sleep(0.25)
 
             log.msg("ping to whitelist:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
@@ -1639,7 +1630,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             log.msg("queue: ", stat4)
             log.msg("workers2: ", tp.ThreadPool.workers)
 
-            sleep(0.2)
+            sleep(0.25)
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.RQsendmsg), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_sndMSG ) # this is just for conf that we sent it
             self.deferred.addErrback(self.rpl777ERR)
@@ -1726,7 +1717,7 @@ class UC_Scheduler_XML(object):
 
         for req in scheduledReqs:
 
-            sleep(0.51) # constraint on demo account sportsdataLLC
+            sleep(0.25) # constraint on demo account sportsdataLLC
             requestOUT = req.schedule['target'].encode("utf-8")
             #
             self.uc_Factory = ClientFactory()

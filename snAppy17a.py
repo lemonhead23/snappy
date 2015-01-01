@@ -536,9 +536,9 @@ class SuperNETApiD(Daemon3): #object):
         reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
 
     def stopUC1(self, result):
-        log.msg(5*"\nSTOP UC1 with result: ", result, "\n")
+        log.msg(1*"\n                           STOP UC1 with result: ", result, "\n")
         self.timer1.stop( )
-        # self.stop()
+        #self.stop()
         self.startUC2()
 
 
@@ -547,9 +547,7 @@ class SuperNETApiD(Daemon3): #object):
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
         log.msg(1*"initUC2")
-
         uc2_havenode = UC2_havenode(serverFactory, self, self.environ )
-
         reactor.suggestThreadPoolSize(500)
         serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
         try:
@@ -557,18 +555,16 @@ class SuperNETApiD(Daemon3): #object):
         except Exception as e:
             log.msg("already listening, continue.{0}".format(str(e)))
 
-        timer2 = task.LoopingCall(uc2_havenode.periodic,  )
-        timer2.start( TIMER_850 , now=True )
-
-
+        self.timer2 = task.LoopingCall(uc2_havenode.periodic,  )
+        self.timer2.start( TIMER_850 , now=True )
 
 
     def stopUC2(self, result):
-        log.msg(5*"\nSTOP UC2 with result: ", result, "\n")
-        self.timer1.stop( )
-        # self.stop()
+        log.msg(5*"\n\n                           STOP UC2 with result:  ", result, "\n")
+        self.timer2.stop( )
+        self.stop()
         #self.startUC2()
-        stopApp
+
 
 
     def startUC3(self):
