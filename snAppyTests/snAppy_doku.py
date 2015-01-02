@@ -1074,11 +1074,12 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=fin
 {'data': 'c0ffee'}
 
 
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findvalue&key=1031470952125437106'
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findvalue&key=9429550506782723939'
 {'data': 'c0ffee'}
 
 
 
+./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"9429550506782723939"}'
 
 ./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
 {"requestType":"dbret","NXT":"2131686659786462901","key":"1031470952125437106","data":"c0ffee"}

@@ -566,23 +566,29 @@ class SuperNETApiD(Daemon3): #object):
         #self.startUC2()
 
 
-
     def startUC3(self):
         log.startLogging(sys.stdout)
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
         log.msg(1*"initUC3")
-        ucTEST_3 = UCTEST_3_store_findvalue(serverFactory,  self.environ ) #self,
-        timer3 = task.LoopingCall(ucTEST_3.periodic,  )
-        timer3.start( TIMER_850 , now=True )
+        uc3_store_findvalue = UC3_store_findvalue(serverFactory, self, self.environ )
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
         reactor.suggestThreadPoolSize(500)
-        reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory)
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        self.timer3 = task.LoopingCall(uc3_store_findvalue.periodic,  )
+        self.timer3.start( TIMER_850 , now=True )
+
 
     def stopUC3(self, result):
         log.msg("STOP TIMER31")
         self.timer3.stop( )
         log.msg("STOP snappyDaemon")
         self.stop()
+
 
     def startUC4(self):
         log.startLogging(sys.stdout)

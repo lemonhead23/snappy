@@ -183,6 +183,15 @@ class UC_TEMPLATE(object):
 
 
 class UC1_pingPong(object):
+    """
+       SuperNET calls tested here:
+
+       settings
+       getpeers
+       GUIpoll
+       pong
+
+       """#
 
 
     def __init__(self, serverFactory , superNET_daemon , environ = {}, ): # prepSchedules = {},
@@ -468,10 +477,24 @@ class UC1_pingPong(object):
 
 
 
+
+
+
+
 class UC2_havenode(object):
+    """
+       SuperNET calls tested here:
+
+       settings
+       getpeers
+       GUIpoll
+       pong
+       havenode
+
+       """#
 
 
-    def __init__(self, serverFactory , superNET_daemon , environ = {}, ): # prepSchedules = {},
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
         # uc1_pingPong = UC1_pingPong(serverFactory,  self.environ ,  self )
         #  also hand in 'self' here as a means to stop self
         # log.msg(superNET_daemon)
@@ -482,8 +505,8 @@ class UC2_havenode(object):
         self.superNET_daemon = superNET_daemon
 
         # local state information UC dependent
-        self.pongers =  {} # etc..
-        self.havenoders =  {} # etc..
+        self.pongers =  {} # LOCAL AUXILIARY REGISTER
+        self.havenoders =  {} #  LOCAL AUXILIARY REGISTER
         self.peersDiLoc = {}
 
 
@@ -517,7 +540,14 @@ class UC2_havenode(object):
              Here we explicitly check the name and send them to the first callback of their callback sequence."""#
 
         for schedDue in schedulesDue:
-            if 'uc_settings' in schedDue.SNrequests.keys():
+
+            if 'GUIpoll' in schedDue.SNrequests.keys():
+                reqData = schedDue.SNrequests['GUIpoll']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_GUIpoll)
+                self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'uc_settings' in schedDue.SNrequests.keys():
                 reqData1 = schedDue.SNrequests['uc_settings']
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_settings)
@@ -528,25 +558,7 @@ class UC2_havenode(object):
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_getpeers)
                 self.deferred.addErrback(self.rpl777ERR)
-            #
-            #
-            # elif 'uc_findnode' in schedDue.SNrequests.keys():
-            #     reqFindnode = {'requestType':'findnode'}
-            #     #log.msg(11*"\n rpl777_df1_getpeers & reqFindnode all:", self.peersDiLoc, type(self.peersDiLoc))
-            #     for peer in self.peersDiLoc.keys():
-            #         reqFindnode['key']=self.peersDiLoc[peer]
-            #         sleep(0.1)
-            #         self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
-            #         self.deferred.addCallback(self.rpl777_df1_findnode )
-            #         self.deferred.addErrback(self.rpl777ERR)
 
-
-
-            elif 'GUIpoll' in schedDue.SNrequests.keys():
-                reqData = schedDue.SNrequests['GUIpoll']
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
-                self.deferred.addCallback(self.rpl777_GUIpoll)
-                self.deferred.addErrback(self.rpl777ERR)
 
 
     def rpl777_GUIpoll(self, dataFrom777):
@@ -926,25 +938,11 @@ kademlia_havenode
 
 
 
-
-
-
-
-
-class UCTEST_3_store_findvalue(object):
+class UC3_store_findvalue(object):
     """
 
     import binascii
-  ss="asdfasfreGJHGJHGKJGoo769875tkzg"
 
-  ss1=ss.encode("utf-8")
-
-Out[48]: b'asdfasfreGJHGJHGKJGoo769875tkzg'
-
-  test =  ss1.hexlify(ss1)
-
-In [50]: test
-Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 
 
 
@@ -952,8 +950,8 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 """#
 
 
-    def __init__(self, serverFactory , environ = {} ): # prepSchedules = {},
 
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
 
 
         self.MSGfrags = [
@@ -971,12 +969,17 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
         self.environ = environ
         self.schedules = {}    # this contains the schedules
 
+        self.superNET_daemon = superNET_daemon
+
+        # local state information UC dependent
         self.peersDiLoc = {}
-        #self.peers = {}
+        self.storedVals = {} # LOCAL AUXILIARY REGISTER
+        self.numStores = 0
+        self.numFinds = 0
 
-        self.storedVals = {} # name:data !
+        self.stopDaemon = False
 
-        prepSchedules = environ['UCTEST_3_store_findvalue'] # can use same as UC1 for now- extends it
+        prepSchedules = environ['UC3_store_findvalue'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
             sched = prepSchedules[sched]
             self.schedules[ sched['schedName']] = Schedule( sched )
@@ -984,12 +987,13 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
         self.lastCallTime = int(time.time() * 1000)
 
 
+
+
     def periodic(self, ):
         """ This is the method that is called periodically by the twisted loopingTask.
          It iterates over all schedules in the UseCase class, checks if they are due to be called,
          adds the ones due to a list and passes that list on to runSchedules(). """#
 
-        schedulesDue =[]
 
 # curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
 #{'key': '1031470952125437106', 'txid': '0', 'len': 3, 'data': 'c0ffee', 'result': 'kademlia_store'}
@@ -998,8 +1002,6 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 
 
 
-
-
 #./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
 #./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
 # havenodeB ???
@@ -1009,7 +1011,14 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 # havenodeB ???
 
 
+        schedulesDue =[]
 
+        if (self.numFinds >2 and self.numStores>2):
+             self.stopDaemon = True
+
+        if  self.stopDaemon:
+            log.msg(1*" STOP  finish OK")
+            self.superNET_daemon.stopUC3(True)
 
 
         for schedule in self.schedules.keys():
@@ -1021,6 +1030,8 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
         self.runSchedules(schedulesDue)
 
 
+
+
     def runSchedules(self,schedulesDue):
         """ here we get through all the due schedules and call them on SuperNET server
              Here we explicitly check the name and send them to the first callback of their callback sequence."""#
@@ -1028,66 +1039,134 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 
 
 
-        def msg():
-            msg = ''
-            for frag in range(randint(4,7)):
-                msg +=  self.MSGfrags[randint(0,7)]
-            return msg
-
         for schedDue in schedulesDue:
-            if 'sched_findvalue' in schedDue.SNrequests.keys():
-
-                reqData1 = schedDue.SNrequests['sched_findvalue']
-
-                for key in self.storedVals.keys():
-                    reqData1['key'] = self.storedVals[key]
-                    print(1*"\nreqData1 try to FINDVALUE", reqData1)
-
-                    self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
-                    self.deferred.addCallback(self.rpl777_findvalue)
-                    self.deferred.addErrback(self.rpl777ERR)
 
 
 
-            elif 'sched_store' in schedDue.SNrequests.keys():
-                log.msg("do sched_store")
-                reqData = schedDue.SNrequests['sched_store'] # this has 0.9 sec
-
-
-
-                n1=msg()
-                n2=n1.encode("utf-8")
-                n2 = binascii.hexlify(n2)
-                n3 = n2.decode("utf-8")
-
-
-
-                reqData['name'] = 'myStoreName' + str(int(time.time())) #n1
-
-
-                reqData['data'] = n3
-
-
-                log.msg("do reqData", reqData)
-
-
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
-                self.deferred.addCallback(self.rpl777_store)
-                self.deferred.addErrback(self.rpl777ERR)
-
-            elif 'GUIpoll' in schedDue.SNrequests.keys():
-                log.msg("do GUIpoll")
+            if 'GUIpoll' in schedDue.SNrequests.keys():
+                #log.msg("do GUIpoll")
                 reqData = schedDue.SNrequests['GUIpoll'] # this has 0.9 sec
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_GUIpoll)
                 self.deferred.addErrback(self.rpl777ERR)
 
 
-    def rpl777_store(self, dataFrom777):
+            elif 'uc_findvalue' in schedDue.SNrequests.keys():
+
+                reqData1 = schedDue.SNrequests['uc_findvalue']
+
+                for key in self.storedVals.keys():
+                    reqData1['key'] = self.storedVals[key]
+                    #log.msg(1*"runSchedules findvalue storedVals: ", reqData1)
+
+                    self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                    self.deferred.addCallback(self.rpl777_df1_findvalue)
+                    self.deferred.addErrback(self.rpl777ERR)
+
+
+            elif 'sched_store' in schedDue.SNrequests.keys():
+                #log.msg("do sched_store")
+                reqData = schedDue.SNrequests['sched_store'] # this has 0.9 sec
+
+                n1 = self.msg()
+                n2 = n1.encode("utf-8")
+                n2 = binascii.hexlify(n2)
+                n3 = n2.decode("utf-8")
+
+                reqData['name'] = 'myStoreName' + str(int(time.time())) #n1
+
+                reqData['data'] = n3
+
+                log.msg("do store No.", str(self.numStores +1 ))
+                self.numStores += 1
+
+                if self.numStores <20:
+
+                    self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                    self.deferred.addCallback(self.rpl777_df1_store)
+                    self.deferred.addErrback(self.rpl777ERR)
+
+
+            elif 'uc_settings' in schedDue.SNrequests.keys():
+                #log.msg(1*"do uc_settings")
+                reqData1 = schedDue.SNrequests['uc_settings']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_settings)
+                self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'uc_getpeers' in schedDue.SNrequests.keys():
+                #log.msg(1*"do uc_getpeers")
+                reqData1 = schedDue.SNrequests['uc_getpeers']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_getpeers)
+                self.deferred.addErrback(self.rpl777ERR)
+
+
+
+
+    def rpl777_GUIpoll(self, dataFrom777):
+        """
+
+
+
+         """#
+
 
         rpl777=dataFrom777.json()
-        print("rpl777_stored a data val", rpl777, type(rpl777))
-        #stored = {}
+        #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
+
+
+        if 'nothing pending' in str(rpl777):
+            pass#
+            log.msg("GUIpoll --->  ",rpl777)
+
+        elif 'kademlia_store' in str(rpl777):
+            self.rpl777_GUIpoll_kademlia_store(rpl777)
+            #log.msg("GUIpoll ---> kademlia_store",rpl777, type(rpl777),"\n")
+
+        elif 'kademlia_findvalue' in str(rpl777):
+            #log.msg("GUIpoll ---> findnode",rpl777, type(rpl777),"\n")
+            self.rpl777_GUIpoll_findvalue(rpl777)
+
+        elif 'kademlia_havenodeB' in str(rpl777):
+            #log.msg("GUIpoll ---> kademlia_havenodeB",rpl777, type(rpl777),"\n")
+            self.rpl777_GUIpoll_havenodeB(rpl777)
+
+
+
+        else:
+            log.msg(1*"GUIpoll --->misc: ")#,rpl777, type(rpl777),"\n")
+
+        return 0
+
+
+
+
+
+    def rpl777_GUIpoll_havenodeB(self,rpl777):
+
+        log.msg(21*"\n  ---> rpl777_GUIpoll_havenodeB",rpl777, type(rpl777),"\n")
+
+
+    def rpl777_GUIpoll_findvalue(self,rpl777):
+
+        log.msg(11*"\n  ---> rpl777_GUIpoll_findvalue",rpl777, type(rpl777),"\n") # findvalue does not seem to pass GUIpoll!!
+
+    def rpl777_GUIpoll_kademlia_store(self,rpl777):
+
+        log.msg(1*"  ---> rpl777_GUIpoll_kademlia_store")
+        #log.msg(1*"  ---> rpl777_GUIpoll_kademlia_store",rpl777, type(rpl777),"\n")
+
+
+
+
+
+
+
+    def rpl777_df1_store(self, dataFrom777):
+
+        rpl777=dataFrom777.json()
+        log.msg("done rpl777_df1_store -", rpl777, type(rpl777), "numStores=", str(self.numStores))
 
         self.storedVals[rpl777['key']] = rpl777['key']
 
@@ -1104,81 +1183,116 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 
 
 
-    def rpl777_findvalue(self, dataFrom777):
+    def rpl777_df1_findvalue(self, dataFrom777):
 
         rpl777=dataFrom777.json()
-        print(1 * "\nrpl777_findvalue got this:", rpl777)
-
-#rpl="{'len': '112', 'key': '16442637354607720438', 'data': '5369782c207369723b20666976652c207369723b54656e7365722c2073616964207468652054656e736f722e45696768742c207369723b20736576656e2c207369723b45696768742c207369723b20736576656e2c207369723b466f75722c207369723b2074687265652c207369723b'}"
-
+        #log.msg(1 * "\nrpl777_findvalue got this:", rpl777)
+        #rpl="{'len': '112', 'key': '16442637354607720438', 'data': '5369782c207369723b20666976652c207369723b54656e7365722c2073616964207468652054656e736f722e45696768742c207369723b20736576656e2c207369723b45696768742c207369723b20736576656e2c207369723b466f75722c207369723b2074687265652c207369723b'}"
         #foundVal=eval(rpl777)
         foundVal=rpl777['data']
         #foundVal = foundVal.decode("utf-8")
         foundVal = binascii.a2b_hex(foundVal)
+        self.numFinds += 1
 
-        print(1 * "\nrpl777_findvalue got this:", foundVal)
+        log.msg(1 * "done rpl777_df1_findvalue sent:", foundVal, rpl777, "numFinds=", str(self.numFinds))
 
-
-
-    def rpl777_havenodeB(self, dataFrom777):
-
-        rpl777=dataFrom777.json()
-        print(1*"\nrpl777_havenodeB", rpl777, type(rpl777))
+        if self.numFinds > 25:
+            pass
 
 
-    def rpl777_GUIpoll(self, dataFrom777):
+    def rpl777_df1_settings(self, dataFrom777): #these are the basic pings from the whitlist
+        """
+         this sends pings
+
+          """#
+        repl=dataFrom777.json()
+        reqPing = {'requestType':'ping'}
+
+        # self.peersDiLoc[node[1]] = node[0]
+
+        ipsToPing=repl['whitelist'] #[0] # singlecheck
+        # manual tests:
+        #ipsToPing = 20* ['88.179.105.82'] # ['178.62.185.131'] # stonefish['80.41.56.181'] # ['85.178.202.108']   #
+
+        log.msg(1*"ping to whitelist:")#, reqPing['destip'])
+        for node in ipsToPing:
+            reqPing['destip']=node
+            sleep(0.25)
+            #log.msg("ping to whitelist:", reqPing['destip'])
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_df1_getpeers(self, dataFrom777):
         """
 
 
+        """#
 
-         """#
+        repl=dataFrom777.json()
 
-        # test on string and send there!
-        # maybe this can be done more elegant later, but probably not.
+        Numnxtaccts = repl['Numnxtaccts']
+        peers = repl['peers']
+        Numpservers = repl['Numpservers']
+        num = repl['num']
+        log.msg("Numnxtaccts", Numnxtaccts)
+        #log.msg("peers", peers)
+        log.msg("Numpservers", Numpservers)
+        log.msg("num", num)
 
-        #log.msg("GUIpoll entry--->  ",dataFrom777, type(dataFrom777),"\n")
+        reqFindnode = {'requestType':'findnode'}
 
-        rpl777=dataFrom777.json()
-        #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
+        reqPing = {'requestType':'ping'}
 
-        if 'nothing pending' in str(rpl777):
-            pass#
-            log.msg("GUIpoll --->  ",rpl777, type(rpl777),"\n")
+        for peer in peers[2:]:
+            #log.msg(1*"\n\npeer:", peer, type(peer))
+            ipaddr = peer['srvipaddr']
+            reqPing['destip'] = ipaddr
 
-        elif 'kademlia_store' in str(rpl777):
-            self.rpl777_GUIpoll_kademlia_store(rpl777)
-            #log.msg("GUIpoll ---> kademlia_store",rpl777, type(rpl777),"\n")
+            # #log.msg("ping to peer:", reqPing['destip'])
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
 
-        elif 'kademlia_findvalue' in str(rpl777):
-            #log.msg("GUIpoll ---> findnode",rpl777, type(rpl777),"\n")
-            self.rpl777_GUIpoll_findvalue(rpl777)
-
-        elif 'kademlia_havenodeB' in str(rpl777):
-            log.msg("GUIpoll ---> kademlia_havenodeB",rpl777, type(rpl777),"\n")
-            self.rpl777_GUIpoll_havenodeB(rpl777)
-
-
-
-        else:
-            log.msg(1*"GUIpoll ---> CALL not caught yet: ",rpl777, type(rpl777),"\n")
-
-        return 0
-
-
-
-    def rpl777_GUIpoll_havenodeB(self,rpl777):
-
-        log.msg(1*"\n  ---> rpl777_GUIpoll_havenodeB",rpl777, type(rpl777),"\n")
+            pserv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            sleep(0.25)
+            reqFindnode['key']=srvNXT
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_findnode )
+            self.deferred.addErrback(self.rpl777ERR)
 
 
-    def rpl777_GUIpoll_findvalue(self,rpl777):
 
-        log.msg(1*"\n  ---> rpl777_GUIpoll_findvalue",rpl777, type(rpl777),"\n")
+    def rpl777_df2_ping(self, dataFrom777):
+        """
 
-    def rpl777_GUIpoll_kademlia_store(self,rpl777):
 
-        log.msg(1*"\n  ---> rpl777_GUIpoll_kademlia_store",rpl777, type(rpl777),"\n")
+        """#
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        #log.msg( 1 * "ping sent", repl)
 
+
+
+    def rpl777_df2_findnode(self, dataFrom777):
+
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        log.msg( 1 * "rpl777_df2_findnode sent", repl)
+
+
+
+    def msg(self, ):
+
+        msg = ''
+        for frag in range(randint(4,7)):
+            msg +=  self.MSGfrags[randint(0,7)]
+        return msg
 
 
     def rpl777ERR(self, ERR777):
@@ -1188,6 +1302,7 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 
 
 
+
 ####################################
 ####################################
 ####################################
@@ -1195,6 +1310,279 @@ Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
 ####################################
 ####################################
 
+
+
+
+
+
+#
+#
+#
+#
+#
+# class UC3_store_findvalue(object):
+#     """
+#
+#     import binascii
+#   ss="asdfasfreGJHGJHGKJGoo769875tkzg"
+#
+#   ss1=ss.encode("utf-8")
+#
+# Out[48]: b'asdfasfreGJHGJHGKJGoo769875tkzg'
+#
+#   test =  ss1.hexlify(ss1)
+#
+# In [50]: test
+# Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
+#
+#
+#
+#
+# """#
+#
+#
+#     def __init__(self, serverFactory , environ = {} ): # prepSchedules = {},
+#
+#
+#
+#         self.MSGfrags = [
+#                         'Eight, sir; seven, sir;',
+#                         'Six, sir; five, sir;',
+#                         'Four, sir; three, sir;',
+#                         'Two, sir; one!',
+#                         'Tenser, said the Tensor.',
+#                         'Tenser, said the Tensor.',
+#                         'Tension, apprehension,',
+#                         'And dissension have begun.',
+#                         ]
+#
+#
+#         self.environ = environ
+#         self.schedules = {}    # this contains the schedules
+#
+#         self.peersDiLoc = {}
+#         #self.peers = {}
+#
+#         self.storedVals = {} # name:data !
+#
+#         prepSchedules = environ['UC3_store_findvalue'] # can use same as UC1 for now- extends it
+#         for sched in prepSchedules.keys():
+#             sched = prepSchedules[sched]
+#             self.schedules[ sched['schedName']] = Schedule( sched )
+#
+#         self.lastCallTime = int(time.time() * 1000)
+#
+#
+#     def periodic(self, ):
+#         """ This is the method that is called periodically by the twisted loopingTask.
+#          It iterates over all schedules in the UseCase class, checks if they are due to be called,
+#          adds the ones due to a list and passes that list on to runSchedules(). """#
+#
+#         schedulesDue =[]
+#
+# # curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
+# #{'key': '1031470952125437106', 'txid': '0', 'len': 3, 'data': 'c0ffee', 'result': 'kademlia_store'}
+# #curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findvalue&key=1031470952125437106'
+# #{'key': '1031470952125437106', 'len': '3', 'data': 'c0ffee'}
+#
+#
+#
+#
+#
+# #./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
+# #./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
+# # havenodeB ???
+#
+# #./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
+# #./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
+# # havenodeB ???
+#
+#
+#
+#
+#
+#         for schedule in self.schedules.keys():
+#             schedule = self.schedules[schedule]
+#
+#             if schedule.callMe():
+#                 schedulesDue.append(schedule)
+#
+#         self.runSchedules(schedulesDue)
+#
+#
+#     def runSchedules(self,schedulesDue):
+#         """ here we get through all the due schedules and call them on SuperNET server
+#              Here we explicitly check the name and send them to the first callback of their callback sequence."""#
+#
+#
+#
+#         def msg():
+#             msg = ''
+#             for frag in range(randint(4,7)):
+#                 msg +=  self.MSGfrags[randint(0,7)]
+#             return msg
+#
+#         for schedDue in schedulesDue:
+#             if 'sched_findvalue' in schedDue.SNrequests.keys():
+#
+#                 reqData1 = schedDue.SNrequests['sched_findvalue']
+#
+#                 for key in self.storedVals.keys():
+#                     reqData1['key'] = self.storedVals[key]
+#                     log.msg(1*"\nreqData1 try to FINDVALUE", reqData1)
+#
+#                     self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+#                     self.deferred.addCallback(self.rpl777_findvalue)
+#                     self.deferred.addErrback(self.rpl777ERR)
+#
+#
+#
+#             elif 'sched_store' in schedDue.SNrequests.keys():
+#                 log.msg("do sched_store")
+#                 reqData = schedDue.SNrequests['sched_store'] # this has 0.9 sec
+#
+#
+#
+#                 n1=msg()
+#                 n2=n1.encode("utf-8")
+#                 n2 = binascii.hexlify(n2)
+#                 n3 = n2.decode("utf-8")
+#
+#
+#
+#                 reqData['name'] = 'myStoreName' + str(int(time.time())) #n1
+#
+#
+#                 reqData['data'] = n3
+#
+#
+#                 log.msg("do reqData", reqData)
+#
+#
+#                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+#                 self.deferred.addCallback(self.rpl777_store)
+#                 self.deferred.addErrback(self.rpl777ERR)
+#
+#             elif 'GUIpoll' in schedDue.SNrequests.keys():
+#                 log.msg("do GUIpoll")
+#                 reqData = schedDue.SNrequests['GUIpoll'] # this has 0.9 sec
+#                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+#                 self.deferred.addCallback(self.rpl777_GUIpoll)
+#                 self.deferred.addErrback(self.rpl777ERR)
+#
+#
+#     def rpl777_store(self, dataFrom777):
+#
+#         rpl777=dataFrom777.json()
+#         print("rpl777_stored a data val", rpl777, type(rpl777))
+#         #stored = {}
+#
+#         self.storedVals[rpl777['key']] = rpl777['key']
+#
+# #
+# # reqData STORE {'name': 'myStoreName1418569814', 'data': 'myStoreData1418569814', 'requestType': 'store'}
+# # 2014-12-14 16:10:14+0100 [-] do GUIpoll
+# # 2014-12-14 16:10:15+0100 [-] rpl777_stored a data val {'txid': '13689646989932326452', 'result': 'kademlia_store', 'data': 'fffffffefafa1418569814', 'len': 11, 'key': '270615323620844315'} <class 'dict'>
+#
+# # okokokokokokok
+#
+#         #
+#         # {'data': 'myStoreData1418569169', 'name': 'myStoreName1418569169', 'requestType': 'store'}
+#
+#
+#
+#
+#     def rpl777_findvalue(self, dataFrom777):
+#
+#         rpl777=dataFrom777.json()
+#         print(1 * "\nrpl777_findvalue got this:", rpl777)
+#
+# #rpl="{'len': '112', 'key': '16442637354607720438', 'data': '5369782c207369723b20666976652c207369723b54656e7365722c2073616964207468652054656e736f722e45696768742c207369723b20736576656e2c207369723b45696768742c207369723b20736576656e2c207369723b466f75722c207369723b2074687265652c207369723b'}"
+#
+#         #foundVal=eval(rpl777)
+#         foundVal=rpl777['data']
+#         #foundVal = foundVal.decode("utf-8")
+#         foundVal = binascii.a2b_hex(foundVal)
+#
+#         print(1 * "\nrpl777_findvalue got this:", foundVal)
+#
+#
+#
+#     def rpl777_havenodeB(self, dataFrom777):
+#
+#         rpl777=dataFrom777.json()
+#         print(15*"\nrpl777_havenodeB", rpl777, type(rpl777))
+#
+#
+#     def rpl777_GUIpoll(self, dataFrom777):
+#         """
+#
+#
+#
+#          """#
+#
+#         # test on string and send there!
+#         # maybe this can be done more elegant later, but probably not.
+#
+#         #log.msg("GUIpoll entry--->  ",dataFrom777, type(dataFrom777),"\n")
+#
+#         rpl777=dataFrom777.json()
+#         #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
+#
+#         if 'nothing pending' in str(rpl777):
+#             pass#
+#             log.msg("GUIpoll --->  ",rpl777, type(rpl777),"\n")
+#
+#         elif 'kademlia_store' in str(rpl777):
+#             self.rpl777_GUIpoll_kademlia_store(rpl777)
+#             #log.msg("GUIpoll ---> kademlia_store",rpl777, type(rpl777),"\n")
+#
+#         elif 'kademlia_findvalue' in str(rpl777):
+#             #log.msg("GUIpoll ---> findnode",rpl777, type(rpl777),"\n")
+#             self.rpl777_GUIpoll_findvalue(rpl777)
+#
+#         elif 'kademlia_havenodeB' in str(rpl777):
+#             log.msg("GUIpoll ---> kademlia_havenodeB",rpl777, type(rpl777),"\n")
+#             self.rpl777_GUIpoll_havenodeB(rpl777)
+#
+#
+#
+#         else:
+#             log.msg(1*"GUIpoll ---> CALL not caught yet: ",rpl777, type(rpl777),"\n")
+#
+#         return 0
+#
+#
+#
+#     def rpl777_GUIpoll_havenodeB(self,rpl777):
+#
+#         log.msg(1*"\n  ---> rpl777_GUIpoll_havenodeB",rpl777, type(rpl777),"\n")
+#
+#
+#     def rpl777_GUIpoll_findvalue(self,rpl777):
+#
+#         log.msg(1*"\n  ---> rpl777_GUIpoll_findvalue",rpl777, type(rpl777),"\n")
+#
+#     def rpl777_GUIpoll_kademlia_store(self,rpl777):
+#
+#         log.msg(1*"\n  ---> rpl777_GUIpoll_kademlia_store",rpl777, type(rpl777),"\n")
+#
+#
+#
+#     def rpl777ERR(self, ERR777):
+#         print("ERR", ERR777)
+#
+#
+#
+#
+#
+# ####################################
+# ####################################
+# ####################################
+# ####################################
+# ####################################
+# ####################################
+#
 
 
 
