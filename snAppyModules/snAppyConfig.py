@@ -109,7 +109,7 @@ UCsched_1={}
 
 sched_GUIpoll ={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
-sched_GUIpoll['callFreq'] = 900               # ms!!
+sched_GUIpoll['callFreq'] = 500               # ms!!
 
 schedReqTypes={}
 
@@ -149,22 +149,15 @@ UCsched_1[sched_getPeers['schedName']] = sched_getPeers
 
 
 environ['UCsched_1'] = UCsched_1
-
+#
+#                      used by UCs:
+#                        UC1_pingPong
+#                        UC2_havenode
 
 ##################################################################
 
 
 UC_sched_3={}
-
-#----------------------------------------
-sched_GUIpoll ={}
-sched_GUIpoll['schedName'] = 'GUIpoll'
-sched_GUIpoll['callFreq'] = 500               # ms!!
-
-schedReqTypes={}
-schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
-sched_GUIpoll['schedReqTypes']  = schedReqTypes
-sched_GUIpoll['target'] = 'this Uses requests!'
 
 
 #----------------------------------------
@@ -189,6 +182,16 @@ sched_store['target'] = 'this Uses requests!'
 ### ++++++
 
 #----------------------------------------
+sched_GUIpoll ={}
+sched_GUIpoll['schedName'] = 'GUIpoll'
+sched_GUIpoll['callFreq'] = 500               # ms!!
+
+schedReqTypes={}
+schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+sched_GUIpoll['schedReqTypes']  = schedReqTypes
+sched_GUIpoll['target'] = 'this Uses requests!'
+
+#----------------------------------------
 sched_settings={}
 sched_settings['schedName'] = 'uc_settings'
 sched_settings['callFreq'] = 22500               # ms!!
@@ -210,11 +213,6 @@ schedReqTypes['uc_getpeers'] = {'requestType':'getpeers'}
 sched_getPeers['schedReqTypes']  = schedReqTypes
 sched_getPeers['target'] = 'this Uses requests!'
 
-
-
-
-
-
 # plug the schedules into the environment
 
 UC_sched_3[sched_GUIpoll['schedName']] = sched_GUIpoll
@@ -229,6 +227,27 @@ UC_sched_3[sched_getPeers['schedName']] = sched_getPeers
 environ['UC3_store_findvalue'] = UC_sched_3
 
 
+#
+#                      used by UCs:
+#
+#                        UC3_store_findvalue
+###################################################################
+
+
+
+
+
+
+
+
+
+
+
+###################################################################
+
+###################################################################
+
+###################################################################
 
 
 
@@ -255,7 +274,7 @@ schedReqTypes['xml2'] = {'requestType':'get2'}
 
 sched1={}
 sched1['schedName'] = 'matchesSchedule'
-sched1['callFreq'] = 6000
+sched1['callFreq'] = 6000000
 sched1['reqType'] = 'xml'
 sched1['target'] = 'http://api.sportsdatallc.org/soccer-t2/eu/schema/matches-schedule.xml?api_key=fv37s4rd2arqqxav774wb2kc'
 
@@ -265,7 +284,7 @@ schedSportsData[sched1['schedName']] = sched1
 
 sched2={}
 sched2['schedName'] = 'sched_matchSumm1'
-sched2['callFreq'] = 11000
+sched2['callFreq'] = 1100000
 sched2['reqType'] = 'xml'
 sched2['target'] = 'http://api.sportsdatallc.org/soccer-t2/eu/matches/2014/08/22/summary.xml?api_key=fv37s4rd2arqqxav774wb2kc'
 
@@ -275,7 +294,7 @@ schedSportsData[sched2['schedName']] = sched2
 
 sched3={}
 sched3['schedName'] = 'sched_matchSumm2'
-sched3['callFreq'] = 17000
+sched3['callFreq'] = 1700000
 sched3['reqType'] = 'xml'
 sched3['target'] = 'http://api.sportsdatallc.org/soccer-t2/eu/matches/2014/08/21/summary.xml?api_key=fv37s4rd2arqqxav774wb2kc'
 
@@ -293,56 +312,6 @@ environ['envSportsData'] = schedSportsData
 
 
 
-#
-#
-# UCsched_1={}
-#
-# # Three schedules here
-#
-# #----------------------------------------
-# sched_GUIpoll ={}
-# sched_GUIpoll['schedName'] = 'GUIpoll'
-# sched_GUIpoll['callFreq'] = 900               # ms!!
-#
-# schedReqTypes={}
-# schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
-# sched_GUIpoll['schedReqTypes']  = schedReqTypes
-# sched_GUIpoll['target'] = 'this Uses requests!'
-#
-# #----------------------------------------
-# sched1={}
-# sched1['schedName'] = 'uc_settings'
-# sched1['callFreq'] = 13500               # ms!!
-#
-# schedReqTypes={}
-# schedReqTypes['uc_settings'] = {'requestType':'settings'}
-# schedReqTypes['ping'] = {'requestType':'ping'}
-#
-# sched1['schedReqTypes']  = schedReqTypes
-# #  legacy: sched1['target'] = 'GET /nxt?requestType=settings HTTP/1.1\r\nUser-Agent: curl/7.35.0\r\nHost: 127.0.0.1:7800\r\nAccept: */*\r\ncontent-type: text/plain;\r\n\r\n'
-# sched1['target'] = 'this Uses requests!'
-#
-# #----------------------------------------
-# sched_uc_findnode ={}
-# sched_uc_findnode['schedName'] = 'uc_findnode'
-# sched_uc_findnode['callFreq'] = 12500               # ms!!
-#
-# schedReqTypes={}
-# schedReqTypes['uc_findnode'] = {'requestType':'findnode'}
-# sched_uc_findnode['schedReqTypes']  = schedReqTypes
-# sched_uc_findnode['target'] = 'this Uses requests!'
-#
-#
-# ### ++++++
-#
-#
-# # plug the schedules into the environment
-# UCsched_1[sched_GUIpoll['schedName']] = sched_GUIpoll
-# UCsched_1[sched1['schedName']] = sched1
-# UCsched_1[sched_uc_findnode['schedName']] = sched_uc_findnode
-#
-#
-# environ['UCsched_1'] = UCsched_1
 #
 #
 #

@@ -184,24 +184,22 @@ class UC_TEMPLATE(object):
 
 class UC1_pingPong(object):
     """
-       SuperNET calls tested here:
+       SuperNET calls used here:
 
        settings
        getpeers
        GUIpoll
+       ping
        pong
 
        """#
 
 
     def __init__(self, serverFactory , superNET_daemon , environ = {}, ): # prepSchedules = {},
-        # uc1_pingPong = UC1_pingPong(serverFactory,  self.environ ,  self )
         #  also hand in 'self' here as a means to stop self
-        # log.msg(superNET_daemon)
 
         self.environ = environ
         self.schedules = {}    # this contains the schedules
-
         self.superNET_daemon = superNET_daemon
 
         # local state information UC dependent
@@ -228,6 +226,7 @@ class UC1_pingPong(object):
                 schedulesDue.append(schedule)
 
         self.runSchedules(schedulesDue)
+
 
 
     def runSchedules(self,schedulesDue):
@@ -278,7 +277,7 @@ class UC1_pingPong(object):
 
         """#
 
-        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+        log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
 
         try:
             fromIp = rpl777['from']
@@ -371,7 +370,7 @@ class UC1_pingPong(object):
         # manual tests:
         #ipsToPing = 20* ['88.179.105.82'] # ['178.62.185.131'] # stonefish['80.41.56.181'] # ['85.178.202.108']   #
 
-        log.msg(1*"ping to whitelist:")#, reqPing['destip'])
+        log.msg(1*"ping to whitelist:")
         for node in ipsToPing:
             reqPing['destip']=node
             sleep(0.25)
@@ -483,26 +482,28 @@ class UC1_pingPong(object):
 
 class UC2_havenode(object):
     """
-       SuperNET calls tested here:
+       SuperNET calls used here:
 
        settings
        getpeers
        GUIpoll
        pong
+       ping
        havenode
+       findnode
 
        """#
 
 
     def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
-        # uc1_pingPong = UC1_pingPong(serverFactory,  self.environ ,  self )
-        #  also hand in 'self' here as a means to stop self
+         #  also hand in 'self' here as a means to stop self
         # log.msg(superNET_daemon)
 
         self.environ = environ
         self.schedules = {}    # this contains the schedules
-
         self.superNET_daemon = superNET_daemon
+
+        self.stopDaemon = False
 
         # local state information UC dependent
         self.pongers =  {} # LOCAL AUXILIARY REGISTER
@@ -525,6 +526,15 @@ class UC2_havenode(object):
 
         schedulesDue =[]
 
+        # STOP condition check
+        if ( len(self.havenoders.keys())  > 1 and len(self.havenoders.keys()) > 1 ):
+             self.stopDaemon = True
+
+        if  self.stopDaemon:
+            log.msg(1*" STOP UC2  finish OK")
+            self.superNET_daemon.stopUC2(True)
+
+        #--------------------------------------
         for schedule in self.schedules.keys():
             schedule = self.schedules[schedule]
 
@@ -701,18 +711,13 @@ kademlia_havenode
         log.msg(1*"              local havenoders :", len(self.havenoders))
 
         num_havenoders =  len(self.havenoders)
+
         for peer in self.peersDiLoc.keys():
             log.msg(peer, " - ", self.peersDiLoc[peer] )
 
-
         if not fromNXT  in self.havenoders.keys():
-            log.msg(fromNXT)
-
+            log.msg("new havenoder:", fromNXT)
             self.havenoders[fromNXT] =  rpl777
-
-        if  num_havenoders > 4:
-            log.msg(1*"\nhavenode finsish OK")
-            self.superNET_daemon.stopUC2(True)
 
 
 
@@ -758,7 +763,7 @@ kademlia_havenode
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
-            log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
             log.msg("Error rplArgsRQ {0}".format(str(e)))
 
         try:
@@ -780,17 +785,18 @@ kademlia_havenode
         #log.msg("pongers: ", (self.pongers),"\n")
 
         if not ipaddr  in self.pongers.keys():
-            log.msg(ipaddr)
-            log.msg(type(ipaddr))
+            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
 
-            if ipaddr == '<nullstr':
+            if ipaddr == '<nullstr>':
                 print(12*"\n###########", rpl777)
 
             self.pongers[ipaddr] =  rpl777
 
-        log.msg("pongers: ", len(self.ipaddr))
+        log.msg("pongers: ", len(self.pongers.keys()))
 
-        numPongers =  len(self.ipaddr)
+
+
+        #numPongers =  len(self.pongers.keys())
 
 
 
@@ -941,11 +947,17 @@ kademlia_havenode
 class UC3_store_findvalue(object):
     """
 
-    import binascii
 
+       settings
+       getpeers
+       GUIpoll
+       ping
+       findnode
+       -----------------------
+       store
+       findvalue
 
-
-
+        needs: import binascii
 
 """#
 
@@ -968,7 +980,6 @@ class UC3_store_findvalue(object):
 
         self.environ = environ
         self.schedules = {}    # this contains the schedules
-
         self.superNET_daemon = superNET_daemon
 
         # local state information UC dependent
@@ -1013,8 +1024,10 @@ class UC3_store_findvalue(object):
 
         schedulesDue =[]
 
+        # STOP condition check
         if (self.numFinds >2 and self.numStores>2):
              self.stopDaemon = True
+
 
         if  self.stopDaemon:
             log.msg(1*" STOP  finish OK")
@@ -1113,8 +1126,7 @@ class UC3_store_findvalue(object):
 
 
         rpl777=dataFrom777.json()
-        #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
-
+        #log.msg(1*"\nGUIpoll entry--->  ",rpl777, type(rpl777),"\n")
 
         if 'nothing pending' in str(rpl777):
             pass#
@@ -1131,8 +1143,6 @@ class UC3_store_findvalue(object):
         elif 'kademlia_havenodeB' in str(rpl777):
             #log.msg("GUIpoll ---> kademlia_havenodeB",rpl777, type(rpl777),"\n")
             self.rpl777_GUIpoll_havenodeB(rpl777)
-
-
 
         else:
             log.msg(1*"GUIpoll --->misc: ")#,rpl777, type(rpl777),"\n")
@@ -1303,7 +1313,7 @@ class UC3_store_findvalue(object):
 
 
 
-####################################
+####################################                      UC3_store_findvalue
 ####################################
 ####################################
 ####################################
@@ -1314,275 +1324,6 @@ class UC3_store_findvalue(object):
 
 
 
-
-#
-#
-#
-#
-#
-# class UC3_store_findvalue(object):
-#     """
-#
-#     import binascii
-#   ss="asdfasfreGJHGJHGKJGoo769875tkzg"
-#
-#   ss1=ss.encode("utf-8")
-#
-# Out[48]: b'asdfasfreGJHGJHGKJGoo769875tkzg'
-#
-#   test =  ss1.hexlify(ss1)
-#
-# In [50]: test
-# Out[50]: b'617364666173667265474a48474a48474b4a476f6f373639383735746b7a67'
-#
-#
-#
-#
-# """#
-#
-#
-#     def __init__(self, serverFactory , environ = {} ): # prepSchedules = {},
-#
-#
-#
-#         self.MSGfrags = [
-#                         'Eight, sir; seven, sir;',
-#                         'Six, sir; five, sir;',
-#                         'Four, sir; three, sir;',
-#                         'Two, sir; one!',
-#                         'Tenser, said the Tensor.',
-#                         'Tenser, said the Tensor.',
-#                         'Tension, apprehension,',
-#                         'And dissension have begun.',
-#                         ]
-#
-#
-#         self.environ = environ
-#         self.schedules = {}    # this contains the schedules
-#
-#         self.peersDiLoc = {}
-#         #self.peers = {}
-#
-#         self.storedVals = {} # name:data !
-#
-#         prepSchedules = environ['UC3_store_findvalue'] # can use same as UC1 for now- extends it
-#         for sched in prepSchedules.keys():
-#             sched = prepSchedules[sched]
-#             self.schedules[ sched['schedName']] = Schedule( sched )
-#
-#         self.lastCallTime = int(time.time() * 1000)
-#
-#
-#     def periodic(self, ):
-#         """ This is the method that is called periodically by the twisted loopingTask.
-#          It iterates over all schedules in the UseCase class, checks if they are due to be called,
-#          adds the ones due to a list and passes that list on to runSchedules(). """#
-#
-#         schedulesDue =[]
-#
-# # curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=store&name=starbucks&data=c0ffee'
-# #{'key': '1031470952125437106', 'txid': '0', 'len': 3, 'data': 'c0ffee', 'result': 'kademlia_store'}
-# #curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findvalue&key=1031470952125437106'
-# #{'key': '1031470952125437106', 'len': '3', 'data': 'c0ffee'}
-#
-#
-#
-#
-#
-# #./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
-# #./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
-# # havenodeB ???
-#
-# #./BitcoinDarkd SuperNET '{"requestType":"store","key":"116876777391303227","data":"deadbee32f"}'
-# #./BitcoinDarkd SuperNET '{"requestType":"findvalue","key":"116876777391303227"}'
-# # havenodeB ???
-#
-#
-#
-#
-#
-#         for schedule in self.schedules.keys():
-#             schedule = self.schedules[schedule]
-#
-#             if schedule.callMe():
-#                 schedulesDue.append(schedule)
-#
-#         self.runSchedules(schedulesDue)
-#
-#
-#     def runSchedules(self,schedulesDue):
-#         """ here we get through all the due schedules and call them on SuperNET server
-#              Here we explicitly check the name and send them to the first callback of their callback sequence."""#
-#
-#
-#
-#         def msg():
-#             msg = ''
-#             for frag in range(randint(4,7)):
-#                 msg +=  self.MSGfrags[randint(0,7)]
-#             return msg
-#
-#         for schedDue in schedulesDue:
-#             if 'sched_findvalue' in schedDue.SNrequests.keys():
-#
-#                 reqData1 = schedDue.SNrequests['sched_findvalue']
-#
-#                 for key in self.storedVals.keys():
-#                     reqData1['key'] = self.storedVals[key]
-#                     log.msg(1*"\nreqData1 try to FINDVALUE", reqData1)
-#
-#                     self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
-#                     self.deferred.addCallback(self.rpl777_findvalue)
-#                     self.deferred.addErrback(self.rpl777ERR)
-#
-#
-#
-#             elif 'sched_store' in schedDue.SNrequests.keys():
-#                 log.msg("do sched_store")
-#                 reqData = schedDue.SNrequests['sched_store'] # this has 0.9 sec
-#
-#
-#
-#                 n1=msg()
-#                 n2=n1.encode("utf-8")
-#                 n2 = binascii.hexlify(n2)
-#                 n3 = n2.decode("utf-8")
-#
-#
-#
-#                 reqData['name'] = 'myStoreName' + str(int(time.time())) #n1
-#
-#
-#                 reqData['data'] = n3
-#
-#
-#                 log.msg("do reqData", reqData)
-#
-#
-#                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
-#                 self.deferred.addCallback(self.rpl777_store)
-#                 self.deferred.addErrback(self.rpl777ERR)
-#
-#             elif 'GUIpoll' in schedDue.SNrequests.keys():
-#                 log.msg("do GUIpoll")
-#                 reqData = schedDue.SNrequests['GUIpoll'] # this has 0.9 sec
-#                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
-#                 self.deferred.addCallback(self.rpl777_GUIpoll)
-#                 self.deferred.addErrback(self.rpl777ERR)
-#
-#
-#     def rpl777_store(self, dataFrom777):
-#
-#         rpl777=dataFrom777.json()
-#         print("rpl777_stored a data val", rpl777, type(rpl777))
-#         #stored = {}
-#
-#         self.storedVals[rpl777['key']] = rpl777['key']
-#
-# #
-# # reqData STORE {'name': 'myStoreName1418569814', 'data': 'myStoreData1418569814', 'requestType': 'store'}
-# # 2014-12-14 16:10:14+0100 [-] do GUIpoll
-# # 2014-12-14 16:10:15+0100 [-] rpl777_stored a data val {'txid': '13689646989932326452', 'result': 'kademlia_store', 'data': 'fffffffefafa1418569814', 'len': 11, 'key': '270615323620844315'} <class 'dict'>
-#
-# # okokokokokokok
-#
-#         #
-#         # {'data': 'myStoreData1418569169', 'name': 'myStoreName1418569169', 'requestType': 'store'}
-#
-#
-#
-#
-#     def rpl777_findvalue(self, dataFrom777):
-#
-#         rpl777=dataFrom777.json()
-#         print(1 * "\nrpl777_findvalue got this:", rpl777)
-#
-# #rpl="{'len': '112', 'key': '16442637354607720438', 'data': '5369782c207369723b20666976652c207369723b54656e7365722c2073616964207468652054656e736f722e45696768742c207369723b20736576656e2c207369723b45696768742c207369723b20736576656e2c207369723b466f75722c207369723b2074687265652c207369723b'}"
-#
-#         #foundVal=eval(rpl777)
-#         foundVal=rpl777['data']
-#         #foundVal = foundVal.decode("utf-8")
-#         foundVal = binascii.a2b_hex(foundVal)
-#
-#         print(1 * "\nrpl777_findvalue got this:", foundVal)
-#
-#
-#
-#     def rpl777_havenodeB(self, dataFrom777):
-#
-#         rpl777=dataFrom777.json()
-#         print(15*"\nrpl777_havenodeB", rpl777, type(rpl777))
-#
-#
-#     def rpl777_GUIpoll(self, dataFrom777):
-#         """
-#
-#
-#
-#          """#
-#
-#         # test on string and send there!
-#         # maybe this can be done more elegant later, but probably not.
-#
-#         #log.msg("GUIpoll entry--->  ",dataFrom777, type(dataFrom777),"\n")
-#
-#         rpl777=dataFrom777.json()
-#         #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777),"\n")
-#
-#         if 'nothing pending' in str(rpl777):
-#             pass#
-#             log.msg("GUIpoll --->  ",rpl777, type(rpl777),"\n")
-#
-#         elif 'kademlia_store' in str(rpl777):
-#             self.rpl777_GUIpoll_kademlia_store(rpl777)
-#             #log.msg("GUIpoll ---> kademlia_store",rpl777, type(rpl777),"\n")
-#
-#         elif 'kademlia_findvalue' in str(rpl777):
-#             #log.msg("GUIpoll ---> findnode",rpl777, type(rpl777),"\n")
-#             self.rpl777_GUIpoll_findvalue(rpl777)
-#
-#         elif 'kademlia_havenodeB' in str(rpl777):
-#             log.msg("GUIpoll ---> kademlia_havenodeB",rpl777, type(rpl777),"\n")
-#             self.rpl777_GUIpoll_havenodeB(rpl777)
-#
-#
-#
-#         else:
-#             log.msg(1*"GUIpoll ---> CALL not caught yet: ",rpl777, type(rpl777),"\n")
-#
-#         return 0
-#
-#
-#
-#     def rpl777_GUIpoll_havenodeB(self,rpl777):
-#
-#         log.msg(1*"\n  ---> rpl777_GUIpoll_havenodeB",rpl777, type(rpl777),"\n")
-#
-#
-#     def rpl777_GUIpoll_findvalue(self,rpl777):
-#
-#         log.msg(1*"\n  ---> rpl777_GUIpoll_findvalue",rpl777, type(rpl777),"\n")
-#
-#     def rpl777_GUIpoll_kademlia_store(self,rpl777):
-#
-#         log.msg(1*"\n  ---> rpl777_GUIpoll_kademlia_store",rpl777, type(rpl777),"\n")
-#
-#
-#
-#     def rpl777ERR(self, ERR777):
-#         print("ERR", ERR777)
-#
-#
-#
-#
-#
-# ####################################
-# ####################################
-# ####################################
-# ####################################
-# ####################################
-# ####################################
-#
 
 
 
@@ -1601,7 +1342,10 @@ differentiate two types of replies:
 
 
 
-    def __init__(self, serverFactory , environ = {} ):
+
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
+
+#    def __init__(self, serverFactory , environ = {} ):
 
         self.serverFactory = serverFactory
 
@@ -1615,20 +1359,14 @@ differentiate two types of replies:
                         'Tension, apprehension,',
                         'And dissension have begun.',
                         ]
-        # #
-        # self.MSGfrags = [' PING SPIKES GALORE',
-        #                  ' anybody can see this???',
-        #                  ' Noth Korean Hacker Attack',
-        #                  ' (c) Sony Motion Pictures',
-        #                  ' looks like the heat is on now!',
-        #                  ' Three Two One Liftoff..',
-        #                  ' any banks in trouble??',
-        #                  ' SuperNET messages tunnel under ping spikes ']
+
 
         self.environ = environ
         self.schedules = {}    # this contains the schedules
 
         self.peersDiLoc = {}
+        self.superNET_daemon = superNET_daemon
+
         #self.peers = {}
 
         self.numCalls = 0
@@ -1695,11 +1433,10 @@ differentiate two types of replies:
                     self.deferred.addErrback(self.rpl777ERR)
 
             elif 'GUIpoll' in schedDue.SNrequests.keys():
-                reqData = schedDue.SNrequests['GUIpoll'] # this has 0.9 sec
+                reqData = schedDue.SNrequests['GUIpoll']
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_GUIpoll)
                 self.deferred.addErrback(self.rpl777ERR)
-
 
 
 
@@ -1709,7 +1446,7 @@ differentiate two types of replies:
          """#
 
         rpl777=dataFrom777.json()
-        #log.msg("GUIpoll entry--->  ",rpl777, type(rpl777))
+        #log.msg(1*"GUIpoll entry--->  ",rpl777, type(rpl777))
 
         if 'nothing pending' in str(rpl777):
             log.msg("GUIpoll  ",rpl777)
@@ -1735,24 +1472,6 @@ differentiate two types of replies:
 
     def rpl777_df1_getpeers(self, dataFrom777): #these are the basic pings from the whitlist
         """
-
-         peers [{'pubkey': '05a7612d54d14c21be9baa654ad50b4ba423eea0735185ac732ada2332315c3f', 'RS': 'NXT-8AF7-ESB7-GHFM-896JY', 'privateNXT': '8016556209183334821'}, {'RS': 'NXT-7PPP-R6AJ-VSJ7-37C7V', 'pserver': {'recv': 8, 'lastrecv': 14.0111578, 'lastsent': 14.01127447, 'pings': 1, 'sent': 8}, 'srvipaddr': '178.62.185.131', 'recv': 8, 'srvNXT': '2131686659786462901', 'pubkey': '849c97e5b1e8c50429249eff867de5e6ded39d34a6ccc9c42ea720d927a12d18', 'sent': 8}, {'RS': 'NXT-EZJ4-8F5T-8VX4-FVCB7', 'pserver': {'lastrecv': 0.6551996, 'lastsent': 0.06295793, 'pingtime': 231, 'avetime': 3893.46431672, 'recv': 155, 'pings': 63, 'pongs': 63, 'sent': 178}, 'srvipaddr': '167.114.2.206', 'recv': 155, 'srvNXT': '15178638394924629506', 'pubkey': '52e3524b5392a2ecba9e702a0c9c04d3d73dc4f93008977e1bcd15ea5bd5b376', 'sent': 178}, {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ', 'pserver': {'lastrecv': 0.07671293, 'lastsent': 0.00977127, 'pingtime': 176.5, 'avetime': 18793.97457429, 'recv': 188, 'pings': 83, 'pongs': 84, 'sent': 205}, 'srvipaddr': '89.212.19.49', 'recv': 188, 'srvNXT': '1978065578067355462', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'sent': 205}, {'RS': 'NXT-A4NA-7P8Y-MDMZ-3K4AZ', 'pserver': {'lastrecv': 0.07303403, 'lastsent': 0.07965903, 'pingtime': 327.75, 'avetime': 33324.18828125, 'recv': 35, 'pings': 9, 'pongs': 11, 'sent': 81}, 'srvipaddr': '167.114.2.204', 'recv': 35, 'srvNXT': '2278910666471639688', 'pubkey': '47faa8a876ae56be36a1d214515d0ef3f9ff99b06f4d2702acf0380cab7ccc5e', 'sent': 81}, {'RS': 'NXT-JNLE-Q9XW-MG8P-7GQKE', 'pserver': {'lastrecv': 0.05130237, 'lastsent': 0.0543357, 'pingtime': 36882.25, 'avetime': 13861.70690789, 'recv': 127, 'pings': 47, 'pongs': 48, 'sent': 174}, 'srvipaddr': '192.99.246.126', 'recv': 127, 'srvNXT': '6216883599460291148', 'pubkey': '2fdfab9d3d5e1c91a27e48ed7422ebcea628ebdf36ea0052fdd62e1533a8751d', 'sent': 174}, {'RS': 'NXT-YPWQ-F7SB-WCD7-CFCLC', 'pserver': {'lastrecv': 0.01943838, 'lastsent': 0.02329255, 'pingtime': 295, 'avetime': 7594.5688101, 'recv': 104, 'pings': 38, 'pongs': 40, 'sent': 131}, 'srvipaddr': '167.114.2.94', 'recv': 104, 'srvNXT': '11910135804814382998', 'pubkey': '34e55ae366e8b11e5dc195f29a0d9999567123b9c02e4a621600e4de5c72bb77', 'sent': 131}, {'RS': 'NXT-NHBB-5ZF3-4WTB-GBCK3', 'pserver': {'lastrecv': 2.37580073, 'lastsent': 0.0236049, 'pingtime': 52420.75, 'avetime': 7924.83104292, 'recv': 193, 'pings': 84, 'pongs': 82, 'sent': 181}, 'srvipaddr': '167.114.2.203', 'recv': 193, 'srvNXT': '16196432036059823401', 'pubkey': 'be3db1badadb0e95b8afd2f1f5f53df7837de15c14f09f7a531c489a3f470543', 'sent': 181}, {'RS': 'NXT-Y5FR-ZSRB-BQWC-9W9PR', 'pserver': {'lastrecv': 1.36517293, 'lastsent': 0.03602293, 'pingtime': 93572, 'avetime': 20840.15337171, 'recv': 96, 'pings': 37, 'pongs': 39, 'sent': 104}, 'srvipaddr': '192.99.246.33', 'recv': 96, 'srvNXT': '8923034930361863607', 'pubkey': 'ea83e39d553470725960180afb25afffe3de1fe0019979236b96536e22e1ed29', 'sent': 104}, {'RS': 'NXT-VSVF-FFF5-M4EX-8YUB7', 'pserver': {'lastrecv': 0.04354165, 'lastsent': 0.00936665, 'pingtime': 36595.5, 'avetime': 9679.23729884, 'recv': 188, 'pings': 90, 'pongs': 77, 'sent': 224}, 'srvipaddr': '167.114.2.171', 'recv': 188, 'srvNXT': '7108754351996134253', 'pubkey': '9e33da1c9ac00d376832cf3c9293dfb21d055d76e1c446449f0672fd688a237f', 'sent': 224}, {'RS': 'NXT-DGHK-DUWA-2MRL-C44UP', 'pserver': {'lastrecv': 1.73030202, 'lastsent': 0.00871452, 'pingtime': 45173.25, 'avetime': 9300.74114583, 'recv': 134, 'pings': 62, 'pongs': 58, 'sent': 130}, 'srvipaddr': '167.114.2.205', 'recv': 134, 'srvNXT': '12315166155634751985', 'pubkey': 'eef155b7c8c50dc62ae45f40c30d2b1a0874ca5f5f11adeef7637933d863583b', 'sent': 130}, {'RS': 'NXT-WXJV-AFNK-YW5D-6S95W', 'pserver': {'lastrecv': 1.77902338, 'lastsent': 0.02744422, 'pingtime': -156179, 'avetime': 10604.32024083, 'recv': 114, 'pings': 63, 'pongs': 46, 'sent': 157}, 'srvipaddr': '192.99.212.250', 'recv': 114, 'srvNXT': '5624143003089008155', 'pubkey': 'ecea0d22fca77e28210c0b4c05b8bd16ff8003e5065c09f4e73105398e31840f', 'sent': 157}, {'RS': 'NXT-VT9R-9GYM-YLJF-D8QCT', 'pserver': {'lastrecv': 1.15555233, 'lastsent': 0.01185233, 'pingtime': 223334, 'avetime': 39925.74770221, 'recv': 123, 'pings': 50, 'pongs': 52, 'sent': 134}, 'srvipaddr': '192.99.246.20', 'recv': 123, 'srvNXT': '13594896385051583735', 'pubkey': '430695694b02bb71e8222e1e5d20b1c985afd9ba899e25fe2d52ee1be92f532c', 'sent': 134}, {'RS': 'NXT-UE4H-CXMN-HR75-8W376', 'pserver': {'lastrecv': 4.86252565, 'lastsent': 0.02568398, 'pingtime': -3670675.75, 'avetime': 12546.13709677, 'recv': 14, 'pings': 30, 'pongs': 1, 'sent': 158}, 'srvipaddr': '94.102.50.70', 'recv': 14, 'srvNXT': '7067340061344084047', 'pubkey': '4bd4794f0a77d22949c944f96f9b7a429021e59644a98eea310546fd47b96440', 'sent': 158}, {'RS': 'NXT-XSQA-YBXH-CW2M-93QSF', 'pserver': {'lastrecv': 1.1530546, 'lastsent': 0.05522543, 'pingtime': 371363.25, 'avetime': 83528.03227459, 'recv': 54, 'pings': 41, 'pongs': 20, 'sent': 143}, 'srvipaddr': '37.59.108.92', 'recv': 54, 'srvNXT': '8566622688401875656', 'pubkey': '5a1c33c1e00cec3beecb9a9fcd8379fe61d6a661566875cf0cff89726b27b76f', 'sent': 143}]
-         peers is a LIST!
-
-         [
-
-         {'pubkey': '05a7612d54d14c21be9baa654ad50b4ba423eea0735185ac732ada2332315c3f', 'RS': 'NXT-8AF7-ESB7-GHFM-896JY', 'privateNXT': '8016556209183334821'},
-
-         {'RS': 'NXT-7PPP-R6AJ-VSJ7-37C7V', 'pserver': {'recv': 8, 'lastrecv': 14.0111578, 'lastsent': 14.01127447, 'pings': 1, 'sent': 8},
-         'srvipaddr': '178.62.185.131', 'recv': 8, 'srvNXT': '2131686659786462901', 'pubkey': '849c97e5b1e8c50429249eff867de5e6ded39d34a6ccc9c42ea720d927a12d18', 'sent': 8},
-
-         {'RS': 'NXT-EZJ4-8F5T-8VX4-FVCB7', 'pserver': {'lastrecv': 0.6551996, 'lastsent': 0.06295793, 'pingtime': 231, 'avetime': 3893.46431672, 'recv': 155, 'pings': 63, 'pongs': 63, 'sent': 178},
-          'srvipaddr': '167.114.2.206', 'recv': 155, 'srvNXT': '15178638394924629506', 'pubkey': '52e3524b5392a2ecba9e702a0c9c04d3d73dc4f93008977e1bcd15ea5bd5b376', 'sent': 178},
-
-          {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ', 'pserver': {'lastrecv': 0.07671293, 'lastsent': 0.00977127, 'pingtime': 176.5, 'avetime': 18793.97457429, 'recv': 188, 'pings': 83, 'pongs': 84, 'sent': 205}, 'srvipaddr': '89.212.19.49', 'recv': 188, 'srvNXT': '1978065578067355462', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'sent': 205},
-          {'RS': 'NXT-A4NA-7P8Y-MDMZ-3K4AZ', 'pserver': {'lastrecv': 0.07303403, 'lastsent': 0.07965903, 'pingtime': 327.75, 'avetime': 33324.18828125, 'recv': 35, 'pings': 9, 'pongs': 11, 'sent': 81}, 'srvipaddr': '167.114.2.204', 'recv': 35, 'srvNXT': '2278910666471639688', 'pubkey': '47faa8a876ae56be36a1d214515d0ef3f9ff99b06f4d2702acf0380cab7ccc5e', 'sent': 81},
-
-          ]
 
 
         """#
@@ -1787,14 +1506,6 @@ differentiate two types of replies:
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df3_findnode )
             self.deferred.addErrback(self.rpl777ERR)
-
-
-
-#        GUIpoll ---> kademlia_pong {'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"16451506450525369985","ipaddr":"92.222.160.77","port":0,"lag":"1904.809","numpings":1,"numpongs":1,"ave":"1269.872"}', 'args': '[{"requestType":"pong","NXT":"16451506450525369985","time":1419198740,"MMatrix":0,"yourip":"178.62.185.131","yourport":50472,"ipaddr":"92.222.160.77","pubkey":"b8b3105deb570c745e78edd43773b6183b76d000224ed9468b8a75b600ab0869","ver":"0.299"},{"token":"tdeh1ctof1f7832nmppjfl7d0387ceoohd3dijh2lc0bctca0lbd8q88a0p9j4g2qjknqf3kk5b11pn82epr79k05ibufjh00gjjuk4dvig0v2pk4ijoioir4ig6t8gesbq9h26ldr13r0bbvjbjq4922a0j79so"}]', 'from': '92.222.160.77', 'port': 0} <class 'dict'>
-
-#>
-#2014-12-21 22:53:52+0100 [-] GUIpoll entry--->   {'from': '167.114.2.205', 'result': '{"result":"kademlia_havenode from NXT.12315166155634751985 key.(13594896385051583735) value.([["13594896385051583735", "192.99.246.20", "56745", "1419123113"], ["12315166155634751985", "167.114.2.205", "55912", "0"], ["11634703838614499263", "69.90.132.106", "40225", "1419131956"], ["1978065578067355462", "89.212.19.49", "50444", "1419123113"], ["7108754351996134253", "167.114.2.171", "37131", "1419123116"], ["2131686659786462901", "178.62.185.131", "60626", "1419157351"], ["7837143510182070614", "62.194.6.163", "35416", "1419185505"]])"}', 'port': 0, 'args': '[{"requestType":"havenode","NXT":"12315166155634751985","time":1419198801,"key":"13594896385051583735","data":[["13594896385051583735", "192.99.246.20", "56745", "1419123113"], ["12315166155634751985", "167.114.2.205", "55912", "0"], ["11634703838614499263", "69.90.132.106", "40225", "1419131956"], ["1978065578067355462", "89.212.19.49", "50444", "1419123113"], ["7108754351996134253", "167.114.2.171", "37131", "1419123116"], ["2131686659786462901", "178.62.185.131", "60626", "1419157351"], ["7837143510182070614", "62.194.6.163", "35416", "1419185505"]]},{"token":"p2rlbsfesglcc3e55c6s6g2vbv57820quvnaq4avcfc36ub30lbh4eqo47s68dg2vc0mm449f5srp4rfndsuvvufj906o89mhid8am91sa4g6n45enqlkvg95vrjigl3ndf6s7hhbsl9bv8ap6c7nam0svi6va8s"}]'} <class 'dict'>
-
 
 
 
@@ -1865,9 +1576,8 @@ differentiate two types of replies:
         GUIpoll --->   {'result': '{"result":"kademlia_findnode from.(7067340061344084047) previp.(94.102.50.70) key.(2131686659786462901) datalen.0 txid.12611969529750120048"}', 'port': 0, 'from': '94.102.50.70', 'args': '[{"requestType":"findnode","NXT":"7067340061344084047","time":1418391191,"key":"2131686659786462901"},{"token":"197njl2bp54ijkjnfadmvua4irii342267l8taa4n53vqhg5v425eg3455h836g1in2v8sunh9j9mf4hnr7fmhsbdhsb8qk1kp18m6a77gq0d6s57151c1mejh29j3fcpg3jsvidjkbva8g896hjbss5ub7482ms"}]'} <class 'dict'>
         GUIpoll --->   {'from': '167.114.2.171', 'result': '{"result":"kademlia_findnode from.(7108754351996134253) previp.(167.114.2.171) key.(2131686659786462901) datalen.0 txid.14645060032929148909"}', 'port': 0, 'args': '[{"requestType":"findnode","NXT":"7108754351996134253","time":1418320475,"key":"2131686659786462901"},{"token":"j8edkcsu69k3e3e0ru9p4f6fepega7dijt24dh71h9kfqsg6uvo1ovp37gquc4g1ssnvc81804v9pipdo8al5iihmpmls4n9ici5hbe5m0rgveg8fek61lpihnn5k9cne28m9p8b71o918vkeelei1lpaljpn8n4"}]'} <class 'dict'>
         """#
-        #log.msg("GUIpoll ---> rpl777_GUIpoll_findnode",rpl777, type(rpl777),"\n")
+
         pass
-        note=""" here we can answer with a findnode or a ping """
 
 
 
@@ -2043,6 +1753,17 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
 
 
 
+
+
+
+
+
+####################################                      UC4
+####################################
+####################################
+####################################
+####################################
+####################################
 
 
 

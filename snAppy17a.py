@@ -562,15 +562,15 @@ class SuperNETApiD(Daemon3): #object):
     def stopUC2(self, result):
         log.msg(5*"\n\n                           STOP UC2 with result:  ", result, "\n")
         self.timer2.stop( )
-        self.stop()
-        #self.startUC2()
+        #self.stop()
+        self.startUC3()
 
 
     def startUC3(self):
         log.startLogging(sys.stdout)
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        log.msg(1*"initUC3")
+        log.msg(10*"\ninitUC3")
         uc3_store_findvalue = UC3_store_findvalue(serverFactory, self, self.environ )
         serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
         reactor.suggestThreadPoolSize(500)
@@ -584,10 +584,11 @@ class SuperNETApiD(Daemon3): #object):
 
 
     def stopUC3(self, result):
-        log.msg("STOP TIMER31")
+        log.msg(5*"\n\n                           STOP UC3 with result:  ", result, "\n")
         self.timer3.stop( )
         log.msg("STOP snappyDaemon")
-        self.stop()
+        #self.stop()
+        self.startUC4()
 
 
     def startUC4(self):
@@ -602,15 +603,15 @@ class SuperNETApiD(Daemon3): #object):
         except Exception as e:
             log.msg("already listening, continue.{0}".format(str(e)))
 
-        uc_4_sendMSGs = UC_4_sendMSGs(serverFactory,  self.environ )     #  self,
+        uc_4_sendMSGs = UC_4_sendMSGs(serverFactory, self,  self.environ )
 
-        timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
-        timer4.start( TIMER_850 , now=True )
+        self.timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
+        self.timer4.start( TIMER_850 , now=True )
 
 
 
     def stopUC4(self,result):
-        log.msg("STOP UC4 with result:", result)
+        log.msg(5*"\n\n                           STOP UC4 with result:  ", result, "\n")
         self.timer4.stop( )
         log.msg("STOP snappyDaemon")
         self.stop()

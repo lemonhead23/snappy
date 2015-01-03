@@ -26,10 +26,16 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 Launches scripts in UseCase classes:
 
 
-UC1_pingPong
-
 
 ./snAppy17c.py UC1
+
+
+UC1_pingPong
+UC2_havenode
+
+
+??
+rpl777_df2_findnode sent {'result': 'kademlia_findnode from.(10501328530345129240) previp.() key.(1978065578067355462) datalen.0 txid.2411900097109397113'}
 
 
 
@@ -88,8 +94,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=79.245.52.39'
 
  #178.62.185.131'
-
-
 
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/stop?'
@@ -630,12 +634,19 @@ I had to do this due to too many levels of stringification and different paths, 
                  'passthru',\
                    'remote',\
 
- call_NOT_TESTED
-
-  static char *passthru[] = { (char *)passthru_func, "passthru", "", "coin", "method", "params", 0 };
 
 
-call_NOT_TESTED
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=passthru&coin=BTCD&method=listunspent'
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"passthru",  "coin":"BTCD","method":"listunspent"  }'
+
+
+
+    static char *passthru[] = { (char *)passthru_func, "passthru", "", "coin", "method", "params", 0 };
+
+
+
+
 
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
@@ -924,7 +935,7 @@ b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"NXT\\":\\"106
 
 
 
-  '                   Kademlia DHT 8',\
+  '                   Kademlia DHT 6',\
                    'store',\
                    'findvalue',\
                    'findnode',\
@@ -2550,8 +2561,9 @@ calls only as inventory
 
 // glue 7
 // passthru 2
-// MGW 7   ( // multisig 2 )
-// Kademlia DHT  8
+// MGW 8
+// IP comms 5
+// Kademlia DHT 6
 // MofNfs 3
 // Telepathy 9
 // Teleport 3
@@ -2564,29 +2576,15 @@ calls only as inventory
 http://jnxt.org/init/?requestType=status&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&coin=BTCD
 http://jnxt.org/init/?requestType=newbie&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&email=&lt;emailaddr&gt;&convertNXT=1000
 
-requestType=status
-&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656
-&NXT=NXT-MEXA-RJSP-NKDU-FWWHM
-&coin=BTCD
 
 
 
-requestType=newbie
-&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656
-&NXT=NXT-MEXA-RJSP-NKDU-FWWHM
-&email=&lt;emailaddr
-&gt;
-&convertNXT=1000
-
-
-
-
-api.h: list of all calls. date: 120714
+api.h: list of all calls. date: 010315: 53
 
 
 char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *origargjson,char *sender,int32_t valid,char *origargstr)
 {
-    // local glue
+    // local glue 7
     static char *gotjson[] = { (char *)gotjson_func, "BTCDjson", "V", "json", 0 };
     static char *gotpacket[] = { (char *)gotpacket_func, "gotpacket", "V", "msg", "dur", "ip_port", 0 };
     static char *gotnewpeer[] = { (char *)gotnewpeer_func, "gotnewpeer", "V", "ip_port", 0 };
@@ -2595,28 +2593,28 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *stop[] = { (char *)stop_func, "stop", "V", 0 };
     static char *settings[] = { (char *)settings_func, "settings", "V", "field", "value", "reinit", 0 };
 
-    // passthru
+    // passthru 2
     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
-    // MGW
+    // MGW 8
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
     static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
     static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
     static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };
-    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
     static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
+    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
 
-    // IP comms
+    // IP comms 5
     static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", "MMatrix", 0 };
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", "tag", "MMatrix", 0 };
     static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
     static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
     static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
 
-    // Kademlia DHT
+    // Kademlia DHT 6
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
     static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
@@ -2629,7 +2627,7 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *restorefile[] = { (char *)restorefile_func, "restorefile", "V", RESTORE_ARGS, 0 };
     static char *publish[] = { (char *)publish_func, "publish", "V", "files", "L", "M", "N", "backup", "password", "pin", 0  };
 
-    // Telepathy
+    // Telepathy 9
     static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
     static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V",  "handle", "acct", 0 };
     static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V",  "contact", 0 };
@@ -2640,12 +2638,12 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *sendbinary[] = { (char *)sendbinary_func, "sendbinary", "V", "dest", "data", "L", 0 };
     static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "sender", 0 };
 
-    // Teleport
+    // Teleport 3
     static char *maketelepods[] = { (char *)maketelepods_func, "maketelepods", "V", "amount", "coin", 0 };
     static char *telepodacct[] = { (char *)telepodacct_func, "telepodacct", "V", "amount", "contact", "coin", "comment", "cmd", "withdraw", 0 };
     static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
 
-    // InstantDEX
+    // InstantDEX 6
     static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
     static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
     static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
@@ -2653,7 +2651,7 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
     static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
 
-    // Tradebot
+    // Tradebot 3
     static char *pricedb[] = { (char *)pricedb_func, "pricedb", "V", "exchange", "base", "rel", "stop", 0 };
     static char *getquotes[] = { (char *)getquotes_func, "getquotes", "V", "exchange", "base", "rel", "oldest", 0 };
     static char *tradebot[] = { (char *)tradebot_func, "tradebot", "V", "code", 0 };
