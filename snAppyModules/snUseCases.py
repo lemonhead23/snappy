@@ -1336,12 +1336,7 @@ differentiate two types of replies:
 
     """#
 
-
-
-
     def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
-
-#    def __init__(self, serverFactory , environ = {} ):
 
         self.serverFactory = serverFactory
 
@@ -1367,7 +1362,7 @@ differentiate two types of replies:
 
         self.numCalls = 0
         # can collect the RQs used here for neatness
-        self.RQsendmsg =  {'requestType':'sendmessage'}
+        self.testRQ_sendmsg =  {'requestType':'sendmessage'}
         # each UC only has one ONE master schedule, and the sub-schedules are contained in that
         prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
@@ -1407,15 +1402,11 @@ differentiate two types of replies:
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_settings)
                 self.deferred.addErrback(self.rpl777ERR)
-
-                #
-                #
-                # reqData2 = {"requestType":"getpeers"}
-                # self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData2), headers=POSTHEADERS)
-                # self.deferred.addCallback(self.rpl777_df1_getpeers) #rpl777_pingDB_df1
-                # self.deferred.addErrback(self.rpl777ERR)
-
-
+ 
+                reqData2 = {"requestType":"getpeers"}
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData2), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_getpeers) #rpl777_pingDB_df1
+                self.deferred.addErrback(self.rpl777ERR)
 
             elif 'uc_findnode' in schedDue.SNrequests.keys():
                 reqFindnode = {'requestType':'findnode'}
@@ -1700,7 +1691,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
         for peer in peersList:
 
             self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
-            self.RQsendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
+            self.testRQ_sendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
 
 
           #  if peer[1] == '79.245.52.39':  # '88.179.105.82': # '178.62.185.131': #'62.194.6.163': '88.179.105.82
@@ -1709,7 +1700,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
 
             spam = msg()
 
-            self.RQsendmsg['msg'] = spam
+            self.testRQ_sendmsg['msg'] = spam
 
             stat1 = len(self.serverFactory.reactor.threadpool.waiters)
             stat2 = self.serverFactory.reactor.threadpool.workers
@@ -1723,25 +1714,33 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             log.msg("workers2: ", tp.ThreadPool.workers)
 
             sleep(0.25)
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.RQsendmsg), headers=POSTHEADERS)
-            self.deferred.addCallback(self.rpl777_sndMSG ) # this is just for conf that we sent it
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_sendmsg), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_sendMSG ) # this is just for conf that we sent it
             self.deferred.addErrback(self.rpl777ERR)
 
 
 
 
 
-    def rpl777_sndMSG(self, dataFrom777):
+    def rpl777_sendMSG(self, dataFrom777):
         rpl777=dataFrom777.json()
-        log.msg("rpl777_sndMSG SENT!!!", rpl777, type(rpl777))
 
+        log.msg("rpl777_sendMSG SENT!!!", rpl777, type(rpl777))
+        # for key in rpl777.keys():
+        #     log.msg(key," - ", rpl777[key])
+        status=rpl777['status']
+        status = status.split(' ')
+        if status[6] == 'pending':
 
-        self.numCalls+=1
+            self.numCalls+=1
 
         if self.numCalls > 5:
             self.superNET_daemon.stopUC4(True)
 
-# rpl777_sndMSG SENT!!! {'status': '2131686659786462901 sends encrypted sendmessage to 14768174629330216722 pending via.(14768174629330216722), len.1396'} <class 'dict'>
+
+
+
+# rpl777_sendMSG SENT!!! {'status': '2131686659786462901 sends encrypted sendmessage to 14768174629330216722 pending via.(14768174629330216722), len.1396'} <class 'dict'>
 
 
 #
@@ -1782,11 +1781,19 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
 class UC5_sendBIN(object):
 
     """
-differentiate two types of replies:
+basline UC:
 
-1- the replies that are given back by the SuperNET server regularly
-2- the replies that are taken from the internal GUIpoll
-3- this UC maintains a local dict of peers from doing getpeers and from all HAVENODEs
+       settings
+       getpeers
+       GUIpoll
+       pong
+       ping
+       havenode
+       findnode
+
+
+
+tested calls here: sendbinary
 
     """#
 
@@ -1821,7 +1828,9 @@ differentiate two types of replies:
 
         self.numCalls = 0
         # can collect the RQs used here for neatness
-        self.RQsendBIN =  {'requestType':'sendbinary'}
+
+        self.testRQ_sendBIN =  {'requestType':'sendbinary'}
+
         # each UC only has one ONE master schedule, and the sub-schedules are contained in that
         prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
@@ -2154,7 +2163,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
         for peer in peersList:
 
             self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
-            self.RQsendBIN['dest'] = peer[0] #'16451506450525369985'    # peer[0]
+            self.testRQ_sendBIN['dest'] = peer[0] #'16451506450525369985'    # peer[0]
 
 
           #  if peer[1] == '79.245.52.39':  # '88.179.105.82': # '178.62.185.131': #'62.194.6.163': '88.179.105.82
@@ -2166,7 +2175,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             n2 = binascii.hexlify(n2)
             binSpam = n2.decode("utf-8")
 
-            self.RQsendBIN['data'] = binSpam
+            self.testRQ_sendBIN['data'] = binSpam
 
             stat1 = len(self.serverFactory.reactor.threadpool.waiters)
             stat2 = self.serverFactory.reactor.threadpool.workers
@@ -2180,7 +2189,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             log.msg("workers2: ", tp.ThreadPool.workers)
 
             sleep(0.25)
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.RQsendBIN), headers=POSTHEADERS)
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_sendBIN), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_sndBIN ) # this is just for conf that we sent it
             self.deferred.addErrback(self.rpl777ERR)
 
@@ -2191,14 +2200,22 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
     def rpl777_sndBIN(self, dataFrom777):
         rpl777=dataFrom777.json()
         log.msg("rpl777_sndBIN SENT!!!", rpl777, type(rpl777))
+        #
+        # for key in rpl777.keys():
+        #     log.msg(key," - ", rpl777[key])
+        #
+        # PARSE for successparam
+        status=rpl777['status']
+        status = status.split(' ')
+        if status[6] == 'pending':
 
-
-        self.numCalls+=1
+            self.numCalls+=1
 
         if self.numCalls > 5:
             self.superNET_daemon.stopUC5(True)
 
-# rpl777_sndMSG SENT!!! {'status': '2131686659786462901 sends encrypted sendmessage to 14768174629330216722 pending via.(14768174629330216722), len.1396'} <class 'dict'>
+
+# rpl777_sendMSG SENT!!! {'status': '2131686659786462901 sends encrypted sendmessage to 14768174629330216722 pending via.(14768174629330216722), len.1396'} <class 'dict'>
 
 
 #
@@ -2226,7 +2243,510 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
 
 
 
-class UC6_contacts(object):
+
+####################################                      UC5
+####################################
+####################################
+####################################
+####################################
+####################################
+
+
+
+
+
+
+class UC6_checkMSG(object):
+
+    """
+
+basline UC:
+
+       settings
+       getpeers
+       GUIpoll
+       pong
+       ping
+       havenode
+       findnode
+
+
+
+tested calls here: checkmsg
+
+
+    """#
+
+
+
+
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
+
+#    def __init__(self, serverFactory , environ = {} ):
+
+        self.serverFactory = serverFactory
+
+        self.MSGfrags = [
+                        'Eight, sir; seven, sir;',
+                        'Six, sir; five, sir;',
+                        'Four, sir; three, sir;',
+                        'Two, sir; one!',
+                        'Tenser, said the Tensor.',
+                        'Tenser, said the Tensor.',
+                        'Tension, apprehension,',
+                        'And dissension have begun.',
+                        ]
+
+
+        self.environ = environ
+        self.schedules = {}    # this contains the schedules
+
+        self.peersDiLoc = {}
+        self.superNET_daemon = superNET_daemon
+  
+        self.numCalls = 0
+        # can collect the RQs used here for neatness
+        self.testRQ_sendmsg =  {'requestType':'sendmessage'}
+        self.testRQ_checkmsg =  {'requestType':'checkmsg'}
+
+        # each UC only has one ONE master schedule, and the sub-schedules are contained in that
+        prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
+        for sched in prepSchedules.keys():
+            sched = prepSchedules[sched]
+            self.schedules[ sched['schedName']] = Schedule( sched )
+
+        self.lastCallTime = int(time.time() * 1000)
+
+
+
+    def periodic(self, ):
+        """ This is the method that is called periodically by the twisted loopingTask.
+         It iterates over all schedules in the UseCase class, checks if they are due to be called,
+         adds the ones due to a list and passes that list on to runSchedules(). """#
+
+        schedulesDue =[]
+        for schedule in self.schedules.keys():
+            schedule = self.schedules[schedule]
+
+            if schedule.callMe():
+                schedulesDue.append(schedule)
+
+        self.runSchedules(schedulesDue)
+
+
+
+    def runSchedules(self,schedulesDue):
+        """ here we get through all the due schedules and call them on SuperNET server
+             Here we explicitly check the name and send them to the first callback of their callback sequence."""#
+
+        for schedDue in schedulesDue:
+            if 'uc_settings' in schedDue.SNrequests.keys():
+                log.msg("peersDiLoc: IPs ", self.peersDiLoc.keys())
+                log.msg("peersDiLoc: NXTs", self.peersDiLoc.values())
+
+                reqData1 = schedDue.SNrequests['uc_settings']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_settings)
+                self.deferred.addErrback(self.rpl777ERR)
+ 
+                reqData2 = {"requestType":"getpeers"}
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData2), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_getpeers)  
+                self.deferred.addErrback(self.rpl777ERR)
+ 
+            elif 'uc_findnode' in schedDue.SNrequests.keys():
+                reqFindnode = {'requestType':'findnode'}
+                log.msg(1*"\n reqFindnode all local peers:", self.peersDiLoc, type(self.peersDiLoc))
+                for peer in self.peersDiLoc.keys():
+                    reqFindnode['key']=self.peersDiLoc[peer]
+                    sleep(0.25)
+                    self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
+                    self.deferred.addCallback(self.rpl777_df3_findnode )
+                    self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'GUIpoll' in schedDue.SNrequests.keys():
+                reqData = schedDue.SNrequests['GUIpoll']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_GUIpoll)
+                self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_GUIpoll(self, dataFrom777):
+        """
+
+         """#
+
+        rpl777=dataFrom777.json()
+        #log.msg(1*"GUIpoll entry--->  ",rpl777, type(rpl777))
+
+        if 'nothing pending' in str(rpl777):
+            log.msg("GUIpoll  ",rpl777)
+
+        elif 'kademlia_store' in str(rpl777):
+            self.rpl777_GUIpoll_kademlia_store(rpl777)
+
+        elif 'kademlia_pong' in str(rpl777):
+             self.rpl777_GUIpoll_kademlia_pong(rpl777)
+
+        elif 'kademlia_havenode' in str(rpl777):
+             self.rpl777_GUIpoll_kademlia_havenode(rpl777)
+
+        elif 'kademlia_findnode' in str(rpl777):
+             self.rpl777_GUIpoll_findnode(rpl777)
+
+        else:
+            log.msg(1*"GUIpoll ---> CALL not caught yet: ",rpl777, type(rpl777),"\n")
+
+        return 0
+
+
+
+    def rpl777_df1_getpeers(self, dataFrom777): #these are the basic pings from the whitlist
+        """
+
+
+        """#
+
+        repl=dataFrom777.json()
+
+        Numnxtaccts = repl['Numnxtaccts']
+        peers = repl['peers']
+        Numpservers = repl['Numpservers']
+        num = repl['num']
+        log.msg("Numnxtaccts", Numnxtaccts)
+        #log.msg("peers", peers)
+        log.msg("Numpservers", Numpservers)
+        log.msg("num", num)
+
+        reqFindnode = {'requestType':'findnode'}
+ 
+        log.msg(1*"\n rpl777_df1_getpeers & peers all:")#, peers, type(peers))
+ 
+        for peer in peers[2:]:
+            #log.msg(5*"\n rpl777_df1_getpeers & PING all:", peer, type(peer))
+
+            pserv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            #log.msg(1*"\n FINDNODE peer:", srvNXT)
+            reqFindnode['key']=srvNXT
+
+            sleep(0.25)
+
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df3_findnode )
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+
+
+    def rpl777_df1_settings(self, dataFrom777): #these are the basic pings from the whitlist
+        """"""#
+        repl=dataFrom777.json()
+        reqPing = {'requestType':'ping'}
+
+        ipsToPing = repl['whitelist']
+
+
+
+        #ipsToPing = 10*['88.179.105.82']   #  ['79.245.52.39']  #[ STONEFISH_IP] #[']  #['178.62.185.131'] # ["69.90.132.106"]
+
+        log.msg("ping to whitelist:", len(ipsToPing))
+
+        for node in ipsToPing:
+            reqPing['destip']=node
+
+            #log.msg("dumpStats: ",   self.serverFactory.reactor.threadpool.dumpStats())
+            #log.msg("workers: ", tp.ThreadPool.workers)
+            #
+            # stat1 = len(self.serverFactory.reactor.threadpool.waiters)
+            # stat2 = self.serverFactory.reactor.threadpool.workers
+            # stat3 = len(self.serverFactory.reactor.threadpool.threads)
+            # stat4 = len(self.serverFactory.reactor.threadpool.q.queue)
+            #
+            # log.msg("waiters: ", stat1)
+            # log.msg("workers1: ", stat2)
+            # log.msg("threads: ", stat3)
+            # log.msg("queue: ", stat4)
+            # log.msg("workers2: ", tp.ThreadPool.workers)
+
+            sleep(0.25)
+
+            log.msg("ping to whitelist:", reqPing['destip'])
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+    def rpl777_df2_ping(self, dataFrom777):
+        """
+
+
+        """#
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        #log.msg( 1 * "ping sent", repl)
+
+
+
+    def rpl777_df3_findnode(self, dataFrom777):
+        repl=dataFrom777.json()
+        log.msg("rpl777_df3_findnode",repl)
+
+
+
+    def rpl777_GUIpoll_kademlia_store(self, rpl777): #dataFrom777):
+        pass
+
+
+    def rpl777_GUIpoll_findnode(self, rpl777): #dataFrom777):
+        """
+        GUIpoll --->   {'result': '{"result":"kademlia_findnode from.(7067340061344084047) previp.(94.102.50.70) key.(2131686659786462901) datalen.0 txid.12611969529750120048"}', 'port': 0, 'from': '94.102.50.70', 'args': '[{"requestType":"findnode","NXT":"7067340061344084047","time":1418391191,"key":"2131686659786462901"},{"token":"197njl2bp54ijkjnfadmvua4irii342267l8taa4n53vqhg5v425eg3455h836g1in2v8sunh9j9mf4hnr7fmhsbdhsb8qk1kp18m6a77gq0d6s57151c1mejh29j3fcpg3jsvidjkbva8g896hjbss5ub7482ms"}]'} <class 'dict'>
+        GUIpoll --->   {'from': '167.114.2.171', 'result': '{"result":"kademlia_findnode from.(7108754351996134253) previp.(167.114.2.171) key.(2131686659786462901) datalen.0 txid.14645060032929148909"}', 'port': 0, 'args': '[{"requestType":"findnode","NXT":"7108754351996134253","time":1418320475,"key":"2131686659786462901"},{"token":"j8edkcsu69k3e3e0ru9p4f6fepega7dijt24dh71h9kfqsg6uvo1ovp37gquc4g1ssnvc81804v9pipdo8al5iihmpmls4n9ici5hbe5m0rgveg8fek61lpihnn5k9cne28m9p8b71o918vkeelei1lpaljpn8n4"}]'} <class 'dict'>
+        """#
+
+        pass
+
+
+
+    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
+        """
+
+This catches ALL pings as PONGs - see PONG details in snAppy_doku
+
+        """#
+        log.msg(1*"\nGUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            args = rpl777['args']
+            #log.msg(args, type(args))
+            rpl777 = rpl777['result'] # this is a string!
+            rpl777 = json.loads(rpl777)
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            rplArgs = json.loads(args) # <class 'list'> !!
+            rplArgsRQ = rplArgs[0] # <class 'dict'>
+            rplArgsTK = rplArgs[1]   #<class 'dict'>
+        except Exception as e:
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+            requestType= rplArgsRQ['requestType']
+            ver =rplArgsRQ['ver']
+            yourip =rplArgsRQ['yourip']
+            yourport =rplArgsRQ['yourport']
+
+            NXT =rplArgsRQ['NXT']
+            time =rplArgsRQ['time']
+            ipaddr =rplArgsRQ['ipaddr']
+
+        except Exception as e:
+            log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rplArgsRQ {0}".format(str(e)))
+
+        try:
+            port =  rpl777['port']
+            numpings =  rpl777['numpings']
+            lag  =  rpl777['lag']
+            ipaddr  = rpl777['ipaddr']
+            numpongs =  rpl777['numpongs']
+            result =   rpl777['result']
+            ave  =  rpl777['ave']
+            NXT  = rpl777['NXT']
+            log.msg("rpl777", rpl777,type(rpl777))
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777 {0}".format(str(e)))
+
+        # further ACTION from here
+        note= """ from here, we can go the next step, which is the findnode   """
+        reqFindnode = {'requestType':'findnode'}
+        reqFindnode['key']= NXT # the rea conf will be the havenode in uipoll
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df3_findnode ) # this is just for conf that we sent it
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+
+
+    def rpl777_GUIpoll_kademlia_havenode(self, rpl777):
+        """
+
+    """#
+
+        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
+        log.msg("GUIpoll ---> kademlia_havenode from ",rpl777['from'])
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            rplArgs = rpl777['args']
+            result = rpl777['result']
+            #'result': '{"result":"kademlia_havenode from NXT.13594896385051583735 key.(1978065578067355462) value.([["1978065578067355462", "89.212.19.49", "7777", "1418404057"], ["4
+            # result is the internal raw string part
+            try:
+                rplArgsLi=json.loads(rplArgs)
+                token = rplArgsLi[1]
+                rplArgs = rplArgsLi[0]
+                fromNXT = rplArgs['NXT']
+                requestType = rplArgs['requestType']
+                data = rplArgs['data']
+                key = rplArgs['key']
+                time = rplArgs['time']
+                peersList = rplArgs['data']
+
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("args NOT ok",rplArgs, type(rplArgs))
+
+            try:
+                rpl777 = rpl777['result'] # this is a string!
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("rpl777 NOT ok",rpl777, type(rpl777))
+
+            #log.msg("\nGUIpoll -+--> kademlia_havenode rpl777",rpl777, type(rpl777),"\n")
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
+
+
+        def msg():
+            msg = ''
+            for frag in range(randint(4,7)):
+                msg +=  self.MSGfrags[randint(0,7)]
+            return msg
+
+        log.msg(1*"UC4 rpl777_GUIpoll_kademlia_havenode num peers in peersList", len(peersList))
+
+
+
+
+        for peer in peersList:
+
+            self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
+            self.testRQ_sendmsg['dest'] = peer[0] #'16451506450525369985'    # peer[0]
+
+
+          #  if peer[1] == '79.245.52.39':  # '88.179.105.82': # '178.62.185.131': #'62.194.6.163': '88.179.105.82
+          #      for sp in range(10):
+            log.msg(1*"\ncheck msgs from peer:", peer)
+
+            spam = msg()
+
+            self.testRQ_sendmsg['msg'] = spam
+
+            self.testRQ_checkmsg['sender'] = peer[0]
+
+            stat1 = len(self.serverFactory.reactor.threadpool.waiters)
+            stat2 = self.serverFactory.reactor.threadpool.workers
+            stat3 = len(self.serverFactory.reactor.threadpool.threads)
+            stat4 = len(self.serverFactory.reactor.threadpool.q.queue)
+
+            log.msg("waiters: ", stat1)
+            log.msg("workers1: ", stat2)
+            log.msg("threads: ", stat3)
+            log.msg("queue: ", stat4)
+            log.msg("workers2: ", tp.ThreadPool.workers)
+
+            sleep(0.25)
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_checkmsg), headers=POSTHEADERS)
+            self.deferred.addCallback(self.repl777_checkMSG ) # this is just for conf that we sent it
+            self.deferred.addErrback(self.rpl777ERR)
+            #
+            #
+            # sleep(0.25)
+            # self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_sendmsg), headers=POSTHEADERS)
+            # self.deferred.addCallback(self.rpl777_sendMSG ) # this is just for conf that we sent it
+            # self.deferred.addErrback(self.rpl777ERR)
+
+ 
+    def repl777_checkMSG(self, dataFrom777):
+        rpl777=dataFrom777.json()
+
+        log.msg("repl777_checkMSG !!!", rpl777, type(rpl777))
+        if 'result' in rpl777.keys():
+            self.numCalls+=1
+
+        if self.numCalls > 5:
+            self.superNET_daemon.stopUC6(True)
+
+
+
+    def rpl777_sendMSG(self, dataFrom777):
+        rpl777=dataFrom777.json()
+
+        log.msg("rpl777_sendMSG SENT!!!", rpl777, type(rpl777))
+        # for key in rpl777.keys():
+        #     log.msg(key," - ", rpl777[key])
+        status=rpl777['status']
+        status = status.split(' ')
+        if status[6] == 'pending':
+
+            self.numCalls+=1
+
+        if self.numCalls > 5:
+            self.superNET_daemon.stopUC6(True)
+
+# rpl777_sendMSG SENT!!! {'status': '2131686659786462901 sends encrypted sendmessage to 14768174629330216722 pending via.(14768174629330216722), len.1396'} <class 'dict'>
+
+
+# curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=checkmsg&key=1978065578067355462'
+#  curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=checkmsg&key=1978065578067355462'
+# {'result': None}azure@boxfish:~/workbench/nxtDev/TEAM/snappy$
+#
+
+#
+#
+# SENDMESSAGE
+#
+# Success Case
+#
+# Issued this command from A: ./BitcoinDarkd SuperNET '{"requestType":"sendmessage","dest":"7108754351996134253","msg":"sleuth test"}'
+#
+# Output from the same terminal where you issued the command:
+# Quote
+# {"status":"11634703838614499263 sends encrypted sendmessage to 7108754351996134253 pending via.(7108754351996134253), len.1396"}
+
+    def rpl777ERR(self, ERR777):
+        log.msg("ERR777 1", ERR777, type(ERR777)) #.printDetailedTraceback())
+        log.msg("ERR777 2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
+
+        #raise RuntimeError(ERR777.printDetailedTraceback())
+
+
+
+
+
+
+
+
+
+
+####################################                      UC6
+####################################
+####################################
+####################################
+####################################
+####################################
+
+
+
+
+
+
+class UC7_contacts(object):
     """
        SuperNET calls used here:
 

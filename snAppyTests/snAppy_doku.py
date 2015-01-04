@@ -32,6 +32,13 @@ Launches scripts in UseCase classes:
 
 UC1_pingPong
 UC2_havenode
+UC3_store_findvalue
+UC4_sendMSG
+UC5_sendBIN
+UC6_checkMSG
+
+
+
 
 
 ??
@@ -468,6 +475,14 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
 
 
     // Telepathy 9
+
+
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=checkmsg&key=1978065578067355462'
+ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=checkmsg&key=1978065578067355462'
+{'result': None}azure@boxfish:~/workbench/nxtDev/TEAM/snappy$
 
 
 
@@ -1782,7 +1797,6 @@ findvalue -> havenodeB
 
 
 
-
 I think I just finished coding low level Telepathy transport layer.
 
 Since I am using UDP and many things can go wrong due to no fault of anybody
@@ -1931,7 +1945,6 @@ To prevent the spoofing, I added a contacts list:
 
 
 ./BitcoinDarkd SuperNET '{"requestType":"dispcontact","handle":"jl777"}'
-
 
 
 

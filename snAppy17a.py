@@ -500,6 +500,8 @@ class SuperNETApiD(Daemon3): #object):
             self.initUC(UC)
         elif UC == 'UC5':
             self.initUC(UC)
+        elif UC == 'UC6':
+            self.initUC(UC)
 
         log.msg("initUC() done. starting reactor.run()")
         reactor.run()
@@ -515,18 +517,17 @@ class SuperNETApiD(Daemon3): #object):
 
         if UC == 'UC1':
             self.startUC1()
-
         elif UC == 'UC2':
             self.startUC2()
-
         elif UC == 'UC3':
             self.startUC3()
-
         elif UC == 'UC4':
             self.startUC4()
-
         elif UC == 'UC5':
             self.startUC5()
+        elif UC == 'UC6':
+            self.startUC6()
+
 
 
 
@@ -620,9 +621,8 @@ class SuperNETApiD(Daemon3): #object):
         log.msg(5*"\n\n                           STOP UC4 with result:  ", result, "\n")
         self.timer4.stop( )
         log.msg("STOP snappyDaemon")
-        self.stop()
-
-
+        #self.stop()
+        self.startUC5()
 
 
     def startUC5(self):
@@ -642,13 +642,41 @@ class SuperNETApiD(Daemon3): #object):
         self.timer5 = task.LoopingCall(uc5_sendBIN.periodic,  )
         self.timer5.start( TIMER_850 , now=True )
 
-
-
     def stopUC5(self,result):
         log.msg(5*"\n\n                           STOP UC5 with result:  ", result, "\n")
         self.timer5.stop( )
         log.msg("STOP snappyDaemon")
+        #self.stop()
+        self.startUC6()
+
+
+
+
+    def startUC6(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC5")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc6_checkMSG = UC6_checkMSG(serverFactory, self,  self.environ )
+
+        self.timer6 = task.LoopingCall(uc6_checkMSG.periodic,  )
+        self.timer6.start( TIMER_850 , now=True )
+
+    def stopUC6(self,result):
+        log.msg(5*"\n\n                           STOP UC6 with result:  ", result, "\n")
+        self.timer6.stop( )
+        log.msg("STOP snappyDaemon")
         self.stop()
+
+
+
 
 
 
@@ -667,30 +695,24 @@ if __name__ == "__main__":
     #
     # Also, the sequence of starting reactor and Daemon is sensitive!
 
+    UCs = ['start', 'stop', 'restart', 'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6', ]
+
     if len(sys.argv) == 2:
+        UC=sys.argv[1]
+        if UC not in UCs:
+            print("Unknown command")
+            sys.exit(2)
+
         if 'start' == sys.argv[1]:
             superNetApiD.start()
         elif 'stop' == sys.argv[1]:
             superNetApiD.stop()
         elif 'restart' == sys.argv[1]:
             superNetApiD.restart()
-        elif 'UC1' == sys.argv[1]:
-            superNetApiD.startUC('UC1')
-        elif 'UC2' == sys.argv[1]:
-            superNetApiD.startUC('UC2')
-        elif 'UC3' == sys.argv[1]:
-            superNetApiD.startUC('UC3')
-        elif 'UC4' == sys.argv[1]:
-            superNetApiD.startUC('UC4')
-        elif 'UC5' == sys.argv[1]:
-            print("§§§§")
-            superNetApiD.startUC('UC5')
-
-
-        #...
         else:
-            print("Unknown command")
-            sys.exit(2)
+            superNetApiD.startUC(UC)
+
+
         sys.exit(0)
 
     else:
