@@ -426,13 +426,13 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pin
 
 
 
-    // MGW 6
+    // MGW 8
 
 ./.
 
 
 
-              // IPcomms',\
+              // IPcomms' 5
 
 
 
@@ -444,7 +444,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pon
 
 
 
-    // Kademlia DHT 8
+    // Kademlia DHT 6
 
 
 
@@ -659,7 +659,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pas
 
 ##################################################################################################
 
-    //     MGW   7
+    //     MGW  8
 
 ##################################################################################################
 ------------------------------------------------------------------------------------------
@@ -2663,5 +2663,17 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     int32_t i,j;
 
 
+
+
+chanc3r [6:35 PM]
+this fixed my twisted install
+TWISTED=git+https://github.com/twisted/twisted.git RUNTESTS="python -m unittest discover"
+pip3 install -q --no-use-wheel $TWISTED --use-mirrors
+
+in case anyone else has the problem
+
+GitHub
+twisted/twisted
+twisted - Event-driven networking engine written in Python.
 
 """

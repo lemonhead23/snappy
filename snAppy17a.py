@@ -498,6 +498,8 @@ class SuperNETApiD(Daemon3): #object):
             self.initUC(UC)
         elif UC == 'UC4':
             self.initUC(UC)
+        elif UC == 'UC5':
+            self.initUC(UC)
 
         log.msg("initUC() done. starting reactor.run()")
         reactor.run()
@@ -522,6 +524,10 @@ class SuperNETApiD(Daemon3): #object):
 
         elif UC == 'UC4':
             self.startUC4()
+
+        elif UC == 'UC5':
+            self.startUC5()
+
 
 
     def startUC1(self):
@@ -603,9 +609,9 @@ class SuperNETApiD(Daemon3): #object):
         except Exception as e:
             log.msg("already listening, continue.{0}".format(str(e)))
 
-        uc_4_sendMSGs = UC_4_sendMSGs(serverFactory, self,  self.environ )
+        uc4_sendMSG = UC4_sendMSG(serverFactory, self,  self.environ )
 
-        self.timer4 = task.LoopingCall(uc_4_sendMSGs.periodic,  )
+        self.timer4 = task.LoopingCall(uc4_sendMSG.periodic,  )
         self.timer4.start( TIMER_850 , now=True )
 
 
@@ -617,6 +623,32 @@ class SuperNETApiD(Daemon3): #object):
         self.stop()
 
 
+
+
+    def startUC5(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC5")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc5_sendBIN = UC5_sendBIN(serverFactory, self,  self.environ )
+
+        self.timer5 = task.LoopingCall(uc5_sendBIN.periodic,  )
+        self.timer5.start( TIMER_850 , now=True )
+
+
+
+    def stopUC5(self,result):
+        log.msg(5*"\n\n                           STOP UC5 with result:  ", result, "\n")
+        self.timer5.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
 
 
 
@@ -650,6 +682,11 @@ if __name__ == "__main__":
             superNetApiD.startUC('UC3')
         elif 'UC4' == sys.argv[1]:
             superNetApiD.startUC('UC4')
+        elif 'UC5' == sys.argv[1]:
+            print("§§§§")
+            superNetApiD.startUC('UC5')
+
+
         #...
         else:
             print("Unknown command")
