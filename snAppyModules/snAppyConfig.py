@@ -25,8 +25,8 @@ STONEFISH_IP = '178.62.185.131'   #
 BOXFISH_IP   = '85.xx'   #
 
 
-SERVER_ADDR_jl777 = 'localhost'
-#SERVER_ADDR_jl777 =  STONEFISH_IP
+#SERVER_ADDR_jl777 = 'localhost'
+SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
@@ -107,6 +107,8 @@ TIMER1_SportsdataLLC_SECS = 5000.0
 
 UCsched_1={}
 
+#----------------------------------------
+
 sched_GUIpoll ={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
 sched_GUIpoll['callFreq'] = 500               # ms!!
@@ -123,6 +125,7 @@ sched_settings['schedName'] = 'uc_settings'
 sched_settings['callFreq'] = 12500               # ms!!
 
 schedReqTypes={}
+
 schedReqTypes['uc_settings'] = {'requestType':'settings'}
 schedReqTypes['ping'] = {'requestType':'ping'}
 
@@ -135,6 +138,7 @@ sched_getPeers['schedName'] = 'uc_getpeers'
 sched_getPeers['callFreq'] = 16500               # ms!!
 
 schedReqTypes={}
+
 schedReqTypes['uc_getpeers'] = {'requestType':'getpeers'}
 sched_getPeers['schedReqTypes']  = schedReqTypes
 sched_getPeers['target'] = 'this Uses requests!'
@@ -162,6 +166,74 @@ environ['UCsched_1'] = UCsched_1
 
 
 ##################################################################
+
+UCsched_2 = {}
+
+
+#----------------------------------------
+sched_BTCDpoll ={}
+sched_BTCDpoll['schedName'] = 'BTCDpoll'
+sched_BTCDpoll['callFreq'] = 500             # ms!!
+
+schedReqTypes={}
+
+schedReqTypes['BTCDpoll'] = {'requestType':'BTCDpoll'}
+sched_BTCDpoll['schedReqTypes']  = schedReqTypes
+sched_BTCDpoll['target'] = 'this Uses requests!'
+
+#----------------------------------------
+sched_GUIpoll ={}
+sched_GUIpoll['schedName'] = 'GUIpoll'
+sched_GUIpoll['callFreq'] = 900              # ms!!
+
+schedReqTypes={}
+
+schedReqTypes['GUIpoll'] = {'requestType':'GUIpoll'}
+sched_GUIpoll['schedReqTypes']  = schedReqTypes
+sched_GUIpoll['target'] = 'this Uses requests!'
+
+#----------------------------------------
+sched_settings={}
+sched_settings['schedName'] = 'uc_settings'
+sched_settings['callFreq'] = 12500               # ms!!
+
+schedReqTypes={}
+
+schedReqTypes['uc_settings'] = {'requestType':'settings'}
+schedReqTypes['ping'] = {'requestType':'ping'}
+
+sched_settings['schedReqTypes']  = schedReqTypes
+sched_settings['target'] = 'this Uses requests!'
+
+#----------------------------------------
+sched_getPeers ={}
+sched_getPeers['schedName'] = 'uc_getpeers'
+sched_getPeers['callFreq'] = 16500               # ms!!
+
+schedReqTypes={}
+
+schedReqTypes['uc_getpeers'] = {'requestType':'getpeers'}
+sched_getPeers['schedReqTypes']  = schedReqTypes
+sched_getPeers['target'] = 'this Uses requests!'
+
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++
+# plug the schedules into the environment
+
+UCsched_2[sched_BTCDpoll['schedName']] = sched_BTCDpoll
+UCsched_2[sched_GUIpoll['schedName']] = sched_GUIpoll
+UCsched_2[sched_settings['schedName']] = sched_settings
+UCsched_2[sched_getPeers['schedName']] = sched_getPeers
+
+
+environ['UCsched_2'] = UCsched_2
+
+
+
+
+
+
+#############################################################
 
 
 UC_sched_3={}

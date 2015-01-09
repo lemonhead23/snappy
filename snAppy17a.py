@@ -621,7 +621,7 @@ class SuperNETApiD(Daemon3): #object):
         uc4_sendMSG = UC4_sendMSG(serverFactory, self,  self.environ )
 
         self.timer4 = task.LoopingCall(uc4_sendMSG.periodic,  )
-        self.timer4.start( TIMER_850 , now=True )
+        self.timer4.start( TIMER_850, now=True )
 
 
 
@@ -649,6 +649,7 @@ class SuperNETApiD(Daemon3): #object):
 
         self.timer5 = task.LoopingCall(uc5_sendBIN.periodic,  )
         self.timer5.start( TIMER_850 , now=True )
+
 
     def stopUC5(self,result):
         log.msg(5*"\n\n                           STOP UC5 with result:  ", result, "\n")
@@ -699,9 +700,9 @@ class SuperNETApiD(Daemon3): #object):
         except Exception as e:
             log.msg("already listening, continue.{0}".format(str(e)))
 
-        uc7_contacts = UC7_contacts(serverFactory, self,  self.environ )
+        uc7_findaddress = UC7_findaddress(serverFactory, self,  self.environ )
 
-        self.timer7 = task.LoopingCall(uc7_contacts.periodic,  )
+        self.timer7 = task.LoopingCall(uc7_findaddress.periodic,  )
         self.timer7.start( TIMER_850 , now=True )
 
     def stopUC7(self,result):

@@ -1398,6 +1398,10 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         #     log.msg(havenoder, " - ", self.havenoders[havenoder])
 
 
+        if self.numCalls > 5:
+             self.superNET_daemon.stopUC4(True) # must be stopped here, NOT in a deferred!!
+
+
 
 
         schedulesDue =[]
@@ -1951,6 +1955,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
          It iterates over all schedules in the UseCase class, checks if they are due to be called,
          adds the ones due to a list and passes that list on to runSchedules(). """#
 
+
+
+        if self.numCalls > 5:
+            self.superNET_daemon.stopUC4(True)
+
         schedulesDue =[]
         for schedule in self.schedules.keys():
             schedule = self.schedules[schedule]
@@ -2305,11 +2314,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
         status = status.split(' ')
         if status[6] == 'pending':
 
-            self.numCalls+=1
-
-        if self.numCalls > 5:
-            self.superNET_daemon.stopUC4(True)
-
+            self.numCalls += 1
 
 
 
@@ -2432,7 +2437,14 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
          It iterates over all schedules in the UseCase class, checks if they are due to be called,
          adds the ones due to a list and passes that list on to runSchedules(). """#
 
+
+
+        if self.numCalls > 5:
+            self.superNET_daemon.stopUC5(True)
+
         schedulesDue =[]
+
+
         for schedule in self.schedules.keys():
             schedule = self.schedules[schedule]
 
@@ -2798,9 +2810,6 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
         if status[6] == 'pending':
 
             self.numCalls+=1
-
-        if self.numCalls > 5:
-            self.superNET_daemon.stopUC5(True)
 
 
 # rpl777_sendMSG SENT!!! {'status': '2131686659786462901 sends encrypted sendmessage to 14768174629330216722 pending via.(14768174629330216722), len.1396'} <class 'dict'>
@@ -3304,35 +3313,59 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
 
 
 
+class UC7_findaddress(object):
 
-
-class UC7_contacts(object):
     """
-       SuperNET calls used here:
+           SuperNET calls used here:
 
-       settings
-       getpeers
-       GUIpoll
-       pong
-       ping
-       havenode
-       findnode
+           settings
+           getpeers
+           GUIpoll
+           pong
+           ping
+           havenode
+           findnode
 
-
-
-maintenance calls to init main testing call(s):
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
-
-./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
-./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
+        findaddress
 
 
+    maintenance calls to init main testing call(s):
+
+    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
+    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+    ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
+
+
+# BTCDjson
+
+++++++++++++++++++++++
+
+./BitcoinDarkd  SuperNET '{"requestType":"findaddress","refaddr":"14083245880221951726","list":"","dist":"32","duration":"11","numthreads":"2"}'
+
+
+    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&refaddr=14083245880221951726&list=""&dist=32&duration=11&numthreads=2'
+
+
+    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&refaddr=14083245880221951726&list=""&dist=32&duration=11&numthreads=2'
+
+    static char *findaddress[] = { (char *)findaddress_func, "findaddress", "V", "refaddr", "list", "dist", "duration", "numthreads", 0 };
+
+    4 32 33 38 30 33 34 28 31 28 31 29 30 31 32 31 34 35 39 26 28 35 30 33 31 28 39 30 24 32 28 26 32 35 38 32 36 36 28 32 33 25 37 32 32 37 30 34 30 28 31 31 21 34 31 37 40 34 30 31 n.512 flag.0 sum 32.402 | diff 3.855 | exact.74 above.219 below.219 balance 0 dist 32.000 -> 0.001 c371bd83071ce6ee 14083245880221951726
+    >>>>>>>>>>>>>>> new best () c0aab1f9a0a57a68 13883104487023147624 dist.32 metric 0.00 vs c371bd83071ce6ee 14083245880221951726
+    BTCDjson jsonstr.({"requestType":"findaddress","refaddr":"14083245880221951726","list":"","dist":"32","duration":"11","numthreads":"2"}) from ((null))
+    35 31 28 36 31 35 29 41 28 30 24 33 38 40 32 34 31 34 31 29 35 32 29 32 35 26 29 36 36 30 30 30 37 27 27 34 33 28 34 34 27 33 31 37 27 29 36 33 35 36 30 35 26 28 32 28 30 27 33 34 28 36 31 30 36 36 30 26 34 34 27 30 25 31 32 34 37 30 34 31 32 38 29 36 30 33 31 38 32 32 36 29 27 36 29 36 26 33 39 34 33 28 27 29 31 30 24 31 38 35 39 32 24 40 35 30 31 40 35 31 32 24 34 30 31 28 32 31 35 29 39 29 38 37 37 35 32 30 31 32 37 31 34 32 26 36 34 33 26 29 28 29 28 32 33 29 33 35 31 33 33 32 21 30 29 34 36 32 31 32 32 29 40 37 35 27 39 32 33 32 30 29 29 34 29 37 27 31 33 35 36 30 36 34 32 36 33 32 26 34 30 34 41 36 34 35 26 31 34 34 28 29 27 36 37 25 27 30 28 30 31 28 32 37 41 33 32 33 31 34 32 30 32 37 31 28 30 26 32 33 30 32 26 28 23 37 31 26 36 32 32 36 32 29 32 33 32 38 26 29 30 34 43 30 32 35 31 21 32 31 33 33 35 31 32 29 29 37 24 29 37 28 38 33 43 31 34 29 32 32 26 33 27 28 39 35 32 35 35 26 33 25 34 37 29 29 32 33 42 37 32 27 33 31 34 30 29 32 29 34 32 28 36 27 35 32 36 38 31 34 36 29 31 32 34 35 35 36 36 33 36 37 33 31 29 31 27 31 32 26 32 35 31 31 31 33 33 33 39 34 37 22 37 24 30 29 35 31 30 27 27 33 29 31 32 35 32 25 28 35 32 32 37 29 32 29 33 34 37 34 32 28 35 30 29 33 34 32 30 33 43 37 29 32 33 39 33 35 33 35 35 35 28 33 34 32 31 28 38 31 29 32 41 33 43 33 33 37 29 34 20 31 30 39 32 35 31 31 32 29 37 27 33 36 30 32 35 28 22 31 31 32 34 24 29 32 34 29 26 38 27 28 31 29 38 37 36 25 34 35 35 36 34 41 38 35 25 26 33 28 40 32 26 42 38 37 36 36 34 34 28 28 31 27 31 30 28 33 32 30 30 32 37 31 25 30 29 27 32 32 34 31 n.512 flag.0 sum 32.293 | diff 3.882 | exact.68 above.222 below.222 balance 0 dist 32.000 -> 0.001 c371bd83071ce6ee 14083245880221951726
+    thread.1 n.296489: best.0.0015 -> 17769758952173426149 | 17769758952173426149 calcaddr | ave micros 270.851
+    29 33 34 32 27 31 27 31 30 28 34 39 30 26 30 34 27 34 31 29 33 36 33 30 35 32 39 36 30 34 32 38 33 31 33 30 33 28 32 32 33 29 33 33 31 29 26 35 29 36 38 33 32 30 28 38 32 29 33 34 26 28 23 32 28 32 40 28 42 28 29 32 35 41 32 34 31
 
 
 
-       """#
+FINDADDRESS.({"result":"metric 0.002","privateaddr":"1017339427443748582","password":","dist":32,"targetdist":32})
+findaddress completed ({"result":"metric 0.002","privateaddr":"1017339427443748582","password":","dist":32,"targetdist":32})
+
+
+           """#
 
 
     def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
@@ -3350,8 +3383,15 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         self.havenoders =  {} #  LOCAL AUXILIARY REGISTER
         self.peersDiLoc = {}
 
+        self.findaddr = 0
 
-        prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
+        # can collect the RQs used here for neatness
+
+        self.reqPing = {'requestType':'ping'}
+        self.reqFindnode = {'requestType':'findnode'}
+        self.testRQ_findaddress =  {'requestType':'findaddress'}
+
+        prepSchedules = environ['UCsched_2'] # can use same as UC1 for now- extends it
         for sched in prepSchedules.keys():
             sched = prepSchedules[sched]
             self.schedules[ sched['schedName']] = Schedule( sched )
@@ -3370,13 +3410,14 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         # for ponger in self.pongers.keys():
         #     log.msg(ponger, " - ", self.pongers[ponger])
 
-        log.msg("havenoders: ", len(self.havenoders))
-        #for havenoder in self.havenoders.keys():
-        #    log.msg(havenoder, " - ", self.havenoders[havenoder])
+        log.msg("havenoders:")
+        for havenoder in self.havenoders.keys():
+            log.msg(havenoder, " - ", self.havenoders[havenoder])
+
 
 
         # STOP condition check
-        if ( len(self.havenoders.keys())  > 1 and len(self.havenoders.keys()) > 1 ):
+        if (  self.findaddr  > 11):#
              self.stopDaemon = True
 
         if  self.stopDaemon:
@@ -3406,6 +3447,13 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
                 self.deferred.addCallback(self.rpl777_GUIpoll)
                 self.deferred.addErrback(self.rpl777ERR)
 
+            if 'BTCDpoll' in schedDue.SNrequests.keys():
+                reqData = schedDue.SNrequests['BTCDpoll']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_BTCDpoll)
+                self.deferred.addErrback(self.rpl777ERR)
+
+
             elif 'uc_settings' in schedDue.SNrequests.keys():
                 reqData1 = schedDue.SNrequests['uc_settings']
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
@@ -3417,6 +3465,24 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_getpeers)
                 self.deferred.addErrback(self.rpl777ERR)
+
+
+
+
+    def rpl777_BTCDpoll(self, dataFrom777):
+        """
+
+         """#
+        rpl777=dataFrom777.json()
+        log.msg("rpl777_BTCDpoll", rpl777)
+
+
+        if 'nothing pending' in str(rpl777):
+            self.findaddr += 1
+            log.msg(1*"BTCDpoll : ",rpl777  ) #pass#
+
+
+        return 0
 
 
 
@@ -3506,13 +3572,35 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         log.msg(1*"              local havenoders :", len(self.havenoders))
 
         num_havenoders =  len(self.havenoders)
+        #
+        # for peer in self.peersDiLoc.keys():
+        #     log.msg(peer, " - ", self.peersDiLoc[peer] )
+        try:
+            if not fromNXT in self.havenoders.keys():
+                log.msg("new havenoder- doing findaddress:", fromNXT)
+                self.havenoders[fromNXT] =  rpl777
 
-        for peer in self.peersDiLoc.keys():
-            log.msg(peer, " - ", self.peersDiLoc[peer] )
+                self.testRQ_findaddress['refaddr'] = '14083245880221951726' #srvNXT
+                self.testRQ_findaddress['dist'] = 32
+                self.testRQ_findaddress['duration'] = 11
+                self.testRQ_findaddress['numthreads'] = 2
 
-        if not fromNXT  in self.havenoders.keys():
-            log.msg("new havenoder:", fromNXT)
-            self.havenoders[fromNXT] =  rpl777
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_findaddress), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df2_findaddress )
+                self.deferred.addErrback(self.rpl777ERR)
+
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error doing findaddress rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
+
+
+#    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&
+# refaddr=14083245880221951726&
+# list=""&
+# dist=32&
+# duration=11&
+# numthreads=2'
 
 
 
@@ -3593,14 +3681,12 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 
 
-
     def rpl777_df1_settings(self, dataFrom777): #these are the basic pings from the whitlist
         """
          this sends pings
 
           """#
         repl=dataFrom777.json()
-        reqPing = {'requestType':'ping'}
 
         ipsToPing=repl['whitelist'] #[0] # singlecheck
         # manual tests:
@@ -3608,10 +3694,10 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
         log.msg(1*"ping to whitelist:")#, reqPing['destip'])
         for node in ipsToPing:
-            reqPing['destip']=node
+            self.reqPing['destip']=node
             sleep(0.25)
             #log.msg("ping to whitelist:", reqPing['destip'])
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
 
@@ -3636,25 +3722,46 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
         reqFindnode = {'requestType':'findnode'}
 
-        reqPing = {'requestType':'ping'}
-
         for peer in peers[2:]:
-            #log.msg(1*"\n\npeer:", peer, type(peer))
+            log.msg(1*"\n\npeer:", peer, type(peer))
             ipaddr = peer['srvipaddr']
-            reqPing['destip'] = ipaddr
+
+            sleep(0.25)
 
             # #log.msg("ping to peer:", reqPing['destip'])
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+            self.reqPing['destip'] = ipaddr
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
 
             pserv = peer['pserver']
             srvNXT = peer['srvNXT']
-            sleep(0.25)
-            reqFindnode['key']=srvNXT
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
+            self.reqFindnode['key']=srvNXT
+
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqFindnode), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_findnode )
             self.deferred.addErrback(self.rpl777ERR)
+
+
+
+
+
+    def rpl777_df2_findaddress(self, dataFrom777):
+        """
+
+
+        """#
+        #log.msg( 11 * "\nrpl777_df1_findaddress sent", dataFrom777)
+        repl=dataFrom777.json()
+        log.msg( 1 * "\nrpl777_df1_findaddress sent", repl, type(repl))
+        # repl=dataFrom777.content.decode("utf-8")
+        # repl=eval(repl)
+        #
+        if 'result' in repl.keys():
+            self.findaddr += 1
+
+
+
 
 
 
@@ -3686,6 +3793,21 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         raise RuntimeError(ERR777.printDetailedTraceback())
 
 
+
+
+
+
+####################################                      UC7 fini
+####################################
+####################################
+####################################
+####################################
+####################################
+
+
+
+
+
 #
 #
 #
@@ -3704,17 +3826,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 # {"result":"handle.(VPSCRACK) deleted"}
 #
 #
-
-
-
-####################################                      UC7 fini
-####################################
-####################################
-####################################
-####################################
-####################################
-
-
 
 
 
