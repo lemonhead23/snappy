@@ -98,9 +98,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
 
+
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=79.245.52.39'
 
  #178.62.185.131'
+
 
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/stop?'
@@ -2561,6 +2563,8 @@ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET",
 
 
 ------------------------------------------------------------------------------------------
+
+
 
 
 

@@ -149,10 +149,17 @@ UCsched_1[sched_getPeers['schedName']] = sched_getPeers
 
 
 environ['UCsched_1'] = UCsched_1
-#
-#                      used by UCs:
-#                        UC1_pingPong
-#                        UC2_havenode
+
+                    # used by UCs:
+                    #
+                    # UC1_pingPong
+                    # UC2_havenode
+                    # UC4_sendMSG
+                    # UC5_sendBIN
+                    # UC6_checkMSG
+
+
+
 
 ##################################################################
 

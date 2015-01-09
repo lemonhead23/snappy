@@ -488,6 +488,9 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
+
+
+
     def runUC(self, UC):
         log.msg( 1 * "start UC: ", UC)
         if UC == 'UC1':
@@ -502,6 +505,9 @@ class SuperNETApiD(Daemon3): #object):
             self.initUC(UC)
         elif UC == 'UC6':
             self.initUC(UC)
+        elif UC == 'UC7':
+            self.initUC(UC)
+
 
         log.msg("initUC() done. starting reactor.run()")
         reactor.run()
@@ -527,6 +533,8 @@ class SuperNETApiD(Daemon3): #object):
             self.startUC5()
         elif UC == 'UC6':
             self.startUC6()
+        elif UC == 'UC7':
+            self.startUC7()
 
 
 
@@ -656,7 +664,7 @@ class SuperNETApiD(Daemon3): #object):
         log.startLogging(sys.stdout)
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
         serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
-        log.msg(1*"initUC5")
+        log.msg(1*"initUC6")
         reactor.suggestThreadPoolSize(500) # should be ok
         serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
         try:
@@ -679,6 +687,31 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
+    def startUC7(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC7")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc7_contacts = UC7_contacts(serverFactory, self,  self.environ )
+
+        self.timer7 = task.LoopingCall(uc7_contacts.periodic,  )
+        self.timer7.start( TIMER_850 , now=True )
+
+    def stopUC7(self,result):
+        log.msg(5*"\n\n                           STOP UC7 with result:  ", result, "\n")
+        self.timer7.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+
+
 
 
 if __name__ == "__main__":
@@ -695,7 +728,14 @@ if __name__ == "__main__":
     #
     # Also, the sequence of starting reactor and Daemon is sensitive!
 
-    UCs = ['start', 'stop', 'restart', 'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6', ]
+
+    UCs = [
+            'start', 'stop', 'restart',
+            'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
+            'UC7',
+            ]
+
+
 
     if len(sys.argv) == 2:
         UC=sys.argv[1]
