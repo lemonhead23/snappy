@@ -37,6 +37,8 @@ UC4_sendMSG
 UC5_sendBIN
 UC6_checkMSG
 
+UC6_checkMSG
+UC6_checkMSG
 
 
 

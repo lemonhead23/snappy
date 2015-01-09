@@ -507,7 +507,8 @@ class SuperNETApiD(Daemon3): #object):
             self.initUC(UC)
         elif UC == 'UC7':
             self.initUC(UC)
-
+        elif UC == 'UC8':
+            self.initUC(UC)
 
         log.msg("initUC() done. starting reactor.run()")
         reactor.run()
@@ -520,6 +521,8 @@ class SuperNETApiD(Daemon3): #object):
         The SERVERfactory always the same object! It does NOT get re-instantiated with each new call.
         Factory is somewhat flexible as to what argument types it gets!
         """#
+
+        self.UC_results = {'here we can collect results for individual test cases' : True}
 
         if UC == 'UC1':
             self.startUC1()
@@ -535,6 +538,8 @@ class SuperNETApiD(Daemon3): #object):
             self.startUC6()
         elif UC == 'UC7':
             self.startUC7()
+        elif UC == 'UC8':
+            self.startUC8()
 
 
 
@@ -678,11 +683,13 @@ class SuperNETApiD(Daemon3): #object):
         self.timer6 = task.LoopingCall(uc6_checkMSG.periodic,  )
         self.timer6.start( TIMER_850 , now=True )
 
+
     def stopUC6(self,result):
         log.msg(5*"\n\n                           STOP UC6 with result:  ", result, "\n")
         self.timer6.stop( )
         log.msg("STOP snappyDaemon")
         self.stop()
+        #self.startUC7()
 
 
 
@@ -710,6 +717,34 @@ class SuperNETApiD(Daemon3): #object):
         self.timer7.stop( )
         log.msg("STOP snappyDaemon")
         self.stop()
+        #self.startUC8()
+
+
+
+
+    def startUC8(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC8")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc8_contacts = UC8_contacts(serverFactory, self,  self.environ )
+
+        self.timer8 = task.LoopingCall(uc8_contacts.periodic,  )
+        self.timer8.start( TIMER_850 , now=True )
+
+    def stopUC8(self,result):
+        log.msg(5*"\n\n                           STOP UC8 with result:  ", result, "\n")
+        self.timer8.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
 
 
 
@@ -733,7 +768,7 @@ if __name__ == "__main__":
     UCs = [
             'start', 'stop', 'restart',
             'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
-            'UC7',
+            'UC7', 'UC8',
             ]
 
 

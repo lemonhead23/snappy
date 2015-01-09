@@ -25,8 +25,8 @@ STONEFISH_IP = '178.62.185.131'   #
 BOXFISH_IP   = '85.xx'   #
 
 
-#SERVER_ADDR_jl777 = 'localhost'
-SERVER_ADDR_jl777 =  STONEFISH_IP
+SERVER_ADDR_jl777 = 'localhost'
+#SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
@@ -111,7 +111,7 @@ UCsched_1={}
 
 sched_GUIpoll ={}
 sched_GUIpoll['schedName'] = 'GUIpoll'
-sched_GUIpoll['callFreq'] = 500               # ms!!
+sched_GUIpoll['callFreq'] = 1500               # ms!!
 
 schedReqTypes={}
 
@@ -142,6 +142,7 @@ schedReqTypes={}
 schedReqTypes['uc_getpeers'] = {'requestType':'getpeers'}
 sched_getPeers['schedReqTypes']  = schedReqTypes
 sched_getPeers['target'] = 'this Uses requests!'
+
 
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++
