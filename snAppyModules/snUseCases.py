@@ -309,6 +309,8 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
             self.havenoders[fromNXT] =  rpl777
 
 
+    def UC_spefifics(self):
+        pass
 
 
 
@@ -5017,8 +5019,81 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
             log.msg("new havenoder:", fromNXT)
             self.havenoders[fromNXT] =  rpl777
 
-        log.msg(15*"\n NOW do the UC10 stuff: placeask/bid")
 
+        self.UC_specifics()
+
+    def UC_specifics(self):
+
+
+
+        # SPECIFICS:
+        # self.volumeA = '1.00'
+        # self.priceA = '0.014'
+        #
+        # self.volumeB = '1.00'
+        # self.priceB = '0.004'
+        #
+        # self.baseid = '1106086181814049042'
+        # self.relid = '455105891325210530'
+
+        #
+        # self.baseamount =''
+        # self.relamount =''
+        # self.other =''
+        # self.type =''
+
+        self.testRQ_placebid['volume'] = self.volumeA
+        self.testRQ_placebid['price'] = self.priceA
+        self.testRQ_placebid['baseid'] = self.baseid
+        self.testRQ_placebid['relid'] = self.relid
+
+
+
+        self.testRQ_placeask['volume'] = self.volumeB
+        self.testRQ_placeask['price'] = self.priceB
+        self.testRQ_placeask['baseid'] = self.baseid
+        self.testRQ_placeask['relid'] = self.relid
+
+        sleep(0.25)
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_placebid), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df3_testRQ_placebid )
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_placeask), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df3_testRQ_placeask )
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+        log.msg(5*"\n NOW do the UC10 stuff: placeask/bid")
+
+
+    def rpl777_df3_testRQ_placeask(self, rpl777):
+        """
+
+        """#
+        repl=rpl777.json()
+        repl=rpl777.content.decode("utf-8")
+        repl=eval(repl)
+        log.msg( 3 * "\nrpl777_df3_testRQ_placeask    ", repl)
+        # {'result': 'success', 'txid': '2595019013557569119'}
+        if 'success' in repl.keys():
+            self.stopDaemonCondition1 = True
+
+
+
+    def rpl777_df3_testRQ_placebid(self, rpl777):
+        """
+
+
+        """#
+        repl=rpl777.json()
+        repl=rpl777.content.decode("utf-8")
+        repl=eval(repl)
+        log.msg( 3 * "\nrpl777_df3_testRQ_placebid    ", repl)
+        if 'success' in repl.keys():
+            self.stopDaemonCondition2 = True
 
 
 
