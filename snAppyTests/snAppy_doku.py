@@ -2421,9 +2421,6 @@ that flips the orientation
 
 
 
-35 call_NOT_TESTED
-
-
 
     static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
 
@@ -2444,7 +2441,6 @@ adding allfields will show more info on each orderbook entry, including the NXT 
 
 
 
-36 call_NOT_TESTED
 
     static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
 
@@ -2455,7 +2451,6 @@ adding allfields will show more info on each orderbook entry, including the NXT 
                                                 respondtx
 
 
-37 call_NOT_TESTED
 
     static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
 
@@ -2466,8 +2461,6 @@ adding allfields will show more info on each orderbook entry, including the NXT 
                                                 processutx
 
 
-
-38 call_NOT_TESTED
 
     static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
 

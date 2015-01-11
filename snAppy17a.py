@@ -445,6 +445,15 @@ class SuperNETApiD(Daemon3): #object):
                         }
 
 
+
+
+    UCs = [
+            'start', 'stop', 'restart',
+            'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
+            'UC7', 'UC8',    'UC10',
+            ]
+
+
     def __init__(self, pidfile):
         self.environ = environ
         super(SuperNETApiD, self).__init__(pidfile)
@@ -493,22 +502,29 @@ class SuperNETApiD(Daemon3): #object):
 
     def runUC(self, UC):
         log.msg( 1 * "start UC: ", UC)
-        if UC == 'UC1':
+
+
+        if UC in self.UCs:
             self.initUC(UC)
-        elif UC == 'UC2':
-            self.initUC(UC)
-        elif UC == 'UC3':
-            self.initUC(UC)
-        elif UC == 'UC4':
-            self.initUC(UC)
-        elif UC == 'UC5':
-            self.initUC(UC)
-        elif UC == 'UC6':
-            self.initUC(UC)
-        elif UC == 'UC7':
-            self.initUC(UC)
-        elif UC == 'UC8':
-            self.initUC(UC)
+        else:
+            log.msg("UC name error")
+        #
+        # if UC == 'UC1':
+        #     self.initUC(UC)
+        # elif UC == 'UC2':
+        #     self.initUC(UC)
+        # elif UC == 'UC3':
+        #     self.initUC(UC)
+        # elif UC == 'UC4':
+        #     self.initUC(UC)
+        # elif UC == 'UC5':
+        #     self.initUC(UC)
+        # elif UC == 'UC6':
+        #     self.initUC(UC)
+        # elif UC == 'UC7':
+        #     self.initUC(UC)
+        # elif UC == 'UC8':
+        #     self.initUC(UC)
 
         log.msg("initUC() done. starting reactor.run()")
         reactor.run()
@@ -541,6 +557,10 @@ class SuperNETApiD(Daemon3): #object):
         elif UC == 'UC8':
             self.startUC8()
 
+        elif UC == 'UC10':
+            self.startUC10()
+        else:
+            log.msg("UC name error")
 
 
 
@@ -747,6 +767,30 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
+    def startUC10(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC10")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc10_IDEX_placeAB  = UC10_IDEX_placeAB(serverFactory, self,  self.environ )
+
+        self.timer10 = task.LoopingCall(uc10_IDEX_placeAB.periodic,  )
+        self.timer10.start( TIMER_850 , now=True )
+
+    def stopUC10(self,result):
+        log.msg(5*"\n\n                           STOP UC10 with result:  ", result, "\n")
+        self.timer10.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+
 
 
 
@@ -768,7 +812,7 @@ if __name__ == "__main__":
     UCs = [
             'start', 'stop', 'restart',
             'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
-            'UC7', 'UC8',
+            'UC7', 'UC8', 'UC10'
             ]
 
 

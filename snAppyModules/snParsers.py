@@ -538,11 +538,16 @@ class Parser_777(object):
         """ here we should be flexible as to the data type we get and parse.
          so we need some type checking and hand always the same data type to the actual parse functions."""#
         log.msg("def parse_777()--------->  ", data2parse, "requestType2Parse is: ", requestType2Parse)
+        log.msg("def parse_777()--------->  ", data2parse.json())
+
         #print(type(data2parse))
 
         if isinstance(data2parse, Response):
             data2parse = data2parse.json()
             parsed_777= self.parseReturnedDict(data2parse, requestType2Parse)
+            log.msg(data2parse)
+
+
             return str(parsed_777).encode("utf-8")
 
         elif isinstance(data2parse, dict):

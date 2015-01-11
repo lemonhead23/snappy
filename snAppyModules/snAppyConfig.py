@@ -24,7 +24,6 @@ environ = {}
 STONEFISH_IP = '178.62.185.131'   #
 BOXFISH_IP   = '85.xx'   #
 
-
 SERVER_ADDR_jl777 = 'localhost'
 #SERVER_ADDR_jl777 =  STONEFISH_IP
 
