@@ -232,13 +232,85 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         return 0
 
 
+    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
+        """
+
+        see PONG details in snAppy_doku
+
+        """#
+
+        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            args = rpl777['args']
+            rpl777 = rpl777['result']
+            rpl777 = json.loads(rpl777)
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            rplArgs = json.loads(args) # <class 'list'> !!
+            rplArgsRQ = rplArgs[0] # <class 'dict'>
+            rplArgsTK = rplArgs[1]   #<class 'dict'>
+        except Exception as e:
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+            requestType= rplArgsRQ['requestType']
+            ver =rplArgsRQ['ver']
+            yourip =rplArgsRQ['yourip']
+            yourport =rplArgsRQ['yourport']
+
+            NXT =rplArgsRQ['NXT']
+            time =rplArgsRQ['time']
+            ipaddr =rplArgsRQ['ipaddr']
+
+        except Exception as e:
+            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rplArgsRQ {0}".format(str(e)))
+
+        try:
+            port =  rpl777['port']
+            numpings =  rpl777['numpings']
+            lag  =  rpl777['lag']
+            ipaddr  = rpl777['ipaddr']
+            numpongs =  rpl777['numpongs']
+            result =   rpl777['result']
+            ave  =  rpl777['ave']
+            NXT  = rpl777['NXT']
+            #
+            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
+
+        except Exception as e:
+            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777 {0}".format(str(e)))
+
+        #log.msg("pongers: ", (self.pongers),"\n")
+
+        if not ipaddr  in self.pongers.keys():
+            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
+
+            if ipaddr == '<nullstr>':
+                print(12*"\n###########", rpl777)
+
+            self.pongers[ipaddr] =  rpl777
+
+        log.msg("num pongers: ", len(self.pongers.keys()))
+
+
 
 
 
     def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
         """
 
-
+either do the spcifics on each havenode OR on the NEW havenoders only
 
 
     """#
@@ -313,78 +385,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         pass
 
 
-
-
-    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
-        """
-
-        see PONG details in snAppy_doku
-
-        """#
-
-        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
-
-        try:
-            fromIp = rpl777['from']
-            port = rpl777['port']
-            args = rpl777['args']
-            rpl777 = rpl777['result']
-            rpl777 = json.loads(rpl777)
-
-        except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
-
-        try:
-            rplArgs = json.loads(args) # <class 'list'> !!
-            rplArgsRQ = rplArgs[0] # <class 'dict'>
-            rplArgsTK = rplArgs[1]   #<class 'dict'>
-        except Exception as e:
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
-
-        try:
-            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
-            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
-            requestType= rplArgsRQ['requestType']
-            ver =rplArgsRQ['ver']
-            yourip =rplArgsRQ['yourip']
-            yourport =rplArgsRQ['yourport']
-
-            NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
-            ipaddr =rplArgsRQ['ipaddr']
-
-        except Exception as e:
-            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rplArgsRQ {0}".format(str(e)))
-
-        try:
-            port =  rpl777['port']
-            numpings =  rpl777['numpings']
-            lag  =  rpl777['lag']
-            ipaddr  = rpl777['ipaddr']
-            numpongs =  rpl777['numpongs']
-            result =   rpl777['result']
-            ave  =  rpl777['ave']
-            NXT  = rpl777['NXT']
-            #
-            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
-
-        except Exception as e:
-            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777 {0}".format(str(e)))
-
-        #log.msg("pongers: ", (self.pongers),"\n")
-
-        if not ipaddr  in self.pongers.keys():
-            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
-
-            if ipaddr == '<nullstr>':
-                print(12*"\n###########", rpl777)
-
-            self.pongers[ipaddr] =  rpl777
-
-        log.msg("num pongers: ", len(self.pongers.keys()))
 
 
 
@@ -3369,6 +3369,8 @@ class UC7_findaddress(object):
 
 
 
+ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&refaddr=1978065578067355462&list=""&dist=32&duration=11&numthreads=2'
+
 FINDADDRESS.({"result":"metric 0.002","privateaddr":"1017339427443748582","password":","dist":32,"targetdist":32})
 findaddress completed ({"result":"metric 0.002","privateaddr":"1017339427443748582","password":","dist":32,"targetdist":32})
 
@@ -3514,107 +3516,6 @@ findaddress completed ({"result":"metric 0.002","privateaddr":"10173394274437485
 
 
 
-
-    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
-        """
-
-
-
-
-    """#
-
-        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
-
-
-        try:
-            fromIp = rpl777['from']
-            port = rpl777['port']
-            rplArgs = rpl777['args']
-            result = rpl777['result'] #'result': '{"result":"kademlia_havenode from NXT.13594896385051583735 key.(1978065578067355462) value.([["1978065578067355462", "89.212.19.49", "7777", "1418404057"], ["4
-            # result is the internal raw string part
-            try:
-                rplArgsLi=json.loads(rplArgs)
-
-                token = rplArgsLi[1]
-                rplArgs = rplArgsLi[0]
-                #
-                fromNXT = rplArgs['NXT']
-                requestType = rplArgs['requestType']
-                data = rplArgs['data']
-                key = rplArgs['key']
-                time = rplArgs['time']
-                peersList = rplArgs['data']
-                #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
-
-
-            except Exception as e:
-                log.msg("Error args {0}".format(str(e)))
-                log.msg("args NOT ok",rplArgs, type(rplArgs))
-
-            try:
-                rpl777 = rpl777['result'] # this is a string!
-            except Exception as e:
-                log.msg("Error args {0}".format(str(e)))
-                log.msg("rpl777 NOT ok",rpl777, type(rpl777))
-
-            #log.msg("\nGUIpoll -+--> kademlia_havenode rpl777",rpl777, type(rpl777),"\n")
-
-        except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
-
-
-
-        for peer in peersList:
-        #            ping and findnode!
-
-            if peer[1] not in self.peersDiLoc.keys():
-                self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
-                log.msg(1*" NEW PEER FOR LOCAL LIST:", peer)
-
-
-        log.msg("GUIpoll ---> kademlia_havenode from ", fromNXT, " -- " , fromIp)
-
-
-        log.msg(1*"              local peers :", len(self.peersDiLoc))
-        log.msg(1*"              local havenoders :", len(self.havenoders))
-
-        num_havenoders =  len(self.havenoders)
-        #
-        # for peer in self.peersDiLoc.keys():
-        #     log.msg(peer, " - ", self.peersDiLoc[peer] )
-        try:
-            if not fromNXT in self.havenoders.keys():
-                log.msg("new havenoder- doing findaddress:", fromNXT)
-                self.havenoders[fromNXT] =  rpl777
-
-                self.testRQ_findaddress['refaddr'] = '14083245880221951726' #srvNXT
-                self.testRQ_findaddress['dist'] = 32
-                self.testRQ_findaddress['duration'] = 11
-                self.testRQ_findaddress['numthreads'] = 2
-
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_findaddress), headers=POSTHEADERS)
-                self.deferred.addCallback(self.rpl777_df2_findaddress )
-                self.deferred.addErrback(self.rpl777ERR)
-
-
-        except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error doing findaddress rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
-
-
-#    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&
-# refaddr=14083245880221951726&
-# list=""&
-# dist=32&
-# duration=11&
-# numthreads=2'
-
-
-
-
-
-
     def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
         """
 
@@ -3685,6 +3586,107 @@ findaddress completed ({"result":"metric 0.002","privateaddr":"10173394274437485
             self.pongers[ipaddr] =  rpl777
 
         log.msg("num pongers: ", len(self.pongers.keys()))
+
+
+
+    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
+        """
+
+
+
+
+    """#
+
+        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
+
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            rplArgs = rpl777['args']
+            result = rpl777['result'] #'result': '{"result":"kademlia_havenode from NXT.13594896385051583735 key.(1978065578067355462) value.([["1978065578067355462", "89.212.19.49", "7777", "1418404057"], ["4
+            # result is the internal raw string part
+            try:
+                rplArgsLi=json.loads(rplArgs)
+
+                token = rplArgsLi[1]
+                rplArgs = rplArgsLi[0]
+                #
+                fromNXT = rplArgs['NXT']
+                requestType = rplArgs['requestType']
+                data = rplArgs['data']
+                key = rplArgs['key']
+                time = rplArgs['time']
+                peersList = rplArgs['data']
+                #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
+
+
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("args NOT ok",rplArgs, type(rplArgs))
+
+            try:
+                rpl777 = rpl777['result'] # this is a string!
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("rpl777 NOT ok",rpl777, type(rpl777))
+
+            #log.msg("\nGUIpoll -+--> kademlia_havenode rpl777",rpl777, type(rpl777),"\n")
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
+
+
+
+        for peer in peersList:
+        #            ping and findnode!
+
+            if peer[1] not in self.peersDiLoc.keys():
+                self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
+                log.msg(1*" NEW PEER FOR LOCAL LIST:", peer)
+
+
+        log.msg("GUIpoll ---> kademlia_havenode from ", fromNXT, " -- " , fromIp)
+
+
+        log.msg(1*"              local peers :", len(self.peersDiLoc))
+        log.msg(1*"              local havenoders :", len(self.havenoders))
+
+        num_havenoders =  len(self.havenoders)
+        #
+        # for peer in self.peersDiLoc.keys():
+        #     log.msg(peer, " - ", self.peersDiLoc[peer] )
+        try:
+            #            if not fromNXT in self.havenoders.keys():
+            log.msg("new havenoder- doing findaddress:", fromNXT)
+            self.havenoders[fromNXT] =  rpl777
+
+            self.testRQ_findaddress['refaddr'] = '14083245880221951726' #srvNXT
+            self.testRQ_findaddress['dist'] = 32
+            self.testRQ_findaddress['duration'] = 11
+            self.testRQ_findaddress['numthreads'] = 2
+
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_findaddress), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_findaddress )
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error doing findaddress rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
+
+
+#    curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findaddress&
+# refaddr=14083245880221951726&
+# list=""&
+# dist=32&
+# duration=11&
+# numthreads=2'
+
+
+
+
 
 
 
@@ -3892,15 +3894,614 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dis
         self.havenoders = {} #  LOCAL AUXILIARY REGISTER
         self.peersDiLoc = {}
 
+        self.contactHandles = {}
+        self.contactNXTs = {}
+
+        self.addcontacts = 0
+        self.dispcontacts = 0
+        self.removecontacts = 0
+
+
         self.reqPing = {'requestType':'ping'}
         self.reqFindnode = {'requestType':'findnode'}
         self.testRQ_addcontact =  {'requestType':'addcontact'}
         self.testRQ_dispcontact =  {'requestType':'dispcontact'}
         self.testRQ_removecontact =  {'requestType':'removecontact'}
 
+
+        prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
+        for sched in prepSchedules.keys():
+            sched = prepSchedules[sched]
+            self.schedules[ sched['schedName']] = Schedule( sched )
+        self.lastCallTime = int(time.time() * 1000)
+
+
+# READY UC8 !!!!
+        #
+        # rpl777_df2_addcontact:  {'error': '(myHandle_1420803905) already has 14768174629330216722'}
+        # rpl777_dispcontact:  {'handle': 'myHandle_1420803905', 'NXT': '14768174629330216722', 'pubkey': '0000000000000000000000000000000000000000000000000000000000000000', 'acct': 'NXT-MTSL-LL74-99XV-ESSWT'}
+        # rpl777_df4_removecontact:  {'handle': 'myHandle_1420803905', 'NXT': '14768174629330216722', 'pubkey': '0000000000000000000000000000000000000000000000000000000000000000', 'acct': 'NXT-MTSL-LL74-99XV-ESSWT'}
+
+
+
+
+    def periodic(self, ):
+        """ This is the method that is called periodically by the twisted loopingTask.
+         It iterates over all schedules in the UseCase class, checks if they are due to be called,
+         adds the ones due to a list and passes that list on to runSchedules(). """#
+
+        schedulesDue =[]
+        #
+        # log.msg("pongers:")
+        # for ponger in self.pongers.keys():
+        #     log.msg(ponger, " - ", self.pongers[ponger])
+
+        log.msg("havenoders:", len(self.havenoders)   )
+
+        log.msg("num pongers: ", len(self.pongers.keys()))
+
+
+        # STOP condition check
+        if self.removecontacts  > 2 :
+
+             self.stopDaemon = True
+
+
+        if  self.stopDaemon:
+            log.msg(1*" STOP UC8 finish OK")
+            self.superNET_daemon.stopUC8(True)
+
+        #--------------------------------------
+        for schedule in self.schedules.keys():
+            schedule = self.schedules[schedule]
+
+            if schedule.callMe():
+                schedulesDue.append(schedule)
+
+        self.runSchedules(schedulesDue)
+
+
+
+    def runSchedules(self,schedulesDue):
+        """ here we get through all the due schedules and call them on SuperNET server
+             Here we explicitly check the name and send them to the first callback of their callback sequence."""#
+
+        for schedDue in schedulesDue:
+
+            if 'GUIpoll' in schedDue.SNrequests.keys():
+                reqData = schedDue.SNrequests['GUIpoll']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_GUIpoll)
+                self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'uc_settings' in schedDue.SNrequests.keys():
+                reqData1 = schedDue.SNrequests['uc_settings']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_settings)
+                self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'uc_getpeers' in schedDue.SNrequests.keys():
+                reqData1 = schedDue.SNrequests['uc_getpeers']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_getpeers)
+                self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_GUIpoll(self, dataFrom777):
+        """
+
+         """#
+        rpl777=dataFrom777.json()
+        if 'nothing pending' in str(rpl777):
+            log.msg(1*"GUIpoll : ",rpl777  ) #pass#
+        elif 'kademlia_pong' in str(rpl777):
+            self.rpl777_GUIpoll_kademlia_pong(rpl777)
+        elif 'kademlia_havenode' in str(rpl777):
+            self.rpl777_GUIpoll_kademlia_havenode(rpl777)
+        else:
+            #log.msg(1*"GUIpoll ---> misc.  ", rpl777, type(rpl777))
+            log.msg(1*"GUIpoll ---> misc.  ", )
+
+        return 0
+
+
+
+    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
+        """
+
+        see PONG details in snAppy_doku
+
+        """#
+
+        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            args = rpl777['args']
+            rpl777 = rpl777['result']
+            rpl777 = json.loads(rpl777)
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            rplArgs = json.loads(args) # <class 'list'> !!
+            rplArgsRQ = rplArgs[0] # <class 'dict'>
+            rplArgsTK = rplArgs[1]   #<class 'dict'>
+        except Exception as e:
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+            requestType= rplArgsRQ['requestType']
+            ver =rplArgsRQ['ver']
+            yourip =rplArgsRQ['yourip']
+            yourport =rplArgsRQ['yourport']
+
+            NXT =rplArgsRQ['NXT']
+            time =rplArgsRQ['time']
+            ipaddr =rplArgsRQ['ipaddr']
+
+        except Exception as e:
+            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rplArgsRQ {0}".format(str(e)))
+
+        try:
+            port =  rpl777['port']
+            numpings =  rpl777['numpings']
+            lag  =  rpl777['lag']
+            ipaddr  = rpl777['ipaddr']
+            numpongs =  rpl777['numpongs']
+            result =   rpl777['result']
+            ave  =  rpl777['ave']
+            NXT  = rpl777['NXT']
+            #
+            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
+
+        except Exception as e:
+            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777 {0}".format(str(e)))
+
+        #log.msg("pongers: ", (self.pongers),"\n")
+
+        if not ipaddr  in self.pongers.keys():
+            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
+
+            if ipaddr == '<nullstr>':
+                print(12*"\n###########", rpl777)
+
+            self.pongers[ipaddr] =  rpl777
+
+        #log.msg("num pongers: ", len(self.pongers.keys()))
+
+
+
+
+    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
+        """
+
+
+
+
+    """#
+
+        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
+
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            rplArgs = rpl777['args']
+            result = rpl777['result'] #'result': '{"result":"kademlia_havenode from NXT.13594896385051583735 key.(1978065578067355462) value.([["1978065578067355462", "89.212.19.49", "7777", "1418404057"], ["4
+            # result is the internal raw string part
+            try:
+                rplArgsLi=json.loads(rplArgs)
+
+                token = rplArgsLi[1]
+                rplArgs = rplArgsLi[0]
+                #
+                fromNXT = rplArgs['NXT']
+                requestType = rplArgs['requestType']
+                data = rplArgs['data']
+                key = rplArgs['key']
+                time1 = rplArgs['time']
+                peersList = rplArgs['data']
+                #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
+
+
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("args NOT ok",rplArgs, type(rplArgs))
+
+            try:
+                rpl777 = rpl777['result'] # this is a string!
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("rpl777 NOT ok",rpl777, type(rpl777))
+
+            #log.msg("\nGUIpoll -+--> kademlia_havenode rpl777",rpl777, type(rpl777),"\n")
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
+
+
+        for peer in peersList:
+        #            ping and findnode!
+
+            if peer[1] not in self.peersDiLoc.keys():
+                self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
+                log.msg(1*" NEW PEER FOR LOCAL LIST:", peer)
+
+
+        log.msg("GUIpoll ---> kademlia_havenode from ", fromNXT, " -- " , fromIp)
+
+        log.msg(1*"              local peers :", len(self.peersDiLoc))
+        log.msg(1*"              local havenoders :", len(self.havenoders))
+
+        num_havenoders =  len(self.havenoders)
+        #
+        # for peer in self.peersDiLoc.keys():
+        #     log.msg(peer, " - ", self.peersDiLoc[peer] )
+
+        if not fromNXT  in self.havenoders.keys():
+            log.msg("new havenoder:", fromNXT)
+            self.havenoders[fromNXT] =  rpl777
+
+
+
+        # WORKING API CALL HERE! ADDCONTACT
+        self.testRQ_addcontact['acct'] = fromNXT
+        self.testRQ_addcontact['handle'] = "myHandle_" + str(time.time())
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_addcontact), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df2_addcontact)
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+        # WORKING API CALL HERE! - DISPACONTACT (all)
+        self.testRQ_dispcontact['contact'] = "*"
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_dispcontact), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df3_dispcontact)
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    #      {"error":"(myHan1) acct.(8128620123513482991) has no pubkey.(0000000000000000000000000000000000000000000000000000000000000000)","RS":"NXT-TVRH-XXJ3-PPP8-9APM3"}
+        # rpl777_dispcontact:  {'handle': 'myHandle_1420820143.4665258', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'NXT': '1978065578067355462', 'acct': 'NXT-5TU8-78XL-W2CW-32WWQ'}
+
+
+    def UC_spefifics(self):
+        """
+        self.testRQ_addcontact =  {'requestType':'addcontact'}           1
+        self.testRQ_dispcontact =  {'requestType':'dispcontact'}         2
+        self.testRQ_removecontact =  {'requestType':'removecontact'}     3
+
+
+        """#
+
+        pass
+
+
+
+    def  rpl777_df2_addcontact(self, dataFrom777):
+        repl=dataFrom777.json()
+        self.addcontacts += 1
+        log.msg(1*"\nrpl777_df2_addcontact: ", repl,  "\nself.addcontacts: ", self.addcontacts)
+
+
+        self.testRQ_dispcontact['contact'] = "*" # does ALL!
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_dispcontact), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df3_dispcontact)
+        self.deferred.addErrback(self.rpl777ERR)
+
+        #self.contacts
+
+        if 'error' in repl.keys():
+            errMsg = repl['error']
+
+            errHandle = errMsg.split()[0]
+            errHandle.lstrip('(')
+            errHandle.rstrip(')')
+            errAcc = errMsg.split()[-1]
+
+            log.msg("already has handle- going to dispcontact: ",errAcc)
+
+            log.msg("errHandle", errHandle)
+
+            self.testRQ_dispcontact =  {'requestType':'dispcontact'}
+            self.testRQ_removecontact =  {'requestType':'removecontact'}
+
+
+
+        else:
+            log.msg("5*\nadded new contact: ",repl, type(repl ) )
+
+
+
+
+
+    def rpl777_df3_dispcontact(self, dataFrom777):
+        rpl777=dataFrom777.json()
+        self.dispcontacts += 1
+        log.msg(1*"\nrpl777_dispcontact ")#
+
+        # ok:  rpl777_dispcontact:  {'acct': 'NXT-MTSL-LL74-99XV-ESSWT', 'handle': 'myHandle_1420803905', 'NXT': '14768174629330216722', 'pubkey': '0000000000000000000000000000000000000000000000000000000000000000'}
+
+        for contact in rpl777:
+            log.msg(contact)
+
+
+            self.contactHandles[contact['handle']] = contact
+            self.contactNXTs[contact['NXT']] = contact
+
+
+
+
+#        self.testRQ_removecontact =  {'requestType':'removecontact'}
+
+
+        log.msg(self.contactHandles)
+
+        if len(self.contactHandles) >5:
+
+            # WORKING API CALL HERE! - remove topmost entry of all contacts
+            self.testRQ_removecontact['contact'] = rpl777[0]['handle']
+
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_removecontact), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df4_removecontact)
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def  rpl777_df4_removecontact(self, dataFrom777):
+        repl=dataFrom777.json()
+
+        if 'result' in repl.keys():
+
+            self.removecontacts += 1
+
+            #rpl777_df4_removecontact:  {'result': 'handle.(myHandle_1420969468.6852322) deleted'}
+
+
+
+            log.msg(1*"\nrpl777_df4_removecontact: ", repl , "\nself.removecontacts: ", self.removecontacts)
+        else:
+            log.msg(1*"\nrpl777_df4_removecontact: ", repl , "\nself.removecontacts: ", self.removecontacts)
+
+
+
+
+
+
+
+
+    def rpl777_df1_settings(self, dataFrom777): #these are the basic pings from the whitlist
+        """
+         this sends pings
+
+          """#
+        repl=dataFrom777.json()
+
+        ipsToPing=repl['whitelist'] #[0] # singlecheck
+
+        log.msg(1*"ping to whitelist:")#, reqPing['destip'])
+        for node in ipsToPing:
+            self.reqPing['destip']=node
+            sleep(0.25)
+            #log.msg("ping to whitelist:", reqPing['destip'])
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_df1_getpeers(self, dataFrom777):
+        """
+
+
+        """#
+
+        repl=dataFrom777.json()
+
+        Numnxtaccts = repl['Numnxtaccts']
+        peers = repl['peers']
+        Numpservers = repl['Numpservers']
+        num = repl['num']
+        log.msg("Numnxtaccts", Numnxtaccts)
+        #log.msg("peers", peers)
+        log.msg("Numpservers", Numpservers)
+        log.msg("num", num)
+
+
+        for peer in peers[2:]:
+            #log.msg(1*"\n\npeer:", peer, type(peer))
+            ipaddr = peer['srvipaddr']
+            self.reqPing['destip'] = ipaddr
+
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
+
+            pserv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            sleep(0.25)
+            self.reqFindnode['key']=srvNXT
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqFindnode), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_findnode )
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_df2_ping(self, dataFrom777):
+        """
+
+
+        """#
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        #log.msg( 1 * "ping sent", repl)
+
+
+
+    def rpl777_df2_findnode(self, dataFrom777):
+
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        #log.msg( 1 * "rpl777_df2_findnode sent", repl)
+
+
+
+
+    def rpl777ERR(self, ERR777): # ERR777 is of type exception
+
+        log.msg("ERR777 UC8", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
+        raise RuntimeError(ERR777.printDetailedTraceback())
+
+
+
+#
+#
+#
+# Issued this command from A: ./BitcoinDarkd SuperNET '{"requestType":"addcontact","handle":"VPSCRACK","acct":"NXT-VSVF-FFF5-M4EX-8YUB7"}'
+#
+# Output from same terminal where you issued the command:
+# Quote
+# {"result":"(VPSCRACK) acct.(NXT-VSVF-FFF5-M4EX-8YUB7) (7108754351996134253) has pubkey.(9e33da1c9ac00d376832cf3c9293dfb21d055d76e1c446449f0672fd688a237f)"}
+#
+#
+#
+# Issued this command from A: ./BitcoinDarkd SuperNET '{"requestType":"removecontact","contact":"VPSCRACK"}'
+#
+# Output from same terminal where you issued the command:
+# Quote
+# {"result":"handle.(VPSCRACK) deleted"}
+#
+#
+
+
+
+
+
+
+
+
+
+class UC9_getdb(object):
+    """
+       SuperNET calls used here:
+
+       settings
+       getpeers
+       GUIpoll
+       pong
+       ping
+       havenode
+       findnode
+
+addcontact
+dispcontact
+removecontact
+
+
+getdb
+
+
+
+maintenance calls to init main testing call(s):
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
+
+./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
+
+
+./BitcoinDarkd  SuperNET '{"requestType":"addcontact","handle":"myHan1","acct":"8128620123513482991"}'
+
+{"error":"(myHan1) acct.(8128620123513482991) has no pubkey.(0000000000000000000000000000000000000000000000000000000000000000)","RS":"NXT-TVRH-XXJ3-PPP8-9APM3"}
+
+
+./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"myHan1"}'
+
+./BitcoinDarkd  SuperNET '{"requestType":"removecontact","contact":"myHan1"}'
+
+
+
+./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"myHandle_1420800412"}'
+
+./BitcoinDarkd  SuperNET '{"requestType":"getdb","contact":"myHan1","id":"","key":"","dir":"","destip":"108.46.179.78"}'
+
+
+
+
+this is when dispconact succeeds:
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dispcontact&contact=myHandle_1420800412'
+{'acct': 'NXT-VT9R-9GYM-YLJF-D8QCT', 'pubkey': '0000000000000000000000000000000000000000000000000000000000000000', 'NXT': '13594896385051583735', 'handle': 'myHandle_1420800412'}
+
+
+
+    static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V",  "handle", "acct", 0 };
+    static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V",  "contact", 0 };
+    static char *dispcontact[] = { (char *)dispcontact_func, "dispcontact", "V",  "contact", 0 };
+    static char *getdb[] = { (char *)getdb_func, "getdb", "V",  "contact", "id", "key", "dir", "destip", 0 };
+
+
+
+
+./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"116876777391303227"}'
+
+jl777 [7:37 PM]
+getdb is one of simplest calls
+
+add destip to query remote node's public store
+
+the other fields are for advanced cases, need the simple ones working first
+
+./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"4551058913252105307"}'
+
+orderbooks is also pretty simple, just flip the baseid and relid to flip the orderbook
+
+makeoffer needs the MMatrix in place to work properly, so not ready for testing yet
+
+
+
+       """#
+
+
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
+         #  also hand in 'self' here as a means to stop self
+        # log.msg(superNET_daemon)
+
+        self.environ = environ
+        self.schedules = {}    # this contains the schedules
+        self.superNET_daemon = superNET_daemon
+
+        self.stopDaemon = False
+
+        # local state information UC dependent
+        self.pongers = {}    #  LOCAL AUXILIARY REGISTER
+        self.havenoders = {} #  LOCAL AUXILIARY REGISTER
+        self.peersDiLoc = {}
+
         self.addcontacts = 0
         self.dispcontacts = 0
-        self.removecontacts = 0
+
+
+        self.reqPing = {'requestType':'ping'}
+        self.reqFindnode = {'requestType':'findnode'}
+        self.testRQ_addcontact =  {'requestType':'addcontact'}
+        self.testRQ_dispcontact =  {'requestType':'dispcontact'}
+        self.testRQ_removecontact =  {'requestType':'removecontact'}
+
 
 
         prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
@@ -4086,8 +4687,21 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dis
             self.deferred.addErrback(self.rpl777ERR)
 
 
-      #      {"error":"(myHan1) acct.(8128620123513482991) has no pubkey.(0000000000000000000000000000000000000000000000000000000000000000)","RS":"NXT-TVRH-XXJ3-PPP8-9APM3"}
-# rpl777_dispcontact:  {'handle': 'myHandle_1420820143.4665258', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'NXT': '1978065578067355462', 'acct': 'NXT-5TU8-78XL-W2CW-32WWQ'}
+    #      {"error":"(myHan1) acct.(8128620123513482991) has no pubkey.(0000000000000000000000000000000000000000000000000000000000000000)","RS":"NXT-TVRH-XXJ3-PPP8-9APM3"}
+    # rpl777_dispcontact:  {'handle': 'myHandle_1420820143.4665258', 'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'NXT': '1978065578067355462', 'acct': 'NXT-5TU8-78XL-W2CW-32WWQ'}
+
+
+    def UC_spefifics(self):
+        """
+        self.testRQ_addcontact =  {'requestType':'addcontact'}           1
+        self.testRQ_dispcontact =  {'requestType':'dispcontact'}         2
+
+       getDB
+
+        """#
+
+        pass
+
 
 
     def  rpl777_df2_addcontact(self, dataFrom777):
@@ -4130,13 +4744,21 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dis
         repl=dataFrom777.json()
         self.dispcontacts += 1
         log.msg(1*"\nrpl777_dispcontact: ", repl)
-# print(rpl777)
-# ok:  rpl777_dispcontact:  {'acct': 'NXT-MTSL-LL74-99XV-ESSWT', 'handle': 'myHandle_1420803905', 'NXT': '14768174629330216722', 'pubkey': '0000000000000000000000000000000000000000000000000000000000000000'}
 
-        removeAcct = repl['NXT']
 
-# remove!
+    # ok:  rpl777_dispcontact:
+    #  {
+    # 'acct': 'NXT-MTSL-LL74-99XV-ESSWT',
+    # 'handle': 'myHandle_1420803905',
+    # 'NXT': '14768174629330216722',
+    # 'pubkey': '0000000000000000000000000000000000000000000000000000000000000000' }
 
+        #removeAcct = repl['NXT']
+
+
+
+        for contact in self.contacts:
+            print(contact ," - ", self.contacts[contact])
 
 #        self.testRQ_removecontact =  {'requestType':'removecontact'}
 
@@ -4319,440 +4941,17 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dis
         raise RuntimeError(ERR777.printDetailedTraceback())
 
 
-
 #
 #
 #
-# Issued this command from A: ./BitcoinDarkd SuperNET '{"requestType":"addcontact","handle":"VPSCRACK","acct":"NXT-VSVF-FFF5-M4EX-8YUB7"}'
 #
-# Output from same terminal where you issued the command:
-# Quote
-# {"result":"(VPSCRACK) acct.(NXT-VSVF-FFF5-M4EX-8YUB7) (7108754351996134253) has pubkey.(9e33da1c9ac00d376832cf3c9293dfb21d055d76e1c446449f0672fd688a237f)"}
+#  ./BitcoinDarkd SuperNET '{"requestType":"pricedb","exchange":"bter","base":"BTCD","rel":"BTC"}'
+# PRICEDB.(bter.BTCD_BTC) stopflag.0
 #
+# azure@boxfish:~/workbench/nxtDev/TEAM/btcd/libjl777$ ./BitcoinDarkd SuperNET '{"requestType":"getquotes","exchange":"bter","base":"BTCD","rel":"BTC"}'
+# {"dbname":"bter.btcd_btc","exchange":"bter","base":"BTCD","rel":"BTC","oldest":0,"hbla":[[1421504076, 0.00409424, 0.00423796]]}
+# azure@boxfish:~/workbench/nxtDev/TEAM/btcd/libjl777$
 #
-#
-# Issued this command from A: ./BitcoinDarkd SuperNET '{"requestType":"removecontact","contact":"VPSCRACK"}'
-#
-# Output from same terminal where you issued the command:
-# Quote
-# {"result":"handle.(VPSCRACK) deleted"}
-#
-#
-
-
-
-
-
-
-
-
-class UC9_getdb(object):
-    """
-       SuperNET calls used here:
-
-       settings
-       getpeers
-       GUIpoll
-       pong
-       ping
-       havenode
-       findnode
-
-
-maintenance calls to init main testing call(s):
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
-
-./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
-./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
-
-
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=findnode&key=14768174629330216722'
-GUIpoll ---> kademlia_havenode from  14768174629330216722  --  89.248.160.239
-
-
-
-  {'error': '(myHandle_1420820143.4665258) already has 1978065578067355462'}
-
-
-./BitcoinDarkd  SuperNET '{"requestType":"removecontact","contact":"myHan1"}'
-
-
-./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"myHandle_1420800412"}'
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dispcontact&contact=myHandle_1420800412'
-
-{"handle":"myHandle_1420800412","acct":"NXT-VT9R-9GYM-YLJF-D8QCT","NXT":"13594896385051583735","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"}
-
-
-
-./BitcoinDarkd  SuperNET '{"requestType":"getdb","contact":"myHan1","id":"","key":"","dir":"","destip":"108.46.179.78"}'
-
-
-
-curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getdb&key=14768174629330216722'
-
-
-
-
-
-       """#
-
-
-    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
-         #  also hand in 'self' here as a means to stop self
-        # log.msg(superNET_daemon)
-
-        self.environ = environ
-        self.schedules = {}    # this contains the schedules
-        self.superNET_daemon = superNET_daemon
-
-        self.stopDaemon = False
-
-        # local state information UC dependent
-        self.pongers =  {} # LOCAL AUXILIARY REGISTER
-        self.havenoders =  {} #  LOCAL AUXILIARY REGISTER
-        self.peersDiLoc = {}
-
-        self.reqPing = {'requestType':'ping'}
-        self.reqFindnode = {'requestType':'findnode'}
-
-
-        prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
-        for sched in prepSchedules.keys():
-            sched = prepSchedules[sched]
-            self.schedules[ sched['schedName']] = Schedule( sched )
-        self.lastCallTime = int(time.time() * 1000)
-
-
-
-    def periodic(self, ):
-        """ This is the method that is called periodically by the twisted loopingTask.
-         It iterates over all schedules in the UseCase class, checks if they are due to be called,
-         adds the ones due to a list and passes that list on to runSchedules(). """#
-
-        schedulesDue =[]
-        #
-        # log.msg("pongers:")
-        # for ponger in self.pongers.keys():
-        #     log.msg(ponger, " - ", self.pongers[ponger])
-
-        log.msg("havenoders:", len(self.havenoders)   )
-        for havenoder in self.havenoders.keys():
-            log.msg(havenoder, " - ", self.havenoders[havenoder])
-
-
-
-        # STOP condition check
-        if ( len(self.havenoders.keys())  > 1 and len(self.havenoders.keys()) > 1 ):
-             self.stopDaemon = True
-
-        if  self.stopDaemon:
-            log.msg(1*" STOP UCx  finish OK")
-            self.superNET_daemon.stopUC2(True)
-
-        #--------------------------------------
-        for schedule in self.schedules.keys():
-            schedule = self.schedules[schedule]
-
-            if schedule.callMe():
-                schedulesDue.append(schedule)
-
-        self.runSchedules(schedulesDue)
-
-
-
-    def runSchedules(self,schedulesDue):
-        """ here we get through all the due schedules and call them on SuperNET server
-             Here we explicitly check the name and send them to the first callback of their callback sequence."""#
-
-        for schedDue in schedulesDue:
-
-            if 'GUIpoll' in schedDue.SNrequests.keys():
-                reqData = schedDue.SNrequests['GUIpoll']
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
-                self.deferred.addCallback(self.rpl777_GUIpoll)
-                self.deferred.addErrback(self.rpl777ERR)
-
-            elif 'uc_settings' in schedDue.SNrequests.keys():
-                reqData1 = schedDue.SNrequests['uc_settings']
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
-                self.deferred.addCallback(self.rpl777_df1_settings)
-                self.deferred.addErrback(self.rpl777ERR)
-
-            elif 'uc_getpeers' in schedDue.SNrequests.keys():
-                reqData1 = schedDue.SNrequests['uc_getpeers']
-                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
-                self.deferred.addCallback(self.rpl777_df1_getpeers)
-                self.deferred.addErrback(self.rpl777ERR)
-
-
-
-    def rpl777_GUIpoll(self, dataFrom777):
-        """
-
-         """#
-        rpl777=dataFrom777.json()
-        if 'nothing pending' in str(rpl777):
-            log.msg(1*"GUIpoll : ",rpl777  ) #pass#
-        elif 'kademlia_pong' in str(rpl777):
-            self.rpl777_GUIpoll_kademlia_pong(rpl777)
-        elif 'kademlia_havenode' in str(rpl777):
-            self.rpl777_GUIpoll_kademlia_havenode(rpl777)
-        else:
-            #log.msg(1*"GUIpoll ---> misc.  ", rpl777, type(rpl777))
-            log.msg(1*"GUIpoll ---> misc.  ", )
-
-        return 0
-
-
-
-
-
-    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
-        """
-
-
-
-
-    """#
-
-        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
-
-
-        try:
-            fromIp = rpl777['from']
-            port = rpl777['port']
-            rplArgs = rpl777['args']
-            result = rpl777['result'] #'result': '{"result":"kademlia_havenode from NXT.13594896385051583735 key.(1978065578067355462) value.([["1978065578067355462", "89.212.19.49", "7777", "1418404057"], ["4
-            # result is the internal raw string part
-            try:
-                rplArgsLi=json.loads(rplArgs)
-
-                token = rplArgsLi[1]
-                rplArgs = rplArgsLi[0]
-                #
-                fromNXT = rplArgs['NXT']
-                requestType = rplArgs['requestType']
-                data = rplArgs['data']
-                key = rplArgs['key']
-                time = rplArgs['time']
-                peersList = rplArgs['data']
-                #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
-
-
-            except Exception as e:
-                log.msg("Error args {0}".format(str(e)))
-                log.msg("args NOT ok",rplArgs, type(rplArgs))
-
-            try:
-                rpl777 = rpl777['result'] # this is a string!
-            except Exception as e:
-                log.msg("Error args {0}".format(str(e)))
-                log.msg("rpl777 NOT ok",rpl777, type(rpl777))
-
-            #log.msg("\nGUIpoll -+--> kademlia_havenode rpl777",rpl777, type(rpl777),"\n")
-
-        except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
-
-
-
-        for peer in peersList:
-        #            ping and findnode!
-
-            if peer[1] not in self.peersDiLoc.keys():
-                self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
-                log.msg(1*" NEW PEER FOR LOCAL LIST:", peer)
-
-
-        log.msg("GUIpoll ---> kademlia_havenode from ", fromNXT, " -- " , fromIp)
-
-
-        log.msg(1*"              local peers :", len(self.peersDiLoc))
-        log.msg(1*"              local havenoders :", len(self.havenoders))
-
-        num_havenoders =  len(self.havenoders)
-        #
-        # for peer in self.peersDiLoc.keys():
-        #     log.msg(peer, " - ", self.peersDiLoc[peer] )
-
-        if not fromNXT  in self.havenoders.keys():
-            log.msg("new havenoder:", fromNXT)
-            self.havenoders[fromNXT] =  rpl777
-
-
-
-
-
-
-    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
-        """
-
-        see PONG details in snAppy_doku
-
-        """#
-
-        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
-
-        try:
-            fromIp = rpl777['from']
-            port = rpl777['port']
-            args = rpl777['args']
-            rpl777 = rpl777['result']
-            rpl777 = json.loads(rpl777)
-
-        except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
-
-        try:
-            rplArgs = json.loads(args) # <class 'list'> !!
-            rplArgsRQ = rplArgs[0] # <class 'dict'>
-            rplArgsTK = rplArgs[1]   #<class 'dict'>
-        except Exception as e:
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
-
-        try:
-            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
-            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
-            requestType= rplArgsRQ['requestType']
-            ver =rplArgsRQ['ver']
-            yourip =rplArgsRQ['yourip']
-            yourport =rplArgsRQ['yourport']
-
-            NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
-            ipaddr =rplArgsRQ['ipaddr']
-
-        except Exception as e:
-            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rplArgsRQ {0}".format(str(e)))
-
-        try:
-            port =  rpl777['port']
-            numpings =  rpl777['numpings']
-            lag  =  rpl777['lag']
-            ipaddr  = rpl777['ipaddr']
-            numpongs =  rpl777['numpongs']
-            result =   rpl777['result']
-            ave  =  rpl777['ave']
-            NXT  = rpl777['NXT']
-            #
-            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
-
-        except Exception as e:
-            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777 {0}".format(str(e)))
-
-        #log.msg("pongers: ", (self.pongers),"\n")
-
-        if not ipaddr  in self.pongers.keys():
-            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
-
-            if ipaddr == '<nullstr>':
-                print(12*"\n###########", rpl777)
-
-            self.pongers[ipaddr] =  rpl777
-
-        log.msg("num pongers: ", len(self.pongers.keys()))
-
-
-
-
-    def rpl777_df1_settings(self, dataFrom777): #these are the basic pings from the whitlist
-        """
-         this sends pings
-
-          """#
-        repl=dataFrom777.json()
-
-
-        ipsToPing=repl['whitelist'] #[0] # singlecheck
-        # manual tests:
-        #ipsToPing = 20* ['88.179.105.82'] # ['178.62.185.131'] # stonefish['80.41.56.181'] # ['85.178.202.108']   #
-
-        log.msg(1*"ping to whitelist:")#, reqPing['destip'])
-        for node in ipsToPing:
-            self.reqPing['destip']=node
-            sleep(0.25)
-            #log.msg("ping to whitelist:", reqPing['destip'])
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqPing), headers=POSTHEADERS)
-            self.deferred.addCallback(self.rpl777_df2_ping)
-            self.deferred.addErrback(self.rpl777ERR)
-
-
-
-    def rpl777_df1_getpeers(self, dataFrom777):
-        """
-
-
-        """#
-
-        repl=dataFrom777.json()
-
-        Numnxtaccts = repl['Numnxtaccts']
-        peers = repl['peers']
-        Numpservers = repl['Numpservers']
-        num = repl['num']
-        log.msg("Numnxtaccts", Numnxtaccts)
-        #log.msg("peers", peers)
-        log.msg("Numpservers", Numpservers)
-        log.msg("num", num)
-
-        #reqFindnode = {'requestType':'findnode'}
-
-        reqPing = {'requestType':'ping'}
-
-        for peer in peers[2:]:
-            #log.msg(1*"\n\npeer:", peer, type(peer))
-            ipaddr = peer['srvipaddr']
-            reqPing['destip'] = ipaddr
-
-            # #log.msg("ping to peer:", reqPing['destip'])
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
-            self.deferred.addCallback(self.rpl777_df2_ping)
-            self.deferred.addErrback(self.rpl777ERR)
-
-            pserv = peer['pserver']
-            srvNXT = peer['srvNXT']
-            sleep(0.25)
-            self.reqFindnode['key']=srvNXT
-            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqFindnode), headers=POSTHEADERS)
-            self.deferred.addCallback(self.rpl777_df2_findnode )
-            self.deferred.addErrback(self.rpl777ERR)
-
-
-
-    def rpl777_df2_ping(self, dataFrom777):
-        """
-
-
-        """#
-        repl=dataFrom777.json()
-        repl=dataFrom777.content.decode("utf-8")
-        repl=eval(repl)
-        #log.msg( 1 * "ping sent", repl)
-
-
-
-    def rpl777_df2_findnode(self, dataFrom777):
-
-        repl=dataFrom777.json()
-        repl=dataFrom777.content.decode("utf-8")
-        repl=eval(repl)
-        log.msg( 1 * "rpl777_df2_findnode sent", repl)
-
-
-
-
-    def rpl777ERR(self, ERR777): # ERR777 is of type exception
-
-        log.msg("ERR777 UC2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
-        raise RuntimeError(ERR777.printDetailedTraceback())
 
 
 
@@ -4832,6 +5031,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
 
         self.testRQ_placebid =  {'requestType':'placebid'}
         self.testRQ_placeask =  {'requestType':'placeask'}
+        self.testRQ_orderbook =  {'requestType':'orderbook'}
 
 
         prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
@@ -4946,10 +5146,81 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
 
 
 
-    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
+    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
         """
 
+        see PONG details in snAppy_doku
 
+        """#
+
+        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            args = rpl777['args']
+            rpl777 = rpl777['result']
+            rpl777 = json.loads(rpl777)
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            rplArgs = json.loads(args) # <class 'list'> !!
+            rplArgsRQ = rplArgs[0] # <class 'dict'>
+            rplArgsTK = rplArgs[1]   #<class 'dict'>
+        except Exception as e:
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+            requestType= rplArgsRQ['requestType']
+            ver =rplArgsRQ['ver']
+            yourip =rplArgsRQ['yourip']
+            yourport =rplArgsRQ['yourport']
+
+            NXT =rplArgsRQ['NXT']
+            time =rplArgsRQ['time']
+            ipaddr =rplArgsRQ['ipaddr']
+
+        except Exception as e:
+            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rplArgsRQ {0}".format(str(e)))
+
+        try:
+            port =  rpl777['port']
+            numpings =  rpl777['numpings']
+            lag  =  rpl777['lag']
+            ipaddr  = rpl777['ipaddr']
+            numpongs =  rpl777['numpongs']
+            result =   rpl777['result']
+            ave  =  rpl777['ave']
+            NXT  = rpl777['NXT']
+            #
+            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
+
+        except Exception as e:
+            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777 {0}".format(str(e)))
+
+        #log.msg("pongers: ", (self.pongers),"\n")
+
+        if not ipaddr  in self.pongers.keys():
+            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
+
+            if ipaddr == '<nullstr>':
+                print(12*"\n###########", rpl777)
+
+            self.pongers[ipaddr] =  rpl777
+
+        log.msg("num pongers: ", len(self.pongers.keys()))
+
+
+
+    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
+        """
 
 
     """#
@@ -5025,34 +5296,19 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
     def UC_specifics(self):
 
 
-
-        # SPECIFICS:
-        # self.volumeA = '1.00'
-        # self.priceA = '0.014'
-        #
-        # self.volumeB = '1.00'
-        # self.priceB = '0.004'
-        #
-        # self.baseid = '1106086181814049042'
-        # self.relid = '455105891325210530'
-
-        #
-        # self.baseamount =''
-        # self.relamount =''
-        # self.other =''
-        # self.type =''
-
         self.testRQ_placebid['volume'] = self.volumeA
         self.testRQ_placebid['price'] = self.priceA
         self.testRQ_placebid['baseid'] = self.baseid
         self.testRQ_placebid['relid'] = self.relid
 
 
-
         self.testRQ_placeask['volume'] = self.volumeB
         self.testRQ_placeask['price'] = self.priceB
         self.testRQ_placeask['baseid'] = self.baseid
         self.testRQ_placeask['relid'] = self.relid
+
+        log.msg("placeAB: " , self.testRQ_placeask)
+        log.msg("placeAB: " , self.testRQ_placebid)
 
         sleep(0.25)
 
@@ -5096,77 +5352,31 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
             self.stopDaemonCondition2 = True
 
 
+        self.testRQ_orderbook['relid'] = self.relid
+        self.testRQ_orderbook['baseid'] = self.baseid
 
-    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_orderbook), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_df3_testRQ_orderbook )
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+
+#           orderbook
+
+
+
+
+    def rpl777_df3_testRQ_orderbook(self, dataFrom777): #these are the basic pings from the whitlist
         """
 
-        see PONG details in snAppy_doku
 
-        """#
+          """#
+        repl=dataFrom777.json()
+        log.msg(12*"\norderbook: ", repl)
 
-        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
 
-        try:
-            fromIp = rpl777['from']
-            port = rpl777['port']
-            args = rpl777['args']
-            rpl777 = rpl777['result']
-            rpl777 = json.loads(rpl777)
 
-        except Exception as e:
-            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
-
-        try:
-            rplArgs = json.loads(args) # <class 'list'> !!
-            rplArgsRQ = rplArgs[0] # <class 'dict'>
-            rplArgsTK = rplArgs[1]   #<class 'dict'>
-        except Exception as e:
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
-
-        try:
-            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
-            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
-            requestType= rplArgsRQ['requestType']
-            ver =rplArgsRQ['ver']
-            yourip =rplArgsRQ['yourip']
-            yourport =rplArgsRQ['yourport']
-
-            NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
-            ipaddr =rplArgsRQ['ipaddr']
-
-        except Exception as e:
-            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rplArgsRQ {0}".format(str(e)))
-
-        try:
-            port =  rpl777['port']
-            numpings =  rpl777['numpings']
-            lag  =  rpl777['lag']
-            ipaddr  = rpl777['ipaddr']
-            numpongs =  rpl777['numpongs']
-            result =   rpl777['result']
-            ave  =  rpl777['ave']
-            NXT  = rpl777['NXT']
-            #
-            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
-
-        except Exception as e:
-            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777 {0}".format(str(e)))
-
-        #log.msg("pongers: ", (self.pongers),"\n")
-
-        if not ipaddr  in self.pongers.keys():
-            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
-
-            if ipaddr == '<nullstr>':
-                print(12*"\n###########", rpl777)
-
-            self.pongers[ipaddr] =  rpl777
-
-        log.msg("num pongers: ", len(self.pongers.keys()))
 
 
 
@@ -5261,6 +5471,459 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
 
         log.msg("ERR777 UC2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
         raise RuntimeError(ERR777.printDetailedTraceback())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class UC11_priceDB(object):
+    """
+       SuperNET calls used here:
+
+       settings
+       getpeers
+       GUIpoll
+       pong
+       ping
+       havenode
+       findnode
+
+
+
+
+maintenance calls to init main testing call(s):
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=getpeers'
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
+
+./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
+
+
+       """#
+
+
+    def __init__(self, serverFactory , superNET_daemon , environ = {}, ):
+         #  also hand in 'self' here as a means to stop self
+        # log.msg(superNET_daemon)
+
+        self.environ = environ
+        self.schedules = {}    # this contains the schedules
+        self.superNET_daemon = superNET_daemon
+
+        self.stopDaemon = False
+        self.numRuns = 0
+        # local state information UC dependent
+        self.pongers =  {} # LOCAL AUXILIARY REGISTER
+        self.havenoders =  {} #  LOCAL AUXILIARY REGISTER
+        self.peersDiLoc = {}
+
+        self.reqPing = {'requestType':'ping'}
+        self.reqFindnode = {'requestType':'findnode'}
+
+        self.testRQ_pricedb =  {'requestType':'pricedb'}
+        self.testRQ_getquotes =  {'requestType':'getquotes'}
+
+        self.exchange = "bter"
+        self.base = "BTCD"
+        self.rel = "BTC"
+
+
+        prepSchedules = environ['UCsched_1'] # can use same as UC1 for now- extends it
+        for sched in prepSchedules.keys():
+            sched = prepSchedules[sched]
+            self.schedules[ sched['schedName']] = Schedule( sched )
+        self.lastCallTime = int(time.time() * 1000)
+
+
+
+    def periodic(self, ):
+        """ This is the method that is called periodically by the twisted loopingTask.
+         It iterates over all schedules in the UseCase class, checks if they are due to be called,
+         adds the ones due to a list and passes that list on to runSchedules(). """#
+
+        schedulesDue =[]
+        #
+        # log.msg("pongers:")
+        # for ponger in self.pongers.keys():
+        #     log.msg(ponger, " - ", self.pongers[ponger])
+
+        log.msg("havenoders:", len(self.havenoders)   )
+        for havenoder in self.havenoders.keys():
+            log.msg(havenoder, " - ", self.havenoders[havenoder])
+
+
+
+        # STOP condition check
+        if ( len(self.havenoders.keys())  > 1 and len(self.havenoders.keys()) > 1 ):
+             self.stopDaemon = True
+
+        if  self.stopDaemon:
+            log.msg(1*" STOP UCx  finish OK")
+            self.superNET_daemon.stopUC2(True)
+
+        #--------------------------------------
+        for schedule in self.schedules.keys():
+            schedule = self.schedules[schedule]
+
+            if schedule.callMe():
+                schedulesDue.append(schedule)
+
+        self.runSchedules(schedulesDue)
+
+
+
+    def runSchedules(self,schedulesDue):
+        """ here we get through all the due schedules and call them on SuperNET server
+             Here we explicitly check the name and send them to the first callback of their callback sequence."""#
+
+        for schedDue in schedulesDue:
+
+            if 'GUIpoll' in schedDue.SNrequests.keys():
+                reqData = schedDue.SNrequests['GUIpoll']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_GUIpoll)
+                self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'uc_settings' in schedDue.SNrequests.keys():
+                reqData1 = schedDue.SNrequests['uc_settings']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_settings)
+                self.deferred.addErrback(self.rpl777ERR)
+
+            elif 'uc_getpeers' in schedDue.SNrequests.keys():
+                reqData1 = schedDue.SNrequests['uc_getpeers']
+                self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
+                self.deferred.addCallback(self.rpl777_df1_getpeers)
+                self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_GUIpoll(self, dataFrom777):
+        """
+
+         """#
+        rpl777=dataFrom777.json()
+        if 'nothing pending' in str(rpl777):
+            log.msg(1*"GUIpoll : ",rpl777  ) #pass#
+        elif 'kademlia_pong' in str(rpl777):
+            self.rpl777_GUIpoll_kademlia_pong(rpl777)
+        elif 'kademlia_havenode' in str(rpl777):
+            self.rpl777_GUIpoll_kademlia_havenode(rpl777)
+        else:
+            #log.msg(1*"GUIpoll ---> misc.  ", rpl777, type(rpl777))
+            log.msg(1*"GUIpoll ---> misc.  ", )
+
+        return 0
+
+
+    def rpl777_GUIpoll_kademlia_pong(self, rpl777): #dataFrom777):
+        """
+
+        see PONG details in snAppy_doku
+
+        """#
+
+        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            args = rpl777['args']
+            rpl777 = rpl777['result']
+            rpl777 = json.loads(rpl777)
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            rplArgs = json.loads(args) # <class 'list'> !!
+            rplArgsRQ = rplArgs[0] # <class 'dict'>
+            rplArgsTK = rplArgs[1]   #<class 'dict'>
+        except Exception as e:
+            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+
+        try:
+            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+            requestType= rplArgsRQ['requestType']
+            ver =rplArgsRQ['ver']
+            yourip =rplArgsRQ['yourip']
+            yourport =rplArgsRQ['yourport']
+
+            NXT =rplArgsRQ['NXT']
+            time =rplArgsRQ['time']
+            ipaddr =rplArgsRQ['ipaddr']
+
+        except Exception as e:
+            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rplArgsRQ {0}".format(str(e)))
+
+        try:
+            port =  rpl777['port']
+            numpings =  rpl777['numpings']
+            lag  =  rpl777['lag']
+            ipaddr  = rpl777['ipaddr']
+            numpongs =  rpl777['numpongs']
+            result =   rpl777['result']
+            ave  =  rpl777['ave']
+            NXT  = rpl777['NXT']
+            #
+            #log.msg("GUIpoll ---> rpl777", rpl777,type(rpl777))
+
+        except Exception as e:
+            log.msg("GUIpoll ---> kademlia_pong ERR",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777 {0}".format(str(e)))
+
+        #log.msg("pongers: ", (self.pongers),"\n")
+
+        if not ipaddr  in self.pongers.keys():
+            log.msg("new ponger:", ipaddr) #log.msg(type(ipaddr))
+
+            if ipaddr == '<nullstr>':
+                print(12*"\n###########", rpl777)
+
+            self.pongers[ipaddr] =  rpl777
+
+        log.msg("num pongers: ", len(self.pongers.keys()))
+
+
+
+
+
+    def rpl777_GUIpoll_kademlia_havenode(self, rpl777): #parse777_step1
+        """
+
+either do the spcifics on each havenode OR on the NEW havenoders only
+
+
+    """#
+
+        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
+
+
+        try:
+            fromIp = rpl777['from']
+            port = rpl777['port']
+            rplArgs = rpl777['args']
+            result = rpl777['result'] #'result': '{"result":"kademlia_havenode from NXT.13594896385051583735 key.(1978065578067355462) value.([["1978065578067355462", "89.212.19.49", "7777", "1418404057"], ["4
+            # result is the internal raw string part
+            try:
+                rplArgsLi=json.loads(rplArgs)
+
+                token = rplArgsLi[1]
+                rplArgs = rplArgsLi[0]
+                #
+                fromNXT = rplArgs['NXT']
+                requestType = rplArgs['requestType']
+                data = rplArgs['data']
+                key = rplArgs['key']
+                time = rplArgs['time']
+                peersList = rplArgs['data']
+                #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
+
+
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("args NOT ok",rplArgs, type(rplArgs))
+
+            try:
+                rpl777 = rpl777['result'] # this is a string!
+            except Exception as e:
+                log.msg("Error args {0}".format(str(e)))
+                log.msg("rpl777 NOT ok",rpl777, type(rpl777))
+
+            #log.msg("\nGUIpoll -+--> kademlia_havenode rpl777",rpl777, type(rpl777),"\n")
+
+        except Exception as e:
+            #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
+
+
+
+        for peer in peersList:
+        #            ping and findnode!
+
+            if peer[1] not in self.peersDiLoc.keys():
+                self.peersDiLoc[peer[1]] = peer[0] # add this to the internal list of known nodes
+                log.msg(1*" NEW PEER FOR LOCAL LIST:", peer)
+
+
+        log.msg("GUIpoll ---> kademlia_havenode from ", fromNXT, " -- " , fromIp)
+
+
+        log.msg(1*"              local peers :", len(self.peersDiLoc))
+        log.msg(1*"              local havenoders :", len(self.havenoders))
+
+        num_havenoders =  len(self.havenoders)
+        #
+        # for peer in self.peersDiLoc.keys():
+        #     log.msg(peer, " - ", self.peersDiLoc[peer] )
+
+        if not fromNXT  in self.havenoders.keys():
+            log.msg("new havenoder (UC11):", fromNXT)
+            self.havenoders[fromNXT] =  rpl777
+
+
+        self.testRQ_pricedb['exchange'] = self.exchange
+        self.testRQ_pricedb['base'] = self.base
+        self.testRQ_pricedb['rel'] = self.rel
+
+        #log.msg(self.testRQ_pricedb)
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_pricedb), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_pricedb)
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+
+
+    def UC_spefifics(self):
+        pass
+
+
+
+    def  rpl777_pricedb(self, dataFrom777):
+
+        log.msg(5*"\nrpl777_pricedb ",dataFrom777)
+        try:
+
+            log.msg(5*"\nrpl777_pricedb ",dataFrom777.json())
+            rpl777=dataFrom777.json()
+
+        except:
+
+            log.msg(5*"\nbad json", dataFrom777.content)
+
+        #
+        #
+        self.testRQ_getquotes['exchange'] = self.exchange
+        self.testRQ_getquotes['base'] = self.base
+        self.testRQ_getquotes['rel'] = self.rel
+
+        self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.testRQ_getquotes), headers=POSTHEADERS)
+        self.deferred.addCallback(self.rpl777_getquotes)
+        self.deferred.addErrback(self.rpl777ERR)
+
+
+    def  rpl777_getquotes(self, dataFrom777):
+
+        log.msg(5*"\nrpl777_pricedb ",dataFrom777)
+        try:
+            rpl777=dataFrom777.json()
+            log.msg(5*"\nrpl777_getquotes ", rpl777)
+        except:
+
+            log.msg("bad json:", dataFrom777)
+
+
+
+
+
+
+
+    def rpl777_df1_settings(self, dataFrom777): #these are the basic pings from the whitlist
+        """
+         this sends pings
+
+          """#
+        repl=dataFrom777.json()
+
+
+        ipsToPing=repl['whitelist'] #[0] # singlecheck
+        # manual tests:
+        #ipsToPing = 20* ['88.179.105.82'] # ['178.62.185.131'] # stonefish['80.41.56.181'] # ['85.178.202.108']   #
+
+        log.msg(1*"ping to whitelist:")#, reqPing['destip'])
+        for node in ipsToPing:
+            self.reqPing['destip']=node
+            sleep(0.25)
+            #log.msg("ping to whitelist:", reqPing['destip'])
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_df1_getpeers(self, dataFrom777):
+        """
+
+
+        """#
+
+        repl=dataFrom777.json()
+
+        Numnxtaccts = repl['Numnxtaccts']
+        peers = repl['peers']
+        Numpservers = repl['Numpservers']
+        num = repl['num']
+        log.msg("Numnxtaccts", Numnxtaccts)
+        #log.msg("peers", peers)
+        log.msg("Numpservers", Numpservers)
+        log.msg("num", num)
+
+        #reqFindnode = {'requestType':'findnode'}
+
+        reqPing = {'requestType':'ping'}
+
+        for peer in peers[2:]:
+            #log.msg(1*"\n\npeer:", peer, type(peer))
+            ipaddr = peer['srvipaddr']
+            reqPing['destip'] = ipaddr
+
+            # #log.msg("ping to peer:", reqPing['destip'])
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_ping)
+            self.deferred.addErrback(self.rpl777ERR)
+
+            pserv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            sleep(0.25)
+            self.reqFindnode['key']=srvNXT
+            self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(self.reqFindnode), headers=POSTHEADERS)
+            self.deferred.addCallback(self.rpl777_df2_findnode )
+            self.deferred.addErrback(self.rpl777ERR)
+
+
+
+    def rpl777_df2_ping(self, dataFrom777):
+        """
+
+
+        """#
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        #log.msg( 1 * "ping sent", repl)
+
+
+
+    def rpl777_df2_findnode(self, dataFrom777):
+
+        repl=dataFrom777.json()
+        repl=dataFrom777.content.decode("utf-8")
+        repl=eval(repl)
+        log.msg( 1 * "rpl777_df2_findnode sent", repl)
+
+
+
+
+    def rpl777ERR(self, ERR777): # ERR777 is of type exception
+
+        log.msg("ERR777 UC2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
+        raise RuntimeError(ERR777.printDetailedTraceback())
+
+
 
 
 

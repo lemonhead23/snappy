@@ -450,7 +450,7 @@ class SuperNETApiD(Daemon3): #object):
     UCs = [
             'start', 'stop', 'restart',
             'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
-            'UC7', 'UC8',    'UC10',
+            'UC7', 'UC8', 'UC9', 'UC10', 'UC11',
             ]
 
 
@@ -505,26 +505,11 @@ class SuperNETApiD(Daemon3): #object):
 
 
         if UC in self.UCs:
+            print("UC9 - 0")
             self.initUC(UC)
         else:
             log.msg("UC name error")
-        #
-        # if UC == 'UC1':
-        #     self.initUC(UC)
-        # elif UC == 'UC2':
-        #     self.initUC(UC)
-        # elif UC == 'UC3':
-        #     self.initUC(UC)
-        # elif UC == 'UC4':
-        #     self.initUC(UC)
-        # elif UC == 'UC5':
-        #     self.initUC(UC)
-        # elif UC == 'UC6':
-        #     self.initUC(UC)
-        # elif UC == 'UC7':
-        #     self.initUC(UC)
-        # elif UC == 'UC8':
-        #     self.initUC(UC)
+
 
         log.msg("initUC() done. starting reactor.run()")
         reactor.run()
@@ -556,9 +541,13 @@ class SuperNETApiD(Daemon3): #object):
             self.startUC7()
         elif UC == 'UC8':
             self.startUC8()
-
+        elif UC == 'UC9':
+            self.startUC9()
         elif UC == 'UC10':
             self.startUC10()
+        elif UC == 'UC11':
+            self.startUC11()
+
         else:
             log.msg("UC name error")
 
@@ -708,8 +697,8 @@ class SuperNETApiD(Daemon3): #object):
         log.msg(5*"\n\n                           STOP UC6 with result:  ", result, "\n")
         self.timer6.stop( )
         log.msg("STOP snappyDaemon")
-        self.stop()
-        #self.startUC7()
+        #self.stop()
+        self.startUC7()
 
 
 
@@ -767,6 +756,33 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
+
+
+    def startUC9(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC9")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc9_getdb = UC9_getdb(serverFactory, self,  self.environ )
+
+        self.timer9 = task.LoopingCall(uc9_getdb.periodic,  )
+        self.timer9.start( TIMER_850 , now=True )
+
+    def stopUC9(self,result):
+        log.msg(5*"\n\n                           STOP UC9 with result:  ", result, "\n")
+        self.timer9.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+
+
     def startUC10(self):
         log.startLogging(sys.stdout)
         serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
@@ -792,6 +808,30 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
+    def startUC11(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC11")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc11_priceDB  = UC11_priceDB(serverFactory, self,  self.environ )
+
+        self.timer11 = task.LoopingCall(uc11_priceDB.periodic,  )
+        self.timer11.start( TIMER_850 , now=True )
+
+    def stopUC11(self,result):
+        log.msg(5*"\n\n                           STOP UC11 with result:  ", result, "\n")
+        self.timer11.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+
 
 
 if __name__ == "__main__":
@@ -812,7 +852,7 @@ if __name__ == "__main__":
     UCs = [
             'start', 'stop', 'restart',
             'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
-            'UC7', 'UC8', 'UC10'
+            'UC7', 'UC8','UC9', 'UC10', 'UC11',
             ]
 
 

@@ -1114,7 +1114,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=fin
 ./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
 {"requestType":"dbret","NXT":"2131686659786462901","key":"1031470952125437106","data":"c0ffee"}
 
-
+192.99.151.160
 
 
 jl777 [6:23 PM]
@@ -1382,6 +1382,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=hav
 ------------------------------------------------------------------------------------------
 
 
+
                                             findaddress
 
 17
@@ -1392,7 +1393,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=hav
 
 
 
-./BitcoinDarkd  SuperNET '{"requestType":"findaddress","refaddr":"10694781281555936856","numthreads":2,"duration":20000,"dist":28}'
+./BitcoinDarkd  SuperNET '{"requestType":"findaddress","refaddr":"7295734703995477934","numthreads":2,"duration":20000,"dist":28}'
 
 
 
@@ -1401,10 +1402,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=fin
 
 
 
+8016556209183334821
 
+(2131686659786462901) previp.() key.(1978065578067355462) d
 
-
-./BitcoinDarkd SuperNET '{"requestType":"findaddress","refaddr":"2131686659786462901","dist":24,"numthreads":20,"duration":6000,"list":["13434315136155299987","8894667849638377372","10694781281555936856","18429876966171494368","16163006958863727986","1838354277347686608","17572279667799017517","14815310753561302584"]}'
+./BitcoinDarkd SuperNET '{"requestType":"findaddress","refaddr":"2131686659786462901","dist":24,"numthreads":20,"duration":6000,"list":["1978065578067355462"]}'
 
 
 
@@ -1413,8 +1415,8 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=fin
 The refaddr is your privacyServer's NXT address, dist is the distance in bits (after xor),
 
 
-
 numthreads is the number of parallel tasks doing the search, duration is in seconds and list is the reference list of public server addressees
+
 
 This will run in the background until the time runs out and it will print out a password and stats for your super private account.
 
@@ -2038,8 +2040,6 @@ Report to moderator   Logged
 
 
 
-21
-
     static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
 
 
@@ -2060,16 +2060,13 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
 
 
 
-22 call_NOT_TESTED
-
     static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V",  "handle", "acct", 0 };
 
-# ./BitcoinDarkd  SuperNET '{"requestType":"addcontact","handle":"jl777","acct":"NXT-P3K3-M9XB-5MDG-DVNT8"}'
-# ./BitcoinDarkd  SuperNET '{"requestType":"addcontact","handle":"s2","acct":"482478496576188177"}'
-
-# ./BitcoinDarkd  SuperNET '{"requestType":"addcontact","handle":"s2","acct":"482478496576188177"}'
 
 
+
+ ./BitcoinDarkd  SuperNET '{"requestType":"addcontact","handle":"l8TestHandle","acct":"1978065578067355462"}'
+{"error":"(myHandle_1420820143.4665258) already has 1978065578067355462"}
 
 
 ------------------------------------------------------------------------------------------
@@ -2079,7 +2076,6 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
                                                     removecontact
 
 
-23 call_NOT_TESTED
 
     static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V",  "contact", 0 };
 # ./BitcoinDarkd  SuperNET '{"requestType":"removecontact","handle":"jl777"}'
@@ -2088,16 +2084,27 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
 ------------------------------------------------------------------------------------------
 
 
-
+myHandle_1420820143.4665258
                                                 dispcontact
 
-24 call_NOT_TESTED
 
     static char *dispcontact[] = { (char *)dispcontact_func, "dispcontact", "V",  "contact", 0 };
 
-# ./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"jl777"}'
-# ./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"myhandle"}'
-# ./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"*"}'
+ ./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"jl777"}'
+ ./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"myhandle"}'
+ ./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"*"}'
+
+./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"myHandle_1420820143.4665258"}'
+
+
+./BitcoinDarkd  SuperNET '{"requestType":"dispcontact","contact":"*"}'
+
+[{"handle":"myHan1","acct":"NXT-TVRH-XXJ3-PPP8-9APM3","NXT":"8128620123513482991","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420800411","acct":"NXT-WXJV-AFNK-YW5D-6S95W","NXT":"5624143003089008155","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420800417","acct":"NXT-EZJ4-8F5T-8VX4-FVCB7","NXT":"15178638394924629506","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420803904","acct":"NXT-4SKN-SBG3-M9JT-98NFW","NXT":"9094604666847715892","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420820141.7786758","acct":"NXT-JNLE-Q9XW-MG8P-7GQKE","NXT":"6216883599460291148","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420820143.4665258","acct":"NXT-5TU8-78XL-W2CW-32WWQ","NXT":"1978065578067355462","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40"},{"handle":"myHandle_1420820147.725082","acct":"NXT-TTRG-JE5K-RA8A-EXFW8","NXT":"14083245880221951726","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420820151.9703877","acct":"NXT-VSVF-FFF5-M4EX-8YUB7","NXT":"7108754351996134253","pubkey":"9e33da1c9ac00d376832cf3c9293dfb21d055d76e1c446449f0672fd688a237f"},{"handle":"myHandle_1420800410","acct":"NXT-TZ4T-KMPK-43FS-3FWKK","NXT":"1785551413655174233","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420800412","acct":"NXT-VT9R-9GYM-YLJF-D8QCT","NXT":"13594896385051583735","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420800414","acct":"NXT-Y252-DJ7Q-HFWD-67ALE","NXT":"5064585148841787488","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420803903","acct":"NXT-5BMM-KYT7-BMM8-6SNGS","NXT":"5492870438471181939","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"},{"handle":"myHandle_1420803905","acct":"NXT-MTSL-LL74-99XV-ESSWT","NXT":"14768174629330216722","pubkey":"0000000000000000000000000000000000000000000000000000000000000000"}]
+
+
+
+rpl777_dispcontact:  {'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40', 'acct': 'NXT-5TU8-78XL-W2CW-32WWQ', 'NXT': '1978065578067355462', 'handle': 'myHandle_1420820143.4665258'}
+
 
 ------------------------------------------------------------------------------------------
 
@@ -2109,32 +2116,35 @@ curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "p
 
 
 
-
-25 call_NOT_TESTED
-
     static char *telepathy[] = { (char *)telepathy_func, "telepathy", "V",  "contact", "id", "type", "attach", 0 };
-# ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s0","msg":"deadbeef"}'
-# ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s2","msg":"beefdead"}'
 
 
-# ./BitcoinDarkd SuperNET '{"requestType":"telepathy","contact":"s0","type":"test","attach":{"msg":"deadbeef"}}'
-#
-#
-# ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s2","msg":"beefdead"}'
-#
-# ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s0","msg":"deadbeef"}'
+ ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s0","msg":"deadbeef"}'
+ ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s2","msg":"beefdead"}'
+
+ ./BitcoinDarkd SuperNET '{"requestType":"telepathy","contact":"s0","type":"test","attach":{"msg":"deadbeef"}}'
+
+ ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s2","msg":"beefdead"}'
+
+ ./BitcoinDarkd  SuperNET '{"requestType":"telepathy","contact":"s0","msg":"deadbeef"}'
 
 ------------------------------------------------------------------------------------------
+
+
 
 
                                             getdb
 
 
+1978065578067355462
 
 
 
 
-./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
+./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'  -> c0fee
+
+./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"14083245880221951726"}'
+
 
 
 Returns:
@@ -2143,7 +2153,7 @@ Returns:
 GETDB.({"requestType":"dbret","NXT":"6249611027680999354","key":"1031470952125437106","data":"c0ffee"})
 
 
-
+./BitcoinDarkd  SuperNET '{"requestType":"getdb","destip":"167.114.113.194" }'
 
 cassius [12:32 PM]
 So what am I looking at here? Is this the contact list held by the node that's storing  that value?
@@ -2151,8 +2161,6 @@ So what am I looking at here? Is this the contact list held by the node that's s
 cassius [12:32 PM]
 
 
-
-26 call_NOT_TESTED
 
     static char *getdb[] = { (char *)getdb_func, "getdb", "V",  "contact", "id", "key", "dir", "destip", 0 };
 
