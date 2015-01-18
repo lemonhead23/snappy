@@ -12,10 +12,14 @@ from twisted.internet import reactor
 import sys, time
 import os
 from snAppyModules.snUseCases import *
+
+from snAppyTests.snTests import *
 from snAppyModules.snQueryComposers import *
 from snAppyModules.snParsers import *
 from snAppyModules.snAppyConfig import *
 from snAppyModules.pyDaemon3 import Daemon3
+
+
 
 from twisted.internet import task
 from twisted.python import threadpool as tp
@@ -876,5 +880,5 @@ if __name__ == "__main__":
         sys.exit(0)
 
     else:
-        print("usage: %s start|stop|restart" % sys.argv[0])
+        print("usage: %s start|stop|restart|UC" % sys.argv[0])
         sys.exit(2)
