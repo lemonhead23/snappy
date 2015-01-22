@@ -454,7 +454,7 @@ class SuperNETApiD(Daemon3): #object):
     UCs = [
             'start', 'stop', 'restart',
             'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
-            'UC7', 'UC8', 'UC9', 'UC10', 'UC11',
+            'UC7', 'UC8', 'UC9', 'UC10', 'UC11','UC12',
             ]
 
 
@@ -551,6 +551,9 @@ class SuperNETApiD(Daemon3): #object):
             self.startUC10()
         elif UC == 'UC11':
             self.startUC11()
+        elif UC == 'UC12':
+            self.startUC12()
+
 
         else:
             log.msg("UC name error")
@@ -838,6 +841,31 @@ class SuperNETApiD(Daemon3): #object):
 
 
 
+    def startUC12(self):
+        log.startLogging(sys.stdout)
+        serverFactory = nxtServerFactory(SuperNETApiD.queryComposers, SuperNETApiD.parsers, self.environ)
+        serverFactory.protocol = ProxyServerProtocolSuperNET # <- this is not an instance this is the CLASS!!!!
+        log.msg(1*"initUC12")
+        reactor.suggestThreadPoolSize(500) # should be ok
+        serverFactory.reactor = reactor # this # is only used ATM to access to access thread stats
+        try:
+            reactor.listenTCP(LISTEN_PORT_SNT, serverFactory) # this is needed to also recevies GET queries
+        except Exception as e:
+            log.msg("already listening, continue.{0}".format(str(e)))
+
+        uc12_save_restore_File = UC12_save_restore_File(serverFactory, self,  self.environ )
+
+        self.timer12 = task.LoopingCall(uc12_save_restore_File.periodic,  )
+        self.timer12.start( TIMER_850 , now=True )
+
+    def stopUC12(self,result):
+        log.msg(5*"\n\n                           STOP UC12 with result:  ", result, "\n")
+        self.timer12.stop( )
+        log.msg("STOP snappyDaemon")
+        self.stop()
+
+
+
 if __name__ == "__main__":
 
 
@@ -856,7 +884,7 @@ if __name__ == "__main__":
     UCs = [
             'start', 'stop', 'restart',
             'UC1', 'UC2', 'UC3', 'UC4', 'UC5', 'UC6',
-            'UC7', 'UC8','UC9', 'UC10', 'UC11',
+            'UC7', 'UC8','UC9', 'UC10', 'UC11','UC12',
             ]
 
 

@@ -23,6 +23,7 @@ General command format:
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=settings'
 
 
+
 Launches scripts in UseCase classes:
 
 
@@ -70,6 +71,18 @@ This instantiates a scheduler that runs the designated script/test class
 #################################################################################################
 
 
+
+
+chanc3r [6:35 PM]
+this fixed my twisted install
+TWISTED=git+https://github.com/twisted/twisted.git RUNTESTS="python -m unittest discover"
+pip3 install -q --no-use-wheel $TWISTED --use-mirrors
+
+in case anyone else has the problem
+
+GitHub
+twisted/twisted
+twisted - Event-driven networking engine written in Python.
 
 
 
@@ -727,6 +740,64 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pas
 
 
 ------------------------------------------------------------------------------------------
+
+
+
+
+Since without the 50 servers, I cant really debug the DHT and I need that for the next step, I decided to take a break and looked into curve25519
+
+
+I figured out how to do 3 of 3 multisig!
+I think I can also do 2 of 3, but still need to verify the 3 of 3.
+
+I linked BitcoinDarkd to b to save on typing. I have three servers, with the following pubaddrs:
+1st: 10694781281555936856
+2nd: 8894667849638377372
+3rd: 13434315136155299987
+
+./b SuperNET '{"requestType":"cosign","otheracct":"10694781281555936856","text":"this is a test"}'
+./b SuperNET '{"requestType":"cosign","otheracct":"8894667849638377372","text":"this is a test"}'
+./b SuperNET '{"requestType":"cosign","otheracct":"13434315136155299987","text":"this is a test"}'
+it returns:
+
+1st server:
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"f193137b79a4993b40b0be6c7154cf2d559e3d6f974941cca657a45733435205","privacct":"10694781281555936856","pubacct":"10694781281555936856"}
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209","privacct":"10694781281555936856","pubacct":"8894667849638377372"}
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f","privacct":"10694781281555936856","pubacct":"13434315136155299987"}
+
+2nd server:
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209","privacct":"8894667849638377372","pubacct":"10694781281555936856"}
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"4a3bc59ad2f2ea5191447ce2ad2f6a2d877daebbc096c826eb2b40bfd8293502","privacct":"8894667849638377372","pubacct":"8894667849638377372"}
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071","privacct":"8894667849638377372","pubacct":"13434315136155299987"}
+
+3rd server:
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f","privacct":"13434315136155299987","pubacct":"10694781281555936856"}
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071","privacct":"13434315136155299987","pubacct":"8894667849638377372"}
+{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"d6bdcaf3d5890eb3839860d6eec1f8f151d6af7c94d7feb6691e9b4ebc26a20a","privacct":"13434315136155299987","pubacct":"13434315136155299987"}
+
+####
+note the matched pairs of results. Now I will submit one of them to the server that isnt listed, the following three, to each server:
+
+
+./b SuperNET '{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071","privacct":"8894667849638377372","pubacct":"13434315136155299987"}'
+
+./b SuperNET '{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f","privacct":"13434315136155299987","pubacct":"10694781281555936856"}'
+
+./b SuperNET '{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209","privacct":"10694781281555936856","pubacct":"8894667849638377372"}'
+
+and all three servers produced the same results! Note that each server had different inputs to create the same result.
+
+{"seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"5f176db34fce1b7812e97c13771d9c7767e839304d17c9611794343db76bc556","acct","10694781281555936856","privacct":"8894667849638377372","pubacct":"13434315136155299987","input":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071"}
+
+{"seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"5f176db34fce1b7812e97c13771d9c7767e839304d17c9611794343db76bc556","acct","8894667849638377372","privacct":"13434315136155299987","pubacct":"10694781281555936856","input":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f"}
+
+{"seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"5f176db34fce1b7812e97c13771d9c7767e839304d17c9611794343db76bc556","acct","13434315136155299987","privacct":"10694781281555936856","pubacct":"8894667849638377372","input":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209"}
+
+now these are low level primitives and doesnt directly get us multisig tx, but it does allow 3 nodes to cooperate and verify that the other two are also signing the original text. by publishing the final result, it will prove to others that all three nodes reached agreement.
+
+James
+
+
 
 
 
@@ -1530,6 +1601,7 @@ James
 
 
 I changed the name of "usbdir" to "backup" just because it is unlikely to actually be a usb
+
 I also added a "pin" field, which is actually what password used to be. If you dont specify a pin, then it will just use one round of AES
 
 now if the password is left off or blank, eg. "", then it will use your public server acct's password, so if you want it to not encrypt at all you need to set "password":"none"
@@ -1537,10 +1609,6 @@ now if the password is left off or blank, eg. "", then it will use your public s
 got half of the telepathic send to work, at least I was able to properly encrypt a sample packet that decrypted and it went into the cloud. too tired for the other half as this is super tricky code
 
 James
-
-P.S. these are untested changes, so let me know if it actually works
-Report to moderator   Logged
-
 
 
 savefile saves to the cloud
@@ -1570,14 +1638,30 @@ so filename is the only required field it will return the data needed to restore
 
 [ANN - MofNfs: store files in the SuperNET cloud using fully encrypted M of N shared secret fragments]
 
-Since there was no large network for me to test with today, I decided to make two new API calls that allow for cloud storage of files. They are massively encrypted and also M of N is supported to deal with hash collisions, sybil attacks, offline nodes, etc. With the proper M and N settings, I think this will be quite a resilient file storage appropriate for the files you just cant lose. The comms with the cloud are via the DHT API from this weekend and the L parameter is for the max number of onion layers to use and all the packets are the same size, so there is no leakage based on packet size.
+Since there was no large network for me to test with today, I decided to make two new API calls that allow for cloud storage of files.
+They are massively encrypted and also M of N is supported to deal with hash collisions, sybil attacks, offline nodes, etc.
+With the proper M and N settings, I think this will be quite a resilient file storage appropriate for the files you just cant lose.
+The comms with the cloud are via the DHT API from this weekend and the L parameter is for the max number of onion layers to use and all the packets are the same size,
+ so there is no leakage based on packet size.
 
-Now I am not sure what all the other decentralized storage projects are doing and I am sure what I did today is just a small portion of a full system. Still, after I debug it tomorrow, it will be an easy way to safely put things in the cloud.
+Now I am not sure what all the other decentralized storage projects are doing and I am sure what I did today is just a small portion of a full system.
+ Still, after I debug it tomorrow, it will be an easy way to safely put things in the cloud.
 
 The savefile will print (and save in usbdir) the required sharenrs and txids JSON fields to use for the restorefile.
 The "destfile" field is where the file will be reconstructed.
 
-If the "usbdir" parameter is set, then local backups are made (highly recommended!) and it is used to check the data coming back from the cloud. After you verify that the cloud has a proper copy, then you can partition the various parts from the usbdir directory to various places to have two full backups, one under your local control and one in the cloud.
+
+./BitcoinDarkd SuperNET '{"requestType":"savefile","fname":"saveTest","L":0,"M":1,"N":1,"password":"1234"}'
+
+
+./BitcoinDarkd SuperNET '{"requestType":"savefile","fname":"saveTest","L":0,"M":1,"N":1,"password":"1234"}'
+{"fname":"saveTest","L":0,"M":1,"N":1,"nrs":"","txids":["6036147788633665598"],"password":""}
+
+
+
+
+If the "usbdir" parameter is set, then local backups are made (highly recommended!) and it is used to check the data coming back from the cloud. After you verify that the cloud has a proper copy,
+then you can partition the various parts from the usbdir directory to various places to have two full backups, one under your local control and one in the cloud.
 
 The max value for N is 254 and M has to be less than or equal to N. The M of N parameters are independent of the "password" field. If you are using M of N, then unless the attacker gets a hold of M pieces, they wont be able to reconstruct the file. Without the txid list, the attacker wont know how to reconstruct the file.
 
@@ -1614,10 +1698,24 @@ The following are the ciphers:
 
 
 
-./BitcoinDarkd SuperNET '{"requestType":"savefile","filename":"m_unix","L":0,"M":1,"N":1,"usbdir":"/tmp"}'                                {"result":"status.0","sharenrs":"","txids":["1666057801165456042", "232969103956564539"],"filesize":"296","descr":"mofn_savefile M.1 of N.1 sent with Lfactor.0 usbdir.(/tmp) usedpassword.0 dont lose the password, sharenrs or txids!"}
+test ok: worked manually
 
-./BitcoinDarkd SuperNET '{"requestType":"restorefile","filename":"m_unix","L":0,"M":1,"N":1,"usbdir":"/tmp","txids":["1666057801165456042", "232969103956564539"],"destfile":"newfile"}'
-{"result":"status.0","completed":1.000,"filesize":"592","descr":"mofn_restorefile M.1 of N.1 sent with Lfactor.0 usbname.(/tmp) usedpassword.0 reconstructed"}
+./BitcoinDarkd SuperNET '{"requestType":"savefile","fname":"saveTest","L":0,"M":1,"N":1,"backup":"/tmp","password":"asdf1234", "pin":""}'
+{"fname":"saveTest","L":0,"M":1,"N":1,"nrs":"","txids":["4231396617578744659"],"password":""}
+
+
+ ./BitcoinDarkd SuperNET '{"requestType":"restorefile","filename":"saveTest","L":0,"M":1,"N":1,"usbdir":"/tmp","txids":["4231396617578744659"],"destfile":"saveTestRestore"}'
+
+{"result":"status.0","completed":1.000,"destfile":".restore","filesize":"306","descr":"mofn_restorefile M.1 of N.1 sent with Lfactor.0 usbname.() usedpassword.0 usedpin.0 reconstructed"}
+
+
+
+
+
+
+
+Restore: you need the txids generated after the command.
+
 
 
 [07:33] <jl777> what the M of N does is custom make N fragments
@@ -1652,68 +1750,9 @@ If anyone is helping us with testing please do a ./m_unix to build the latest an
 However, you can try the following command to save a file. The file has to be in the path/folder where you are using it.
 
 
-./BitcoinDarkd SuperNET '{"requestType":"savefile","filename":"BitcoinDark-qt.pro","L":0,"M":2,"N":3,"usbdir":"/tmp","password":"asdf1234"}'
 
-Restore: you need the txids generated after the command.
-
-./BitcoinDarkd SuperNET '{"requestType":"restorefile","filename":"m_unix","L":0,"M":2,"N":3,"usbdir":"/tmp","txids":["14641644028532519953", "11912799765614641787", "11174634834433195997"],"password":"1234","destfile":"newfile2"}'
 
 You can try chaning the value of M, N and different password / without password. Just to let you know we did the value of N:254. There seem to be a small bug while restoring it. Try to scale up the value from the lower value.
-
-
-
-Since without the 50 servers, I cant really debug the DHT and I need that for the next step, I decided to take a break and looked into curve25519
-
-
-I figured out how to do 3 of 3 multisig!
-I think I can also do 2 of 3, but still need to verify the 3 of 3.
-
-I linked BitcoinDarkd to b to save on typing. I have three servers, with the following pubaddrs:
-1st: 10694781281555936856
-2nd: 8894667849638377372
-3rd: 13434315136155299987
-
-./b SuperNET '{"requestType":"cosign","otheracct":"10694781281555936856","text":"this is a test"}'
-./b SuperNET '{"requestType":"cosign","otheracct":"8894667849638377372","text":"this is a test"}'
-./b SuperNET '{"requestType":"cosign","otheracct":"13434315136155299987","text":"this is a test"}'
-it returns:
-
-1st server:
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"f193137b79a4993b40b0be6c7154cf2d559e3d6f974941cca657a45733435205","privacct":"10694781281555936856","pubacct":"10694781281555936856"}
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209","privacct":"10694781281555936856","pubacct":"8894667849638377372"}
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f","privacct":"10694781281555936856","pubacct":"13434315136155299987"}
-
-2nd server:
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209","privacct":"8894667849638377372","pubacct":"10694781281555936856"}
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"4a3bc59ad2f2ea5191447ce2ad2f6a2d877daebbc096c826eb2b40bfd8293502","privacct":"8894667849638377372","pubacct":"8894667849638377372"}
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071","privacct":"8894667849638377372","pubacct":"13434315136155299987"}
-
-3rd server:
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f","privacct":"13434315136155299987","pubacct":"10694781281555936856"}
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071","privacct":"13434315136155299987","pubacct":"8894667849638377372"}
-{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"d6bdcaf3d5890eb3839860d6eec1f8f151d6af7c94d7feb6691e9b4ebc26a20a","privacct":"13434315136155299987","pubacct":"13434315136155299987"}
-
-####
-note the matched pairs of results. Now I will submit one of them to the server that isnt listed, the following three, to each server:
-
-
-./b SuperNET '{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071","privacct":"8894667849638377372","pubacct":"13434315136155299987"}'
-
-./b SuperNET '{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f","privacct":"13434315136155299987","pubacct":"10694781281555936856"}'
-
-./b SuperNET '{"requestType":"cosigned","seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209","privacct":"10694781281555936856","pubacct":"8894667849638377372"}'
-
-and all three servers produced the same results! Note that each server had different inputs to create the same result.
-
-{"seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"5f176db34fce1b7812e97c13771d9c7767e839304d17c9611794343db76bc556","acct","10694781281555936856","privacct":"8894667849638377372","pubacct":"13434315136155299987","input":"196d7054e987a0a8061d4b4d86db5e3dfe502066208bda98a3b1c834e4fc8071"}
-
-{"seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"5f176db34fce1b7812e97c13771d9c7767e839304d17c9611794343db76bc556","acct","8894667849638377372","privacct":"13434315136155299987","pubacct":"10694781281555936856","input":"681d2ff77944cb36db523e775f5fe7fb5519cc106ca3fafd6bb8a31d17d10d6f"}
-
-{"seed":"2e99758548972a8e8822ad47fa1017ff72f06f3ff6a016851f45c398732bc50c","result":"5f176db34fce1b7812e97c13771d9c7767e839304d17c9611794343db76bc556","acct","13434315136155299987","privacct":"10694781281555936856","pubacct":"8894667849638377372","input":"b39af77f1b18389e9acb782ad41a365cf5ef48d63b7394f714742f7471b4d209"}
-
-now these are low level primitives and doesnt directly get us multisig tx, but it does allow 3 nodes to cooperate and verify that the other two are also signing the original text. by publishing the final result, it will prove to others that all three nodes reached agreement.
-
-James
 
 
 
@@ -1728,7 +1767,7 @@ James
 
 18
 
-    static char *savefile[] = { (char *)savefile_func, "savefile", "V", "filename", "L", "M", "N", "backup", "password", "pin", 0 };
+    static char *savefile[] = { (char *)savefile_func, "savefile", "V", "fname", "L", "M", "N", "backup", "password", "pin", 0 };
 
 
 
@@ -2617,6 +2656,24 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
+
+    // ramchains   11
+    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
+    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
+    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "coin", "type", "rawind", 0 };
+    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "coin", "type", "string", 0 };
+    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "coin", "blocknum", 0 };
+    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
+    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "destip", "coin", "address", "unspent", 0 };
+    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "destip", "coin", "numwhales", "recalc", 0 };
+    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
+    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
+    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
+
+
+
+
+
     // MGW 8
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
     static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
@@ -2679,21 +2736,12 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     // Privatbet 1
     static char *lotto[] = { (char *)lotto_func, "lotto", "V", "refacct", "asset", 0 };
 
-     static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy, addcontact, dispcontact, removecontact, findaddress, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, getpeers, maketelepods, tradebot, respondtx, processutx, checkmsg, placebid, placeask, makeoffer, sendmsg, sendbinary, orderbook, teleport, telepodacct, savefile, restorefile, pricedb, getquotes, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGW, MGWaddr, MGWresponse, sendfrag, gotfrag, startxfer, lotto };
-    int32_t i,j;
 
 
-
-
-chanc3r [6:35 PM]
-this fixed my twisted install
-TWISTED=git+https://github.com/twisted/twisted.git RUNTESTS="python -m unittest discover"
-pip3 install -q --no-use-wheel $TWISTED --use-mirrors
-
-in case anyone else has the problem
-
-GitHub
-twisted/twisted
-twisted - Event-driven networking engine written in Python.
+     static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy,
+     addcontact, dispcontact, removecontact, findaddress, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, getpeers,
+     maketelepods, tradebot, respondtx, processutx, checkmsg, placebid, placeask, makeoffer, sendmsg, sendbinary, orderbook, teleport, telepodacct,
+      savefile, restorefile, pricedb, getquotes, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGW, MGWaddr, MGWresponse, sendfrag, gotfrag, startxfer,
+      lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist };
 
 """
