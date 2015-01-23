@@ -236,6 +236,7 @@ class QC_777_aAll(QC_777Base):
         //  privatebet 1
         // glue 7
         // passthru 2
+        // ramchains 11
         // MGW 8
         // IPcomms 5
         // Kademlia DHT  6
@@ -515,6 +516,459 @@ static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method",
             P4 = ''
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, K4 : P4,}
+
+
+    #########################
+
+
+
+    #     // ramchains 11
+    #########################
+
+
+    #
+    # // ramchains   11
+
+
+
+    def ramstatus(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+CHECK!
+
+
+
+    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramstatus'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2 }
+
+
+
+
+    def ramaddrlist(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
+
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramaddrlist'
+        try:
+            K1 = 'coin'
+            P1 = reqDict['coin']
+        except:
+            P1 = ''
+
+
+        return  { K0 : P0 , K1 : P1 }
+
+
+
+    def ramstring(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+
+    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "coin", "type", "rawind", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramstring'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'type'
+            P2 = reqDict['type']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'rawind'
+            P3 = reqDict['rawind']
+        except:
+            P3 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3}
+
+
+
+    def ramrawind(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+
+    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "coin", "type", "string", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramrawind'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'type'
+            P3 = reqDict['type']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'string'
+            P4 = reqDict['string']
+        except:
+            P4 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+
+
+    def ramblock(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+
+    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "coin", "blocknum", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramblock'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'blocknum'
+            P3 = reqDict['blocknum']
+        except:
+            P3 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+
+
+
+
+
+    def ramscript(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramscript'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'txid'
+            P2 = reqDict['txid']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'vout'
+            P3 = reqDict['vout']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'blocknum'
+            P4 = reqDict['blocknum']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'txind'
+            P5 = reqDict['txind']
+        except:
+            P5 = ''
+
+
+        try:
+            K6 = 'v'
+            P6 = reqDict['v']
+        except:
+            P6 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6}
+
+
+
+
+
+    def ramtxlist(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "destip", "coin", "address", "unspent", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramtxlist'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'address'
+            P3 = reqDict['address']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'unspent'
+            P4 = reqDict['unspent']
+        except:
+            P4 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+
+
+
+
+
+    def ramrichlist(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "destip", "coin", "numwhales", "recalc", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramrichlist'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'numwhales'
+            P3 = reqDict['numwhales']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'recalc'
+            P4 = reqDict['recalc']
+        except:
+            P4 = ''
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+
+
+    def ramcompress(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+
+    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramcompress'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'data'
+            P3 = reqDict['data']
+        except:
+            P3 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+
+
+
+
+
+
+    def ramexpand(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramexpand'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'data'
+            P3 = reqDict['data']
+        except:
+            P3 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+
+
+
+
+    def rambalances(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+
+    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'rambalances'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'coin'
+            P2 = reqDict['coin']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'coins'
+            P3 = reqDict['coins']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'rates'
+            P4 = reqDict['rates']
+        except:
+            P4 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
 
 
 
@@ -2521,6 +2975,18 @@ This is the wrapper class
                    '                   passthru 2'
                    'passthru',\
                    'remote',\
+                   '                  ramchains 11',\
+                   'ramstatus',\
+                   'ramaddrlist',\
+                   'ramstring',\
+                   'ramrawind',\
+                   'ramblock',\
+                   'ramscript',\
+                   'ramtxlist',\
+                   'ramrichlist',\
+                   'remoramcompresste',\
+                   'ramexpand',\
+                   'rambalances',\
                    '                   MGW 8',\
                    'genmultisig',\
                    'getmsigpubkey',\
@@ -2634,6 +3100,53 @@ This is the wrapper class
 
         elif reqDict['requestType'] == 'remote':
             jsonSpecs = self.jl777_aAll.remote(reqDict)
+            return jsonSpecs
+
+        # ramchains 11
+
+
+        elif reqDict['requestType'] == 'ramstatus':
+            jsonSpecs = self.jl777_aAll.ramstatus(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramaddrlist':
+            jsonSpecs = self.jl777_aAll.ramaddrlist(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramstring':
+            jsonSpecs = self.jl777_aAll.ramstring(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramrawind':
+            jsonSpecs = self.jl777_aAll.ramrawind(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramblock':
+            jsonSpecs = self.jl777_aAll.ramblock(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramscript':
+            jsonSpecs = self.jl777_aAll.ramscript(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramtxlist':
+            jsonSpecs = self.jl777_aAll.ramtxlist(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramrichlist':
+            jsonSpecs = self.jl777_aAll.ramrichlist(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramcompress':
+            jsonSpecs = self.jl777_aAll.ramcompress(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramexpand':
+            jsonSpecs = self.jl777_aAll.ramexpand(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'rambalances':
+            jsonSpecs = self.jl777_aAll.rambalances(reqDict)
             return jsonSpecs
 
 

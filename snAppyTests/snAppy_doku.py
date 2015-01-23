@@ -38,8 +38,14 @@ UC4_sendMSG
 UC5_sendBIN
 UC6_checkMSG
 
-UC6_checkMSG
-UC6_checkMSG
+UC7_
+UC8_
+UC9_
+UC10_
+UC11_
+UC12_
+
+
 
 
 
@@ -178,6 +184,9 @@ Currently:
 
 
 
+
+
+
 --------->         6 steps to include new API calls into this api controller
 
 
@@ -202,6 +211,9 @@ subclassing Parser_JL777_Base
 
 
 
+
+
+
 2 register this class in Parser777
 ----------------------------------
 
@@ -212,6 +224,9 @@ class Parser_777(object):
     ""#
 
     ql777_settings = Parser_jl777_settings()
+
+
+
 
 
 
@@ -253,6 +268,9 @@ class QueryComposer_777(QC_777Base):
 -----------------------------------------------------------------------------
 
 
+
+
+
         elif reqDict['requestType'] == 'gotjson':
             jsonSpecs = self.jl777_aAll.gotjson(reqDict)
 
@@ -263,6 +281,7 @@ class QueryComposer_777(QC_777Base):
 
 6 add def <callName> in class QC_777_aAll
 -----------------------------------------
+
 
 
 
@@ -685,6 +704,69 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pas
 
 
 
+
+
+##################################################################################################
+
+    //     ramchains  11
+
+##################################################################################################
+------------------------------------------------------------------------------------------
+
+
+
+    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
+
+
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ramstatus&coin=BTCD&destip=37.59.108.92'
+
+
+
+    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
+
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ramaddrlist&coin=BTCD'
+
+
+ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ramaddrlist&coin=BTCD'
+{'total': 1, 'result': 'addrlist', 'mine': 1, 'multisig': 1}
+
+
+
+
+    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "coin", "type", "rawind", 0 };
+
+
+
+    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "coin", "type", "string", 0 };
+
+
+
+    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "coin", "blocknum", 0 };
+
+
+
+    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
+
+
+
+    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "destip", "coin", "address", "unspent", 0 };
+
+
+
+    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "destip", "coin", "numwhales", "recalc", 0 };
+
+
+
+    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
+
+
+
+    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
+
+
+
+    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
 
 
 
@@ -1723,11 +1805,14 @@ Restore: you need the txids generated after the command.
 [07:33] <jl777> one M of N for the same file will be different each time you do it, even if M and N are the same
 [07:34] <jl777> certainly if anything about M or N changes, it will make totally new data
 [07:34] <jl777> the sharenrs are lookup values in a galois field
+
 [07:34] <SHossain> i dont know where it is coming from but i get it after the savefile cmd as in the result "sharenrs":"4d76a9"
+
 [07:34] <jl777> yes that is for N = 3
 [07:35] <jl777> it will only work with the exact txids and file and password
 [07:35] <jl777> everything has to be matched
 [07:35] <jl777> this is why I think MofNfs is immune to sybil attack, node failres, ets
+
 [07:35] <SHossain> yep. without everything exact it doesn't work
 [07:36] <jl777> it is not possible to even know what the magic txid's your file is made of
 [07:36] <SHossain> any other test you want me to try?
@@ -1764,9 +1849,6 @@ You can try chaning the value of M, N and different password / without password.
                                                 savefile
 
 
-
-18
-
     static char *savefile[] = { (char *)savefile_func, "savefile", "V", "fname", "L", "M", "N", "backup", "password", "pin", 0 };
 
 
@@ -1779,7 +1861,6 @@ You can try chaning the value of M, N and different password / without password.
                                                 restorefile
 
 
-19
 
     static char *restorefile[] = { (char *)restorefile_func, "restorefile", "V", "filename", "L", "M", "N", "backup", "password", "destfile", "sharenrs", "txids", "pin", 0 };
 
@@ -1787,15 +1868,10 @@ You can try chaning the value of M, N and different password / without password.
 ------------------------------------------------------------------------------------------
 
 
-                                                sendfile
+                                                publish
 
+static char *publish[] = { (char *)publish_func, "publish", "V", "files", "L", "M", "N", "backup", "password", "pin", 0  };
 
-20
-
-    static char *sendfile[] = { (char *)sendfile_func, "sendfile", "V", "filename", "dest", "L", 0 };
-
-sendfile is stubbed now
-l8orre 9:38 PM ok
 ------------------------------------------------------------------------------------------
 
 
@@ -2656,7 +2732,6 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
-
     // ramchains   11
     static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
     static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
@@ -2669,10 +2744,6 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
     static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
     static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
-
-
-
-
 
     // MGW 8
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };

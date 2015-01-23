@@ -150,6 +150,66 @@ class Parser_jl777_remote(Parser_JL777_Base):
         return data2parse
 
 
+# // ramchains   11
+
+
+class Parser_jl777_ramstatus(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramaddrlist(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramstring(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramrawind(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramblock(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramscript(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramtxlist(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramrichlist(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramcompress(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramexpand(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_rambalances(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
+
 # multisig MGW 8
 
 
@@ -464,6 +524,21 @@ class Parser_777(object):
     ql777_passthru = Parser_jl777_passthru()
     ql777_remote = Parser_jl777_remote()
 
+    #// ramchains   11
+
+    ql777_ramstatus = Parser_jl777_ramstatus()
+    ql777_ramaddrlist = Parser_jl777_ramaddrlist()
+    ql777_ramstring = Parser_jl777_ramstring()
+    ql777_ramrawind = Parser_jl777_ramrawind()
+    ql777_ramblock = Parser_jl777_ramblock()
+    ql777_ramscript = Parser_jl777_ramscript()
+    ql777_ramtxlist = Parser_jl777_ramtxlist()
+    ql777_ramrichlist = Parser_jl777_ramrichlist()
+    ql777_ramcompress = Parser_jl777_ramcompress()
+    ql777_ramexpand = Parser_jl777_ramexpand()
+    ql777_rambalances = Parser_jl777_rambalances()
+
+
     # // MGW
     ql777_genmultisig = Parser_jl777_genmultisig()
     ql777_getmsigpubkey = Parser_jl777_getmsigpubkey()
@@ -538,7 +613,21 @@ class Parser_777(object):
         """ here we should be flexible as to the data type we get and parse.
          so we need some type checking and hand always the same data type to the actual parse functions."""#
         log.msg("def parse_777()--------->  ", data2parse, "requestType2Parse is: ", requestType2Parse)
-        log.msg("def parse_777()--------->  ", data2parse.json())
+        try:
+            log.msg("def parse_777()--------->  ", data2parse.json(), data2parse.content,type(data2parse.content))
+
+
+        except Exception as e:
+            log.msg("except def parse_777()---------> ", data2parse.content)
+            log.msg("except def parse_777()---------> ", type(data2parse.content))
+
+
+            log.msg("except def parse_777()--------->  {0}".format(str(e)))
+
+        #log.msg("ERR777 UC2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
+        #raise RuntimeError(ERR777.printDetailedTraceback())
+
+
 
         #print(type(data2parse))
 
@@ -611,6 +700,41 @@ class Parser_777(object):
         elif requestType2Parse == 'remote':
             parsed = self.ql777_remote.parse(data2parse)
 
+
+    # // ramchains   11
+
+        elif requestType2Parse == 'ramstatus':
+            parsed = self.ql777_ramstatus.parse(data2parse)
+
+        elif requestType2Parse == 'ramaddrlist':
+            parsed = self.ql777_ramaddrlist.parse(data2parse)
+
+        elif requestType2Parse == 'ramstring':
+            parsed = self.ql777_ramstring.parse(data2parse)
+
+        elif requestType2Parse == 'ramrawind':
+            parsed = self.ql777_ramrawind.parse(data2parse)
+
+        elif requestType2Parse == 'ramblock':
+            parsed = self.ql777_ramblock.parse(data2parse)
+
+        elif requestType2Parse == 'ramscript':
+            parsed = self.ql777_ramscript.parse(data2parse)
+
+        elif requestType2Parse == 'ramtxlist':
+            parsed = self.ql777_ramtxlist.parse(data2parse)
+
+        elif requestType2Parse == 'ramrichlist':
+            parsed = self.ql777_ramrichlist.parse(data2parse)
+
+        elif requestType2Parse == 'ramcompress':
+            parsed = self.ql777_ramcompress.parse(data2parse)
+
+        elif requestType2Parse == 'ramexpand':
+            parsed = self.ql777_ramexpand.parse(data2parse)
+
+        elif requestType2Parse == 'rambalances':
+            parsed = self.ql777_rambalances.parse(data2parse)
 
 
 
