@@ -7,6 +7,7 @@ to be placed in order to NOT hardcode it into the code.
 
 LISTEN_PORT_SNT = 7800 #
 
+
 environ = {}
 # Note: this dict has currently four levels of nesting.
 # The top level contains immediate configuraiton informatin for launching the app,
@@ -24,8 +25,8 @@ environ = {}
 STONEFISH_IP = '178.62.185.131'   #
 BOXFISH_IP   = '85.xx'   #
 
-SERVER_ADDR_jl777 = 'localhost'
-#SERVER_ADDR_jl777 =  STONEFISH_IP
+#SERVER_ADDR_jl777 = 'localhost'
+SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int

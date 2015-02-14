@@ -140,20 +140,21 @@ class Daemon3:
 
         # Start the daemon
         self.daemonize()
+
+
         self.runUC(UC)
-
-
 
 
 
     def stop(self):
         """Stop the daemon."""
-
         # Get the pid from the pidfile
         try:
             with open(self.pidfile,'r') as pf:
                 pid = int(pf.read().strip())
+                print(1*"\nstop pid: ", pid)
         except IOError:
+
             pid = None
 
         if not pid:
@@ -185,6 +186,8 @@ class Daemon3:
             else:
                 print(str(err.args))
                 sys.exit(1)
+
+
 
     def restart(self):
         """Restart the daemon."""

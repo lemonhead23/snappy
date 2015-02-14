@@ -13,27 +13,14 @@ import sys, time
 import os
 from snAppyModules.snUseCases import *
 
-from snAppyTests.snTests import *
+#from snAppyTests.snTests import *
 from snAppyModules.snQueryComposers import *
 from snAppyModules.snParsers import *
 from snAppyModules.snAppyConfig import *
 from snAppyModules.pyDaemon3 import Daemon3
 
-
-
 from twisted.internet import task
 from twisted.python import threadpool as tp
-
-#from snAppyModules.snApiConfig import environ
-#import requests
-#from twisted.internet.defer import Deferred
-#import twisted.web.client as cli
-#from twisted.web.client import getPage
-#from io import StringIO # io.BytesIO
-#from lxml import etree
-#from datetime import datetime
-#from twisted.python import log
-
 
 
 
@@ -215,7 +202,11 @@ class ProxyServerProtocolSuperNET(protocol.Protocol):
             self.clientFactory.server = self #
             self.clientFactory.requestType = reqDict['requestType'] # just put it in here to be available for the Parser!
             reactor.connectTCP( SERVER_ADDR_jl777, SERVER_PORT_SUPERNETHTTP, self.clientFactory)
+            print(12*"\nreqDict:", reqDict)
+
             self.newQuery = self.proxyServerFactory.qComp_777.make_777POST_Request(reqDict)
+            print(12*"\nquers:", self.newQuery)
+
 
         elif reqDict['requestType'] in  ["start","stop" ]:
         # direct to BTCD RPC, use that parser ONLY for START and stop call that must go through BTCD
@@ -349,7 +340,11 @@ class ProxyClientProtocol777(protocol.Protocol):
         # self.factory.server.requestOUT = '' # cleanup
 
     def rcvPOSTERR(self,retPOSTERR):
-        log.msg(30*"\n++++++++++ERRR+++++", retPOSTERR)
+        log.msg(10*"\n++++++++++ERRR in ProxyClientProtocol777+++", retPOSTERR, str(retPOSTERR))
+        self.factory.server.write("TTTTTTTTTTTTTTTT")#str(retPOSTERR)) #data_777_parsed)
+        self.transport.loseConnection()
+        return None
+
 
     def rcvPOST(self, data_777):
         """ this receives the RAW reply from the jl777lib. POSTprocessing needs to be done. """ #
@@ -360,6 +355,7 @@ class ProxyClientProtocol777(protocol.Protocol):
         self.factory.server.write(data_777_parsedBytes) #data_777_parsed)
         self.transport.loseConnection()
         return None
+
 
 class ProxyClientProtocolXML(protocol.Protocol):
     """ This ProxyClient is using the TWISTED getPage function """#
@@ -408,7 +404,7 @@ class ProxyClientProtocolXML(protocol.Protocol):
 
 
 
-class SuperNETApiD(Daemon3): #object):
+class SuperNETApiD(Daemon3):
 
 
     """ This is the SuperNET API Main class.
@@ -509,7 +505,7 @@ class SuperNETApiD(Daemon3): #object):
 
 
         if UC in self.UCs:
-            print("UC9 - 0")
+            print("UC1 - 0")
             self.initUC(UC)
         else:
             log.msg("UC name error")
@@ -553,7 +549,6 @@ class SuperNETApiD(Daemon3): #object):
             self.startUC11()
         elif UC == 'UC12':
             self.startUC12()
-
 
         else:
             log.msg("UC name error")
@@ -901,8 +896,11 @@ if __name__ == "__main__":
             superNetApiD.stop()
         elif 'restart' == sys.argv[1]:
             superNetApiD.restart()
+
         else:
             superNetApiD.startUC(UC)
+
+
 
 
         sys.exit(0)

@@ -413,13 +413,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
         except:
             P1 = ''
 
-
         try:
             K2 = 'value'
             P2 = reqDict['value']
         except:
             P2 = ''
-
 
         try:
             K3 = 'reinit'
@@ -428,7 +426,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
             P3 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2,  }
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2,  K3 : P3,  }
         #
         # # unwrap into tuple here, and pass into the relevant function!
         # parms = ( (K0,P0),  (K1,P1), (K2,P2), (K3,P3),) # NB: need the extra comma to force len(parms)==1 for ONE tuple

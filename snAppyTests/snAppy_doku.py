@@ -5,6 +5,10 @@
 SuperNET_api_controller_doku = """
 
 
+temp:stonefish path bitches
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/azure/go/bin"
+
+
 
 Snappy acts as a relay that receives and relays commands to SuperNET.
 
@@ -76,6 +80,10 @@ This instantiates a scheduler that runs the designated script/test class
 
 #################################################################################################
 
+
+
+ASSERTION:
+Note: for each call, we list the assertins to be tested under the label 'ASSERTION'
 
 
 
@@ -712,6 +720,12 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=pas
 
 ##################################################################################################
 ------------------------------------------------------------------------------------------
+
+
+ASSERTION:
+
+ ./BitcoinDarkd  SuperNET '{"requestType":"ramstatus","coin":"BTCD"}'
+{"result":"MGWstatus","coin":"BTCD","gatewayid":"-1","balance":"217410145","sentNXT":"15000000000","unspent":"1019844560145","supply":"0","circulation":"1019627150000","pendingredeems":"0","pendingdeposits":"0","internal":"0","RTNXT":{"height":"357145","lag":"12","ECblock":"487916652642120458","ECheight":"357142"},"BTCD":{"permblocks":"370155","height":"370158","lag":"3"},"ramchain":"BTCD : RT.370158 nonz.370155 V.370155 B.370155 B64.370112 B4096.368640 | 121.0MB 19.2MB R6.31 | minutes: V0.1 B0.1 | outputs.910724 181625033.12224579 spends.887986 180420381.12028271 -> balance: 22738 1204652.00196305 ave 52.97968168"}
 
 
 
@@ -2814,5 +2828,9 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
      maketelepods, tradebot, respondtx, processutx, checkmsg, placebid, placeask, makeoffer, sendmsg, sendbinary, orderbook, teleport, telepodacct,
       savefile, restorefile, pricedb, getquotes, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGW, MGWaddr, MGWresponse, sendfrag, gotfrag, startxfer,
       lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist };
+
+
+
+
 
 """
