@@ -550,7 +550,7 @@ class Parser_777(object):
     ql777_passthru = Parser_jl777_passthru()
     ql777_remote = Parser_jl777_remote()
 
-    #// ramchains   11
+    #// ramchains   13
 
     ql777_ramstatus = Parser_jl777_ramstatus()
     ql777_ramaddrlist = Parser_jl777_ramaddrlist()

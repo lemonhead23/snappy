@@ -1410,7 +1410,7 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
             K4 = 'pubacct'
             P4 = reqDict['pubacct']
         except:
-            P2 = ''
+            P4 = ''
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,}
 
@@ -2299,10 +2299,11 @@ individual treatment of requests and their parms here """#
 
 
 
-        parms = ( (K0,P0),  (K1,P1),)
-        jsonSpecs = self.assembleQuery(parms)
-
-        return jsonSpecs
+        return  { K0 : P0 , K1 : P1 , }
+        # parms = ( (K0,P0),  (K1,P1),)
+        # jsonSpecs = self.assembleQuery(parms)
+        #
+        # return jsonSpecs
 
 
     def dispcontact(self, reqDict):
@@ -3116,8 +3117,8 @@ This is the wrapper class
                    'gotnewpeer',\
                    'BTCDpoll',\
                    'GUIpoll',\
-                   'stopDummy',\
-                   'startDummy',\
+                   'stop',\
+                   'start',\
                    'settings',\
                    '                   passthru 2'
                    'passthru',\
@@ -3131,8 +3132,8 @@ This is the wrapper class
                    'ramscript',\
                    'ramtxlist',\
                    'ramrichlist',\
-                   'remoramcompresste',\
-                   'ramexpand',\
+                    'ramcompress',\
+                    'ramexpand',\
                    'rambalances',\
                    'rampyramid' ,\
                    'ramresponse',\
