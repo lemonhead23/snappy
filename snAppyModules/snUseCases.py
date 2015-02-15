@@ -677,7 +677,8 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         for pongerr in self.pongers:
             log.msg(self.pongers[pongerr]['ipaddr'])
 
-        if numPongers >3:
+        if numPongers >=1:
+
             self.superNET_daemon.stopUC1(True)
 
         # 2014-12-29 12:10:41+0100 [-] GUIpoll ---> rpl777 {'tag': '', 'numpongs': 144, 'lag': '344.375', 'ave': '1259.662', 'numpings': 143, 'result': 'kademlia_pong', 'isMM': '0', 'ipaddr': '<nullstr>', 'NXT': '15178638394924629506', 'port': 0} <class 'dict'>
@@ -882,7 +883,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 
         # STOP condition check
-        if ( len(self.havenoders.keys())  > 1 and len(self.havenoders.keys()) > 1 ):
+        if ( len(self.havenoders.keys())  >= 1 and len(self.havenoders.keys()) >= 1 ):
              self.stopDaemon = True
 
         if  self.stopDaemon:

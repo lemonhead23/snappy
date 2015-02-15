@@ -8,18 +8,25 @@ import json
 from snAppyModules.snQueryComposers import QueryComposer_777
 from snAppyModules.snTestConfig import *
 
+import time
 
 
 class SNET_BaseTest(unittest.TestCase):
 
+    """
+
+
+    """#
     url = SNET_url # environ['SNET_url']
     qComp_777 = QueryComposer_777(environ)
-    numPongers = 31
+    numPongers = 1
     numHavenoders = 1
+
+    headers = {'content-type': 'application/json'}
 
     def setUp(self):
         """ This can be overridden by any testing class if needed. """
-        
+
         print("this test using generic setUp function")
         while self.numPongers < 2 and self.numHavenoders < 2 :
             print("establishing PONGers and HAVENODErs of SUperNET server")
@@ -28,35 +35,172 @@ class SNET_BaseTest(unittest.TestCase):
         # ping until pongers
         # findnode until havenodes
 
+    def example_query(self):
+        reqType = {'requestType': 'settings'}
+        payload= self.qComp_777.make_777POST_Request(reqType)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
-class SNET_ping(SNET_BaseTest):
+        rpl777 = eval(testReq.text)
+        for setting in rpl777:
+            print(setting, " - ",rpl777[setting])
+
+
+
+
+class SNET_baseSetup(SNET_BaseTest):
+    """ this tests
+     settings
+     getpeers
+     ping
+     pong
+     GUIpoll
+     findnode
+     havenode
+
+     """#
+    maxPolls = 15
+    pollsDone = 0
+
+    has_pong = False
+    has_havenode = False
+
 
     def setUp(self):
-        pass
 
-    def test_pingPong(self):
-        pass
-        #assert number of Pongers
+        print(5*"\n++++++++++++","SNET_baseSetup")
+        req_settings = {'requestType': 'settings'}
+        payload= self.qComp_777.make_777POST_Request(req_settings)
+
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+
+        self.whitelist = rpl777['whitelist']
+        self.settingsPassed=True
+
+
+        req_getpeers = {'requestType': 'getpeers'}
+        payload = self.qComp_777.make_777POST_Request(req_getpeers)
+
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+
+        self.localpeers=rpl777['peers']
+        self.getpeersPassed=True
+
+
+        establishNetwork = True
+        while establishNetwork:
+
+
+            for ip in self.whitelist:
+                req_ping = {'requestType': 'ping'}
+                payload= self.qComp_777.make_777POST_Request(req_ping)
+                payload['destip'] = ip
+                #print(payload)
+                testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+                rpl777 = eval(testReq.text)
+                #print("ping rpl777: ",rpl777)
+
+            time.sleep(0.1)
+
+            for peer in self.localpeers[2:]:
+                req_findnode = {'requestType': 'findnode'}
+
+                payload= self.qComp_777.make_777POST_Request(req_findnode)
+                #print(peer)
+                payload['key'] = peer['srvNXT']
+                #print(payload)
+                testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+                rpl777 = eval(testReq.text)
+                #print("req_findnode rpl777: ",rpl777)
+
+
+            time.sleep(0.1)
+
+            reqType = {'requestType': 'GUIpoll'}
+            payload= self.qComp_777.make_777POST_Request(reqType)
+
+            headers = {'content-type': 'application/json'}
+            testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+            rpl777 = eval(testReq.text)
+            #print(rpl777['result'])
+            self.pollsDone+=1
+            #
+            # if 'nothing pending' in rpl777['result']:
+            #     print(1*"GUIpoll : ",rpl777  )
+            #
+            if 'kademlia_pong' in rpl777['result']:
+                #print("kademlia_pong -------> ", rpl777)
+                self.has_pong=True
+            elif 'kademlia_havenode' in rpl777['result']:
+                self.has_havenode=True
+                #print("kademlia_havenode------->", rpl777)
+            else:
+                #log.msg(1*"GUIpoll ---> misc.  ", rpl777, type(rpl777))
+                print(1*"GUIpoll ---> misc.  ", rpl777)
+
+
+            print("base setup- has ponger:", self.has_pong)
+            print("base setup- has havenoder:",self.has_havenode,"\n")
+
+
+            if self.has_pong and self.has_havenode:
+                establishNetwork = False
+                self.SNET_baseSetup = True
+
+            if self.pollsDone > self.maxPolls:
+                establishNetwork = False # give up
+                self.SNET_baseSetup = False
 
 
 
-class SNET_findnode_havenode(SNET_BaseTest):
 
-    def setUp(self):
-        pass
+    def test_SNET_baseSetup(self):
 
-    def test_findnode_havenode(self):
-        pass
-        #assert number of havendoers
+        self.assertTrue(self.SNET_baseSetup)
+
+    def xtest_ping(self):
+
+        """ for each testXYZ method in a test class, the setUp is executed again!!!""" #
+
+        print(5*"\n++++++++++++","SNET_baseSetup test_ping" )
+        reqPing = {'requestType': 'ping'}
+        payload= self.qComp_777.make_777POST_Request(reqPing)
+        payload['destip'] = self.whitelist[0] # only one needed, did that before ip
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        #print("ping rpl777: ",rpl777)
+
+        for setting in rpl777:
+            print(setting, " - ",rpl777[setting])
+        self.assertIn('kademlia_ping' , rpl777['result'])
+
+
+    def xtest_GUIpoll(self):
+        print(5*"\n++++++++++++","SNET_baseSetup test_GUIpoll" )
+        self.assertTrue (True)
+
+    def xtest_findnode(self):
+        print(5*"\n++++++++++++","SNET_baseSetup test_findnode" )
+        self.assertTrue(True)
+
+
 
 
 
 
 class SNET_settings(SNET_BaseTest): #unittest.TestCase):
-    # #
-    # def setUp(self):
-    #     #print("this test using own setUp function")
-    #     pass
+
+
+    def setUp(self):
+        print("SNET_settings setUp here- NOP")
+        pass
 
     def test_settings(self):
         print(5*"\n++++++++++++","test_settings")
@@ -67,11 +211,11 @@ class SNET_settings(SNET_BaseTest): #unittest.TestCase):
         # here we can add individual params to the request dict
 
         headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=headers)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
-        repl = eval(testReq.text)
-        for setting in repl:
-            print(setting, " - ",repl[setting])
+        rpl777 = eval(testReq.text)
+        for setting in rpl777:
+            print(setting, " - ",rpl777[setting])
         print("\n")
 
         self.assertGreater(3,2)
@@ -153,6 +297,10 @@ class SNET_settings(SNET_BaseTest): #unittest.TestCase):
 class SNET_getpeers(SNET_BaseTest):
 
 
+    def setUp(self):
+        print("SNET_getpeers setUp here- NOP")
+        pass
+
 
 
     def test_getpeers(self):
@@ -162,21 +310,21 @@ class SNET_getpeers(SNET_BaseTest):
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=headers)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
-        repl = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET reply:") # repl)
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
 
-        print(repl['Numnxtaccts'])
-        print(repl['Numpservers'])
-        print(repl['num'])
+        print(rpl777['Numnxtaccts'])
+        print(rpl777['Numpservers'])
+        print(rpl777['num'])
 
-        for peer in repl['peers']:#
+        for peer in rpl777['peers']:#
             for dat in peer:
                 print(dat, " - ", peer[dat])
             print("\n")
 
-        self.assertGreater(repl['num'],1)
+        self.assertGreater(rpl777['num'],1)
 
         self.assertGreater(3,2)
 
@@ -228,31 +376,109 @@ class SNET_getpeers(SNET_BaseTest):
 
 
 
+def suite_1():
+    suite = unittest.TestSuite()
+    #suite.addTest(SNET_baseSetup('test_ping'))
+    suite.addTest(SNET_baseSetup('setUp'))
+
+    return suite
+
 
 if __name__ == '__main__':
-    unittest.main()
+
+    runSuite = False
+    mainOnly = True
+
+    if mainOnly:
+        unittest.main()
+    elif runSuite:
+        suite1 = suite_1()
+        runner = unittest.TextTestRunner()
+        runner.run(suite1)
 
 
 
 
+#
+# Common Assertions
+#
+# Method
+#
+# assertTrue(x, msg=None)
+#
+# assertFalse(x, msg=None)
+#
+# assertIsNone(x, msg=None)
+#
+# assertIsNotNone(x, msg=None)
+#
+# assertEqual(a, b, msg=None)
+#
+# assertNotEqual(a, b, msg=None)
+#
+# assertIs(a, b, msg=None)
+#
+# assertIsNot(a, b, msg=None)
+#
+# assertIn(a, b, msg=None)
+#
+# assertNotIn(a, b, msg=None)
+#
+# assertIsInstance(a, b, msg=None)
+#
+# assertNotIsInstance(a, b, msg=None)
+#
+#
+# Other Assertions
+#
+# Method
+#
+# assertAlmostEqual(a, b, places=7, msg=None, delta=None)
+#
+# assertNotAlmostEqual(a, b, places=7, msg=None, delta=None)
+#
+# assertGreater(a, b, msg=None)
+#
+# assertGreaterEqual(a, b, msg=None)
+#
+# assertLess(a, b, msg=None)
+#
+# assertLessEqual(a, b, msg=None)
+#
+# assertRegex(text, regexp, msg=None)
+#
+# assertNotRegex(text, regexp, msg=None)
+#
+# assertCountEqual(a, b, msg=None)
+#
+# assertMultiLineEqual(a, b, msg=None)
+#
+# assertSequenceEqual(a, b, msg=None)
+#
+# assertListEqual(a, b, msg=None)
+#
+# assertTupleEqual(a, b, msg=None)
+#
+# assertSetEqual(a, b, msg=None)
+#
+# assertDictEqual(a, b, msg=None)
+#
 
-    #
-    # def test_shuffle(self):
-    #     # make sure the shuffled sequence does not lose any elements
-    #     random.shuffle(self.seq)
-    #     self.seq.sort()
-    #     self.assertEqual(self.seq, list(range(10)))
-    #
-    #     # should raise an exception for an immutable sequence
-    #     self.assertRaises(TypeError, random.shuffle, (1,2,3))
-    #
-    # def test_choice(self):
-    #     element = random.choice(self.seq)
-    #     self.assertTrue(element in self.seq)
-    #
-    # def test_sample(self):
-    #     with self.assertRaises(ValueError):
-    #         random.sample(self.seq, 20)
-    #     for element in random.sample(self.seq, 5):
-    #         self.assertTrue(element in self.seq)
-    #
+#
+# there should be 2 kinds of unit tests
+#
+# blackyblack [11:15 PM]
+# for testing server you test the internals
+#
+# blackyblack [11:16 PM]
+# so no need for POST
+#
+# blackyblack [11:16 PM]
+# for testing client side you create a fake server and test client requets
+#
+# blackyblack [11:16 PM]11:16
+# all networking is removed from testing
+#
+# blackyblack [11:17 PM]
+# for networking you create another test suite and test it separately from client/server
+
