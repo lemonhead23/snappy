@@ -28,12 +28,8 @@ class SNET_BaseTest(unittest.TestCase):
         """ This can be overridden by any testing class if needed. """
 
         print("this test using generic setUp function")
-        while self.numPongers < 2 and self.numHavenoders < 2 :
-            print("establishing PONGers and HAVENODErs of SUperNET server")
 
-        # as setup:
-        # ping until pongers
-        # findnode until havenodes
+
 
     def example_query(self):
         reqType = {'requestType': 'settings'}
@@ -43,7 +39,7 @@ class SNET_BaseTest(unittest.TestCase):
 
         rpl777 = eval(testReq.text)
         for setting in rpl777:
-            print(setting, " - ",rpl777[setting])
+            print(setting, " - ", rpl777[setting])
 
 
 
@@ -64,7 +60,7 @@ class SNET_baseSetup(SNET_BaseTest):
 
     has_pong = False
     has_havenode = False
-
+    SNET_baseSetupOK = False
 
     def setUp(self):
 
@@ -96,7 +92,6 @@ class SNET_baseSetup(SNET_BaseTest):
         establishNetwork = True
         while establishNetwork:
 
-
             for ip in self.whitelist:
                 req_ping = {'requestType': 'ping'}
                 payload= self.qComp_777.make_777POST_Request(req_ping)
@@ -104,7 +99,7 @@ class SNET_baseSetup(SNET_BaseTest):
                 #print(payload)
                 testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
                 rpl777 = eval(testReq.text)
-                #print("ping rpl777: ",rpl777)
+                print("ping whitelist rpl777: ",rpl777)
 
             time.sleep(0.1)
 
@@ -117,7 +112,7 @@ class SNET_baseSetup(SNET_BaseTest):
                 #print(payload)
                 testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
                 rpl777 = eval(testReq.text)
-                #print("req_findnode rpl777: ",rpl777)
+                print("req_findnode rpl777: ",rpl777)
 
 
             time.sleep(0.1)
@@ -136,59 +131,51 @@ class SNET_baseSetup(SNET_BaseTest):
             #     print(1*"GUIpoll : ",rpl777  )
             #
             if 'kademlia_pong' in rpl777['result']:
-                #print("kademlia_pong -------> ", rpl777)
+                print("kademlia_pong -------> ", rpl777)
                 self.has_pong=True
             elif 'kademlia_havenode' in rpl777['result']:
                 self.has_havenode=True
-                #print("kademlia_havenode------->", rpl777)
+                print("kademlia_havenode------->", rpl777)
             else:
                 #log.msg(1*"GUIpoll ---> misc.  ", rpl777, type(rpl777))
                 print(1*"GUIpoll ---> misc.  ", rpl777)
 
-
             print("base setup- has ponger:", self.has_pong)
             print("base setup- has havenoder:",self.has_havenode,"\n")
 
-
             if self.has_pong and self.has_havenode:
                 establishNetwork = False
-                self.SNET_baseSetup = True
+                self.SNET_baseSetupOK = True
 
             if self.pollsDone > self.maxPolls:
                 establishNetwork = False # give up
-                self.SNET_baseSetup = False
+                self.SNET_baseSetupOK = False
 
 
 
 
     def test_SNET_baseSetup(self):
 
-        self.assertTrue(self.SNET_baseSetup)
+        self.assertTrue(self.SNET_baseSetupOK)
 
-    def xtest_ping(self):
+    #
+    # def test_ping(self):
+    #
+    #     """ for each testXYZ method in a test class, the setUp is executed again!!!""" #
+    #
+    #     print(5*"\n++++++++++++","SNET_baseSetup test_ping" )
+    #     req_ping = {'requestType': 'ping'}
+    #     payload= self.qComp_777.make_777POST_Request(req_ping) # pull the whole dict for this req
+    #     payload['destip'] = self.whitelist[0] # only one needed, did that before ip
+    #     testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+    #     rpl777 = eval(testReq.text)
+    #     #print("ping rpl777: ",rpl777)
+    #
+    #     for setting in rpl777:
+    #         print(setting, " - ",rpl777[setting])
+    #     self.assertIn('kademlia_ping' , rpl777['result'])
 
-        """ for each testXYZ method in a test class, the setUp is executed again!!!""" #
 
-        print(5*"\n++++++++++++","SNET_baseSetup test_ping" )
-        reqPing = {'requestType': 'ping'}
-        payload= self.qComp_777.make_777POST_Request(reqPing)
-        payload['destip'] = self.whitelist[0] # only one needed, did that before ip
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-        rpl777 = eval(testReq.text)
-        #print("ping rpl777: ",rpl777)
-
-        for setting in rpl777:
-            print(setting, " - ",rpl777[setting])
-        self.assertIn('kademlia_ping' , rpl777['result'])
-
-
-    def xtest_GUIpoll(self):
-        print(5*"\n++++++++++++","SNET_baseSetup test_GUIpoll" )
-        self.assertTrue (True)
-
-    def xtest_findnode(self):
-        print(5*"\n++++++++++++","SNET_baseSetup test_findnode" )
-        self.assertTrue(True)
 
 
 
@@ -326,10 +313,6 @@ class SNET_getpeers(SNET_BaseTest):
 
         self.assertGreater(rpl777['num'],1)
 
-        self.assertGreater(3,2)
-
-
-
         details_of_expected_SuperNET_reply = """
         r.apparent_encoding = ascii
         r.headers
@@ -375,13 +358,69 @@ class SNET_getpeers(SNET_BaseTest):
 
 
 
+##############################################
+##############################################
+##############################################
+##############################################
+##############################################
+
+
+
+# copy this over for every api call
+
+
+class SNET_(SNET_BaseTest):
+
+
+    def setUp(self):
+        print("SNET_ t setUp here- NOP")
+        pass
+
+
+
+    def test_(self):
+
+        print(5*"\n++++++++++++","test_x1")
+        reqType = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(reqType)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
+
+        print(rpl777['Numnxtaccts'])
+        print(rpl777['Numpservers'])
+        print(rpl777['num'])
+
+        for peer in rpl777['peers']:#
+            for dat in peer:
+                print(dat, " - ", peer[dat])
+            print("\n")
+
+        self.assertTrue(False)
+
+
+
+
+
+
+##############################################
+##############################################
+##############################################
+##############################################
+##############################################
+
+
 
 def suite_1():
     suite = unittest.TestSuite()
-    #suite.addTest(SNET_baseSetup('test_ping'))
     suite.addTest(SNET_baseSetup('setUp'))
 
     return suite
+
+
 
 
 if __name__ == '__main__':

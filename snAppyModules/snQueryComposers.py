@@ -525,7 +525,7 @@ static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method",
 
 
     #
-    # // ramchains   11
+    # // ramchains   13
 
 
 
@@ -970,6 +970,96 @@ CHECK!
 
 
 
+
+
+
+
+
+    #// remotable ramchains
+    #
+
+
+    def ramresponse(self, reqDict):
+        """ individual treatment of requests and their parms here
+ #static char *ramresponse[] = { (char *)ramresponse_func, "ramresponse", "V", "coin", "origcmd", "data", 0 };
+
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'ramresponse'
+        try:
+            K1 = 'coin'
+            P1 = reqDict['coin']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'origcmd'
+            P2 = reqDict['origcmd']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'data'
+            P3 = reqDict['data']
+        except:
+            P3 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+
+
+
+
+    def rampyramid(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
+"""#
+        K0 = 'requestType'
+        P0 = 'rampyramid'
+        try:
+            K1 = 'destip'
+            P1 = reqDict['destip']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'port'
+            P2 = reqDict['port']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'coin'
+            P3 = reqDict['coin']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'blocknum'
+            P4 = reqDict['blocknum']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'type'
+            P5 = reqDict['type']
+        except:
+            P5 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5 }
 
 
 
@@ -2901,6 +2991,62 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
         return  { K0 : P0 , K1 : P1 , K2 : P2 , }
 
+
+
+
+
+
+
+    # // Embedded Langs
+
+
+
+    def python(self, reqDict):
+        """ individual treatment of requests and their parms here
+ #static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'python'
+        try:
+            K1 = 'name'
+            P1 = reqDict['name']
+        except:
+            P1 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1   }
+
+
+
+
+    def syscall(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+    #static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'syscall'
+        try:
+            K1 = 'name'
+            P1 = reqDict['name']
+        except:
+            P1 = ''
+        try:
+            K2 = 'cmd'
+            P2 = reqDict['cmd']
+        except:
+            P2 = ''
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2 , }
+
+
+
+
     #
 ##########################
 ##########################
@@ -2960,6 +3106,9 @@ This is the wrapper class
 
     #API_callsRPC = ['start', 'stop']
     # these can be instantiated w/ different factories
+
+
+
     API_calls = [
                    '                 glue 7',\
                    'gotjson',\
@@ -2973,7 +3122,7 @@ This is the wrapper class
                    '                   passthru 2'
                    'passthru',\
                    'remote',\
-                   '                  ramchains 11',\
+                   '                  ramchains 13',\
                    'ramstatus',\
                    'ramaddrlist',\
                    'ramstring',\
@@ -2985,6 +3134,8 @@ This is the wrapper class
                    'remoramcompresste',\
                    'ramexpand',\
                    'rambalances',\
+                   'rampyramid' ,\
+                   'ramresponse',\
                    '                   MGW 8',\
                    'genmultisig',\
                    'getmsigpubkey',\
@@ -3037,8 +3188,14 @@ This is the wrapper class
                    'getquotes',\
                    'tradebot',\
                     '                     Privatebet',\
-                    'lotto'
+                    'lotto',\
+                    '                     embeddedLangs',\
+                    'python',\
+                    'syscall',\
                    ]
+
+
+
 
     def __init__(self, environ = {}):
         super(QueryComposer_777, self).__init__(environ)
@@ -3067,25 +3224,32 @@ This is the wrapper class
         elif reqDict['requestType'] == 'gotjson':
             jsonSpecs = self.jl777_aAll.gotjson(reqDict)
             return jsonSpecs
+
         elif reqDict['requestType'] == 'gotpacket':
             jsonSpecs = self.jl777_aAll.gotpacket(reqDict)
             return jsonSpecs
+
         elif reqDict['requestType'] == 'gotnewpeer':
             jsonSpecs = self.jl777_aAll.gotnewpeer(reqDict)
             return jsonSpecs
+
         elif reqDict['requestType'] == 'BTCDpoll':
             jsonSpecs = self.jl777_aAll.BTCDpoll(reqDict)
             return jsonSpecs
+
         elif reqDict['requestType'] == 'GUIpoll':
             jsonSpecs = self.jl777_aAll.GUIpoll(reqDict)
             return jsonSpecs
+
         elif reqDict['requestType'] == 'stop':
            jsonSpecs = self.jl777_aAll.stop(reqDict)
            return jsonSpecs
+
         # NOTE: this is used by another parser!
         elif reqDict['requestType'] == 'start':
             jsonSpecs = self.jl777_aAll.start(reqDict)
             return jsonSpecs
+
         elif reqDict['requestType'] == 'settings':
             jsonSpecs = self.jl777_aAll.settings(reqDict)
             return jsonSpecs
@@ -3100,7 +3264,7 @@ This is the wrapper class
             jsonSpecs = self.jl777_aAll.remote(reqDict)
             return jsonSpecs
 
-        # ramchains 11
+        # ramchains 13
 
 
         elif reqDict['requestType'] == 'ramstatus':
@@ -3145,6 +3309,14 @@ This is the wrapper class
 
         elif reqDict['requestType'] == 'rambalances':
             jsonSpecs = self.jl777_aAll.rambalances(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'rampyramid':
+            jsonSpecs = self.jl777_aAll.rampyramid(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'ramresponse':
+            jsonSpecs = self.jl777_aAll.ramresponse(reqDict)
             return jsonSpecs
 
 
@@ -3300,6 +3472,14 @@ This is the wrapper class
             return jsonSpecs
         elif reqDict['requestType'] == 'tradebot':
             jsonSpecs = self.jl777_aAll.tradebot(reqDict)
+            return jsonSpecs
+
+        #// embedLangs
+        elif reqDict['requestType'] == 'python':
+            jsonSpecs = self.jl777_aAll.python(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'syscall':
+            jsonSpecs = self.jl777_aAll.syscall(reqDict)
             return jsonSpecs
 
         else:

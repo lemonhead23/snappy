@@ -195,7 +195,7 @@ Currently:
 
 
 
---------->         6 steps to include new API calls into this api controller
+--------->                        6 steps to include new API calls into this api controller
 
 
 ~~~~~~~~~~~~~~~~~~~

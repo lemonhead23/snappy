@@ -209,6 +209,17 @@ class Parser_jl777_rambalances(Parser_JL777_Base):
         return data2parse
 
 
+class Parser_jl777_rampyramid(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ramresponse(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
 
 # multisig MGW 8
 
@@ -486,6 +497,21 @@ class Parser_jl777_lotto(Parser_JL777_Base):
         return data2parse
 
 
+# embeddedLnags
+
+class Parser_jl777_python(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
+class Parser_jl777_syscall(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
+
 
   
 ##########################
@@ -537,9 +563,12 @@ class Parser_777(object):
     ql777_ramcompress = Parser_jl777_ramcompress()
     ql777_ramexpand = Parser_jl777_ramexpand()
     ql777_rambalances = Parser_jl777_rambalances()
-
+    ql777_rampyramid = Parser_jl777_rampyramid()
+    ql777_ramresponse = Parser_jl777_ramresponse()
 
     # // MGW
+
+
     ql777_genmultisig = Parser_jl777_genmultisig()
     ql777_getmsigpubkey = Parser_jl777_getmsigpubkey()
     ql777_MGWaddr = Parser_jl777_MGWaddr()
@@ -548,9 +577,7 @@ class Parser_777(object):
     ql777_MGWresponse = Parser_jl777_MGWresponse()
     ql777_cosign = Parser_jl777_cosign()
     ql777_cosigned = Parser_jl777_cosigned()
-
-    # // IPcomms
-
+    # // IPcomms(MGW)
     ql777_ping = Parser_jl777_ping()
     ql777_pong = Parser_jl777_pong()
     ql777_sendfrag = Parser_jl777_sendfrag()
@@ -602,6 +629,12 @@ class Parser_777(object):
 
     # // # privatebet
     ql777_lotto = Parser_jl777_lotto()
+
+
+    # // Embedded Langs
+    ql777_python = Parser_jl777_python()
+    ql777_syscall = Parser_jl777_syscall()
+
 
 
 
@@ -736,6 +769,11 @@ class Parser_777(object):
         elif requestType2Parse == 'rambalances':
             parsed = self.ql777_rambalances.parse(data2parse)
 
+        elif requestType2Parse == 'rampyramid':
+            parsed = self.ql777_rampyramid.parse(data2parse)
+
+        elif requestType2Parse == 'ramresponse':
+            parsed = self.ql777_ramresponse.parse(data2parse)
 
 
     # //  8 MGW
@@ -894,6 +932,15 @@ class Parser_777(object):
 
         elif requestType2Parse == 'lotto':
             parsed = self.ql777_lotto.parse(data2parse)
+
+    # // embedded langs
+        elif requestType2Parse == 'python':
+            parsed = self.ql777_python.parse(data2parse)
+
+        elif requestType2Parse == 'syscall':
+            parsed = self.ql777_syscall.parse(data2parse)
+
+
 
     # //
         else:
