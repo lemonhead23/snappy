@@ -6,7 +6,7 @@ import requests
 import json
 
 from snAppyModules.snQueryComposers import QueryComposer_777
-from snAppyModules.snTestConfig import *
+from snAppyTests.snTestConfig import *
 
 import time
 
@@ -21,6 +21,7 @@ class SNET_BaseTest(unittest.TestCase):
     qComp_777 = QueryComposer_777(environ)
     numPongers = 1
     numHavenoders = 1
+    # can count pongers and havenoders just as in snappey
 
     headers = {'content-type': 'application/json'}
 
@@ -68,7 +69,11 @@ class SNET_baseSetup(SNET_BaseTest):
         req_settings = {'requestType': 'settings'}
         payload= self.qComp_777.make_777POST_Request(req_settings)
 
+        print(payload)
         headers = {'content-type': 'application/json'}
+        print(self.url)
+
+
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
         rpl777 = eval(testReq.text)
@@ -85,8 +90,8 @@ class SNET_baseSetup(SNET_BaseTest):
 
         rpl777 = eval(testReq.text)
 
+        print(rpl777)
         self.localpeers=rpl777['peers']
-        self.getpeersPassed=True
 
 
         establishNetwork = True
@@ -97,6 +102,7 @@ class SNET_baseSetup(SNET_BaseTest):
                 payload= self.qComp_777.make_777POST_Request(req_ping)
                 payload['destip'] = ip
                 #print(payload)
+                time.sleep(0.2)
                 testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
                 rpl777 = eval(testReq.text)
                 print("ping whitelist rpl777: ",rpl777)
@@ -110,6 +116,7 @@ class SNET_baseSetup(SNET_BaseTest):
                 #print(peer)
                 payload['key'] = peer['srvNXT']
                 #print(payload)
+                time.sleep(0.2)
                 testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
                 rpl777 = eval(testReq.text)
                 print("req_findnode rpl777: ",rpl777)
@@ -158,27 +165,11 @@ class SNET_baseSetup(SNET_BaseTest):
 
         print(5*"\ntest_SNET_baseSetup")
         time.sleep(3)
-        self.assertTrue(self.SNET_baseSetupOK)
-
-    #
-    # def test_ping(self):
-    #
-    #     """ for each testXYZ method in a test class, the setUp is executed again!!!""" #
-    #
-    #     print(5*"\n++++++++++++","SNET_baseSetup test_ping" )
-    #     req_ping = {'requestType': 'ping'}
-    #     payload= self.qComp_777.make_777POST_Request(req_ping) # pull the whole dict for this req
-    #     payload['destip'] = self.whitelist[0] # only one needed, did that before ip
-    #     testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-    #     rpl777 = eval(testReq.text)
-    #     #print("ping rpl777: ",rpl777)
-    #
-    #     for setting in rpl777:
-    #         print(setting, " - ",rpl777[setting])
-    #     self.assertIn('kademlia_ping' , rpl777['result'])
+        #self.assertTrue(self.SNET_baseSetupOK)
+        self.failUnless(self.SNET_baseSetupOK)
 
 
-
+    # GUIpoll reply: kademlia_pong ------->  {'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"127.0.0.1","port":0,"lag":"143.250","numpings":5,"numpongs":24,"ave":"366301.170"}', 'from': '89.212.19.49', 'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1424204548,"MMatrix":0,"yourip":"178.62.185.131","yourport":35671,"ipaddr":"127.0.0.1","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.599"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a6scag2ricaddi82i9cgd2qokv9147cqp2aqbtoogldjbaofuoga3cb3r2m06qjmfu5gpl8s63m6hn2gfahl3l4o7t0eds96d78t4eiclm5psims"}]', 'port': 0}
 
 
 
@@ -203,6 +194,8 @@ class SNET_settings(SNET_BaseTest): #unittest.TestCase):
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
         rpl777 = eval(testReq.text)
+
+        print(rpl777)
         for setting in rpl777:
             print(setting, " - ",rpl777[setting])
         print("\n")
@@ -211,6 +204,7 @@ class SNET_settings(SNET_BaseTest): #unittest.TestCase):
 
         settingsReply="""
         query json is:  {'value': '', 'requestType': 'settings', 'field': '', 'reinit': ''}
+   ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
 {
   "debug":2,
   "whitelist":[
@@ -239,6 +233,7 @@ class SNET_settings(SNET_BaseTest): #unittest.TestCase):
   "UPNP":0,
   "MULTIPORT":1,
   "LIBTEST":1,
+ "MGWROOT":"/var/www",
   "active":[
     "BTCD"
   ],
@@ -277,6 +272,8 @@ class SNET_settings(SNET_BaseTest): #unittest.TestCase):
     }
   ]
 }
+
+
 
         """
 
@@ -399,6 +396,10 @@ class SNET_gotjson(SNET_BaseTest):
 
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
+
+# azure@boxfish:~/workbench/nxtDev/TEAM/snappy$ curl   -H 'content-type: text/plain;' 'http://127/nxt?requestType=gotjson'
+# {'result': None}
+#
 
 
         self.assertTrue(True)
@@ -2034,6 +2035,7 @@ class SNET_syscall(SNET_BaseTest):
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
+
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
         rpl777 = eval(testReq.text)
@@ -2051,24 +2053,51 @@ class SNET_syscall(SNET_BaseTest):
 
 
 
-def suite_1():
+def suite_baseSetup():
     suite = unittest.TestSuite()
     suite.addTest(SNET_baseSetup('setUp'))
-
+    suite.addTest(SNET_baseSetup('test_SNET_baseSetup'))
     return suite
 
+def suite_getpeers():
+    suite = unittest.TestSuite()
+    #suite.addTest(SNET_getpeers('setUp'))
+    suite.addTest(SNET_getpeers('test_getpeers'))
+    return suite
+
+def suite_settings():
+    suite = unittest.TestSuite()
+    #suite.addTest(SNET_getpeers('setUp'))
+    suite.addTest(SNET_settings('test_settings'))
+    return suite
 
 
 
 if __name__ == '__main__':
 
-    runSuite = True
-    mainOnly = False
 
-    if runSuite:
-        suite1 = suite_1()
+    runSuite3 = True
+    runSuite2 = True
+    runSuite1 = False  #TrueTrue #
+    mainOnly =        False #True ##
+
+
+    if runSuite1:
+        suiteBaseSetup = suite_baseSetup()
         runner = unittest.TextTestRunner()
-        runner.run(suite1)
+        runner.run(suiteBaseSetup)
+
+    if runSuite2:
+        suiteGetpeers = suite_getpeers()
+        runner = unittest.TextTestRunner()
+        runner.run(suiteGetpeers)
+
+    if runSuite3:
+        suiteSettings = suite_settings()
+        runner = unittest.TextTestRunner()
+        runner.run(suiteSettings)
+
+
 
     if mainOnly:
         unittest.main()

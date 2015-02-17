@@ -2444,6 +2444,28 @@ got JSON.({"requestType":"maketelepods","coin":"BTCD","amount":".005"})
                    'processutx',\
 
 
+static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
+   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
+   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
+   static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
+   static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
+   static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
+
+
+respondtx and processutx are internal trade negotiation API's and can be ignored, there will be other internal API calls too, like "bid" and "ask"
+
+I am defaulting to expiring quotes in 5 minutes
+
+orderbooks are created dynamically when a placebid/placeask is submitted
+
+initially the orderbook API will just return the direct orderbook, later it will return synthetic quotes. more on that later
+fgotjso
+
+
+
+
+
+
 
 do_localstore(12008998766472701676) <- (7b2274696d65223a313431363133373530302c2274797065223a322c224e5854223a2232313331363836363539373836343632393031222c2262617365223a223131303630383631383138313430343930343233222c2262617365616d6f756e74223a22313030343939393939222c2272656c223a2234353531303538393133323532313035333037222c2272656c616d6f756e74223a22343031393939222c227265717565737454797065223a22626964227d00)
 updated.public.db (12008998766472701676) hp.0x7fb8666f6750 data.data 0x7fb8666f6750
