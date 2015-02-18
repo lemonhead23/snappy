@@ -58,7 +58,14 @@ UC12_
 rpl777_df2_findnode sent {'result': 'kademlia_findnode from.(10501328530345129240) previp.() key.(1978065578067355462) datalen.0 txid.2411900097109397113'}
 
 
-
+{
+       "orderbooks":   [{
+                       "base": "BTC",
+                       "baseid":       "4551058913252105307",
+                       "rel":  "BTCD",
+                       "relid":        "11060861818140490423",
+                       "numquotes":    3
+               }]}
 
 
 

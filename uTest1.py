@@ -22,7 +22,7 @@ class SNET_BaseTest(unittest.TestCase):
     numPongers = 1
     numHavenoders = 1
     # can count pongers and havenoders just as in snappey
-
+    # and other basic state
     headers = {'content-type': 'application/json'}
 
     def setUp(self):
@@ -69,10 +69,9 @@ class SNET_baseSetup(SNET_BaseTest):
         req_settings = {'requestType': 'settings'}
         payload= self.qComp_777.make_777POST_Request(req_settings)
 
-        print(payload)
+        # print(payload)
         headers = {'content-type': 'application/json'}
-        print(self.url)
-
+        # print(self.url)
 
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
@@ -80,7 +79,6 @@ class SNET_baseSetup(SNET_BaseTest):
 
         self.whitelist = rpl777['whitelist']
         self.settingsPassed=True
-
 
         req_getpeers = {'requestType': 'getpeers'}
         payload = self.qComp_777.make_777POST_Request(req_getpeers)
@@ -92,7 +90,6 @@ class SNET_baseSetup(SNET_BaseTest):
 
         print(rpl777)
         self.localpeers=rpl777['peers']
-
 
         establishNetwork = True
         while establishNetwork:
@@ -131,24 +128,50 @@ class SNET_baseSetup(SNET_BaseTest):
             testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
             rpl777 = eval(testReq.text)
+
+            # #####################
+            #
+            #  This is a testig suite. So keep this comment here.
+            #
+            # print(testReq.text)
+            # print(testReq.content)
+            #
+            # {"result":"{\"result\":\"kademlia_pong\",\"tag\":\"\",\"isMM\":\"0\",\"NXT\":\"1978065578067355462\",\"ipaddr\":\"89.212.19.49\",\"port\":0,\"lag\":\"430430.250\",\"numpings\":5,\"numpongs\":66,\"ave\":\"516774.061\"}","from":"89.212.19.49","port":0,"args":"[{\"requestType\":\"pong\",\"NXT\":\"1978065578067355462\",\"time\":1424245045,\"MMatrix\":0,\"yourip\":\"178.62.185.131\",\"yourport\":33978,\"ipaddr\":\"89.212.19.49\",\"pubkey\":\"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40\",\"ver\":\"0.599\"},{\"token\":\"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a9bfcg2rsiss5o82ik5t372e28kcalo6t6l9rcm6e5ol2qad2sn479go2kqgho6kkvq3ne0496t396vvcobl2fpg4ngmtmb3pac0grs7knhn8qe4\"}]"}
+            #
+            # b'{"result":"{\\"result\\":\\"kademlia_pong\\",\\"tag\\":\\"\\",\\"isMM\\":\\"0\\",\\"NXT\\":\\"1978065578067355462\\",\\"ipaddr\\":\\"89.212.19.49\\",\\"port\\":0,\\"lag\\":\\"430430.250\\",\\"numpings\\":5,\\"numpongs\\":66,\\"ave\\":\\"516774.061\\"}","from":"89.212.19.49","port":0,"args":"[{\\"requestType\\":\\"pong\\",\\"NXT\\":\\"1978065578067355462\\",\\"time\\":1424245045,\\"MMatrix\\":0,\\"yourip\\":\\"178.62.185.131\\",\\"yourport\\":33978,\\"ipaddr\\":\\"89.212.19.49\\",\\"pubkey\\":\\"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40\\",\\"ver\\":\\"0.599\\"},{\\"token\\":\\"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a9bfcg2rsiss5o82ik5t372e28kcalo6t6l9rcm6e5ol2qad2sn479go2kqgho6kkvq3ne0496t396vvcobl2fpg4ngmtmb3pac0grs7knhn8qe4\\"}]"}'
+            #
+            #
+            #
+
             #print(rpl777['result'])
-            self.pollsDone+=1
+            self.pollsDone += 1
             #
             # if 'nothing pending' in rpl777['result']:
             #     print(1*"GUIpoll : ",rpl777  )
             #
             if 'kademlia_pong' in rpl777['result']:
-                print("kademlia_pong -------> ", rpl777)
+                print("kademlia_pong -------> ", rpl777['result'])
+
+                #
+                # print("kademlia_pong -------> ", rpl777)
+                # print("kademlia_pong -------> ", rpl777['result'])
+                #
+                #
+                # kademlia_pong ------->  {'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"430430.250","numpings":5,"numpongs":66,"ave":"516774.061"}', 'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1424245045,"MMatrix":0,"yourip":"178.62.185.131","yourport":33978,"ipaddr":"89.212.19.49","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.599"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a9bfcg2rsiss5o82ik5t372e28kcalo6t6l9rcm6e5ol2qad2sn479go2kqgho6kkvq3ne0496t396vvcobl2fpg4ngmtmb3pac0grs7knhn8qe4"}]', 'port': 0, 'from': '89.212.19.49'}
+                # kademlia_pong ------->  {"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"430430.250","numpings":5,"numpongs":66,"ave":"516774.061"}
+                #
+
+
                 self.has_pong=True
             elif 'kademlia_havenode' in rpl777['result']:
                 self.has_havenode=True
-                print("kademlia_havenode------->", rpl777)
+                print("kademlia_havenode -------> ", rpl777)
             else:
                 #log.msg(1*"GUIpoll ---> misc.  ", rpl777, type(rpl777))
                 print(1*"GUIpoll ---> misc.  ", rpl777)
 
-            print("base setup- has ponger:", self.has_pong)
-            print("base setup- has havenoder:",self.has_havenode,"\n")
+            print("base setup- has ponger(s): ", self.has_pong)
+            print("base setup- has havenoder(s): ",self.has_havenode,"\n")
 
             if self.has_pong and self.has_havenode:
                 establishNetwork = False
@@ -169,13 +192,14 @@ class SNET_baseSetup(SNET_BaseTest):
         self.failUnless(self.SNET_baseSetupOK)
 
 
-    # GUIpoll reply: kademlia_pong ------->  {'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"127.0.0.1","port":0,"lag":"143.250","numpings":5,"numpongs":24,"ave":"366301.170"}', 'from': '89.212.19.49', 'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1424204548,"MMatrix":0,"yourip":"178.62.185.131","yourport":35671,"ipaddr":"127.0.0.1","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.599"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a6scag2ricaddi82i9cgd2qokv9147cqp2aqbtoogldjbaofuoga3cb3r2m06qjmfu5gpl8s63m6hn2gfahl3l4o7t0eds96d78t4eiclm5psims"}]', 'port': 0}
+    # GUIpoll reply: kademlia_pong ------->
+    # {'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"127.0.0.1","port":0,"lag":"143.250","numpings":5,"numpongs":24,"ave":"366301.170"}', 'from': '89.212.19.49', 'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1424204548,"MMatrix":0,"yourip":"178.62.185.131","yourport":35671,"ipaddr":"127.0.0.1","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.599"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a6scag2ricaddi82i9cgd2qokv9147cqp2aqbtoogldjbaofuoga3cb3r2m06qjmfu5gpl8s63m6hn2gfahl3l4o7t0eds96d78t4eiclm5psims"}]', 'port': 0}
+    # {'args': '[{"requestType":"pong","NXT":"1978065578067355462","time":1424241662,"MMatrix":0,"yourip":"178.62.185.131","yourport":33978,"ipaddr":"89.212.19.49","pubkey":"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40","ver":"0.599"},{"token":"aqqagqe2sph302rsgieobfm482580iqs386jrk2teb5tjd67a94rsg2r93ggu7o2va245utlbcftdrfqkm74cjnc4nomh0tsrbe3iupfn2mg2r2ii6k40iki6b70ppfo3naq2vcmndtab86m036r22g3ka2f2a4f"}]', 'from': '89.212.19.49', 'result': '{"result":"kademlia_pong","tag":"","isMM":"0","NXT":"1978065578067355462","ipaddr":"89.212.19.49","port":0,"lag":"84380.922","numpings":0,"numpongs":2,"ave":"70919.423"}', 'port': 0}
+    # {'result': 'nothing pending'}
 
 
 
-
-
-class SNET_settings(SNET_BaseTest): #unittest.TestCase):
+class SNET_settings(SNET_BaseTest):
 
 
     def setUp(self):
@@ -291,6 +315,11 @@ class SNET_getpeers(SNET_BaseTest):
 
     def test_getpeers(self):
 
+        """
+        self.assertTrue('peers' in rpl777.keys())
+
+        """ #
+
         print(5*"\n++++++++++++","test_getpeers")
         reqType = {'requestType': 'getpeers'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -299,18 +328,54 @@ class SNET_getpeers(SNET_BaseTest):
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
         rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        #
+        # print(rpl777['Numnxtaccts'])
+        # print(rpl777['Numpservers'])
+        # print(rpl777['num'])
+        #
+        # for peer in rpl777['peers']:#
+        #     for dat in peer:
+        #         print(dat, " - ", peer[dat])
+        #     print("\n")
 
-        print(rpl777['Numnxtaccts'])
-        print(rpl777['Numpservers'])
-        print(rpl777['num'])
+        self.assertTrue('peers' in rpl777.keys())
 
-        for peer in rpl777['peers']:#
-            for dat in peer:
-                print(dat, " - ", peer[dat])
-            print("\n")
+    #
+    # def test_getpeers(self):
+    #
+    #     print(5*"\n++++++++++++**","test_getpeers")
+    #     reqType = {'requestType': 'getpeers'}
+    #     payload= self.qComp_777.make_777POST_Request(reqType)
+    #     print("query json is: ", payload)
+    #     headers = {'content-type': 'application/json'}
+    #     testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+    #
+    #     rpl777 = eval(testReq.text)
+    #     print(15*"\n~~~~~~~~~~~~","SuperNET rpl777y:",rpl777)
+    #
+    #
+    #     print(rpl777['Numnxtaccts'])
+    #     print(rpl777['Numpservers'])
+    #     print(rpl777['num'])
+    #
+    #     for peer in rpl777['peers']:#
+    #         for dat in peer:
+    #             print(dat, " - ", peer[dat])
+    #         print("\n")
+    #
+    #     self.assertGreater(rpl777['num'],1)
 
-        self.assertGreater(rpl777['num'],1)
+#
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+
+
 
         details_of_expected_SuperNET_reply = """
         r.apparent_encoding = ascii
@@ -357,22 +422,6 @@ class SNET_getpeers(SNET_BaseTest):
 
 
 
-##############################################
-##############################################
-##############################################
-##############################################
-##############################################
-
-
-
-# copy this over for every api call
-
-
-
-    # // glue
-
-
-
 
 
 
@@ -386,16 +435,18 @@ class SNET_gotjson(SNET_BaseTest):
 
 
     def test_gotjson(self):
-
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
         print(5*"\n++++++++++++","test_gotjson")
         reqType = {'requestType': 'gotjson'}
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", testReq.content) #  b'{"result":null}'
+
 
         rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777) # rpl777)
 
 # azure@boxfish:~/workbench/nxtDev/TEAM/snappy$ curl   -H 'content-type: text/plain;' 'http://127/nxt?requestType=gotjson'
 # {'result': None}
@@ -426,6 +477,8 @@ class SNET_gotpacket(SNET_BaseTest):
 
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
+# {'result': None}
+#
 
 
         self.assertTrue(True)
@@ -455,9 +508,6 @@ class SNET_gotnewpeer(SNET_BaseTest):
 
 
         self.assertTrue(True)
-
-
-
 
 
 
@@ -1406,7 +1456,8 @@ class SNET_publish(SNET_BaseTest):
     # // Telepathy
 ##############getpeers
 
-class SNET_getpeers(SNET_BaseTest):
+
+class SNET_getpeers___DOUBLE__1(SNET_BaseTest):
 
 
     def setUp(self):
@@ -1425,7 +1476,7 @@ class SNET_getpeers(SNET_BaseTest):
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
         rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:") # rpl777)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
 
         print(rpl777['Numnxtaccts'])
         print(rpl777['Numpservers'])
@@ -1436,7 +1487,7 @@ class SNET_getpeers(SNET_BaseTest):
                 print(dat, " - ", peer[dat])
             print("\n")
 
-        self.assertTrue(True)
+        self.assertTrue('peers' in rpl777.keys())
 
 
 
@@ -2073,12 +2124,23 @@ def suite_settings():
 
 
 
+def suite_gotjson():
+    suite = unittest.TestSuite()
+    #suite.addTest(SNET_getpeers('setUp'))
+    suite.addTest(SNET_gotjson('test_gotjson'))
+    return suite
+
+
+
+
+
 if __name__ == '__main__':
 
-
-    runSuite3 = True
+    suite1=['t1','t2',] # ????
+    runSuite3 = False#True
     runSuite2 = True
-    runSuite1 = False  #TrueTrue #
+    runSuite1 = False #True#True #False  #
+
     mainOnly =        False #True ##
 
 
@@ -2093,9 +2155,13 @@ if __name__ == '__main__':
         runner.run(suiteGetpeers)
 
     if runSuite3:
-        suiteSettings = suite_settings()
+        suiteGotjson = suite_gotjson()
         runner = unittest.TextTestRunner()
-        runner.run(suiteSettings)
+        runner.run(suiteGotjson)
+        #
+        # suiteSettings = suite_settings()
+        # runner = unittest.TextTestRunner()
+        # runner.run(suiteSettings)
 
 
 
@@ -2104,6 +2170,16 @@ if __name__ == '__main__':
 
 
 
+# List of tests and what they do:
+
+# getpeers:
+
+    """
+    self.assertTrue('peers' in rpl777.keys())
+
+    """ #
+
+# ALSO: failIf etc!
 
 #
 # Common Assertions

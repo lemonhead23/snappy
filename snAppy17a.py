@@ -90,7 +90,7 @@ class ProxyServerProtocolSuperNET(protocol.Protocol):
         render_GET, etc... """ #
         # ToDo: check mechnism: - self.client? this has to do with connection status somehow.
         if self.client:
-            #log.msg("ProxyServerProtocolSuperNET 2a::\n\n", str(rawRequest))
+            log.msg("ProxyServerProtocolSuperNET 2a::\n\n", str(rawRequest))
             self.client.write(rawRequest)
         else:
             #log.msg("ProxyServerProtocolSuperNET 2b--dataReceived- ", str(rawRequest))
