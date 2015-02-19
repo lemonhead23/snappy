@@ -30,8 +30,8 @@ SNET_url = 'http://' + STONEFISH_IP + ":" + SNET_port
 #SNET_url = 'http://' + BOXFISH_IP + ":" + SNET_port
 
 
-SERVER_ADDR_jl777 = BOXFISH_IP
-#SERVER_ADDR_jl777 =  STONEFISH_IP
+#SERVER_ADDR_jl777 = BOXFISH_IP
+SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int

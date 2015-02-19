@@ -9,7 +9,8 @@ from snAppyModules.snQueryComposers import QueryComposer_777
 from snAppyTests.snTestConfig import *
 
 import time
-
+import sys
+import argparse
 
 class SNET_BaseTest(unittest.TestCase):
 
@@ -206,6 +207,10 @@ class SNET_settings(SNET_BaseTest):
         print("SNET_settings setUp here- NOP")
         pass
 
+
+    def runTest(self):
+        self.test_settings()
+
     def test_settings(self):
         print(5*"\n++++++++++++","test_settings")
         reqType = {'requestType': 'settings'}
@@ -311,6 +316,9 @@ class SNET_getpeers(SNET_BaseTest):
         print("SNET_getpeers setUp here- NOP")
         pass
 
+
+    def runTest(self):
+        self.test_getpeers()
 
 
     def test_getpeers(self):
@@ -2077,6 +2085,8 @@ class SNET_syscall(SNET_BaseTest):
         print(" test setUp func here")
         pass
 
+    def runTest(self):
+        self.test_syscall()
 
 
     def test_syscall(self):
@@ -2120,9 +2130,8 @@ def suite_settings():
     suite = unittest.TestSuite()
     #suite.addTest(SNET_getpeers('setUp'))
     suite.addTest(SNET_settings('test_settings'))
+
     return suite
-
-
 
 def suite_gotjson():
     suite = unittest.TestSuite()
@@ -2130,43 +2139,82 @@ def suite_gotjson():
     suite.addTest(SNET_gotjson('test_gotjson'))
     return suite
 
+def suite_SG():
+    suite = unittest.TestSuite()
+    suite.addTest(SNET_getpeers('test_getpeers'))
+    suite.addTest(SNET_settings('test_settings'))
+    return suite
 
+
+
+def main():
+    """
+
+    can be invoked from cmd line with a specific test CLASS as agrument:
+
+    python3 -m unittest -vvv uTest1.SNET_baseSetup
+
+
+    OR
+
+    by itself with a list of test suites and test classes and test lists to be run
+
+    ./uTest1.py sg base settings testList1
+
+
+    """#
+
+    #argparse later
+
+    testClasses = {}
+    testClasses['settings'] = SNET_settings
+
+
+    testSuites = {}
+    testSuites['base'] = suite_baseSetup
+    testSuites['base1'] = suite_baseSetup
+    testSuites['base2'] = suite_baseSetup
+    testSuites['base3'] = suite_baseSetup
+    testSuites['base4'] = suite_baseSetup
+    testSuites['base5'] = suite_baseSetup
+    testSuites['base6'] = suite_baseSetup
+    testSuites['sg'] = suite_SG
+
+    testList1 = [ SNET_settings, SNET_getpeers ]
+
+    args = sys.argv[1:]
+
+    for  test in args:
+
+        if test in testClasses:
+
+            runner = unittest.TextTestRunner()
+            runner.run(testClasses[test]())
+
+
+        elif test in testSuites:
+
+             suite  = testSuites[test]()
+             runner = unittest.TextTestRunner()
+             runner.run(suite)
+
+        elif test == 'tl1':
+            for test in testList1:
+                runner = unittest.TextTestRunner()
+                runner.run(test())
+
+    try:
+        if args[0] == 'all':
+            unittest.main()
+    except:
+        print(main.__doc__)
 
 
 
 if __name__ == '__main__':
-
-    suite1=['t1','t2',] # ????
-    runSuite3 = False#True
-    runSuite2 = True
-    runSuite1 = False #True#True #False  #
-
-    mainOnly =        False #True ##
+    main()
 
 
-    if runSuite1:
-        suiteBaseSetup = suite_baseSetup()
-        runner = unittest.TextTestRunner()
-        runner.run(suiteBaseSetup)
-
-    if runSuite2:
-        suiteGetpeers = suite_getpeers()
-        runner = unittest.TextTestRunner()
-        runner.run(suiteGetpeers)
-
-    if runSuite3:
-        suiteGotjson = suite_gotjson()
-        runner = unittest.TextTestRunner()
-        runner.run(suiteGotjson)
-        #
-        # suiteSettings = suite_settings()
-        # runner = unittest.TextTestRunner()
-        # runner.run(suiteSettings)
-
-
-
-    if mainOnly:
-        unittest.main()
 
 
 

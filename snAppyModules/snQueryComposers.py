@@ -1224,123 +1224,122 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, K4 : P4, }
 
-
-
-
-    def MGW(self, reqDict):
-        """ individual treatment of requests and their parms here
-
-
-   static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
-
- """#
-        K0 = 'requestType'
-        P0 = 'MGW'
-
-        try:
-            K1 = 'NXT0'
-            P1 = reqDict['NXT0']
-        except:
-            P1= ''
-        try:
-            K2 = 'NXT1'
-            P2 = reqDict['NXT1']
-        except:
-            P2= ''
-        try:
-            K3 = 'NXT2'
-            P3 = reqDict['NXT2']
-        except:
-            P3= ''
-        try:
-            K4 = 'ip0'
-            P4 = reqDict['ip0']
-        except:
-            P4= ''
-        try:
-            K5 = 'ip1'
-            P5 = reqDict['ip1']
-        except:
-            P5= ''
-        try:
-            K6 = 'ip2'
-            P6 = reqDict['ip2']
-        except:
-            P6= ''
-        try:
-            K7 = 'coin'
-            P7 = reqDict['coin']
-        except:
-            P7= ''
-        try:
-            K8 = 'asset'
-            P8 = reqDict['asset']
-        except:
-            P8= ''
-        try:
-            K9 = 'rescan'
-            P9 = reqDict['rescan']
-        except:
-            P9= ''
-        try:
-            K10 = 'actionflag'
-            P10 = reqDict['actionflag']
-        except:
-            P10= ''
-        try:
-            K11 = 'specialNXT'
-            P11 = reqDict['specialNXT']
-        except:
-            P11= ''
-        try:
-            K12 = 'exclude0'
-            P12 = reqDict['exclude0']
-        except:
-            P12= ''
-        try:
-            K13 = 'exclude1'
-            P13 = reqDict['exclude1']
-        except:
-            P13= ''
-        try:
-            K14 = 'exclude2'
-            P14 = reqDict['exclude2']
-        except:
-            P14 = ''
-        try:
-            K15 = 'destip'
-            P15 = reqDict['destip']
-        except:
-            P15 = ''
-        try:
-            K16 = 'destport'
-            P16 = reqDict['destport']
-        except:
-            P16 = ''
-        try:
-            K17 = 'userpubkey'
-            P17 = reqDict['userpubkey']
-        except:
-            P17 = ''
-        try:
-            K18 = 'email'
-            P18 = reqDict['email']
-        except:
-            P18 = ''
-        try:
-            K19 = 'destNXT'
-            P19 = reqDict['destNXT']
-        except:
-            P19 = ''
-
-        retVal =  {
-                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
-                    K8 : P8 , K9 : P9 , K10 : P10, K11 : P11, K12 : P12,  K13 : P13, \
-                     K14 : P14 , K15 : P15 , K16 : P16, K17 : P17, K18 : P18,  K19 : P19,
-                    }
-
-        return retVal
-
+ # deprec
+ #
+ #    def MGW(self, reqDict):
+ #        """ individual treatment of requests and their parms here
+ #
+ #
+ #   static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
+ #
+ # """#
+ #        K0 = 'requestType'
+ #        P0 = 'MGW'
+ #
+ #        try:
+ #            K1 = 'NXT0'
+ #            P1 = reqDict['NXT0']
+ #        except:
+ #            P1= ''
+ #        try:
+ #            K2 = 'NXT1'
+ #            P2 = reqDict['NXT1']
+ #        except:
+ #            P2= ''
+ #        try:
+ #            K3 = 'NXT2'
+ #            P3 = reqDict['NXT2']
+ #        except:
+ #            P3= ''
+ #        try:
+ #            K4 = 'ip0'
+ #            P4 = reqDict['ip0']
+ #        except:
+ #            P4= ''
+ #        try:
+ #            K5 = 'ip1'
+ #            P5 = reqDict['ip1']
+ #        except:
+ #            P5= ''
+ #        try:
+ #            K6 = 'ip2'
+ #            P6 = reqDict['ip2']
+ #        except:
+ #            P6= ''
+ #        try:
+ #            K7 = 'coin'
+ #            P7 = reqDict['coin']
+ #        except:
+ #            P7= ''
+ #        try:
+ #            K8 = 'asset'
+ #            P8 = reqDict['asset']
+ #        except:
+ #            P8= ''
+ #        try:
+ #            K9 = 'rescan'
+ #            P9 = reqDict['rescan']
+ #        except:
+ #            P9= ''
+ #        try:
+ #            K10 = 'actionflag'
+ #            P10 = reqDict['actionflag']
+ #        except:
+ #            P10= ''
+ #        try:
+ #            K11 = 'specialNXT'
+ #            P11 = reqDict['specialNXT']
+ #        except:
+ #            P11= ''
+ #        try:
+ #            K12 = 'exclude0'
+ #            P12 = reqDict['exclude0']
+ #        except:
+ #            P12= ''
+ #        try:
+ #            K13 = 'exclude1'
+ #            P13 = reqDict['exclude1']
+ #        except:
+ #            P13= ''
+ #        try:
+ #            K14 = 'exclude2'
+ #            P14 = reqDict['exclude2']
+ #        except:
+ #            P14 = ''
+ #        try:
+ #            K15 = 'destip'
+ #            P15 = reqDict['destip']
+ #        except:
+ #            P15 = ''
+ #        try:
+ #            K16 = 'destport'
+ #            P16 = reqDict['destport']
+ #        except:
+ #            P16 = ''
+ #        try:
+ #            K17 = 'userpubkey'
+ #            P17 = reqDict['userpubkey']
+ #        except:
+ #            P17 = ''
+ #        try:
+ #            K18 = 'email'
+ #            P18 = reqDict['email']
+ #        except:
+ #            P18 = ''
+ #        try:
+ #            K19 = 'destNXT'
+ #            P19 = reqDict['destNXT']
+ #        except:
+ #            P19 = ''
+ #
+ #        retVal =  {
+ #                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
+ #                    K8 : P8 , K9 : P9 , K10 : P10, K11 : P11, K12 : P12,  K13 : P13, \
+ #                     K14 : P14 , K15 : P15 , K16 : P16, K17 : P17, K18 : P18,  K19 : P19,
+ #                    }
+ #
+ #        return retVal
+ #
 
 
 
@@ -2643,9 +2642,39 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-    #     // InstantDEX 6
+    #     // InstantDEX 8
     #########################
 
+
+
+
+
+    def allorderbooks(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
+    """#
+        K0 = 'requestType'
+        P0 = 'allorderbooks'
+
+
+        return  { K0 : P0  }
+
+
+
+
+
+    def openorders(self, reqDict):
+        """ individual treatment of requests and their parms here
+ static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
+
+    """#
+        K0 = 'requestType'
+        P0 = 'openorders'
+
+
+        return  { K0 : P0   }
 
 
 
@@ -3137,13 +3166,12 @@ This is the wrapper class
                    'rambalances',\
                    'rampyramid' ,\
                    'ramresponse',\
-                   '                   MGW 8',\
+                   '                   MGW 7',\
                    'genmultisig',\
                    'getmsigpubkey',\
                    'MGWaddr',\
                    'MGWresponse',\
                    'setmsigpubkey',\
-                   'MGW',\
                    'cosign',\
                    'cosigned',\
                    '                   IPcomms',\
@@ -3177,7 +3205,10 @@ This is the wrapper class
                    'maketelepods',\
                    'telepodacct',\
                    'teleport',\
-                                       'InstantDEX 6',\
+                                       'InstantDEX 8',\
+                   'allorderbooks',\
+                   'openorders',\
+
                    'orderbook',\
                    'placebid',\
                    'placeask',\
@@ -3321,7 +3352,7 @@ This is the wrapper class
             return jsonSpecs
 
 
-        #     //  MGW 7
+        #     //  MGW 6
 
         elif reqDict['requestType'] == 'genmultisig':
             jsonSpecs = self.jl777_aAll.genmultisig(reqDict)
@@ -3338,8 +3369,8 @@ This is the wrapper class
         elif reqDict['requestType'] == 'setmsigpubkey':
             jsonSpecs = self.jl777_aAll.setmsigpubkey(reqDict)
             return jsonSpecs
-        elif reqDict['requestType'] == 'MGW':
-            jsonSpecs = self.jl777_aAll.MGW(reqDict)
+        # elif reqDict['requestType'] == 'MGW':
+        #     jsonSpecs = self.jl777_aAll.MGW(reqDict)
             return jsonSpecs
         elif reqDict['requestType'] == 'cosign':
             jsonSpecs = self.jl777_aAll.cosign(reqDict)
@@ -3443,7 +3474,16 @@ This is the wrapper class
             jsonSpecs = self.jl777_aAll.teleport(reqDict)
             return jsonSpecs
 
-        #     // InstantDEX 6
+        #     // InstantDEX 8
+
+        elif reqDict['requestType'] == 'allorderbooks':
+            jsonSpecs = self.jl777_aAll.allorderbooks(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'openorders':
+            jsonSpecs = self.jl777_aAll.openorders(reqDict)
+            return jsonSpecs
+
 
         elif reqDict['requestType'] == 'orderbook':
             jsonSpecs = self.jl777_aAll.orderbook(reqDict)

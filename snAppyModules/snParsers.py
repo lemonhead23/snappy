@@ -250,12 +250,12 @@ class Parser_jl777_setmsigpubkey(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
-
-class Parser_jl777_MGW(Parser_JL777_Base):
-
-    def parse(self, data2parse):
-        return data2parse
-
+#
+# class Parser_jl777_MGW(Parser_JL777_Base):
+#
+#     def parse(self, data2parse):
+#         return data2parse
+# DEPREC
 
 class Parser_jl777_cosign(Parser_JL777_Base):
 
@@ -434,6 +434,18 @@ class Parser_jl777_teleport(Parser_JL777_Base):
 #InstantDEX 6
 
 
+class Parser_jl777_allorderbooks(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
+class Parser_jl777_openorders(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
 class Parser_jl777_orderbook(Parser_JL777_Base):
 
     def parse(self, data2parse):
@@ -573,7 +585,7 @@ class Parser_777(object):
     ql777_getmsigpubkey = Parser_jl777_getmsigpubkey()
     ql777_MGWaddr = Parser_jl777_MGWaddr()
     ql777_setmsigpubkey = Parser_jl777_setmsigpubkey()
-    ql777_MGW = Parser_jl777_MGW()
+    #ql777_MGW = Parser_jl777_MGW() deprec
     ql777_MGWresponse = Parser_jl777_MGWresponse()
     ql777_cosign = Parser_jl777_cosign()
     ql777_cosigned = Parser_jl777_cosigned()
@@ -615,6 +627,9 @@ class Parser_777(object):
     ql777_teleport = Parser_jl777_teleport()
 
     # // InstantDEX
+
+    ql777_allorderbooks = Parser_jl777_allorderbooks()
+    ql777_openorders = Parser_jl777_openorders()
     ql777_orderbook = Parser_jl777_orderbook()
     ql777_placebid = Parser_jl777_placebid()
     ql777_placeask = Parser_jl777_placeask()
@@ -792,9 +807,9 @@ class Parser_777(object):
 
         elif requestType2Parse == 'setmsigpubkey':
             parsed = self.ql777_setmsigpubkey.parse(data2parse)
-
-        elif requestType2Parse == 'MGW':
-            parsed = self.ql777_MGW.parse(data2parse)
+        # deprec
+        # elif requestType2Parse == 'MGW':
+        #     parsed = self.ql777_MGW.parse(data2parse)
 
         elif requestType2Parse == 'cosign':
             parsed = self.ql777_cosign.parse(data2parse)
@@ -896,7 +911,13 @@ class Parser_777(object):
         elif requestType2Parse == 'teleport':
             parsed = self.ql777_teleport.parse(data2parse)
 
-    # // InstantDEX 6
+    # // InstantDEX 8
+
+        elif requestType2Parse == 'allorderbooks':
+            parsed = self.ql777_allorderbooks.parse(data2parse)
+
+        elif requestType2Parse == 'openorders':
+            parsed = self.ql777_openorders.parse(data2parse)
 
         elif requestType2Parse == 'orderbook':
             parsed = self.ql777_orderbook.parse(data2parse)
