@@ -2738,16 +2738,17 @@ calls only as inventory
 
 // glue 7
 // passthru 2
-// MGW 8
+// ramchains   13
+// MGW 6
 // IP comms 5
 // Kademlia DHT 6
 // MofNfs 3
 // Telepathy 9
 // Teleport 3
-// InstantDEX 6
+// InstantDEX 8
 // Tradebot 3
 // privatebet 1
-
+// EmLang 2
 
 
 http://jnxt.org/init/?requestType=status&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&coin=BTCD
@@ -2774,7 +2775,7 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
-    // ramchains   11
+    // ramchains   13
     static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
     static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
     static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "coin", "type", "rawind", 0 };
@@ -2786,14 +2787,14 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
     static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
     static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
+    static char *ramresponse[] = { (char *)ramresponse_func, "ramresponse", "V", "coin", "origcmd", "data", 0 };
+    static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
 
-    // MGW 8
+    // MGW 6
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
     static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
     static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
-    static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };
-    static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
-    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
+    static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };     static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
 
@@ -2833,7 +2834,10 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *telepodacct[] = { (char *)telepodacct_func, "telepodacct", "V", "amount", "contact", "coin", "comment", "cmd", "withdraw", 0 };
     static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
 
-    // InstantDEX 6
+    // InstantDEX 8
+
+    static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
+    static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
     static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
     static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
     static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
@@ -2849,14 +2853,9 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     // Privatbet 1
     static char *lotto[] = { (char *)lotto_func, "lotto", "V", "refacct", "asset", 0 };
 
-
-
-     static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy,
-     addcontact, dispcontact, removecontact, findaddress, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, getpeers,
-     maketelepods, tradebot, respondtx, processutx, checkmsg, placebid, placeask, makeoffer, sendmsg, sendbinary, orderbook, teleport, telepodacct,
-      savefile, restorefile, pricedb, getquotes, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGW, MGWaddr, MGWresponse, sendfrag, gotfrag, startxfer,
-      lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist };
-
+    // EmLang 2
+    static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
+    static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
 
 
 

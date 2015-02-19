@@ -662,27 +662,19 @@ class Parser_777(object):
          so we need some type checking and hand always the same data type to the actual parse functions."""#
         log.msg("def parse_777()--------->  ", data2parse, "requestType2Parse is: ", requestType2Parse)
         try:
-            log.msg("def parse_777()--------->  ", data2parse.json(), data2parse.content,type(data2parse.content))
+            log.msg("def parse_777()--------->  ", type(data2parse.content), data2parse.json(), data2parse.content)
 
 
         except Exception as e:
             log.msg("except def parse_777()---------> ", data2parse.content)
             log.msg("except def parse_777()---------> ", type(data2parse.content))
-
-
             log.msg("except def parse_777()--------->  {0}".format(str(e)))
 
-        #log.msg("ERR777 UC2", ERR777.value, type(ERR777.value)) #.printDetailedTraceback())
-        #raise RuntimeError(ERR777.printDetailedTraceback())
-
-
-
-        #print(type(data2parse))
 
         if isinstance(data2parse, Response):
             data2parse = data2parse.json()
             parsed_777= self.parseReturnedDict(data2parse, requestType2Parse)
-            log.msg(data2parse)
+            log.msg("type(data2parse): ", type(data2parse))
 
 
             return str(parsed_777).encode("utf-8")

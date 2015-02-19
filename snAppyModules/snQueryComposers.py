@@ -369,7 +369,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
 
 
 
-
     def stop(self, reqDict):
         """ individual treatment of requests and their parms here
     static char *stop[] = { (char *)stop_func, "stop", "", 0 };
@@ -520,12 +519,8 @@ static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method",
 
 
 
-    #     // ramchains 11
+    #     // ramchains 13
     #########################
-
-
-    #
-    # // ramchains   13
 
 
 
@@ -704,8 +699,6 @@ CHECK!
 
 
 
-
-
     def ramscript(self, reqDict):
         """ individual treatment of requests and their parms here
 
@@ -762,8 +755,6 @@ CHECK!
 
 
 
-
-
     def ramtxlist(self, reqDict):
         """ individual treatment of requests and their parms here
 
@@ -803,9 +794,6 @@ CHECK!
 
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
-
-
-
 
 
     def ramrichlist(self, reqDict):
@@ -884,9 +872,6 @@ CHECK!
 
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
-
-
-
 
 
 
@@ -970,11 +955,6 @@ CHECK!
 
 
 
-
-
-
-
-
     #// remotable ramchains
     #
 
@@ -1019,7 +999,7 @@ CHECK!
         """ individual treatment of requests and their parms here
 
 static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
-"""#
+    """#
         K0 = 'requestType'
         P0 = 'rampyramid'
         try:
@@ -1068,7 +1048,7 @@ static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "desti
 
 
 
-    #     // MGW 8
+    #     // MGW 6
     #########################
 
 
@@ -1417,10 +1397,6 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
 
 
 
-
-
-
-
     #########################
 
 
@@ -1622,7 +1598,6 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
         return retVal
 
-############
 
 
 
@@ -2222,8 +2197,6 @@ individual treatment of requests and their parms here """#
 
 
         return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
-
-    #########################
 
 
 
