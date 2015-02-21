@@ -99,7 +99,9 @@ class SNET_baseSetup(SNET_BaseTest):
 
             for ip in self.whitelist:
                 req_ping = {'requestType': 'ping'}
+
                 payload= self.qComp_777.make_777POST_Request(req_ping)
+
                 payload['destip'] = ip
                 #print(payload)
                 time.sleep(0.2)
@@ -209,7 +211,9 @@ class ___glue():
     pass
 
 class SNET_getpeers(SNET_BaseTest):
-
+    """
+    has basic test
+    """#
 
     def setUp(self):
         print("SNET_getpeers setUp here- NOP")
@@ -226,6 +230,8 @@ class SNET_getpeers(SNET_BaseTest):
         self.assertTrue('peers' in rpl777.keys())
 
         """ #
+        #query json is:  {'scan': '', 'requestType': 'getpeers'}
+
 
         print(5*"\n++++++++++++","test_getpeers")
         reqType = {'requestType': 'getpeers'}
@@ -303,6 +309,8 @@ class SNET_gotjson(SNET_BaseTest):
 
     def test_gotjson(self):
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+        #query json is:  {'requestType': 'gotjson', 'json': ''}
+
         print(5*"\n++++++++++++","test_gotjson")
         reqType = {'requestType': 'gotjson'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -337,7 +345,9 @@ class SNET_gotpacket(SNET_BaseTest):
 
 
     def test_gotpacket(self):
+        #query json is:  {'ip_port': '', 'msg': '', 'requestType': 'gotpacket', 'dur': ''}
 
+       #     null = None #  b'{"result":null}' for when null is sent back, which py doenst know
         print(5*"\n++++++++++++","test_gotpacket")
         reqType = {'requestType': 'gotpacket'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -348,9 +358,9 @@ class SNET_gotpacket(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
-        print(rpl777['error'])
         if 'error' in rpl777.keys():
-            self.Assert(False)
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
         else:
             self.assertTrue('result' in rpl777.keys() )
 
@@ -370,6 +380,8 @@ class SNET_gotnewpeer(SNET_BaseTest):
 
 
     def test_gotnewpeer(self):
+#        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+#query json is:  {'requestType': 'gotnewpeer', 'ip_port': ''}
 
         print(5*"\n++++++++++++","test_gotnewpeer")
         reqType = {'requestType': 'gotnewpeer'}
@@ -391,7 +403,8 @@ class SNET_gotnewpeer(SNET_BaseTest):
 
 
 class SNET_BTCDpoll(SNET_BaseTest):
-
+    """{'result': 'nothing pending'}
+    """
 
     def setUp(self):
         print(" test setUp func here")
@@ -404,6 +417,11 @@ class SNET_BTCDpoll(SNET_BaseTest):
 
 
     def test_BTCDpoll(self):
+#        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+
+
+#query json is:  {'requestType': 'BTCDpoll'}
+
 
         print(5*"\n++++++++++++","test_BTCDpoll")
         reqType = {'requestType': 'BTCDpoll'}
@@ -419,6 +437,8 @@ class SNET_BTCDpoll(SNET_BaseTest):
 
 
 class SNET_GUIpoll(SNET_BaseTest):
+    """{'result': 'nothing pending'}
+    """
 
 
     def setUp(self):
@@ -432,6 +452,7 @@ class SNET_GUIpoll(SNET_BaseTest):
 
 
     def test_GUIpoll(self):
+#query json is:  {'requestType': 'GUIpoll'}
 
         print(5*"\n++++++++++++","test_GUIpoll")
         reqType = {'requestType': 'GUIpoll'}
@@ -459,6 +480,8 @@ class SNET_settings(SNET_BaseTest):
         self.test_settings()
 
     def test_settings(self):
+        #query json is:  {'value': '', 'field': '', 'requestType': 'settings', 'reinit': ''}
+
         print(5*"\n++++++++++++","test_settings")
         reqType = {'requestType': 'settings'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -572,6 +595,7 @@ class SNET_passthru(SNET_BaseTest):
 
 
     def test_passthru(self):
+#query json is:  {'method': '', 'requestType': 'passthru', 'coin': '', 'params': ''}
 
         print(5*"\n++++++++++++","test_passthru")
         reqType = {'requestType': 'passthru'}
@@ -583,8 +607,11 @@ class SNET_passthru(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
-
-        self.assertTrue(True)
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
 
@@ -607,6 +634,8 @@ class SNET_remote(SNET_BaseTest):
 
 
     def test_remote(self):
+#query json is:  {'method': '', 'coin': '', 'tag': '', 'result': '', 'requestType': 'remote'}
+
 
         print(5*"\n++++++++++++","test_remote")
         reqType = {'requestType': 'remote'}
@@ -618,8 +647,11 @@ class SNET_remote(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
-
-        self.assertTrue('result' in rpl777.keys() )
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
     #########################
@@ -636,7 +668,9 @@ class ___Ramchains():
 
 
 class SNET_ramstatus(SNET_BaseTest):
-
+    """
+     {'pendingdeposits': '0', 'gatewayid': '-1', 'RTNXT': {'ECblock': '7630770946270487105', 'height': '363517', 'lag': '12', 'ECheight': '363516'}, 'sentNXT': '15000000000', 'circulation': '1024989150000', 'result': 'MGWstatus', 'balance': '18446744014491661761', 'unspent': '1025204260145', 'coin': 'BTCD', 'internal': '0', 'pendingredeems': '59433000000', 'supply': '0', 'BTCD': {'height': '382851', 'lag': '3', 'permblocks': '382848'}, 'ramchain': 'BTCD : RT.382851 nonz.382848 V.382848 B.382848 B64.382848 B4096.380928 | 118.5MB 19.1MB R6.22 | minutes: V0.5 B0.5 | outputs.934661 188917683.05667377 spends.911829 187711860.41899481 -> balance: 22832 1205822.63767893 ave 52.81283452'}
+    """
 
     def setUp(self):
         print(" test setUp func here")
@@ -649,6 +683,7 @@ class SNET_ramstatus(SNET_BaseTest):
 
 
     def test_ramstatus(self):
+#query json is:  {'coin': 'BTCD', 'destip': '', 'requestType': 'ramstatus'}
 
         print(5*"\n++++++++++++","test_ramstatus")
         reqType = {'requestType': 'ramstatus'}
@@ -682,9 +717,13 @@ class SNET_ramaddrlist(SNET_BaseTest):
 
 
     def test_ramaddrlist(self):
+#query json is:  {'coin': '', 'requestType': 'ramaddrlist'}
+#  {'mine': 1, 'total': 1, 'result': 'addrlist', 'multisig': 1}
+
 
         print(5*"\n++++++++++++","test_ramaddrlist")
         reqType = {'requestType': 'ramaddrlist'}
+        reqType['coin'] = 'BTCD'
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -694,7 +733,11 @@ class SNET_ramaddrlist(SNET_BaseTest):
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
 
-        self.assertTrue('result' in rpl777.keys() )
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
 
@@ -712,6 +755,8 @@ class SNET_ramstring(SNET_BaseTest):
         self.test_ramstring()
 
     def test_ramstring(self):
+#query json is:  {'destip': '', 'rawind': '', 'requestType': 'ramstring', 'type': ''}
+
 
         print(5*"\n++++++++++++","test_ramstring")
         reqType = {'requestType': 'ramstring'}
@@ -723,8 +768,11 @@ class SNET_ramstring(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
-
-        self.assertTrue('result' in rpl777.keys() )
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
 
@@ -742,6 +790,8 @@ class SNET_ramrawind(SNET_BaseTest):
 
 
     def test_ramrawind(self):
+#query json is:  {'destip': '', 'coin': '', 'requestType': 'ramblock', 'blocknum': ''}
+
 
         print(5*"\n++++++++++++","test_ramrawind")
         reqType = {'requestType': 'ramrawind'}
@@ -753,9 +803,11 @@ class SNET_ramrawind(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
-
-        self.assertTrue('result' in rpl777.keys() )
-
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
 class SNET_ramblock(SNET_BaseTest):
@@ -784,7 +836,11 @@ class SNET_ramblock(SNET_BaseTest):
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
 
-        self.assertTrue('result' in rpl777.keys() )
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
 
@@ -802,6 +858,8 @@ class SNET_ramscript(SNET_BaseTest):
 
 
     def test_ramscript(self):
+#query json is:  {'vout': '', 'destip': '', 'txid': '', 'requestType': 'ramscript', 'txind': '', 'v': '', 'blocknum': ''}
+
 
         print(5*"\n++++++++++++","test_ramscript")
         reqType = {'requestType': 'ramscript'}
@@ -814,7 +872,11 @@ class SNET_ramscript(SNET_BaseTest):
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
 
-        self.assertTrue('result' in rpl777.keys() )
+        if 'error' in rpl777.keys():
+            self.assertTrue(False)
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+        else:
+            self.assertTrue('result' in rpl777.keys() )
 
 
 
@@ -832,6 +894,8 @@ class SNET_ramtxlist(SNET_BaseTest):
 
 
     def test_ramtxlist(self):
+#query json is:  {'address': '', 'destip': '', 'requestType': 'ramtxlist', 'unspent': '', 'coin': ''}
+
 
         print(5*"\n++++++++++++","test_ramtxlist")
         reqType = {'requestType': 'ramtxlist'}
@@ -862,6 +926,8 @@ class SNET_ramrichlist(SNET_BaseTest):
 
 
     def test_ramrichlist(self):
+#query json is:  {'recalc': '', 'coin': '', 'destip': '', 'requestType': 'ramrichlist', 'numwhales': ''}
+
 
         print(5*"\n++++++++++++","test_ramrichlist")
         reqType = {'requestType': 'ramrichlist'}
@@ -892,9 +958,11 @@ class SNET_ramcompress(SNET_BaseTest):
 
 
     def test_ramcompress(self):
+#query json is:  {'data': '', 'destip': '', 'requestType': 'ramcompress', 'coin': ''}
+
 
         print(5*"\n++++++++++++","test_x1")
-        reqType = {'requestType': 'test_ramcompress'}
+        reqType = {'requestType': 'ramcompress'}
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -922,6 +990,8 @@ class SNET_ramexpand(SNET_BaseTest):
 
 
     def test_ramexpand(self):
+#query json is:  {'requestType': 'ramexpand', 'destip': '', 'data': '', 'coin': ''}
+
 
         print(5*"\n++++++++++++","test_ramexpand")
         reqType = {'requestType': 'ramexpand'}
@@ -952,9 +1022,12 @@ class SNET_rambalances(SNET_BaseTest):
 
 
     def test_rambalances(self):
+#query json is:  {'requestType': 'rambalances', 'destip': '', 'rates': '', 'coin': '', 'coins': ''}
+
 
         print(5*"\n++++++++++++","test_rambalances")
         reqType = {'requestType': 'rambalances'}
+
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -982,6 +1055,8 @@ class SNET_rampyramid(SNET_BaseTest):
 
 
     def test_rampyramid(self):
+#query json is:  {'destip': '', 'requestType': 'rampyramid', 'type': '', 'blocknum': '', 'coin': '', 'port': ''}
+
 
         print(5*"\n++++++++++++","test_rampyramid")
         reqType = {'requestType': 'rampyramid'}
@@ -1018,6 +1093,10 @@ class SNET_ramresponse(SNET_BaseTest):
 
 
     def test_ramresponse(self):
+#query json is:  {'data': '', 'requestType': 'ramresponse', 'coin': '', 'origcmd': ''}
+
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_ramresponse")
         reqType = {'requestType': 'ramresponse'}
@@ -1053,6 +1132,8 @@ class SNET_genmultisig(SNET_BaseTest):
 
 
     def test_genmultisig(self):
+#query json is:  {'destip': '', 'requestType': 'genmultisig', 'coin': '', 'refcontact': '', 'N': '', 'contacts': ''}
+
 
         print(5*"\n++++++++++++","test_genmultisig")
         reqType = {'requestType': 'genmultisig'}
@@ -1082,6 +1163,8 @@ class SNET_getmsigpubkey(SNET_BaseTest):
         self.test_getmsigpubkey()
 
     def test_getmsigpubkey(self):
+#query json is:  {'requestType': 'getmsigpubkey', 'myaddr': '', 'refNXTaddr': '', 'coin': '', 'mypubkey': ''}
+
 
         print(5*"\n++++++++++++","test_getmsigpubkey")
         reqType = {'requestType': 'getmsigpubkey'}
@@ -1112,6 +1195,9 @@ class SNET_MGWaddr(SNET_BaseTest):
 
 
     def test_MGWaddr(self):
+#query json is:  {'requestType': 'MGWaddr'}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_MGWaddr")
         reqType = {'requestType': 'MGWaddr'}
@@ -1141,6 +1227,9 @@ class SNET_MGWresponse(SNET_BaseTest):
 
 
     def test_MGWresponse(self):
+#query json is:  {'requestType': 'MGWresponse'}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_MGWresponse")
         reqType = {'requestType': 'MGWresponse'}
@@ -1172,6 +1261,10 @@ class SNET_setmsigpubkey(SNET_BaseTest):
 
     def test_setmsigpubkey(self):
 
+    #query json is:  {'refNXTaddr': '', 'addr': '', 'pubkey': '', 'requestType': 'setmsigpubkey', 'coin': ''}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+
         print(5*"\n++++++++++++","test_setmsigpubkey")
         reqType = {'requestType': 'setmsigpubkey'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -1201,6 +1294,8 @@ class SNET_cosign(SNET_BaseTest):
 
 
     def test_cosign(self):
+#query json is:  {'text': '', 'requestType': 'cosign', 'seed': '', 'otheracct': ''}
+
 
         print(5*"\n++++++++++++","test_cosign")
         reqType = {'requestType': 'cosign'}
@@ -1237,6 +1332,8 @@ class SNET_cosigned(SNET_BaseTest):
 
 
     def test_cosigned(self):
+#query json is:  {'privacct': '', 'result': '', 'seed': '', 'pubacct': '', 'requestType': 'cosigned'}
+
 
         print(5*"\n++++++++++++","test_cosigned")
         reqType = {'requestType': 'cosigned'}
@@ -1277,6 +1374,8 @@ class SNET_ping(SNET_BaseTest):
 
 
     def test_ping(self):
+#query json is:  {'destip': 'localhost', 'ipaddr': '', 'pubkey': '', 'requestType': 'ping', 'port': ''}
+
 
         print(5*"\n++++++++++++","test_ping")
         reqType = {'requestType': 'ping'}
@@ -1309,8 +1408,12 @@ class SNET_pong(SNET_BaseTest):
 
     def test_pong(self):
         null=None
+        #query json is:  {'port': '', 'pubkey': '', 'yourip': '', 'requestType': 'pong', 'yourport': '', 'ipaddr': '209.126.70.156'}
+
         print(5*"\n++++++++++++","test_pong")
         reqType = {'requestType': 'pong'}
+        reqType['ipaddr'] = '209.126.70.156'
+
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -1339,6 +1442,8 @@ class SNET_sendfrag(SNET_BaseTest):
 
 
     def test_sendfrag(self):
+#query json is:  {'fragi': '', 'pubkey': '', 'blocksize': '', 'numfrags': '', 'totalcrc': '', 'name': '', 'totallen': '', 'data': '', 'handler': '', 'ipaddr': '', 'requestType': 'sendfrag', 'datacrc': ''}
+
 
         print(5*"\n++++++++++++","test_sendfrag")
         reqType = {'requestType': 'sendfrag'}
@@ -1371,6 +1476,7 @@ class SNET_gotfrag(SNET_BaseTest):
 
 
     def test_gotfrag(self):
+# query json is:  {'fragi': '', 'totalcrc': '', 'name': '', 'blocksize': '', 'datacrc': '', 'handler': '', 'numfrags': '', 'totallen': '', 'ipaddr': '', 'count': '', 'requestType': 'sendfrag', 'pubkey': ''}
 
         print(5*"\n++++++++++++","test_gotfrag")
         reqType = {'requestType': 'gotfrag'}
@@ -1422,6 +1528,11 @@ class SNET_startxfer(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+#query json is:  {'requestType': 'startxfer', 'fname': '', 'timeout': '', 'handler': '', 'dest': '', 'data': ''}
+
+# {'result': 'pending SuperNET API call', 'txid': '2466605655551381573'}
+
+
 #findvalue
 
 
@@ -1454,6 +1565,38 @@ class SNET_store(SNET_BaseTest):
 
         print(5*"\n++++++++++++","test_store")
         reqType = {'requestType': 'store'}
+        payload= self.qComp_777.make_777POST_Request(reqType)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_findvalue(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_findvalue()
+
+
+    def test_findvalue(self):
+#query json is:  {'data': '', 'key': '', 'name': '', 'requestType': 'findvalue', 'pubkey': ''}
+
+
+        print(5*"\n++++++++++++","test_findvalue")
+        reqType = {'requestType': 'findvalue'}
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -1542,9 +1685,12 @@ class SNET_findaddress(SNET_BaseTest):
 
 
     def test_findaddress(self):
+#query json is:  {'refaddr': '', 'requestType': 'findaddress', 'numthreads': '', 'dist': '', 'duration': '', 'list': ''}
 
-        print(5*"\n++++++++++++","test_findnode")
-        reqType = {'requestType': 'findnode'}
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+
+        print(5*"\n++++++++++++","test_findaddress")
+        reqType = {'requestType': 'findaddress'}
         payload= self.qComp_777.make_777POST_Request(reqType)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -1571,6 +1717,8 @@ class SNET_havenodeB(SNET_BaseTest):
 
 
     def test_havenodeB(self):
+#query json is:  {'pubkey': '', 'name': '', 'data': '', 'key': '', 'requestType': 'havenodeB'}
+
 
         print(5*"\n++++++++++++","test_havenodeB")
         reqType = {'requestType': 'havenodeB'}
@@ -1608,6 +1756,8 @@ class SNET_savefile(SNET_BaseTest):
 
 
     def test_savefile(self):
+#query json is:  {'M': '', 'N': '', 'requestType': 'savefile', 'filename': '', 'backup': '', 'L': '', 'password': '', 'pin': ''}
+
 
         print(5*"\n++++++++++++","test_savefile")
         reqType = {'requestType': 'savefile'}
@@ -1638,6 +1788,9 @@ class SNET_restorefile(SNET_BaseTest):
 
 
     def test_restorefile(self):
+#query json is:  {'password': '', 'backup': '', 'sharenrs': '', 'restorefile': 'stop', 'destfile': '', 'filename': '', 'pin': '', 'L': '', 'N': '', 'txids': '', 'M': ''}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_restorefile")
         reqType = {'requestType': 'restorefile'}
@@ -1668,6 +1821,7 @@ class SNET_publish(SNET_BaseTest):
 
 
     def test_publish(self):
+#query json is:  {'L': '', 'backup': '', 'files': '', 'N': '', 'pin': '', 'requestType': 'publish', 'M': ''}
 
         print(5*"\n++++++++++++","test_publish")
         reqType = {'requestType': 'publish'}
@@ -1694,6 +1848,9 @@ class SNET_publish(SNET_BaseTest):
     #########################
 
 
+class ___Telepathy():
+    pass
+
 
 
 class SNET_addcontact(SNET_BaseTest):
@@ -1710,6 +1867,8 @@ class SNET_addcontact(SNET_BaseTest):
 
 
     def test_addcontact(self):
+#query json is:  {'handle': '', 'acct': '', 'requestType': 'addcontact'}
+
 
         print(5*"\n++++++++++++","test_addcontact")
         reqType = {'requestType': 'addcontact'}
@@ -1723,9 +1882,6 @@ class SNET_addcontact(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
-
-class ___Telepathy():
-    pass
 
 class SNET_removecontact(SNET_BaseTest):
 
@@ -1741,6 +1897,7 @@ class SNET_removecontact(SNET_BaseTest):
 
 
     def test_removecontact(self):
+#query json is:  {'requestType': 'removecontact', 'contact': ''}
 
         print(5*"\n++++++++++++","test_removecontact")
         reqType = {'requestType': 'removecontact'}
@@ -1771,6 +1928,7 @@ class SNET_dispcontact(SNET_BaseTest):
 
 
     def test_dispcontact(self):
+#query json is:  {'contact': '', 'requestType': 'dispcontact'}
 
         print(5*"\n++++++++++++","test_dispcontact")
         reqType = {'requestType': 'dispcontact'}
@@ -1801,6 +1959,7 @@ class SNET_telepathy(SNET_BaseTest):
 
 
     def test_telepathy(self):
+#query json is:  {'attach': '', 'contact': '', 'id': '', 'requestType': 'telepathy', 'type': ''}
 
         print(5*"\n++++++++++++","test_telepathy")
         reqType = {'requestType': 'telepathy'}
@@ -1831,6 +1990,8 @@ class SNET_getdb(SNET_BaseTest):
 
 
     def test_getdb(self):
+#query json is:  {'destip': '', 'requestType': 'getdb', 'dir': '', 'id': '', 'contact': '', 'key': ''}
+
 
         print(5*"\n++++++++++++","test_getdb")
         reqType = {'requestType': 'getdb'}
@@ -1861,6 +2022,9 @@ class SNET_sendmessage(SNET_BaseTest):
 
 
     def test_sendmessage(self):
+#query json is:  {'dest': '', 'requestType': 'sendmessage', 'msg': '', 'L': ''}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_sendmessage")
         reqType = {'requestType': 'sendmessage'}
@@ -1891,6 +2055,9 @@ class SNET_sendbinary(SNET_BaseTest):
 
 
     def test_sendbinary(self):
+#query json is:  {'data': '', 'L': '', 'requestType': 'sendbinary', 'dest': ''}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_sendbinary")
         reqType = {'requestType': 'sendbinary'}
@@ -1921,6 +2088,9 @@ class SNET_checkmsg(SNET_BaseTest):
 
 
     def test_checkmsg(self):
+#query json is:  {'sender': '', 'requestType': 'checkmsg'}
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_checkmsg")
         reqType = {'requestType': 'checkmsg'}
@@ -1968,6 +2138,11 @@ class SNET_maketelepods(SNET_BaseTest):
 
     def test_maketelepods(self):
 
+#query json is:  {'amount': '', 'requestType': 'maketelepods', 'coin': ''}
+
+
+# {'result': 'pending SuperNET API call', 'txid': '8448558224120207202'}
+
         print(5*"\n++++++++++++","test_maketelepods")
         reqType = {'requestType': 'maketelepods'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -1997,6 +2172,10 @@ class SNET_telepodacct(SNET_BaseTest):
 
     def test_telepodacct(self):
 
+#query json is:  {'amount': '', 'comment': '', 'coin': '', 'contact': '', 'cmd': '', 'requestType': 'telepodacct', 'withdraw': ''}
+
+# {'result': 'pending SuperNET API call', 'txid': '13468243516026239723'}
+
         print(5*"\n++++++++++++","test_telepodacct")
         reqType = {'requestType': 'telepodacct'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2025,6 +2204,9 @@ class SNET_teleport(SNET_BaseTest):
 
 
     def test_teleport(self):
+#query json is:  {'coin': '', 'minage': '', 'requestType': 'teleport', 'amount': '', 'contact': '', 'withdraw': ''}
+
+# {'result': 'pending SuperNET API call', 'txid': '12100319098835243886'}
 
         print(5*"\n++++++++++++","test_teleport")
         reqType = {'requestType': 'teleport'}
@@ -2070,6 +2252,11 @@ class SNET_allorderbooks(SNET_BaseTest):
 
     def test_allorderbooks(self):
 
+# query json is:  {'requestType': 'allorderbooks'}
+
+# {'orderbooks': []}
+
+
         print(5*"\n++++++++++++","test_allorderbooks")
         reqType = {'requestType': 'allorderbooks'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2103,6 +2290,10 @@ class SNET_openorders(SNET_BaseTest):
 
     def test_openorders(self):
 
+#query json is:  {'requestType': 'openorders'}
+
+# {'result': 'no openorders'}
+
         print(5*"\n++++++++++++","test_openorders")
         reqType = {'requestType': 'openorders'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2133,6 +2324,8 @@ class SNET_orderbook(SNET_BaseTest):
 
 
     def test_orderbook(self):
+# query json is:  {'allfields': '', 'baseid': '', 'relid': '', 'requestType': 'orderbook', 'oldest': ''}
+
 
         print(5*"\n++++++++++++","test_orderbook")
         reqType = {'requestType': 'orderbook'}
@@ -2164,6 +2357,7 @@ class SNET_placebid(SNET_BaseTest):
 
 
     def test_placebid(self):
+#query json is:  {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
 
         print(5*"\n++++++++++++","test_placebid")
         reqType = {'requestType': 'placebid'}
@@ -2193,6 +2387,8 @@ class SNET_placeask(SNET_BaseTest):
 
 
     def test_placeask(self):
+# query json is:  {'relid': '', 'requestType': 'placeask', 'baseid': '', 'volume': '', 'price': ''}
+
 
         print(5*"\n++++++++++++","test_placeask")
         reqType = {'requestType': 'placeask'}
@@ -2222,6 +2418,11 @@ class SNET_makeoffer(SNET_BaseTest):
 
 
     def test_makeoffer(self):
+
+#query json is:  {'requestType': 'makeoffer', 'relid': '', 'other': '', 'baseamount': '', 'relamount': '', 'type': '', 'baseid': ''}
+
+# {'result': 'invalid makeoffer_func request'}
+
 
         print(5*"\n++++++++++++","test_makeoffer")
         reqType = {'requestType': 'makeoffer'}
@@ -2253,6 +2454,11 @@ class SNET_respondtx(SNET_BaseTest):
 
     def test_respondtx(self):
 
+#query json is:  {'signedtx': '', 'requestType': 'respondtx'}
+
+# {'result': 'invalid makeoffer_func request'}
+
+
         print(5*"\n++++++++++++","test_respondtx")
         reqType = {'requestType': 'respondtx'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2282,6 +2488,23 @@ class SNET_processutx(SNET_BaseTest):
 
 
     def test_processutx(self):
+#
+#  test_processutx
+# query json is:  {'requestType': 'processutx', 'utx': '', 'sig': '', 'full': ''}
+# E
+# ======================================================================
+# ERROR: runTest (__main__.SNET_processutx)
+# ----------------------------------------------------------------------
+# Traceback (most recent call last):
+#   File "./uTest1.py", line 2487, in runTest
+#     self.test_processutx()
+#   File "./uTest1.py", line 2499, in test_processutx
+#     rpl777 = eval(testReq.text)
+#   File "<string>", line 1
+#     {"error":" missing comment.({"errorCode":3,"errorDescription":"At least one of [transactionBytes, transactionJSON] must be specified"}) or zero vol 0.00000000"}
+#                                           ^
+# SyntaxError: invalid syntax
+#
 
         print(5*"\n++++++++++++","test_processutx")
         reqType = {'requestType': 'processutx'}
@@ -2327,6 +2550,11 @@ class SNET_pricedb(SNET_BaseTest):
 
     def test_pricedb(self):
 
+#query json is:  {'rel': '', 'stop': '', 'requestType': 'pricedb', 'exchange': '', 'base': ''}
+
+# {'error': 'bad pricedb paramater'}
+
+
         print(5*"\n++++++++++++","test_pricedb")
         reqType = {'requestType': 'pricedb'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2357,6 +2585,12 @@ class SNET_getquotes(SNET_BaseTest):
 
     def test_getquotes(self):
 
+#query json is:  {'requestType': 'getquotes', 'base': '', 'rel': '', 'oldest': '', 'exchange': ''}
+
+
+# {'error': 'bad getquotes paramater'}
+
+
         print(5*"\n++++++++++++","test_getquotes")
         reqType = {'requestType': 'getquotes'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2385,6 +2619,12 @@ class SNET_tradebot(SNET_BaseTest):
 
 
     def test_tradebot(self):
+#query json is:  {'code': '', 'requestType': 'tradebot'}
+
+
+# {'result': 'invalid tradebot request'}
+
+
 
         print(5*"\n++++++++++++","test_tradebot")
         reqType = {'requestType': 'tradebot'}
@@ -2421,6 +2661,11 @@ class SNET_lotto(SNET_BaseTest):
 
     def test_lotto(self):
 
+#query json is:  {'asset': '', 'refacct': '', 'requestType': 'lotto'}
+
+# {'error': 'illegal lotto parms'}
+
+
         print(5*"\n++++++++++++","test_lotto")
         reqType = {'requestType': 'lotto'}
         payload= self.qComp_777.make_777POST_Request(reqType)
@@ -2454,6 +2699,12 @@ class SNET_python(SNET_BaseTest):
 
 
     def test_python(self):
+#query json is:  {'requestType': 'python', 'name': ''}
+
+# {'result': None}
+
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_python")
         reqType = {'requestType': 'python'}
@@ -2480,6 +2731,10 @@ class SNET_syscall(SNET_BaseTest):
 
 
     def test_syscall(self):
+#query json is:  {'name': '', 'requestType': 'syscall', 'cmd': ''}
+
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(5*"\n++++++++++++","test_syscall")
         reqType = {'requestType': 'syscall'}
@@ -2540,90 +2795,103 @@ def suite_SG():
 class TestCollector(object):
 
     def getTestClassDict(self, ):
+        """
+        test status as in comments below::
 
+        *  verified
+        ~  returns null
+        +  returns None
+        !  crashes server
+        ?  needs params
+
+        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+
+
+        """#
         testClasses = {}
         #
-        testClasses['SNET_baseSetup'] = SNET_baseSetup #
+        testClasses['SNET_baseSetup'] = SNET_baseSetup # *
         #
-        testClasses['SNET_gotjson'] = SNET_gotjson     #
-        testClasses['SNET_gotpacket'] = SNET_gotpacket #
-        testClasses['SNET_gotnewpeer'] = SNET_gotnewpeer #
-        testClasses['SNET_BTCDpoll'] = SNET_BTCDpoll #
-        testClasses['SNET_GUIpoll'] = SNET_GUIpoll    #
-        testClasses['SNET_settings'] = SNET_settings  #
+        testClasses['SNET_gotjson'] = SNET_gotjson     # ~
+        testClasses['SNET_gotpacket'] = SNET_gotpacket # ?
+        testClasses['SNET_gotnewpeer'] = SNET_gotnewpeer # * +
+        testClasses['SNET_BTCDpoll'] = SNET_BTCDpoll # *
+        testClasses['SNET_GUIpoll'] = SNET_GUIpoll    # *
+        testClasses['SNET_settings'] = SNET_settings  # *
         #
-        testClasses['SNET_passthru'] = SNET_passthru
-        testClasses['SNET_remote'] = SNET_remote
+        testClasses['SNET_passthru'] = SNET_passthru # ?
+        testClasses['SNET_remote'] = SNET_remote # ?
         #
-        testClasses['SNET_ramstatus'] = SNET_ramstatus ##
-        testClasses['SNET_ramaddrlist'] = SNET_ramaddrlist
-        testClasses['SNET_ramstring'] = SNET_ramstring
-        testClasses['SNET_ramrawind'] = SNET_ramrawind
-        testClasses['SNET_ramblock'] = SNET_ramblock
-        testClasses['SNET_ramscript'] = SNET_ramscript
-        testClasses['SNET_ramtxlist'] = SNET_ramtxlist
-        testClasses['SNET_ramrichlist'] = SNET_ramrichlist
-        testClasses['SNET_ramcompress'] = SNET_ramcompress
-        testClasses['SNET_ramexpand'] = SNET_ramexpand
-        testClasses['SNET_rambalances'] = SNET_rambalances
-        testClasses['SNET_rampyramid'] = SNET_rampyramid
-        testClasses['SNET_ramresponse'] = SNET_ramresponse
+        testClasses['SNET_ramstatus'] = SNET_ramstatus # *
+        testClasses['SNET_ramaddrlist'] = SNET_ramaddrlist # *
+        testClasses['SNET_ramstring'] = SNET_ramstring # ?
+        testClasses['SNET_ramrawind'] = SNET_ramrawind # ?
+        testClasses['SNET_ramblock'] = SNET_ramblock # ?
+        testClasses['SNET_ramscript'] = SNET_ramscript # ?
+        testClasses['SNET_ramtxlist'] = SNET_ramtxlist # ?
+        testClasses['SNET_ramrichlist'] = SNET_ramrichlist # ?
+        testClasses['SNET_ramcompress'] = SNET_ramcompress # ?
+        testClasses['SNET_ramexpand'] = SNET_ramexpand # ?
+        testClasses['SNET_rambalances'] = SNET_rambalances # ?
+        testClasses['SNET_rampyramid'] = SNET_rampyramid # ?
+        testClasses['SNET_ramresponse'] = SNET_ramresponse # ~
         #
-        testClasses['SNET_genmultisig'] = SNET_genmultisig
-        testClasses['SNET_getmsigpubkey'] = SNET_getmsigpubkey
-        testClasses['SNET_MGWaddr'] = SNET_MGWaddr
-        testClasses['SNET_MGWresponse'] = SNET_MGWresponse
-        testClasses['SNET_setmsigpubkey'] = SNET_setmsigpubkey
-        testClasses['SNET_cosign'] = SNET_cosign
-        testClasses['SNET_cosigned'] = SNET_cosigned
+        testClasses['SNET_genmultisig'] = SNET_genmultisig # ?
+        testClasses['SNET_getmsigpubkey'] = SNET_getmsigpubkey # ?
+        testClasses['SNET_MGWaddr'] = SNET_MGWaddr # * ~
+        testClasses['SNET_MGWresponse'] = SNET_MGWresponse # * ~
+        testClasses['SNET_setmsigpubkey'] = SNET_setmsigpubkey # ?
+        testClasses['SNET_cosign'] = SNET_cosign # ?
+        testClasses['SNET_cosigned'] = SNET_cosigned # ?
         #
-        testClasses['SNET_ping'] = SNET_ping #
-        testClasses['SNET_pong'] = SNET_pong # [#]
-        testClasses['SNET_sendfrag'] = SNET_sendfrag
-        testClasses['SNET_gotfrag'] = SNET_gotfrag
-        testClasses['SNET_startxfer'] = SNET_startxfer
+        testClasses['SNET_ping'] = SNET_ping # *
+        testClasses['SNET_pong'] = SNET_pong # *
+        testClasses['SNET_sendfrag'] = SNET_sendfrag # ?
+        testClasses['SNET_gotfrag'] = SNET_gotfrag # ?
+        testClasses['SNET_startxfer'] = SNET_startxfer # *
         #
         testClasses['SNET_store'] = SNET_store
-        testClasses['SNET_findnode'] = SNET_findnode #
-        testClasses['SNET_havenode'] = SNET_havenode
-        testClasses['SNET_findaddress'] = SNET_findaddress
-        testClasses['SNET_havenodeB'] = SNET_havenodeB
+        testClasses['SNET_findvalue'] = SNET_findvalue # ?
+        testClasses['SNET_findnode'] = SNET_findnode # *
+        testClasses['SNET_havenode'] = SNET_havenode # ?
+        testClasses['SNET_findaddress'] = SNET_findaddress # ? ~
+        testClasses['SNET_havenodeB'] = SNET_havenodeB # ?
         #
-        testClasses['SNET_savefile'] = SNET_savefile
-        testClasses['SNET_restorefile'] = SNET_restorefile
-        testClasses['SNET_publish'] = SNET_publish
+        testClasses['SNET_savefile'] = SNET_savefile # ?
+        testClasses['SNET_restorefile'] = SNET_restorefile # ?
+        testClasses['SNET_publish'] = SNET_publish # ?
         #
-        testClasses['SNET_getpeers'] = SNET_getpeers          #
-        testClasses['SNET_addcontact'] = SNET_addcontact
-        testClasses['SNET_removecontact'] = SNET_removecontact
-        testClasses['SNET_dispcontact'] = SNET_dispcontact
-        testClasses['SNET_telepathy'] = SNET_telepathy
-        testClasses['SNET_getdb'] = SNET_getdb
-        testClasses['SNET_sendmessage'] = SNET_sendmessage
-        testClasses['SNET_sendbinary'] = SNET_sendbinary
-        testClasses['SNET_checkmsg'] = SNET_checkmsg
+        testClasses['SNET_getpeers'] = SNET_getpeers # *
+        testClasses['SNET_addcontact'] = SNET_addcontact # ?
+        testClasses['SNET_removecontact'] = SNET_removecontact # ?
+        testClasses['SNET_dispcontact'] = SNET_dispcontact # ?
+        testClasses['SNET_telepathy'] = SNET_telepathy # ?
+        testClasses['SNET_getdb'] = SNET_getdb # ?
+        testClasses['SNET_sendmessage'] = SNET_sendmessage # ?
+        testClasses['SNET_sendbinary'] = SNET_sendbinary # ?
+        testClasses['SNET_checkmsg'] = SNET_checkmsg # ?
         #
-        testClasses['SNET_maketelepods'] = SNET_maketelepods
-        testClasses['SNET_telepodacct'] = SNET_telepodacct
-        testClasses['SNET_teleport'] = SNET_teleport
+        testClasses['SNET_maketelepods'] = SNET_maketelepods # ?
+        testClasses['SNET_telepodacct'] = SNET_telepodacct # ?
+        testClasses['SNET_teleport'] = SNET_teleport # ?
         #
-        testClasses['SNET_allorderbooks'] = SNET_allorderbooks #
-        testClasses['SNET_openorders'] = SNET_openorders       #
-        testClasses['SNET_orderbook'] = SNET_orderbook
-        testClasses['SNET_placebid'] = SNET_placebid
-        testClasses['SNET_placeask'] = SNET_placeask
-        testClasses['SNET_makeoffer'] = SNET_makeoffer
-        testClasses['SNET_respondtx'] = SNET_respondtx
-        testClasses['SNET_processutx'] = SNET_processutx
+        testClasses['SNET_allorderbooks'] = SNET_allorderbooks # *
+        testClasses['SNET_openorders'] = SNET_openorders       # *
+        testClasses['SNET_orderbook'] = SNET_orderbook # ?
+        testClasses['SNET_placebid'] = SNET_placebid # ?
+        testClasses['SNET_placeask'] = SNET_placeask # ?
+        testClasses['SNET_makeoffer'] = SNET_makeoffer # ?
+        testClasses['SNET_respondtx'] = SNET_respondtx  # ?
+        testClasses['SNET_processutx'] = SNET_processutx  # ?
         #
-        testClasses['SNET_pricedb'] = SNET_pricedb
-        testClasses['SNET_getquotes'] = SNET_getquotes
-        testClasses['SNET_tradebot'] = SNET_tradebot
+        testClasses['SNET_pricedb'] = SNET_pricedb   # ?
+        testClasses['SNET_getquotes'] = SNET_getquotes   # ?
+        testClasses['SNET_tradebot'] = SNET_tradebot   # ?
         #
-        testClasses['SNET_lotto'] = SNET_lotto
+        testClasses['SNET_lotto'] = SNET_lotto  # ?
         #
-        testClasses['SNET_python'] = SNET_python
-        testClasses['SNET_syscall'] = SNET_syscall
+        testClasses['SNET_python'] = SNET_python  # ? ~
+        testClasses['SNET_syscall'] = SNET_syscall  # ? ~
 
         return testClasses
 
@@ -2641,8 +2909,26 @@ class TestCollector(object):
         testSuites['sg'] = suite_SG
         return testSuites
 
-    def getTestList(self):
-        pass
+    def getVerifiedTests(self):
+
+        testList = [
+                    SNET_settings,\
+                    SNET_getpeers,\
+                    ]
+
+        return testList
+
+    def getTentTests(self):
+
+        testList = [
+                    SNET_settings,\
+                    SNET_getpeers,\
+                    ]
+
+        return testList
+
+
+
 
 def main():
     """
@@ -2664,29 +2950,32 @@ def main():
     testCollector = TestCollector()
     testClasses = testCollector.getTestClassDict()
     testSuites = testCollector.getTestSuitesDict()
-    testList1 = [ SNET_settings, SNET_getpeers ]
 
     args = sys.argv[1:]
 
-    for  test in args:
 
-        if test in testClasses:
+    for  testCase in args:
+
+        if testCase in testClasses:
 
             runner = unittest.TextTestRunner()
-            runner.run(testClasses[test]())
+            runner.run(testClasses[testCase]())
 
 
-        elif test in testSuites:
+        elif testCase in testSuites:
 
              suite  = testSuites[test]()
              runner = unittest.TextTestRunner()
              runner.run(suite)
 
-        elif test == 'tl1':
-            for test in testList1:
+
+        elif testCase == 'vfd':
+            verifTestList = testCollector.getVerifiedTests()
+            for test in verifTestList:
 
                 runner = unittest.TextTestRunner()
                 runner.run(test())
+
 
     try:
         if args[0] == 'all':
@@ -2703,10 +2992,6 @@ if __name__ == '__main__':
 
 
 
-
-# List of tests and what they do:
-
-# getpeers:
 
     """
 
@@ -2750,7 +3035,7 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
 
     // IP comms 5
-  *  static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", "MMatrix", 0 };
+    static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", "MMatrix", 0 };
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", "tag", "MMatrix", 0 };
     static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
     static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
@@ -2758,7 +3043,7 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
 
     // Kademlia DHT 6
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
-  *  static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
+    static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
     static char *havenode[] = { (char *)havenode_func, "havenode", "V", "pubkey", "key", "name", "data", 0 };
     static char *havenodeB[] = { (char *)havenodeB_func, "havenodeB", "V", "pubkey", "key", "name", "data", 0 };
@@ -2770,7 +3055,7 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *publish[] = { (char *)publish_func, "publish", "V", "files", "L", "M", "N", "backup", "password", "pin", 0  };
 
     // Telepathy 9
-  *  static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
+    static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
     static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V",  "handle", "acct", 0 };
     static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V",  "contact", 0 };
     static char *dispcontact[] = { (char *)dispcontact_func, "dispcontact", "V",  "contact", 0 };

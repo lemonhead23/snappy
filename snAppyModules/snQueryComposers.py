@@ -313,7 +313,7 @@ can use more soph. exception handling later
             P3 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,}
 
             #
             # parms = ( (K0,P0), (K1,P1), (K2,P2), (K3,P3), )
@@ -425,7 +425,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
             P3 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2,  K3 : P3,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2,  K3 : P3,  }
         #
         # # unwrap into tuple here, and pass into the relevant function!
         # parms = ( (K0,P0),  (K1,P1), (K2,P2), (K3,P3),) # NB: need the extra comma to force len(parms)==1 for ONE tuple
@@ -473,7 +473,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
         except:
             P3 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,}
 
 
 
@@ -512,7 +512,7 @@ static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method",
         except:
             P4 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, K4 : P4,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, K4 : P4,}
 
 
     #########################
@@ -552,7 +552,7 @@ CHECK!
             P2 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2 }
 
 
 
@@ -613,7 +613,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3}
 
 
 
@@ -658,7 +658,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4 }
 
 
     def ramblock(self, reqDict):
@@ -695,7 +695,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3 }
 
 
 
@@ -751,7 +751,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6}
 
 
 
@@ -793,7 +793,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4 }
 
 
     def ramrichlist(self, reqDict):
@@ -834,7 +834,7 @@ CHECK!
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4 }
 
 
     def ramcompress(self, reqDict):
@@ -871,7 +871,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3 }
 
 
 
@@ -906,7 +906,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3 }
 
 
 
@@ -951,7 +951,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4 }
 
 
 
@@ -990,7 +990,7 @@ CHECK!
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3 }
 
 
 
@@ -1039,7 +1039,7 @@ static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "desti
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5 }
 
 
 
@@ -1101,7 +1101,7 @@ static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "desti
             P5= ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,K4 : P4, K5 : P5, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,K4 : P4, K5 : P5, }
 
 
     def getmsigpubkey(self, reqDict):
@@ -1136,7 +1136,7 @@ static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "desti
         except:
             P4= ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, K4 : P4, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, K4 : P4, }
 
 
 
@@ -1202,125 +1202,7 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
         except:
             P4= ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, K4 : P4, }
-
- # deprec
- #
- #    def MGW(self, reqDict):
- #        """ individual treatment of requests and their parms here
- #
- #
- #   static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
- #
- # """#
- #        K0 = 'requestType'
- #        P0 = 'MGW'
- #
- #        try:
- #            K1 = 'NXT0'
- #            P1 = reqDict['NXT0']
- #        except:
- #            P1= ''
- #        try:
- #            K2 = 'NXT1'
- #            P2 = reqDict['NXT1']
- #        except:
- #            P2= ''
- #        try:
- #            K3 = 'NXT2'
- #            P3 = reqDict['NXT2']
- #        except:
- #            P3= ''
- #        try:
- #            K4 = 'ip0'
- #            P4 = reqDict['ip0']
- #        except:
- #            P4= ''
- #        try:
- #            K5 = 'ip1'
- #            P5 = reqDict['ip1']
- #        except:
- #            P5= ''
- #        try:
- #            K6 = 'ip2'
- #            P6 = reqDict['ip2']
- #        except:
- #            P6= ''
- #        try:
- #            K7 = 'coin'
- #            P7 = reqDict['coin']
- #        except:
- #            P7= ''
- #        try:
- #            K8 = 'asset'
- #            P8 = reqDict['asset']
- #        except:
- #            P8= ''
- #        try:
- #            K9 = 'rescan'
- #            P9 = reqDict['rescan']
- #        except:
- #            P9= ''
- #        try:
- #            K10 = 'actionflag'
- #            P10 = reqDict['actionflag']
- #        except:
- #            P10= ''
- #        try:
- #            K11 = 'specialNXT'
- #            P11 = reqDict['specialNXT']
- #        except:
- #            P11= ''
- #        try:
- #            K12 = 'exclude0'
- #            P12 = reqDict['exclude0']
- #        except:
- #            P12= ''
- #        try:
- #            K13 = 'exclude1'
- #            P13 = reqDict['exclude1']
- #        except:
- #            P13= ''
- #        try:
- #            K14 = 'exclude2'
- #            P14 = reqDict['exclude2']
- #        except:
- #            P14 = ''
- #        try:
- #            K15 = 'destip'
- #            P15 = reqDict['destip']
- #        except:
- #            P15 = ''
- #        try:
- #            K16 = 'destport'
- #            P16 = reqDict['destport']
- #        except:
- #            P16 = ''
- #        try:
- #            K17 = 'userpubkey'
- #            P17 = reqDict['userpubkey']
- #        except:
- #            P17 = ''
- #        try:
- #            K18 = 'email'
- #            P18 = reqDict['email']
- #        except:
- #            P18 = ''
- #        try:
- #            K19 = 'destNXT'
- #            P19 = reqDict['destNXT']
- #        except:
- #            P19 = ''
- #
- #        retVal =  {
- #                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
- #                    K8 : P8 , K9 : P9 , K10 : P10, K11 : P11, K12 : P12,  K13 : P13, \
- #                     K14 : P14 , K15 : P15 , K16 : P16, K17 : P17, K18 : P18,  K19 : P19,
- #                    }
- #
- #        return retVal
- #
-
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, K4 : P4, }
 
 
 
@@ -1352,7 +1234,7 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
         except:
             P3= ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, }
 
 
 
@@ -1391,7 +1273,7 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
         except:
             P4 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,}
+        return  { K0 : P0 , K1 : P1 , K2 : P2, K3 : P3,  K4 : P4,}
 
 
 
@@ -1455,7 +1337,7 @@ static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "por
         except:
             P4=''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,}
 
 
 
@@ -1518,7 +1400,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
 
 
 
@@ -1592,7 +1474,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
         retVal =  {
-                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
+                    K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
                     K8 : P8 , K9 : P9 , K10 : P10, K11 : P11
                     }
 
@@ -1671,7 +1553,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
         retVal =  {
-                    K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
+                    K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, \
                     K8 : P8 , K9 : P9 , K10 : P10, K11 : P11
                     }
 
@@ -1725,7 +1607,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
 
 
 
@@ -1784,7 +1666,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
 
@@ -1824,7 +1706,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4, }
 
 
 
@@ -1864,7 +1746,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
 
@@ -1904,7 +1786,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
 
@@ -1944,7 +1826,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
 
@@ -1990,7 +1872,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
             P5 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
 
          #########################
 
@@ -2053,7 +1935,7 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
         except:
             P7 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,}
 
 
 
@@ -2133,7 +2015,7 @@ individual treatment of requests and their parms here """#
             P10 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8, K9 : P9,  K10 : P10,}
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8, K9 : P9,  K10 : P10,}
 
 
 
@@ -2196,7 +2078,7 @@ individual treatment of requests and their parms here """#
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
 
 
 
@@ -2254,7 +2136,7 @@ individual treatment of requests and their parms here """#
             P2 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2,  }
 
 
     def removecontact(self, reqDict):
@@ -2332,7 +2214,7 @@ individual treatment of requests and their parms here """#
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
 
@@ -2380,7 +2262,7 @@ individual treatment of requests and their parms here """#
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,  }
 
 
     def sendmessage(self, reqDict):
@@ -2422,7 +2304,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  }
 
 
 
@@ -2452,7 +2334,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P3 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, }
 
 
 
@@ -2508,7 +2390,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, }
 
 
     def telepodacct(self, reqDict):
@@ -2560,7 +2442,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
 
 
 
@@ -2607,7 +2489,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, }
 
     #########################
 
@@ -2688,7 +2570,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
     def placebid(self, reqDict):
@@ -2726,7 +2608,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,   }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,   }
 
 
     def placeask(self, reqDict):
@@ -2764,7 +2646,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
 
@@ -2816,7 +2698,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P6 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
 
 
     def respondtx(self, reqDict):
@@ -2861,7 +2743,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P3 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3, }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, }
 
     #########################
 
@@ -2912,7 +2794,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
 
 
     def getquotes(self, reqDict):
@@ -2948,7 +2830,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2, K2 : P2, K3 : P3,  K4 : P4,   }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,   }
 
 
     def tradebot(self, reqDict):
