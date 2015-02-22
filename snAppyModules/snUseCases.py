@@ -1713,12 +1713,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 
 
-
-    def rpl777_GUIpoll_havenodeB(self,rpl777):
-
-        log.msg(21*"\n  ---> rpl777_GUIpoll_havenodeB",rpl777, type(rpl777),"\n")
-
-
     def rpl777_GUIpoll_findvalue(self,rpl777):
 
         log.msg(11*"\n  ---> rpl777_GUIpoll_findvalue",rpl777, type(rpl777),"\n") # findvalue does not seem to pass GUIpoll!!
@@ -3142,8 +3136,6 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             for frag in range(randint(4,7)):
                 msg +=  self.MSGfrags[randint(0,7)]
             return msg
-
-        log.msg(1*"UC4 rpl777_GUIpoll_kademlia_havenode num peers in peersList", len(peersList))
 
 
 
@@ -5297,14 +5289,14 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
     def UC_specifics(self):
 
 
-        self.testRQ_placebid['volume'] = self.volumeA
-        self.testRQ_placebid['price'] = self.priceA
+        self.testRQ_placebid['volume'] = self.volumeB
+        self.testRQ_placebid['price'] = self.priceB
         self.testRQ_placebid['baseid'] = self.baseid
         self.testRQ_placebid['relid'] = self.relid
 
 
-        self.testRQ_placeask['volume'] = self.volumeB
-        self.testRQ_placeask['price'] = self.priceB
+        self.testRQ_placeask['volume'] = self.volumeA
+        self.testRQ_placeask['price'] = self.priceA
         self.testRQ_placeask['baseid'] = self.baseid
         self.testRQ_placeask['relid'] = self.relid
 
