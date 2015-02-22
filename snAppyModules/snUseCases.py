@@ -3756,7 +3756,7 @@ findaddress completed ({"result":"metric 0.002","privateaddr":"10173394274437485
         """#
         #log.msg( 11 * "\nrpl777_df1_findaddress sent", dataFrom777)
         repl=dataFrom777.json()
-        log.msg( 1 * "\nrpl777_df1_findaddress sent", repl, type(repl))
+        log.msg( 1 * "\nrpl777_df2_findaddress sent", repl, type(repl))
         # repl=dataFrom777.content.decode("utf-8")
         # repl=eval(repl)
         #

@@ -1740,9 +1740,38 @@ class SNET_findaddress(SNET_BaseTest):
 
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
+
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        self.assertTrue('peers' in rpl777.keys())
+
+        peers = rpl777['peers']
+        for peer in peers[2:]:
+            print(peer,"\n")
+            psrv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            print(psrv,"\n")
+            print(srvNXT,"\n")
+           #log.msg(1*"\n FINDNODE peer:", srvNXT)
+
+
+
         print(5*"\n++++++++++++","test_findaddress")
-        test_RQ_ = {'requestType': 'findaddress'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        testRQ_findaddress = {'requestType': 'findaddress'}
+
+        testRQ_findaddress['refaddr'] = srvNXT #'14083245880221951726' #srvNXT
+        testRQ_findaddress['dist'] = 32
+        testRQ_findaddress['duration'] = 11
+        testRQ_findaddress['numthreads'] = 2
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_findaddress)
+
+
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
@@ -1892,7 +1921,6 @@ class SNET_publish(SNET_BaseTest):
 
 
     # // Telepathy
-##############getpeers
 
     #########################
     #     // Telepathy 9
@@ -1919,11 +1947,37 @@ class SNET_addcontact(SNET_BaseTest):
 
     def test_addcontact(self):
         #query_json = {'handle': '', 'acct': '', 'requestType': 'addcontact'}
+#{"result":"(myHan1) acct.(1978065578067355462) (1978065578067355462) has pubkey.(c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40)"}
+#./BitcoinDarkd  SuperNET '{"requestType":"addcontact","handle":"myHan1","acct":"8128620123513482991"}'
+
+        ##### getpeers
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        self.assertTrue('peers' in rpl777.keys())
+
+        peers = rpl777['peers']
+        for peer in peers[2:]:
+            print(peer)
+            psrv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            print(psrv)
+            print(srvNXT)
+           #log.msg(1*"\n FINDNODE peer:", srvNXT)
+
 
 
         print(5*"\n++++++++++++","test_addcontact")
-        test_RQ_ = {'requestType': 'addcontact'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        testRQ_addcontact = {'requestType': 'addcontact'}
+        testRQ_addcontact['acct'] = srvNXT
+        testRQ_addcontact['handle'] = "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_addcontact)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
@@ -1931,7 +1985,51 @@ class SNET_addcontact(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
+
+
         self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('pubkey' in testReq.text )
+
+
+
+
+        print(5*"\n++++++++++++","test_dispcontact")
+        testRQ_dispcontact = {'requestType': 'dispcontact'}
+        #test_dispcontact['acct'] =
+        testRQ_dispcontact['contact'] =  'myTestHandle' # "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_dispcontact)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('handle' in rpl777.keys() )
+
+
+        print(5*"\n++++++++++++","test_RQ_removecontact")
+        test_RQ_removecontact = {'requestType': 'removecontact'}
+        #test_dispcontact['acct'] =
+        test_RQ_removecontact['contact'] =  'myTestHandle' # "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(test_RQ_removecontact)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('deleted' in testReq.text )
+
+
 
 
 class SNET_removecontact(SNET_BaseTest):
@@ -1948,11 +2046,35 @@ class SNET_removecontact(SNET_BaseTest):
 
 
     def test_removecontact(self):
-        #query_json = {'requestType': 'removecontact', 'contact': ''}
 
-        print(5*"\n++++++++++++","test_removecontact")
-        test_RQ_ = {'requestType': 'removecontact'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        ##### getpeers
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        self.assertTrue('peers' in rpl777.keys())
+
+        peers = rpl777['peers']
+        for peer in peers[2:]:
+            print(peer)
+            psrv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            print(psrv)
+            print(srvNXT)
+           #log.msg(1*"\n FINDNODE peer:", srvNXT)
+
+
+
+        print(5*"\n++++++++++++","test_addcontact")
+        testRQ_addcontact = {'requestType': 'addcontact'}
+        testRQ_addcontact['acct'] = srvNXT
+        testRQ_addcontact['handle'] = "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_addcontact)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
@@ -1962,6 +2084,47 @@ class SNET_removecontact(SNET_BaseTest):
 
 
         self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('pubkey' in testReq.text )
+
+
+
+
+
+        print(5*"\n++++++++++++","test_dispcontact")
+        testRQ_dispcontact = {'requestType': 'dispcontact'}
+        #test_dispcontact['acct'] =
+        testRQ_dispcontact['contact'] =  'myTestHandle' # "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_dispcontact)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('handle' in rpl777.keys() )
+
+
+        print(5*"\n++++++++++++","test_RQ_removecontact")
+        test_RQ_removecontact = {'requestType': 'removecontact'}
+        #test_dispcontact['acct'] =
+        test_RQ_removecontact['contact'] =  'myTestHandle' # "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(test_RQ_removecontact)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('deleted' in testReq.text )
 
 
 
@@ -1979,11 +2142,35 @@ class SNET_dispcontact(SNET_BaseTest):
 
 
     def test_dispcontact(self):
-        #query_json = {'contact': '', 'requestType': 'dispcontact'}
 
-        print(5*"\n++++++++++++","test_dispcontact")
-        test_RQ_ = {'requestType': 'dispcontact'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        ##### getpeers
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        self.assertTrue('peers' in rpl777.keys())
+
+        peers = rpl777['peers']
+        for peer in peers[2:]:
+            print(peer)
+            psrv = peer['pserver']
+            srvNXT = peer['srvNXT']
+            print(psrv)
+            print(srvNXT)
+           #log.msg(1*"\n FINDNODE peer:", srvNXT)
+
+
+
+        print(5*"\n++++++++++++","test_addcontact")
+        testRQ_addcontact = {'requestType': 'addcontact'}
+        testRQ_addcontact['acct'] = srvNXT
+        testRQ_addcontact['handle'] = "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_addcontact)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
@@ -1993,6 +2180,47 @@ class SNET_dispcontact(SNET_BaseTest):
 
 
         self.assertTrue('result' in rpl777.keys() )
+        if 'unchanged' in testReq.text:
+            self.assertTrue(True)
+        else:
+            self.assertTrue('pubkey' in testReq.text )
+
+
+        print(5*"\n++++++++++++","test_dispcontact")
+        testRQ_dispcontact = {'requestType': 'dispcontact'}
+        #test_dispcontact['acct'] =
+        testRQ_dispcontact['contact'] =  'myTestHandle' # "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_dispcontact)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('handle' in rpl777.keys() )
+
+
+        print(5*"\n++++++++++++","test_RQ_removecontact")
+        test_RQ_removecontact = {'requestType': 'removecontact'}
+        #test_dispcontact['acct'] =
+        test_RQ_removecontact['contact'] =  'myTestHandle' # "myTestHandle"  #+ str(time.time())
+
+
+        payload= self.qComp_777.make_777POST_Request(test_RQ_removecontact)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('deleted' in testReq.text )
 
 
 
@@ -2098,8 +2326,8 @@ class SNET_sendmessage(SNET_BaseTest):
 
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
-        test_RQ_ = {'requestType': 'getpeers'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
@@ -2185,8 +2413,8 @@ class SNET_sendbinary(SNET_BaseTest):
 
 
         ##### getpeers
-        test_RQ_ = {'requestType': 'getpeers'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
@@ -3256,10 +3484,6 @@ class TestCollector(object):
         testSuites['base'] = suite_baseSetup
         testSuites['base1'] = suite_baseSetup
         testSuites['base2'] = suite_baseSetup
-        testSuites['base3'] = suite_baseSetup
-        testSuites['base4'] = suite_baseSetup
-        testSuites['base5'] = suite_baseSetup
-        testSuites['base6'] = suite_baseSetup
         testSuites['sg'] = suite_SG
         return testSuites
 
@@ -3286,8 +3510,10 @@ class TestCollector(object):
                         SNET_checkmsg,\
                         SNET_store,\
                         SNET_findvalue,\
-
-
+                        SNET_findaddress,\
+                        SNET_addcontact,\
+                        SNET_dispcontact,\
+                        SNET_removecontact
                         ]
 
         elif testListName == 'idex':
@@ -3299,6 +3525,15 @@ class TestCollector(object):
                         SNET_openorders,\
 
                         ]
+        elif testListName == 'contacts':
+
+            testList = [
+
+                       SNET_addcontact,\
+                        SNET_dispcontact,\
+                        SNET_removecontact
+                        ]
+
 
         elif testListName == 'errs':
 
