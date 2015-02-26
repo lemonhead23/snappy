@@ -1293,6 +1293,9 @@ static char *[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "r
 
 
 
+
+
+
     def ping(self, reqDict):
         """ individual treatment of requests and their parms here
 
@@ -1614,6 +1617,35 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
 
+    def getfile(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+!! ip
+ static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
+
+
+        """#
+
+        K0 = 'requestType'
+        P0 = 'getfile'
+
+        try:
+            K1 = 'name'
+            P1 = reqDict['name']
+        except:
+            P1 = ''
+        try:
+            K2 = 'handler'
+            P2 = reqDict['handler']
+        except:
+            P2 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2 }
+
+
+
+
+
 
 
 
@@ -1623,12 +1655,9 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
 
 
-    #     // Kademlia DHT  6
+    #     // Kademlia DHT 8
 
     #########################
-
-
-
 
 
     def store(self, reqDict):
@@ -1874,6 +1903,82 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
 
         return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5,}
 
+
+
+
+    def nonces(self, reqDict):
+        """ individual treatment of requests and their parms here
+   static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
+
+"""#
+        K0 = 'requestType'
+        P0 = 'nonces'
+        try:
+            K1 = 'reftime'
+            P1 = reqDict['reftime']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'threshold'
+            P2 = reqDict['threshold']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'nonces'
+            P3 = reqDict['nonces']
+        except:
+            P3 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3   }
+
+
+
+    def puzzles(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+
+    // Kademlia DHT 8
+
+!!!
+static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
+
+
+"""#
+        K0 = 'requestType'
+        P0 = 'puzzles'
+        try:
+            K1 = 'reftime'
+            P1 = reqDict['reftime']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'duration'
+            P2 = reqDict['duration']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'threshold'
+            P3 = reqDict['threshold']
+        except:
+            P3 = ''
+
+
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3   }
+
+
          #########################
 
 
@@ -1944,8 +2049,8 @@ static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "por
     static char *restorefile[] = { (char *)restorefile_func, "restorefile", "V", "filename", "L", "M", "N", "backup", "password", "destfile", "sharenrs", "txids", "pin", 0 };
 
 individual treatment of requests and their parms here """#
-        K0 = 'restorefile'
-        P0 = 'stop'
+        K0 = 'requestType'
+        P0 = 'restorefile'
         try:
             K1 = 'filename'
             P1 = reqDict['filename']
@@ -2745,6 +2850,146 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
         return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, }
 
+
+
+
+    def bid(self, reqDict):
+        """
+
+
+static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+
+individual treatment of requests and their parms here """#
+        K0 = 'requestType'
+        P0 = 'bid'
+        try:
+            K1 = 'baseid'
+            P1 = reqDict['baseid']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'relid'
+            P2 = reqDict['relid']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'volume'
+            P3 = reqDict['volume']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'price'
+            P4 = reqDict['price']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'timestamp'
+            P5 = reqDict['timestamp']
+        except:
+            P5= ''
+
+
+        try:
+            K6 = 'baseamount'
+            P6 = reqDict['baseamount']
+        except:
+            P6 = ''
+
+        try:
+            K7 = 'relamount'
+            P7 = reqDict['relamount']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'type'
+            P8 = reqDict['type']
+        except:
+            P8= ''
+
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+
+
+
+    def ask(self, reqDict):
+        """
+
+static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+
+individual treatment of requests and their parms here """#
+        K0 = 'requestType'
+        P0 = 'ask'
+        try:
+            K1 = 'baseid'
+            P1 = reqDict['baseid']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'relid'
+            P2 = reqDict['relid']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'volume'
+            P3 = reqDict['volume']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'price'
+            P4 = reqDict['price']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'timestamp'
+            P5 = reqDict['timestamp']
+        except:
+            P5= ''
+
+
+        try:
+            K6 = 'baseamount'
+            P6 = reqDict['baseamount']
+        except:
+            P6 = ''
+
+        try:
+            K7 = 'relamount'
+            P7 = reqDict['relamount']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'type'
+            P8 = reqDict['type']
+        except:
+            P8= ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 }
+
+
+
+
     #########################
 
 
@@ -3029,12 +3274,14 @@ This is the wrapper class
                    'setmsigpubkey',\
                    'cosign',\
                    'cosigned',\
-                   '                   IPcomms',\
+                   '                   IPcomms 6',\
                    'ping',\
                    'pong',\
                    'sendfrag',\
                    'gotfrag',\
                    'startxfer',\
+                   'getfile',\
+
                    '                   Kademlia DHT 8',\
                    'store',\
                    'findvalue',\
@@ -3042,6 +3289,9 @@ This is the wrapper class
                    'havenode',\
                    'havenodeB',\
                    'findaddress',\
+                   'puzzles',\
+                   'nonces',\
+
                    '                   MofNfs 3',\
                    'savefile',\
                    'restorefile',\
@@ -3060,16 +3310,17 @@ This is the wrapper class
                    'maketelepods',\
                    'telepodacct',\
                    'teleport',\
-                                       'InstantDEX 8',\
+                                       'InstantDEX 10',\
                    'allorderbooks',\
                    'openorders',\
-
                    'orderbook',\
                    'placebid',\
                    'placeask',\
                    'makeoffer',\
                    'respondtx',\
                    'processutx',\
+                   'bid',\
+                   'ask',\
                    '                   Tradebot 3',\
                    'pricedb',\
                    'getquotes',\
@@ -3207,7 +3458,7 @@ This is the wrapper class
             return jsonSpecs
 
 
-        #     //  MGW 6
+        #     //  MGW 7
 
         elif reqDict['requestType'] == 'genmultisig':
             jsonSpecs = self.jl777_aAll.genmultisig(reqDict)
@@ -3223,9 +3474,6 @@ This is the wrapper class
             return jsonSpecs
         elif reqDict['requestType'] == 'setmsigpubkey':
             jsonSpecs = self.jl777_aAll.setmsigpubkey(reqDict)
-            return jsonSpecs
-        # elif reqDict['requestType'] == 'MGW':
-        #     jsonSpecs = self.jl777_aAll.MGW(reqDict)
             return jsonSpecs
         elif reqDict['requestType'] == 'cosign':
             jsonSpecs = self.jl777_aAll.cosign(reqDict)
@@ -3253,6 +3501,10 @@ This is the wrapper class
         elif reqDict['requestType'] == 'startxfer':
             jsonSpecs = self.jl777_aAll.startxfer(reqDict)
             return jsonSpecs
+        elif reqDict['requestType'] == 'getfile':
+            jsonSpecs = self.jl777_aAll.getfile(reqDict)
+            return jsonSpecs
+
 
         #     // Kademlia DHT  6
 
@@ -3273,6 +3525,12 @@ This is the wrapper class
             return jsonSpecs
         elif reqDict['requestType'] == 'findaddress':
             jsonSpecs = self.jl777_aAll.findaddress(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'puzzles':
+            jsonSpecs = self.jl777_aAll.puzzles(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'nonces':
+            jsonSpecs = self.jl777_aAll.nonces(reqDict)
             return jsonSpecs
 
         #     // MofNfs 3
@@ -3329,7 +3587,7 @@ This is the wrapper class
             jsonSpecs = self.jl777_aAll.teleport(reqDict)
             return jsonSpecs
 
-        #     // InstantDEX 8
+        #     // InstantDEX 10
 
         elif reqDict['requestType'] == 'allorderbooks':
             jsonSpecs = self.jl777_aAll.allorderbooks(reqDict)
@@ -3358,6 +3616,13 @@ This is the wrapper class
         elif reqDict['requestType'] == 'processutx':
             jsonSpecs = self.jl777_aAll.processutx(reqDict)
             return jsonSpecs
+        elif reqDict['requestType'] == 'bid':
+            jsonSpecs = self.jl777_aAll.bid(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'ask':
+            jsonSpecs = self.jl777_aAll.ask(reqDict)
+            return jsonSpecs
+
         #     // Tradebot 3
 
         elif reqDict['requestType'] == 'pricedb':

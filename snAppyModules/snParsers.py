@@ -221,7 +221,7 @@ class Parser_jl777_ramresponse(Parser_JL777_Base):
 
 
 
-# multisig MGW 8
+# multisig MGW 7
 
 
 
@@ -250,12 +250,6 @@ class Parser_jl777_setmsigpubkey(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
-#
-# class Parser_jl777_MGW(Parser_JL777_Base):
-#
-#     def parse(self, data2parse):
-#         return data2parse
-# DEPREC
 
 class Parser_jl777_cosign(Parser_JL777_Base):
 
@@ -271,7 +265,7 @@ class Parser_jl777_cosigned(Parser_JL777_Base):
 
 
 
- #   // IP comms 5
+ #   // IP comms  6
 
 
 class Parser_jl777_ping(Parser_JL777_Base):
@@ -299,8 +293,15 @@ class Parser_jl777_startxfer(Parser_JL777_Base):
     def parse(self, data2parse):
         return data2parse
 
+class Parser_jl777_getfile(Parser_JL777_Base):
 
-# Kademlia DHT 6
+    def parse(self, data2parse):
+        return data2parse
+
+
+
+
+# Kademlia DHT 8
 
 
 
@@ -339,6 +340,19 @@ class Parser_jl777_findaddress(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
+
+
+class Parser_jl777_puzzles(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
+class Parser_jl777_nonces(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
 
 
 # // MofNfs 3
@@ -431,7 +445,7 @@ class Parser_jl777_teleport(Parser_JL777_Base):
         return data2parse
 
 
-#InstantDEX 6
+#InstantDEX 8
 
 
 class Parser_jl777_allorderbooks(Parser_JL777_Base):
@@ -480,6 +494,18 @@ class Parser_jl777_processutx(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
+
+
+class Parser_jl777_bid(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_ask(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
 
 
 #Tradebot 3
@@ -578,23 +604,25 @@ class Parser_777(object):
     ql777_rampyramid = Parser_jl777_rampyramid()
     ql777_ramresponse = Parser_jl777_ramresponse()
 
-    # // MGW
+    # // MGW 7
 
 
     ql777_genmultisig = Parser_jl777_genmultisig()
     ql777_getmsigpubkey = Parser_jl777_getmsigpubkey()
     ql777_MGWaddr = Parser_jl777_MGWaddr()
     ql777_setmsigpubkey = Parser_jl777_setmsigpubkey()
-    #ql777_MGW = Parser_jl777_MGW() deprec
     ql777_MGWresponse = Parser_jl777_MGWresponse()
     ql777_cosign = Parser_jl777_cosign()
     ql777_cosigned = Parser_jl777_cosigned()
+
+
     # // IPcomms(MGW)
     ql777_ping = Parser_jl777_ping()
     ql777_pong = Parser_jl777_pong()
     ql777_sendfrag = Parser_jl777_sendfrag()
     ql777_gotfrag = Parser_jl777_gotfrag()
     ql777_startxfer = Parser_jl777_startxfer()
+    ql777_getfile = Parser_jl777_getfile()
 
     # // Kademlia DHT
 
@@ -604,6 +632,9 @@ class Parser_777(object):
     ql777_havenode = Parser_jl777_havenode()
     ql777_havenodeB = Parser_jl777_havenodeB()
     ql777_findaddress = Parser_jl777_findaddress()
+    ql777_nonces = Parser_jl777_nonces()
+    ql777_puzzles = Parser_jl777_puzzles()
+
 
     # // MofNfs
     ql777_savefile = Parser_jl777_savefile()
@@ -636,6 +667,8 @@ class Parser_777(object):
     ql777_makeoffer = Parser_jl777_makeoffer()
     ql777_respondtx = Parser_jl777_respondtx()
     ql777_processutx = Parser_jl777_processutx()
+    ql777_bid = Parser_jl777_bid()
+    ql777_ask = Parser_jl777_ask()
 
     # // Tradebot
     ql777_pricedb = Parser_jl777_pricedb()
@@ -741,7 +774,7 @@ class Parser_777(object):
             parsed = self.ql777_remote.parse(data2parse)
 
 
-    # // ramchains   11
+    # // ramchains   13
 
         elif requestType2Parse == 'ramstatus':
             parsed = self.ql777_ramstatus.parse(data2parse)
@@ -783,7 +816,7 @@ class Parser_777(object):
             parsed = self.ql777_ramresponse.parse(data2parse)
 
 
-    # //  8 MGW
+    # // 7 MGW
 
         elif requestType2Parse == 'genmultisig':
             parsed = self.ql777_genmultisig.parse(data2parse)
@@ -799,9 +832,6 @@ class Parser_777(object):
 
         elif requestType2Parse == 'setmsigpubkey':
             parsed = self.ql777_setmsigpubkey.parse(data2parse)
-        # deprec
-        # elif requestType2Parse == 'MGW':
-        #     parsed = self.ql777_MGW.parse(data2parse)
 
         elif requestType2Parse == 'cosign':
             parsed = self.ql777_cosign.parse(data2parse)
@@ -811,7 +841,7 @@ class Parser_777(object):
 
 
 
-    # // IPcomms
+    # // IPcomms 6
 
         elif requestType2Parse == 'ping':
             parsed = self.ql777_ping.parse(data2parse)
@@ -830,8 +860,12 @@ class Parser_777(object):
             parsed = self.ql777_startxfer.parse(data2parse)
 
 
+        elif requestType2Parse == 'getfile':
+            parsed = self.ql777_getfile.parse(data2parse)
 
-    # // Kademlia DHT 6
+
+
+    # // Kademlia DHT 8
 
 
         elif requestType2Parse == 'store':
@@ -851,6 +885,13 @@ class Parser_777(object):
 
         elif requestType2Parse == 'findaddress':
             parsed = self.ql777_findaddress.parse(data2parse)
+
+        elif requestType2Parse == 'puzzles':
+            parsed = self.ql777_puzzles.parse(data2parse)
+
+        elif requestType2Parse == 'nonces':
+            parsed = self.ql777_nonces.parse(data2parse)
+
 
     # // MofNfs 3
 
@@ -903,7 +944,7 @@ class Parser_777(object):
         elif requestType2Parse == 'teleport':
             parsed = self.ql777_teleport.parse(data2parse)
 
-    # // InstantDEX 8
+    # // InstantDEX 10
 
         elif requestType2Parse == 'allorderbooks':
             parsed = self.ql777_allorderbooks.parse(data2parse)
@@ -928,6 +969,13 @@ class Parser_777(object):
 
         elif requestType2Parse == 'processutx':
             parsed = self.ql777_processutx.parse(data2parse)
+
+        elif requestType2Parse == 'bid':
+            parsed = self.ql777_bid.parse(data2parse)
+
+        elif requestType2Parse == 'ask':
+            parsed = self.ql777_ask.parse(data2parse)
+
 
     # // Tradebot 3
 

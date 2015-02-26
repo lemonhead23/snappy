@@ -246,13 +246,12 @@ class Parser_777(object):
 
 
 
-
-
 3 add elif case for requestType in def parse_777()
 --------------------------------------------------
 
     elif requestType2Parse == 'settings':
         parsed = self.ql777_settings.parse(data_result)
+
 
 
 
@@ -275,9 +274,6 @@ class QueryComposer_777(QC_777Base):
 
 
 
-
-
-
 5 add elif case for requestType in def lookUpQuery of class QueryComposer_777
 -----------------------------------------------------------------------------
 
@@ -287,6 +283,8 @@ class QueryComposer_777(QC_777Base):
 
         elif reqDict['requestType'] == 'gotjson':
             jsonSpecs = self.jl777_aAll.gotjson(reqDict)
+
+
 
 
 
@@ -2437,6 +2435,369 @@ got JSON.({"requestType":"maketelepods","coin":"BTCD","amount":".005"})
 
 
 
+
+I have the multi-orderbook all coded and ready to get external prices from NXT AE, poloniex, bittrex, cryptsy and bitfinex
+
+jl777 [8:12 AM]
+but best to wait till I am recharged before activating it as I also want to push forward to hybrid books and that will require making a longer reftx chain
+
+jl777 [8:13 AM]
+so in the context of InstantDEX selfcontained trading, I currently dont know of any bugs and all the API are working
+
+jl777 [8:17 AM]
+the following are the only API you need:
+
+jl777 [8:17 AM]
+static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
+   static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
+   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", 0 };
+   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
+   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
+   static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
+
+jl777 [8:18 AM]8:18
+the exact makeoffer syntax you need to make a specific offer in the orderbook should be displayed via allfields:1 in the orderbook API, but I have a feeling it might not be right for asks
+
+jl777 [8:19 AM]
+please try to get bug reports within 10 hours. I want to fix them all and then add multibooks and hybrid orderbooks
+
+jl777 [8:19 AM]
+At that point I will have just a few more things needed to have InstantDEX into maintenance mode so I can finalize Tradebots
+
+
+
+
+
+
+
+
+##################################################################################################
+
+                    'InstantDEX 6',\
+
+
+##################################################################################################
+
+                    'InstantDEX 6',\
+
+
+##################################################################################################
+
+                    'InstantDEX 6',\
+
+
+##################################################################################################
+
+                    'InstantDEX 6',\
+
+
+##################################################################################################
+
+                    'InstantDEX 6',\
+
+
+
+
+static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
+   static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
+   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", 0 };
+   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
+   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
+   static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+   static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+   static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
+   static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", "feeB", "feetxid", 0 };
+   static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", "feeAtxid", 0 };
+
+
+allorderbooks returns all orderbooks
+
+
+openorders returns all open orders (for the local node)
+
+
+orderbook returns and orderbook, allfields displays all fields, oldest sets the oldest entry that is displayed, maxdepth is the max depth of the orderbook
+
+
+placebid/ask places an order and in turn it broadcast a bid/ask to the network
+
+in the orderbook with allfields on, is a makeoffer API syntax that you can cut and paste and submit to the network
+
+
+
+
+
+this starts the back and forth process to make the atomic swap
+
+makeoffer locally sends a processutx to the node (whose offer you are matchind), it then makes sure it matches and if it does sends a respondutx and then both sides can complete the trade
+
+
+baseid and relid are just assetids
+
+
+baseid -> relid at the price and volume
+
+
+and maybe any MScoins
+
+
+and even NXT, but I havent had a chance to test that yet
+
+
+{ "5527630", "NXT", "8" },
+   { "17554243582654188572", "BTC", "8" },
+   { "4551058913252105307", "BTC", "8" },
+   { "12659653638116877017", "BTC", "8" },
+   { "11060861818140490423", "BTCD", "4" },
+   { "6918149200730574743", "BTCD", "4" },
+   { "13120372057981370228", "BITS", "6" },
+   { "2303962892272487643", "DOGE", "4" },
+   { "16344939950195952527", "DOGE", "4" },
+   { "6775076774325697454", "OPAL", "8" },
+   { "7734432159113182240", "VPN", "4" },
+   { "9037144112883608562", "VRC", "8" },
+   { "1369181773544917037", "BBR", "8" },
+   { "17353118525598940144", "DRK", "8" },
+   { "2881764795164526882", "LTC", "8" },
+   { "7117580438310874759", "BC", "4" },
+   { "275548135983837356", "VIA", "4" },
+
+
+these are all the special MGW asset ID
+
+
+except the NXT, that is the one that represents native NXT, not an asset, but to be compatible with API I make a special ID for NXT
+
+
+
+
+
+backtest is trivial to get 99.9% accurate
+
+
+                  you want to target around 93% accurate
+
+
+that has chance to get 85% in forward tests
+
+
+using historical data it is overfitting
+
+
+so unless the past repeats exactly (it wont), you get much worse results with 99%
+
+
+
+but nothing repeats at 99%
+
+
+ok, go ahead and overfit and get suboptimal results
+
+
+the others are not so much traders
+
+
+placeask is done locally
+
+
+this is then turned into an ask API that is broadcast to the other nodes
+
+
+so an ask coming in means some other node did a placeask
+
+
+like the ping pong thing?
+
+
+exactly like that
+
+
+placeask -> ask
+
+
+placebid -> bid
+
+
+but not to just one other node, to all other nodes (for now)
+
+
+will make a multicast later
+
+
+most the other calls are purely local queries
+
+
+for InstantDEX ,lets do deep testing
+
+
+it is 10 API
+
+
+so would I test for 'ask' by using the GUIpoll call?
+
+jl777 [7:15 AM]
+I think passive
+
+
+
+with 'pong' I can issue the call to the server, but what it does then, it sends a PONG to another node
+
+
+and that other node then has the pong in its guiPoll
+
+
+
+no, passive. I think you need two nodes testing
+
+
+Alice node and Bob node
+
+
+so Alice tests bob's placeask/bid and vice versa by getting the ask/bid passively
+
+
+ok, but how long to test the current level?
+
+jl777 [7:18 AM]
+we do need InstantDEX to be solid at all levels
+
+
+the makeoffer sequence is tricky....
+
+
+locally the makeoffer is made (using the data from the orderbook)
+
+this becomes a processutx
+
+
+which might become a respondtx if it is accepted
+
+
+i dont think anybody else done an ordermatch
+
+
+
+makeoffer -> processutx
+
+
+then the node that receives a processutx might send back a respondtx to the original node
+
+
+Alice does makeoffer locally, a processutx is sent to Bob, who then sends back a respondtx
+
+
+ah good! not too difficult
+
+
+the are constructing a referencedtransaction chain
+
+
+So Alice makes a tx and also sends a fee to InstantDEX (but it is referring to Alice's tx)
+
+
+this is sent to Bob, who verifies that it matches what his orderbook offer is and if it is he signs his half of the tx, but makes it refer to Alice's tx
+
+
+now Alice gets Bobs signed tx back and then verifies it matches what the deal is
+
+the are constructing a referencedtransaction chain
+
+
+So Alice makes a tx and also sends a fee to InstantDEX (but it is referring to Alice's tx)
+
+
+this is sent to Bob, who verifies that it matches what his orderbook offer is and if it is he signs his half of the tx, but makes it refer to Alice's tx
+
+
+now Alice gets Bobs signed tx back and then verifies it matches what the deal is
+
+
+if all is happy, Alice broadcasts the original tx that the others are dependent on
+
+
+it gets confirmed, then the other 3 get confirmed too
+
+
+all that in a makeoffer -> processutx -> respondtx, happens in seconds
+
+
+i am most worried I got the price direction backwards
+
+
+it is VERY confusing as everything looks right, but it can be upside down
+
+
+
+wouldnt be good to send 100 BTC for 1 BTCD!
+
+
+but users want to see NXT/BTC or BTC/NXT so I have to support both orientations
+
+
+and I will also support hybrid books
+
+
+BTCD/NXT + NXT/BTC -> BTCD/BTC
+
+
+and let users direct arbitrage with one click
+
+
+so the cross asset trading is redundant the IDEX and MGW can be used?
+
+
+MGW has nothing to do with iDEX
+
+
+MGW makes assets for IDEX to trade
+
+
+but iDEX can trade any asset, any MScoin and NXT
+
+
+against each other
+
+
+at least it is a bug if they cant
+
+
+so trade BTC on IDEX-> trade MGW[BTCasset]
+
+
+at first yes
+
+
+later I will allow native BTC trading, telepods, etc.
+
+
+jl777 [7:29 AM]
+so we really need to have fully automated regression tests to make sure I dont make any mistakes
+
+
+with asset <-> NXT
+
+
+asset <-> asset
+
+
+asset <-> MScoin
+
+l8orre [7:30 AM]
+I won't be able to do all this alone
+
+
+MScoin <-> NXT
+
+l8orre [7:30 AM]
+I'll try to get the other three gus involved with the testign suite- putting stuff into there is really trivial!
+
+
+jl777 [7:31 AM]
+ok, i will keep making more features
+
+
+
+
 ##################################################################################################
 
                     'InstantDEX 6',\
@@ -2755,9 +3116,7 @@ http://jnxt.org/init/?requestType=status&pubkey=734b83479469164e6059b98c1679043a
 http://jnxt.org/init/?requestType=newbie&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&email=&lt;emailaddr&gt;&convertNXT=1000
 
 
-
-
-api.h: list of all calls. date: 010315: 53
+api.h: list of all calls. date: 022515:    70?
 
 
 char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *origargjson,char *sender,int32_t valid,char *origargstr)
@@ -2775,28 +3134,35 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
-    // ramchains   13
-    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
-    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
-    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "coin", "type", "rawind", 0 };
-    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "coin", "type", "string", 0 };
-    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "coin", "blocknum", 0 };
-    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
-    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "destip", "coin", "address", "unspent", 0 };
-    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "destip", "coin", "numwhales", "recalc", 0 };
-    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
-    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
-    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
-    static char *ramresponse[] = { (char *)ramresponse_func, "ramresponse", "V", "coin", "origcmd", "data", 0 };
-    static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
 
-    // MGW 6
+    // remotable ramchains
+    static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
+    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "port", "coin", 0 };
+    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "port", "coin", "type", "rawind", 0 };
+    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "port", "coin", "type", "string", 0 };
+    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "port", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
+    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "port", "coin", "blocknum", 0 };
+    static char *ramresponse[] = { (char *)ramresponse_func, "ramresponse", "V", "coin", "origcmd", "data", 0 };
+    // local ramchains
+    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "coin", "address", "unspent", 0 };
+    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "coin", "numwhales", "recalc", 0 };
+    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
+    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "coin", "coins", "rates", 0 };
+    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "coin", "data", 0 };
+    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "coin", "data", 0 };
+
+
+    // MGW 7
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
     static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
     static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
     static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };     static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
+    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
+
+
+
 
     // IP comms 5
     static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", "MMatrix", 0 };
@@ -2804,8 +3170,16 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
     static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
     static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
+!!
+ static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
 
-    // Kademlia DHT 6
+
+    // Kademlia DHT 8
+
+!!!
+static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
+static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
+
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
     static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
@@ -2836,6 +3210,11 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
 
     // InstantDEX 8
 
+!!!
+static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+
+
     static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
     static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
     static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
@@ -2856,6 +3235,8 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     // EmLang 2
     static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
     static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
+
+
 
 
 
