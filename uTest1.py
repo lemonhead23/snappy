@@ -1371,6 +1371,10 @@ class SNET_cosigned(SNET_BaseTest):
     #########################
 
 
+class ___ipComms:
+    pass
+
+
 class SNET_ping(SNET_BaseTest):
 
 
@@ -1504,10 +1508,6 @@ class SNET_gotfrag(SNET_BaseTest):
 
 
 
-
-
-
-
     # // Kademlia DHT
 
 
@@ -1541,10 +1541,42 @@ class SNET_startxfer(SNET_BaseTest):
 
         #query_json = {'requestType': 'startxfer', 'fname': '', 'timeout': '', 'handler': '', 'dest': '', 'data': ''}
 
-# {'result': 'pending SuperNET API call', 'txid': '2466605655551381573'}
+        # {'result': 'pending SuperNET API call', 'txid': '2466605655551381573'}
 
 
-#findvalue
+
+class SNET_getfile(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test getfile func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_getfile()
+
+
+    def test_getfile(self):
+
+
+
+#  static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
+#
+        print(5*"\n++++++++++++","test_getfile")
+        test_RQ_ = {'requestType': 'getfile'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
+
 
 
     #########################
@@ -1552,7 +1584,7 @@ class SNET_startxfer(SNET_BaseTest):
 
 
 
-    #     // Kademlia DHT  6
+    #     // Kademlia DHT 8
 
     #########################
 
@@ -1816,6 +1848,73 @@ class SNET_havenodeB(SNET_BaseTest):
 
 
 
+###
+
+
+class SNET_puzzles(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_puzzles()
+
+
+    def test_puzzles(self):
+
+#
+# static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
+
+
+        print(5*"\n++++++++++++","test_puzzles")
+        test_RQ_ = {'requestType': 'puzzles'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
+
+class SNET_nonces(SNET_BaseTest):
+
+
+
+# static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
+#
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_nonces()
+
+
+    def test_nonces(self):
+        #query_json = {'pubkey': '', 'name': '', 'data': '', 'key': '', 'requestType': 'havenodeB'}
+
+
+        print(5*"\n++++++++++++","test_nonces")
+        test_RQ_ = {'requestType': 'nonces'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+
+        self.assertTrue('result' in rpl777.keys() )
 
     # // MofNfs
 
@@ -2707,7 +2806,49 @@ class SNET_teleport(SNET_BaseTest):
     #########################
 
 class ___InstantDex():
+    """
+orderbooks are created dynamically when placebid or placeask is called. this is then sent to the network as bid or ask API calls with the price/volume pair changed to base and rel satoshi amounts for the assets.
+
+allorderbooks returns an array of, yes you guess it!, all the orderbooks
+
+orderbook returns, yes!, an orderbook with base -> rel. So the base NXT, rel BTC orderbook is NXT/BTC
+but you can ask for it with base BTC and rel NXT and it will return it with the prices as BTC/NXT
+
+a bunch of gory details regarding asset decimal places and other mundane things, but in my tests it is propagating pretty fast to other nodes. still need to get more timing results to know if I need to optimize it more.
+
+now that the orderbooks are back online, next up is ordermatching. This is pretty tricky as I need to make it do an atomic swap of any two assets, with NXT itself treated as a special case asset. Good thing this was done last summer, but still need to get it ported into the new codebase and get it debugged.
+
+I remember it was quite touchy, so I will plan for just achieving this automated orderfilling triggered with a makeoffer API. it actually needs at least two more internal ones to match the state transitions.
+
+At that point, the low level InstantDEX API would basically be done for asset<->asset and other than supporting the GUI port to use this, I dont foresee too much more at this level. However, this is only the lowest level. After this step I need to add another layer for the tradebots. But I like to just do one step at a time as often when I do that next step I can see a bit better what is best to do next
+
+
+char *assetmap[][2] =
+{
+    { "5527630", "NXT" },
+    { "17554243582654188572", "BTC" },
+    { "4551058913252105307", "BTC" },
+    { "12659653638116877017", "BTC" },
+    { "11060861818140490423", "BTCD" },
+    { "6918149200730574743", "BTCD" },
+    { "13120372057981370228", "BITS" },
+    { "2303962892272487643", "DOGE" },
+    { "16344939950195952527", "DOGE" },
+    { "6775076774325697454", "OPAL" },
+    { "7734432159113182240", "VPN" },
+    { "9037144112883608562", "VRC" },
+    { "1369181773544917037", "BBR" },
+    { "17353118525598940144", "DRK" },
+    { "2881764795164526882", "LTC" },
+    { "7117580438310874759", "BC" },
+    { "275548135983837356", "VIA" },
+};
+
+
+"""#
     pass
+
+
 
 class SNET_allorderbooks(SNET_BaseTest):
 
@@ -2778,7 +2919,7 @@ class SNET_openorders(SNET_BaseTest):
 
         #         {'result': 'no openorders'}
 
-        self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('openorders' in rpl777.keys() )
 
 
 
@@ -2798,7 +2939,7 @@ class SNET_orderbook(SNET_BaseTest):
     def test_orderbook(self):
 
         test_RQ_orderbook = {
-                            'allfields': '', \
+                            'allfields': '1', \
                             'baseid': '11060861818140490423', \
                             'relid': '17554243582654188572', \
                             'requestType': 'orderbook', \
@@ -2818,7 +2959,108 @@ class SNET_orderbook(SNET_BaseTest):
         if  'no such orderbook' in testReq.text:
            self.assertTrue(True) # {'error': 'no such orderbook.(0 ^ 0)'}
         else:
-            self.assertTrue('result' in rpl777.keys() )
+            self.assertTrue('NXT' in rpl777.keys() )
+
+
+
+class SNET_bid(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_bid()
+
+
+    def test_bid(self):
+
+# {'txid': '14590711946411376684', 'result': 'success'}
+
+# static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+
+        test_RQ_orderbook = {
+
+                            'requestType': 'bid', \
+                            'baseid': '11060861818140490423', \
+                            'relid': '17554243582654188572', \
+                            'volume': '1', \
+                            'price': '1', \
+                            'timestamp': '', \
+                            'baseamount': '', \
+                            'relamount': '', \
+                            'type': '', \
+
+        }
+
+        print(5*"\n++++++++++++","test_bid")
+
+        payload= self.qComp_777.make_777POST_Request(test_RQ_orderbook)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        #
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        if 'error' in testReq.text:
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+            self.assertTrue(False)
+        else:
+            self.assertTrue('txid' in rpl777.keys() )
+
+
+
+class SNET_ask(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+# static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+#{'txid': '11713518629359241926', 'result': 'success'}
+
+
+    def runTest(self):
+        self.test_ask()
+
+
+    def test_ask(self):
+
+        test_RQ_orderbook = {
+
+                            'requestType': 'ask', \
+                            'baseid': '11060861818140490423', \
+                            'relid': '17554243582654188572', \
+                            'volume': '1', \
+                            'price': '1', \
+                            'timestamp': '', \
+                            'baseamount': '', \
+                            'relamount': '', \
+                            'type': '', \
+
+        }
+
+        print(5*"\n++++++++++++","test_ask")
+
+        payload= self.qComp_777.make_777POST_Request(test_RQ_orderbook)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+ #
+        rpl777 = eval(testReq.text)
+        # print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        if 'error' in testReq.text:
+            print(5*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
+            self.assertTrue(False)
+        else:
+            self.assertTrue('txid' in rpl777.keys() )
 
 
 
@@ -2931,11 +3173,8 @@ class SNET_placeask(SNET_BaseTest):
         other =''
         type =''
 
-
         print(5*"\n++++++++++++","test_placeask")
         testRQ_placeask = {'requestType': 'placeask'}
-
-
 
         testRQ_placeask['volume'] = volumeB
         testRQ_placeask['price'] =  priceB
@@ -3036,6 +3275,7 @@ class SNET_respondtx(SNET_BaseTest):
 
     def test_respondtx(self):
 
+        null = None
         #query_json = {'signedtx': '', 'requestType': 'respondtx'}
 
 # {'result': 'invalid makeoffer_func request'}
@@ -3050,7 +3290,6 @@ class SNET_respondtx(SNET_BaseTest):
 
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
 
         self.assertTrue('result' in rpl777.keys() )
 
@@ -3390,34 +3629,46 @@ class TestCollector(object):
 
 
         """#
+#
+#  static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
+#
+#
+# static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
+# static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
+#
+# static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+# static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+
+
         testClasses = {}
         #
         testClasses['SNET_baseSetup'] = SNET_baseSetup # *
-        #
+        # glue
         testClasses['SNET_gotjson'] = SNET_gotjson     # ~
         testClasses['SNET_gotpacket'] = SNET_gotpacket # ?
         testClasses['SNET_gotnewpeer'] = SNET_gotnewpeer # * +
         testClasses['SNET_BTCDpoll'] = SNET_BTCDpoll # *
         testClasses['SNET_GUIpoll'] = SNET_GUIpoll    # *
         testClasses['SNET_settings'] = SNET_settings  # *
-        #
+        # passth
         testClasses['SNET_passthru'] = SNET_passthru # ?
         testClasses['SNET_remote'] = SNET_remote # ?
-        #
+        #remo ramch
+        testClasses['SNET_rampyramid'] = SNET_rampyramid # ?
+        testClasses['SNET_ramresponse'] = SNET_ramresponse # ~
         testClasses['SNET_ramstatus'] = SNET_ramstatus # *
-        testClasses['SNET_ramaddrlist'] = SNET_ramaddrlist # *
         testClasses['SNET_ramstring'] = SNET_ramstring # ?
         testClasses['SNET_ramrawind'] = SNET_ramrawind # ?
         testClasses['SNET_ramblock'] = SNET_ramblock # ?
         testClasses['SNET_ramscript'] = SNET_ramscript # ?
+        # local Ramch
         testClasses['SNET_ramtxlist'] = SNET_ramtxlist # ?
         testClasses['SNET_ramrichlist'] = SNET_ramrichlist # ?
+        testClasses['SNET_ramaddrlist'] = SNET_ramaddrlist # *
         testClasses['SNET_ramcompress'] = SNET_ramcompress # ?
         testClasses['SNET_ramexpand'] = SNET_ramexpand # ?
         testClasses['SNET_rambalances'] = SNET_rambalances # ?
-        testClasses['SNET_rampyramid'] = SNET_rampyramid # ?
-        testClasses['SNET_ramresponse'] = SNET_ramresponse # ~
-        #
+        # mgw
         testClasses['SNET_genmultisig'] = SNET_genmultisig # ?
         testClasses['SNET_getmsigpubkey'] = SNET_getmsigpubkey # ?
         testClasses['SNET_MGWaddr'] = SNET_MGWaddr # * ~
@@ -3425,24 +3676,27 @@ class TestCollector(object):
         testClasses['SNET_setmsigpubkey'] = SNET_setmsigpubkey # ?
         testClasses['SNET_cosign'] = SNET_cosign # ?
         testClasses['SNET_cosigned'] = SNET_cosigned # ?
-        #
+        #ipcomm
         testClasses['SNET_ping'] = SNET_ping # *
         testClasses['SNET_pong'] = SNET_pong # *
         testClasses['SNET_sendfrag'] = SNET_sendfrag # ?
         testClasses['SNET_gotfrag'] = SNET_gotfrag # ?
         testClasses['SNET_startxfer'] = SNET_startxfer # *
-        #
+        testClasses['SNET_getfile'] = SNET_getfile # *
+        # Kademlia DHT 8
         testClasses['SNET_store'] = SNET_store
         testClasses['SNET_findvalue'] = SNET_findvalue # ?
         testClasses['SNET_findnode'] = SNET_findnode # *
         testClasses['SNET_havenode'] = SNET_havenode # ?
         testClasses['SNET_findaddress'] = SNET_findaddress # ? ~
         testClasses['SNET_havenodeB'] = SNET_havenodeB # ?
-        #
+        testClasses['SNET_puzzles'] = SNET_puzzles # *
+        testClasses['SNET_nonces'] = SNET_nonces # *
+        # mofns
         testClasses['SNET_savefile'] = SNET_savefile # ?
         testClasses['SNET_restorefile'] = SNET_restorefile # ?
         testClasses['SNET_publish'] = SNET_publish # ?
-        #
+        # telepa
         testClasses['SNET_getpeers'] = SNET_getpeers # *
         testClasses['SNET_addcontact'] = SNET_addcontact # ?
         testClasses['SNET_removecontact'] = SNET_removecontact # ?
@@ -3452,26 +3706,28 @@ class TestCollector(object):
         testClasses['SNET_sendmessage'] = SNET_sendmessage # ?
         testClasses['SNET_sendbinary'] = SNET_sendbinary # ?
         testClasses['SNET_checkmsg'] = SNET_checkmsg # ?
-        #
+        # telepo
         testClasses['SNET_maketelepods'] = SNET_maketelepods # ?
         testClasses['SNET_telepodacct'] = SNET_telepodacct # ?
         testClasses['SNET_teleport'] = SNET_teleport # ?
-        #
+        # idex
         testClasses['SNET_allorderbooks'] = SNET_allorderbooks # *
         testClasses['SNET_openorders'] = SNET_openorders       # *
-        testClasses['SNET_orderbook'] = SNET_orderbook # ?
-        testClasses['SNET_placebid'] = SNET_placebid # ?
-        testClasses['SNET_placeask'] = SNET_placeask # ?
-        testClasses['SNET_makeoffer'] = SNET_makeoffer # ?
-        testClasses['SNET_respondtx'] = SNET_respondtx  # ?
-        testClasses['SNET_processutx'] = SNET_processutx  # ?
-        #
+        testClasses['SNET_orderbook'] = SNET_orderbook # *
+        testClasses['SNET_placebid'] = SNET_placebid # *
+        testClasses['SNET_placeask'] = SNET_placeask # *
+        testClasses['SNET_makeoffer'] = SNET_makeoffer # *?
+        testClasses['SNET_respondtx'] = SNET_respondtx  # * ?
+        testClasses['SNET_processutx'] = SNET_processutx  # * ?
+        testClasses['SNET_bid'] = SNET_bid # *
+        testClasses['SNET_ask'] = SNET_ask # *
+        # tbot
         testClasses['SNET_pricedb'] = SNET_pricedb   # ?
         testClasses['SNET_getquotes'] = SNET_getquotes   # ?
         testClasses['SNET_tradebot'] = SNET_tradebot   # ?
-        #
+        # pbet
         testClasses['SNET_lotto'] = SNET_lotto  # ?
-        #
+        # lang
         testClasses['SNET_python'] = SNET_python  # ? ~
         testClasses['SNET_syscall'] = SNET_syscall  # ? ~
 
@@ -3489,7 +3745,7 @@ class TestCollector(object):
 
     def getTestList(self, testListName):
 
-        if testListName == 'vrf1':
+        if testListName == 'all':
 
             testList = [
                         SNET_settings,\
@@ -3513,7 +3769,19 @@ class TestCollector(object):
                         SNET_findaddress,\
                         SNET_addcontact,\
                         SNET_dispcontact,\
-                        SNET_removecontact
+                        SNET_removecontact,\
+                        SNET_makeoffer,\
+                        SNET_allorderbooks ,\
+                        SNET_openorders,\
+                        SNET_orderbook,\
+                        SNET_placebid,\
+                        SNET_placeask,\
+                        SNET_bid,\
+                        SNET_ask,\
+                        SNET_respondtx,\
+                        SNET_processutx,\
+
+
                         ]
 
         elif testListName == 'idex':
@@ -3523,8 +3791,16 @@ class TestCollector(object):
                         SNET_makeoffer,\
                         SNET_allorderbooks ,\
                         SNET_openorders,\
+                        SNET_orderbook,\
+                        SNET_placebid,\
+                        SNET_placeask,\
+                        SNET_bid,\
+                        SNET_ask,\
+                        SNET_respondtx,\
+                        SNET_processutx,\
 
                         ]
+
         elif testListName == 'contacts':
 
             testList = [
@@ -3626,8 +3902,7 @@ if __name__ == '__main__':
 
 
 char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *origargjson,char *sender,int32_t valid,char *origargstr)
-{
-    // local glue 7
+ // local glue 7
     static char *gotjson[] = { (char *)gotjson_func, "BTCDjson", "V", "json", 0 };
     static char *gotpacket[] = { (char *)gotpacket_func, "gotpacket", "V", "msg", "dur", "ip_port", 0 };
     static char *gotnewpeer[] = { (char *)gotnewpeer_func, "gotnewpeer", "V", "ip_port", 0 };
@@ -3640,20 +3915,23 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
     static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
-    // ramchains   13
-    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "coin", 0 };
-    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
-    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "coin", "type", "rawind", 0 };
-    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "coin", "type", "string", 0 };
-    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "coin", "blocknum", 0 };
-    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
-    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "destip", "coin", "address", "unspent", 0 };
-    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "destip", "coin", "numwhales", "recalc", 0 };
-    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "destip", "coin", "data", 0 };
-    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "destip", "coin", "data", 0 };
-    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "destip", "coin", "coins", "rates", 0 };
-    static char *ramresponse[] = { (char *)ramresponse_func, "ramresponse", "V", "coin", "origcmd", "data", 0 };
+
+    // remotable ramchains
     static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
+    static char *ramstatus[] = { (char *)ramstatus_func, "ramstatus", "V", "destip", "port", "coin", 0 };
+    static char *ramstring[] = { (char *)ramstring_func, "ramstring", "V", "destip", "port", "coin", "type", "rawind", 0 };
+    static char *ramrawind[] = { (char *)ramrawind_func, "ramrawind", "V", "destip", "port", "coin", "type", "string", 0 };
+    static char *ramscript[] = { (char *)ramscript_func, "ramscript", "V", "destip", "port", "coin", "txid", "vout", "blocknum", "txind", "v", 0 };
+    static char *ramblock[] = { (char *)ramblock_func, "ramblock", "V", "destip", "port", "coin", "blocknum", 0 };
+    static char *ramresponse[] = { (char *)ramresponse_func, "ramresponse", "V", "coin", "origcmd", "data", 0 };
+    // local ramchains
+    static char *ramtxlist[] = { (char *)ramtxlist_func, "ramtxlist", "V", "coin", "address", "unspent", 0 };
+    static char *ramrichlist[] = { (char *)ramrichlist_func, "ramrichlist", "V", "coin", "numwhales", "recalc", 0 };
+    static char *ramaddrlist[] = { (char *)ramaddrlist_func, "ramaddrlist", "V", "coin", 0 };
+    static char *rambalances[] = { (char *)rambalances_func, "rambalances", "V", "coin", "coins", "rates", 0 };
+    static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "coin", "data", 0 };
+    static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "coin", "data", 0 };
+
 
     // MGW 7
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
@@ -3662,15 +3940,22 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };     static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
+    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
 
-    // IP comms 5
+
+    // IP comms 6
     static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", "MMatrix", 0 };
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", "tag", "MMatrix", 0 };
     static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
     static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
     static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
+    static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
 
-    // Kademlia DHT 6
+
+    // Kademlia DHT 8
+    static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
+    static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
+
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
     static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
@@ -3700,7 +3985,6 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
 
     // InstantDEX 8
-
     static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
     static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
     static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
@@ -3709,6 +3993,9 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
     static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
     static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
+    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+
 
     // Tradebot 3
     static char *pricedb[] = { (char *)pricedb_func, "pricedb", "V", "exchange", "base", "rel", "stop", 0 };
