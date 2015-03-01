@@ -86,27 +86,32 @@ class SNET_baseSetup(SNET_BaseTest):
         # print(payload)
         headers = {'content-type': 'application/json'}
         # print(self.url)
-
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
         rpl777 = eval(testReq.text)
 
         self.whitelist = rpl777['whitelist']
-        self.settingsPassed=True
 
-        req_getpeers = {'requestType': 'getpeers'}
-        payload = self.qComp_777.make_777POST_Request(req_getpeers)
+        self.assertTrue('whitelist' in rpl777.keys())
 
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-
-        print(rpl777)
-        self.localpeers=rpl777['peers']
 
         establishNetwork = True
         while establishNetwork:
+
+            req_getpeers = {'requestType': 'getpeers'}
+            payload = self.qComp_777.make_777POST_Request(req_getpeers)
+            headers = {'content-type': 'application/json'}
+            testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+            print(payload)
+            rpl777 = eval(testReq.text)
+
+            print("rpl777 req_getpeers", rpl777)
+            self.localpeers=rpl777['peers']
+            print( self.localpeers[2:])
+            print( self.localpeers)
+
+            time.sleep(0.1)
+
 
             for ip in self.whitelist:
                 req_ping = {'requestType': 'ping'}
@@ -128,7 +133,7 @@ class SNET_baseSetup(SNET_BaseTest):
                 payload= self.qComp_777.make_777POST_Request(req_findnode)
                 #print(peer)
                 payload['key'] = peer['srvNXT']
-                #print(payload)
+                print(payload)
                 time.sleep(0.2)
                 testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
                 rpl777 = eval(testReq.text)
@@ -1392,9 +1397,10 @@ class SNET_ping(SNET_BaseTest):
         #query_json = {'destip': 'localhost', 'ipaddr': '', 'pubkey': '', 'requestType': 'ping', 'port': ''}
 
 
+        destip = '178.62.185.131' # stonefish
         print(5*"\n++++++++++++","test_ping")
         test_RQ_ = {'requestType': 'ping'}
-        test_RQ_['destip'] = 'localhost'
+        test_RQ_['destip'] = destip #'localhost'
         payload= self.qComp_777.make_777POST_Request(test_RQ_)
         print("query json is: ", payload)
         headers = {'content-type': 'application/json'}
@@ -1444,7 +1450,9 @@ class SNET_pong(SNET_BaseTest):
 
 
 class SNET_sendfrag(SNET_BaseTest):
-
+    """sendfrag
+Sendfrag allows to send files. This function is low level and not practical for manual use. See startxfer for more infos.
+    """#
 
     def setUp(self):
         print(" test setUp func here")
@@ -1513,6 +1521,22 @@ class SNET_gotfrag(SNET_BaseTest):
 
 class SNET_startxfer(SNET_BaseTest):
 
+    """startxfer
+
+Startxfer allows to send files. Startxfer splits up a file (or memory buffer) into fixed size blocks. Then it starts parallel transfers using sendfrag. The receiving side receives the sendfrag and dynamically creates a incoming file data structure and sends back a gotfrag. The original sender gets the gotfrag and then sends back the first block that has not been sent yet or that has not been gotfragged yet
+static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
+"timeout" is in second.
+"dest" is the IP address of the receiving side.
+"fname" is the name of a hex file. The default location is the "archive" folder. The DATADIR option in SuperNET.conf file allows to choose the location of datas (nb: only relative path is allowed)
+"data" is hex datas to be send. *** further description needed ***
+"handler" *** description needed ***
+"data" and "fname" are mutualy exclusive.
+example
+./BitcoinDarkd SuperNET '{"requestType":"startxfer","fname":"send_msg.txt","dest":"79.245.10.166"}'
+result
+{"result":"pending SuperNET API call","txid":"1316152311343726577"}
+
+"""#
 
     def setUp(self):
         print(" test setUp func here")
@@ -2032,7 +2056,16 @@ class ___Telepathy():
 
 
 class SNET_addcontact(SNET_BaseTest):
-
+    """addcontact
+Contacts are basically a way of mapping long acct numbers to easy to remember handles for use in other API calls. Since they are not stored on HDD you need to put a "contacts":[{"jl777":""}....] field in SuperNET.conf or have the GUI do it on startup. Calling addcontact again will just update the acct. These accts have to be funded with at least 1 NXT I will add a display handle API with a special handle called "me" that shows your private acct and public key.
+Maintaining a contacts list prevents spoofing. Use addcontact to add contacts.
+static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V", "handle", "acct", 0 };
+example
+./BitcoinDarkd SuperNET '{"requestType":"addcontact","handle":"jl777","acct":"NXT-P3K3-M9XB-5MDG-DVNT8"}'
+result
+{"result":"(jl777) acct.(NXT-P3K3-M9XB-5MDG-DVNT8) (12927190866050319905) has pubkey.(45ec94823354d56c549b475c5e3ffd49c9c2cf4a366deed809bfba38dd756318)"}
+Note that the parameter is handle for addcontact, but contact for removecontact and dispcontact. This is because a handle is a NXT address, whilst a contact is a label for a handle.
+"""#
 
     def setUp(self):
         print(" test setUp func here")
@@ -2132,7 +2165,15 @@ class SNET_addcontact(SNET_BaseTest):
 
 
 class SNET_removecontact(SNET_BaseTest):
-
+    """removecontact
+Maintaining a contacts list prevents spoofing. Use removecontact to remove contacts.
+static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V", "contact", 0 };
+note; you cannot change a contact directly; you have to remove it and add it again with a different handle.
+example
+./BitcoinDarkd SuperNET '{"requestType":"removecontact","contact":"jl777"}'
+result
+{"result":"handle.(jl777) deleted"}
+"""
 
     def setUp(self):
         print(" test setUp func here")
@@ -2228,6 +2269,20 @@ class SNET_removecontact(SNET_BaseTest):
 
 
 class SNET_dispcontact(SNET_BaseTest):
+    """dispcontact
+with dispcontact you can display your added contacts.
+static char *dispcontact[] = { (char *)dispcontact_func, "dispcontact", "V", "contact", 0 };
+example
+./BitcoinDarkd SuperNET '{"requestType":"dispcontact","contact":"myhandle"}'
+result
+{"handle":"myhandle","acct":"NXT-KK6R-W88P-LA6E-6YR2G","NXT":"5116932371338806423", "pubkey":"a98677f8d351abd58446157dea7208fa2150dec3006ba33a06657af6eaede265"}
+'myhandle' is assigned by default to your private NXT address. 'mypublic' is assigned to your public address.
+example
+Using * will display all current contacts:
+./BitcoinDarkd SuperNET '{"requestType":"dispcontact","contact":"*"}'
+result
+[ {"handle":"myhandle","acct":"NXT-KK6R-W88P-LA6E-6YR2G","NXT":"5116932371338806423","pubkey":"a98677f8d351abd58446157dea7208fa2150dec3006ba33a06657af6eaede265"},
+{"handle":"mypublic","acct":"NXT-NFXU-5SNN-69Q2-7NSGF","NXT":"6249611027680999354","pubkey":"8966bee9e9aef15250c2161133a6a086eeb4739e4077f2c0c4cae3b6fe7bb008"}] """#
 
 
     def setUp(self):
@@ -2324,7 +2379,16 @@ class SNET_dispcontact(SNET_BaseTest):
 
 
 class SNET_telepathy(SNET_BaseTest):
-
+    """telepathy
+telepathy conducts telepathic communications (communication without requiring IP addresses to be known).
+static char *telepathy[] = { (char *)telepathy_func, "telepathy", "V", "contact", "id", "type", "attach", 0 };
+contact has to be in your addcontact list. Both sides must have each other as contacts for telepathy to work (but not regular messages).
+id is sequenceid (-1 to set automatically)
+type is the type of transfer: teleport (funds), text (message)... currently type is not required.
+attach is any string (message content)
+example
+./BitcoinDarkd SuperNET '{"requestType":"telepathy","contact":"<privateaddr>","id":"-1","attach":"Are you thinking what I'm thinking?"}'
+"""#
 
     def setUp(self):
         print(" test setUp func here")
@@ -2355,7 +2419,19 @@ class SNET_telepathy(SNET_BaseTest):
 
 
 class SNET_getdb(SNET_BaseTest):
+    """getdb
+getdb is 'basically a low level way to do a findvalue'. getdb allows you to check the DHT store of any node remotely by verifying the contents of public.db. You can submit a DHT request and poll all nodes via getdb to make a map of which nodes received what data. This is important for debugging DHT routing.
+static char *getdb[] = { (char *)getdb_func, "getdb", "V", "contact", "id", "key", "dir", "destip", 0 };
+destip is the IP address of the designated node.
+key is the DHT key for the store value, returned by initial store.
 
+example getdb
+./BitcoinDarkd SuperNET '{"requestType":"getdb","key":"1031470952125437106"}'
+result
+
+GETDB.({"requestType":"dbret","NXT":"6249611027680999354","key":"1031470952125437106","data":"c0ffee"}) nxtip.(167.114.2.94) {"requestType":"findnode","NXT":"11910135804814382998","time":1417778040,"key":"6249611027680999354"} search n.16 sorted mydist.0 remoteflag.0 remoteaccess.1 send_kademlia_cmd.havenode srvpubaddr or cp.0x246ab60 dest.7108754351996134253 len.826 -> 1396 send back.([["6249611027680999354", "80.41.56.181", "7777", "0"], ["8894667849638377372", "209.126.70.156", "7777", "1417655983"], ["5624143003089008155", "192.99.212.250", "7777", "1417621062"], ["2131686659786462901", "178.62.185.131", "7777", "1417701576"], ["7067340061344084047", "94.102.50.70", "7777", "1417621060"], ["2278910666471639688", "167.114.2.204", "7777", "1417621061"], ["16193842359787719847", "110.159.238.254", "54433", "1417660922"]]) to 7108754351996134253 FIND.({"result":"kademlia_findnode from.(7108754351996134253) previp.(167.114.2.171) key.(6249611027680999354) datalen.0 txid.5658681211156582719"})
+
+"""#
 
     def setUp(self):
         print(" test setUp func here")
@@ -2924,7 +3000,25 @@ class SNET_openorders(SNET_BaseTest):
 
 
 class SNET_orderbook(SNET_BaseTest):
-
+    """orderbook
+orderbook returns the InstantDEX orderbook for the Multigateway assets (i.e. coin assets) specified, similar to the way that getquotes returns data from exchanges.
+static char orderbook[] = { (char )orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
+example
+Asset id 11060861818140490423 = mgwBTCD
+Asset id 17554243582654188572 = mgwBTC
+./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572"}'
+result
+{"error":"no such orderbook.(11060861818140490423 ^ 17554243582654188572)"}
+The call returns an error if there are no orders for the given asset pair.
+If there is a result it will show you the following output.
+{
+	"key": 		"7646303683960469163",
+	"baseid": 	"11060861818140490423",
+	"relid": 	"17554243582654188572",
+	"bids": 	 	[["0.00550000000", "100.00000000"]],
+	"asks": 	 	[["0.00650000000", "80.00000000"]]
+}
+The 'key' here is the key for the DHT store."""#
 
     def setUp(self):
         print(" test setUp func here")
@@ -3065,7 +3159,15 @@ class SNET_ask(SNET_BaseTest):
 
 
 class SNET_placebid(SNET_BaseTest):
-
+    """placebid
+placebid adds a bid (buy order) to the InstantDEX orderbook.
+static char placebid[] = { (char )placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
+example
+./BitcoinDarkd SuperNET '{"requestType":"placebid","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"100","price":"0.0055"}'
+This places a Buy order for 100 BTCD at 0.0055 BTC each.
+result
+{"result":"success","txid":"10290445515536677639"}
+"""
 
     def setUp(self):
         print(" test setUp func here")
@@ -3141,7 +3243,14 @@ class SNET_placebid(SNET_BaseTest):
 
 
 class SNET_placeask(SNET_BaseTest):
-
+    """placeask
+placeask adds an ask (sell order) to the InstantDEX orderbook.
+static char placeask[] = { (char )placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
+example
+./BitcoinDarkd SuperNET '{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
+This places a Sell order for 80 BTCD at 0.0065 BTC each
+result
+{"result":"success","txid":"15021359626299573695"}"""
 
     def setUp(self):
         print(" test setUp func here")
@@ -3206,7 +3315,26 @@ class SNET_placeask(SNET_BaseTest):
 
 
 class SNET_makeoffer(SNET_BaseTest):
-
+    """makeoffer
+Makeoffer is under construction, not currently working.
+The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
+static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
+example
+./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
+result
+{
+	"key":		"7646303683960469163",
+	"baseid":	"11060861818140490423",
+ 	"relid":	"17554243582654188572",
+ 	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
+	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
+}
+Each entry now includes the NXT address of the user that submitted it (here in bold).
+For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
+example
+./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
+result
+{"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
 
     def setUp(self):
         print(" test setUp func here")

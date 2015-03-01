@@ -121,7 +121,7 @@ cd
 
     ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
 
-
+./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
 
 
 

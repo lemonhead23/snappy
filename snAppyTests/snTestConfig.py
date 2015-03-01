@@ -31,13 +31,13 @@ SNET_url = 'http://' + STONEFISH_IP + ":" + SNET_port
 
 
 #SERVER_ADDR_jl777 = BOXFISH_IP
-SERVER_ADDR_jl777 =  STONEFISH_IP
+#SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
 
 SCHEME = 'http://'
-FULL_URL = SCHEME + SERVER_ADDR_jl777 + ":" + str(SERVER_PORT_SUPERNETHTTP)
+#FULL_URL = SCHEME + SERVER_ADDR_jl777 + ":" + str(SERVER_PORT_SUPERNETHTTP)
 POSTHEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 

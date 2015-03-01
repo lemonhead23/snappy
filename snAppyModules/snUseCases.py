@@ -268,7 +268,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -334,7 +334,7 @@ either do the spcifics on each havenode OR on the NEW havenoders only
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -544,7 +544,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
 
 
-        log.msg("pongers:")
+        log.msg("pongers:"  )
         for ponger in self.pongers.keys():
             log.msg(ponger, " - ", self.pongers[ponger])
 
@@ -639,7 +639,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp =rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -670,7 +670,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
 
             self.pongers[ponger] =  rpl777
 
-        log.msg("pongers: ", len(self.pongers))
+        log.msg("num pongers: ", len(self.pongers))
 
         numPongers =  len(self.pongers)
 
@@ -914,13 +914,22 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
                 self.deferred.addErrback(self.rpl777ERR)
 
             elif 'uc_settings' in schedDue.SNrequests.keys():
+                #log.msg("uc_settings:")
                 reqData1 = schedDue.SNrequests['uc_settings']
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_settings)
                 self.deferred.addErrback(self.rpl777ERR)
 
             elif 'uc_getpeers' in schedDue.SNrequests.keys():
+                log.msg("uc_getpeers:")
+
                 reqData1 = schedDue.SNrequests['uc_getpeers']
+                log.msg("uc_getpeers:", reqData1 )
+
+
+                reqData1['scan'] = ''
+                log.msg("uc_getpeers:", reqData1 )
+
                 self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqData1), headers=POSTHEADERS)
                 self.deferred.addCallback(self.rpl777_df1_getpeers)
                 self.deferred.addErrback(self.rpl777ERR)
@@ -1032,7 +1041,7 @@ kademlia_havenode
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp = rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -1064,7 +1073,7 @@ kademlia_havenode
 
 
         log.msg("GUIpoll ---> kademlia_havenode from ", fromNXT, " -- " , fromIp)
-
+        self.havenoders[fromNXT] =  rpl777
 
         log.msg(1*"              local peers :", len(self.peersDiLoc))
         log.msg(1*"              local havenoders :", len(self.havenoders))
@@ -1090,7 +1099,38 @@ kademlia_havenode
 
         """#
 
-        #log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+        log.msg(1*"GUIpoll -----> kademlia_pong",rpl777, type(rpl777))
+
+        good_reply = """GUIpoll ----->    kademlia_pong
+             {
+             'result':
+             '{"result":"kademlia_pong",
+             "tag":"",
+             "isMM":"0",
+             "NXT":"1785551413655174233",
+             "ipaddr":"192.99.151.160",
+             "port":0,
+             "lag":"331.000",
+             "numpings":60,
+             "numpongs":62,
+             "ave":"988.172"}',
+
+              'args': '
+              [
+              {
+              "requestType":"pong",
+              "NXT":"1785551413655174233",
+              "timestamp":1425034499,
+              "MMatrix":0,
+              "yourip":"85.178.205.160",
+              "yourport":62824,
+              "ipaddr":"192.99.151.160",
+              "pubkey":"cefec027f138a65af2f1c8dba2e74d8b32248fe8ed8a643c788a74101cf75b2b",
+              "ver":"0.599"},
+              {"token":"u4js1vmeu7p5l9ho9njq5mu8t27i8ckbf0u692nduse10t4abphc6aqr48du1no2demv9r92g52kshia1tfdbv6au6jl4ljleabn1blipkhg9h2rfhtvinp75gjc02so5b8scdban1qheg5stk5vee9cfqucs10r"}]',
+               'from': '192.99.151.160', 'port': 0
+               } <class 'dict'>
+            """
 
         try:
             fromIp = rpl777['from']
@@ -1101,7 +1141,7 @@ kademlia_havenode
 
         except Exception as e:
             #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
-            log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
+            log.msg("Error rpl777_GUIpoll_kademlia_pong outer wrapper {0}".format(str(e)))
 
         try:
             rplArgs = json.loads(args) # <class 'list'> !!
@@ -1111,15 +1151,25 @@ kademlia_havenode
             log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
 
         try:
-            #log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
-            pubkey= rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+            log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            #pubkeyDi = eval(rplArgsRQ['pubkey']) # check that this is really pubkey and not DHT key
+            #print(pubkey)
+            pubkey = rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
+
+            #ver =  pubkeyDi['ver']
             requestType= rplArgsRQ['requestType']
-            ver =rplArgsRQ['ver']
+
+            ver =rplArgsRQ['ver'] #v!!!!!!!!!!!
+
             yourip =rplArgsRQ['yourip']
             yourport =rplArgsRQ['yourport']
 
+
+            timestamp =rplArgsRQ['timestamp']
+
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+#            timestamp=rplArgsRQ['timestamp']
+
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -1183,7 +1233,7 @@ kademlia_havenode
         # manual tests:
         #ipsToPing = 20* ['88.179.105.82'] # ['178.62.185.131'] # stonefish['80.41.56.181'] # ['85.178.202.108']   #
 
-        log.msg(1*"ping to whitelist:")#, reqPing['destip'])
+        log.msg(1*"settings: ping to whitelist:")#, reqPing['destip'])
         for node in ipsToPing:
             reqPing['destip']=node
             sleep(0.25)
@@ -1220,12 +1270,14 @@ kademlia_havenode
 
         repl=dataFrom777.json()
 
+        print(3*"\nREPL", repl)
+
         Numnxtaccts = repl['Numnxtaccts']
         peers = repl['peers']
         Numpservers = repl['Numpservers']
         num = repl['num']
         log.msg("Numnxtaccts", Numnxtaccts)
-        #log.msg("peers", peers)
+        log.msg("peers", peers)
         log.msg("Numpservers", Numpservers)
         log.msg("num", num)
 
@@ -1233,12 +1285,22 @@ kademlia_havenode
 
         reqPing = {'requestType':'ping'}
 
+
+        print("rpl777 req_getpeers" )
+        self.localpeers=repl['peers']
+        print( "\n", self.localpeers[2:])
+        print( "\n", self.localpeers)
+
+        print("1 peers", peers, type(peers))
+
+        print("2, ", peers[2:])
+
         for peer in peers[2:]:
-            #log.msg(1*"\n\npeer:", peer, type(peer))
+            log.msg(1*"\n\npeer:", peer, type(peer))
             ipaddr = peer['srvipaddr']
             reqPing['destip'] = ipaddr
 
-            # #log.msg("ping to peer:", reqPing['destip'])
+            log.msg("ping to peer:", reqPing['destip'])
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqPing), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_ping)
             self.deferred.addErrback(self.rpl777ERR)
@@ -1247,6 +1309,7 @@ kademlia_havenode
             srvNXT = peer['srvNXT']
             sleep(0.25)
             reqFindnode['key']=srvNXT
+            log.msg("reqFindnode to peer:", reqFindnode )
             self.deferred = deferToThread(requests.post, FULL_URL, data=json.dumps(reqFindnode), headers=POSTHEADERS)
             self.deferred.addCallback(self.rpl777_df2_findnode )
             self.deferred.addErrback(self.rpl777ERR)
@@ -1590,7 +1653,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -1662,7 +1725,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -2187,7 +2250,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -2242,7 +2305,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
 
             except Exception as e:
@@ -2584,7 +2647,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -2638,7 +2701,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
 
             except Exception as e:
@@ -3054,7 +3117,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -3111,7 +3174,7 @@ This catches ALL pings as PONGs - see PONG details in snAppy_doku
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
 
             except Exception as e:
@@ -3545,7 +3608,7 @@ findaddress completed ({"result":"metric 0.002","privateaddr":"10173394274437485
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -3609,7 +3672,7 @@ findaddress completed ({"result":"metric 0.002","privateaddr":"10173394274437485
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -4036,7 +4099,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dis
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -4101,7 +4164,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=dis
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time1 = rplArgs['time']
+                time1 = rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -4625,7 +4688,7 @@ makeoffer needs the MMatrix in place to work properly, so not ready for testing 
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time1 = rplArgs['time']
+                time1 = rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -4811,7 +4874,7 @@ makeoffer needs the MMatrix in place to work properly, so not ready for testing 
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -5175,7 +5238,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -5237,7 +5300,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=mak
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
@@ -5656,7 +5719,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
             yourport =rplArgsRQ['yourport']
 
             NXT =rplArgsRQ['NXT']
-            time =rplArgsRQ['time']
+            timestamp=rplArgsRQ['timestamp']
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
@@ -5722,7 +5785,7 @@ either do the spcifics on each havenode OR on the NEW havenoders only
                 requestType = rplArgs['requestType']
                 data = rplArgs['data']
                 key = rplArgs['key']
-                time = rplArgs['time']
+                timestamp= rplArgs['timestamp']
                 peersList = rplArgs['data']
                 #log.msg("\nGUIpoll -+--> kademlia_havenode peersList",peersList, type(peersList),"\n")
 
