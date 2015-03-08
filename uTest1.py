@@ -3218,28 +3218,6 @@ result
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         self.assertTrue('result' in rpl777.keys() )
-#
-
-#
-# ERROR REPORT: MADE SNET CRASH WITH UNNKNOWN ASSET
-#
-# not enough BTCD balance -592.17889855 for withdraw 4.95020000 txfee 0.00010000
-# "error":"no np.0x7fd374000bf0 or global for sendmessage || 423766016895692955 destnp->stats.nxtbits 0 == 0"}
-# cant find.(archive/RTmgw/BTCD.5323331527295977754.g0) for 5323331527295977754 4.95000000 | sent.({"requestType":"getfile","NXT":"10501328530345129240","timestamp":"1424602943","name":"BTCD.5323331527295977754.g0","handler":"RTmgw"}) to 423766016895692955
-#
-# t.1424602945 placequote type.0 dir.1 sender.(10501328530345129240) valid.1 price 0.01400000000 vol 1.00000000
-# CREATE RAMBOOK.(1106086181814049042 -> 455105891325210530)
-# error init_asset({"errorCode":5,"errorDescription":"Unknown asset"}) for assetidstr.1106086181814049042
-# <<<<<<<<<<< bitcoind_RPC.(http://127.0.0.1:7778): BTCD.SuperNET timeout params.({"requestType":"BTCDpoll"}) s.ptr.() err.7
-# <<<<<<<<<<< bitcoind_RPC.(http://127.0.0.1:7778): BTCD.SuperNET timeout params.({"requestType":"BTCDpoll"}) s.ptr.() err.7
-# <<<<<<<<<<< bitcoind_RPC.(http://127.0.0.1:7778): BTCD.SuperNET timeout params.({"requestType":"BTCDpoll"}) s.ptr.() err.7
-#
-#
-# Traceback (most recent call last):
-#   File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 394, in _make_request
-#     httplib_response = conn.getresponse(buffering=True)
-# TypeError: getresponse() got an unexpected keyword argument 'buffering'
-#
 
 
 class SNET_placeask(SNET_BaseTest):
@@ -3299,18 +3277,7 @@ result
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         self.assertTrue('result' in rpl777.keys() )
-#
 
-# not enough BTCD balance -592.17889855 for withdraw 4.95020000 txfee 0.00010000
-# "error":"no np.0x7f7ecc000bf0 or global for sendmessage || 423766016895692955 destnp->stats.nxtbits 0 == 0"}
-# cant find.(archive/RTmgw/BTCD.5323331527295977754.g0) for 5323331527295977754 4.95000000 | sent.({"requestType":"getfile","NXT":"10501328530345129240","timestamp":"1424603230","name":"BTCD.5323331527295977754.g0","handler":"RTmgw"}) to 423766016895692955
-#
-# t.1424603231 placequote type.0 dir.-1 sender.(10501328530345129240) valid.1 price 0.00400000000 vol 1.00000000
-# CREATE RAMBOOK.(455105891325210530 -> 1106086181814049042)
-# error init_asset({"errorCode":5,"errorDescription":"Unknown asset"}) for assetidstr.455105891325210530
-# <<<<<<<<<<< bitcoind_RPC.(http://127.0.0.1:7778): BTCD.SuperNET timeout params.({"requestType":"BTCDpoll"}) s.ptr.() err.7
-# <<<<<<<<<<< bitcoind_RPC.(http://127.0.0.1:7778): BTCD.SuperNET timeout params.({"requestType":"BTCDpoll"}) s.ptr.() err.7
-#
 
 
 
@@ -3379,13 +3346,6 @@ result
 
         self.assertTrue('comment' in rpl777_string )
 
-# 9993996036', 'relamount': '617900', 'type': ''}
-# {"error":"5","descr":"{
-# 	"errorCode":	5,
-# 	"errorDescription":	"Unknown account"
-# }","comment":"NXT.10501328530345129240 makeoffer to NXT.8279528579993996036 0.00010111 asset.11060861818140490423 for 0.00617900 asset.17554243582654188572, type.0"
-# E
-
 
 
 class SNET_respondtx(SNET_BaseTest):
@@ -3437,23 +3397,6 @@ class SNET_processutx(SNET_BaseTest):
 
 
     def test_processutx(self):
-#
-#  test_processutx
-# query json is:  {'requestType': 'processutx', 'utx': '', 'sig': '', 'full': ''}
-# E
-# ======================================================================
-# ERROR: runTest (__main__.SNET_processutx)
-# ----------------------------------------------------------------------
-# Traceback (most recent call last):
-#   File "./uTest1.py", line 2487, in runTest
-#     self.test_processutx()
-#   File "./uTest1.py", line 2499, in test_processutx
-#     rpl777 = eval(testReq.text)
-#   File "<string>", line 1
-#     {"error":" missing comment.({"errorCode":3,"errorDescription":"At least one of [transactionBytes, transactionJSON] must be specified"}) or zero vol 0.00000000"}
-#                                           ^
-# SyntaxError: invalid syntax
-#
 
         print(5*"\n++++++++++++","test_processutx")
         test_RQ_ = {'requestType': 'processutx'}
@@ -3469,9 +3412,236 @@ class SNET_processutx(SNET_BaseTest):
 
 
 
+class SNET_allsignals(SNET_BaseTest):
 
-    # // Tradebot
-    #########################
+
+    def setUp(self):
+        print(" test allsignals setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_allsignals()
+
+
+    def test_allsignals(self):
+
+        print(5*"\n++++++++++++","test_allsignals")
+        test_RQ_allsignals = {'requestType': 'allsignals'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_allsignals)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_lottostats(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test lottostats setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_lottostats()
+
+
+    def test_lottostats(self):
+
+        print(5*"\n++++++++++++","test_lottostats")
+        test_RQ_lottostats = {'requestType': 'lottostats'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_lottostats)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_tradehistory(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test tradehistory setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_tradehistory()
+
+
+    def test_tradehistory(self):
+#
+        print(5*"\n++++++++++++","test_tradehistory")
+        test_RQ_tradehistory = {'requestType': 'tradehistory'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_tradehistory)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_getsignal(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test getsignal setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_getsignal()
+
+
+    def test_getsignal(self):
+#
+        print(5*"\n++++++++++++","test_getsignalx")
+        test_RQ_getsignal = {'requestType': 'getsignal'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getsignal)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_cancelquote(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test cancelquote setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_cancelquote()
+
+
+    def test_cancelquote(self):
+#
+        print(5*"\n++++++++++++","test_cancelquote")
+        test_RQ_cancelquote = {'requestType': 'cancelquote'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_cancelquote)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_makeoffer2(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test makeoffer2 setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_makeoffer2()
+
+
+    def test_makeoffer2(self):
+#
+        print(5*"\n++++++++++++","test_makeoffer2")
+        test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_processjumptrade(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test processjumptrade setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_processjumptrade()
+
+
+    def test_processjumptrade(self):
+#
+        print(5*"\n++++++++++++","test_processjumptrade")
+        test_RQ_processjumptrade = {'requestType': 'processjumptrade'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_processjumptrade)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
+
+class SNET_jumptrades(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test jumptrades setUp func here")
+        pass
+
+
+    def runTest(self):
+        self.test_jumptrades()
+
+
+    def test_jumptrades(self):
+
+        print(5*"\n++++++++++++","test_jumptrades")
+        test_RQ_jumptrades = {'requestType': 'jumptrades'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_jumptrades)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+
+
 
 
 
@@ -3849,6 +4019,15 @@ class TestCollector(object):
         testClasses['SNET_processutx'] = SNET_processutx  # * ?
         testClasses['SNET_bid'] = SNET_bid # *
         testClasses['SNET_ask'] = SNET_ask # *
+        testClasses['SNET_allsignals'] = SNET_allsignals # *
+        testClasses['SNET_lottostats'] = SNET_lottostats # *
+        testClasses['SNET_tradehistory'] = SNET_tradehistory # *
+        testClasses['SNET_getsignal'] = SNET_getsignal # *
+        testClasses['SNET_cancelquote'] = SNET_cancelquote # *
+        testClasses['SNET_makeoffer2'] = SNET_makeoffer2 # *
+        testClasses['SNET_processjumptrade'] = SNET_processjumptrade # *
+        testClasses['SNET_jumptrades'] = SNET_jumptrades # *
+
         # tbot
         testClasses['SNET_pricedb'] = SNET_pricedb   # ?
         testClasses['SNET_getquotes'] = SNET_getquotes   # ?
@@ -3876,38 +4055,103 @@ class TestCollector(object):
         if testListName == 'all':
 
             testList = [
-                        SNET_settings,\
-                        SNET_getpeers,\
-                        SNET_gotjson,\
-                        SNET_gotnewpeer,\
-                        SNET_BTCDpoll,\
 
-                        SNET_GUIpoll,\
-                        SNET_ramstatus,\
-                        SNET_ramaddrlist,\
-
-                        SNET_MGWaddr,\
-                        SNET_MGWresponse,\
-                        SNET_ping,\
-                        SNET_sendmessage,\
-                        SNET_sendbinary,\
-                        SNET_checkmsg,\
+                        SNET_baseSetup ,\
+                        # glue
+                        SNET_gotjson     ,\
+                        SNET_gotpacket ,\
+                        SNET_gotnewpeer ,\
+                        SNET_BTCDpoll ,\
+                        SNET_GUIpoll    ,\
+                        SNET_settings  ,\
+                        # passth
+                        SNET_passthru ,\
+                        SNET_remote ,\
+                        #remo ramch
+                        SNET_rampyramid ,\
+                        SNET_ramresponse ,\
+                        SNET_ramstatus ,\
+                        SNET_ramstring ,\
+                        SNET_ramrawind ,\
+                        SNET_ramblock ,\
+                        SNET_ramscript ,\
+                        # local Ramch
+                        SNET_ramtxlist ,\
+                        SNET_ramrichlist ,\
+                        SNET_ramaddrlist ,\
+                        SNET_ramcompress ,\
+                        SNET_ramexpand ,\
+                        SNET_rambalances ,\
+                        # mgw
+                        SNET_genmultisig ,\
+                        SNET_getmsigpubkey ,\
+                        SNET_MGWaddr ,\
+                        SNET_MGWresponse ,\
+                        SNET_setmsigpubkey ,\
+                        SNET_cosign ,\
+                        SNET_cosigned ,\
+                        #ipcomm
+                        SNET_ping ,\
+                        SNET_pong ,\
+                        SNET_sendfrag ,\
+                        SNET_gotfrag ,\
+                        SNET_startxfer ,\
+                        SNET_getfile ,\
+                        # Kademlia DHT 8
                         SNET_store,\
-                        SNET_findvalue,\
-                        SNET_findaddress,\
-                        SNET_addcontact,\
-                        SNET_dispcontact,\
-                        SNET_removecontact,\
-                        SNET_makeoffer,\
+                        SNET_findvalue ,\
+                        SNET_findnode ,\
+                        SNET_havenode ,\
+                        SNET_findaddress ,\
+                        SNET_havenodeB ,\
+                        SNET_puzzles ,\
+                        SNET_nonces ,\
+                        # mofns
+                        SNET_savefile ,\
+                        SNET_restorefile ,\
+                        SNET_publish ,\
+                        # telepa
+                        SNET_getpeers ,\
+                        SNET_addcontact ,\
+                        SNET_removecontact ,\
+                        SNET_dispcontact ,\
+                        SNET_telepathy ,\
+                        SNET_getdb ,\
+                        SNET_sendmessage ,\
+                        SNET_sendbinary ,\
+                        SNET_checkmsg ,\
+                        # telepo
+                        SNET_maketelepods ,\
+                        SNET_telepodacct ,\
+                        SNET_teleport ,\
+                        # idex
                         SNET_allorderbooks ,\
-                        SNET_openorders,\
-                        SNET_orderbook,\
-                        SNET_placebid,\
-                        SNET_placeask,\
-                        SNET_bid,\
-                        SNET_ask,\
-                        SNET_respondtx,\
-                        SNET_processutx,\
+                        SNET_openorders       ,\
+                        SNET_orderbook ,\
+                        SNET_placebid ,\
+                        SNET_placeask ,\
+                        SNET_makeoffer ,\
+                        SNET_respondtx  ,\
+                        SNET_processutx  ,\
+                        SNET_bid ,\
+                        SNET_ask ,\
+                        SNET_allsignals ,\
+                        SNET_lottostats ,\
+                        SNET_tradehistory ,\
+                        SNET_getsignal ,\
+                        SNET_cancelquote ,\
+                        SNET_makeoffer2 ,\
+                        SNET_processjumptrade ,\
+                        SNET_jumptrades ,\
+                        # tbot
+                        SNET_pricedb   ,\
+                        SNET_getquotes   ,\
+                        SNET_tradebot   ,\
+                        # pbet
+                        SNET_lotto  ,\
+                        # lang
+                        SNET_python  ,\
+                        SNET_syscall  ,\
 
 
                         ]
@@ -3915,7 +4159,6 @@ class TestCollector(object):
         elif testListName == 'idex':
 
             testList = [
-
                         SNET_makeoffer,\
                         SNET_allorderbooks ,\
                         SNET_openorders,\
@@ -3926,7 +4169,14 @@ class TestCollector(object):
                         SNET_ask,\
                         SNET_respondtx,\
                         SNET_processutx,\
-
+                        SNET_allsignals ,\
+                        SNET_lottostats ,\
+                        SNET_tradehistory,\
+                        SNET_getsignal,\
+                        SNET_cancelquote,\
+                        SNET_makeoffer2 ,\
+                        SNET_processjumptrade,\
+                        SNET_jumptrades
                         ]
 
         elif testListName == 'contacts':

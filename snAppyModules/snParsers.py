@@ -445,7 +445,7 @@ class Parser_jl777_teleport(Parser_JL777_Base):
         return data2parse
 
 
-#InstantDEX 8
+#InstantDEX 18
 
 
 class Parser_jl777_allorderbooks(Parser_JL777_Base):
@@ -502,6 +502,40 @@ class Parser_jl777_bid(Parser_JL777_Base):
         return data2parse
 
 class Parser_jl777_ask(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_allsignals(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+class Parser_jl777_lottostats(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+class Parser_jl777_tradehistory(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+class Parser_jl777_getsignal(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+class Parser_jl777_cancelquote(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+class Parser_jl777_makeoffer2(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+class Parser_jl777_processjumptrade(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+class Parser_jl777_jumptrades(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
@@ -657,7 +691,7 @@ class Parser_777(object):
     ql777_telepodacct = Parser_jl777_telepodacct()
     ql777_teleport = Parser_jl777_teleport()
 
-    # // InstantDEX
+    # // InstantDEX 18
 
     ql777_allorderbooks = Parser_jl777_allorderbooks()
     ql777_openorders = Parser_jl777_openorders()
@@ -669,6 +703,15 @@ class Parser_777(object):
     ql777_processutx = Parser_jl777_processutx()
     ql777_bid = Parser_jl777_bid()
     ql777_ask = Parser_jl777_ask()
+
+    ql777_allsignals = Parser_jl777_allsignals()
+    ql777_lottostats = Parser_jl777_lottostats()
+    ql777_tradehistory = Parser_jl777_tradehistory()
+    ql777_getsignal = Parser_jl777_getsignal()
+    ql777_cancelquote = Parser_jl777_cancelquote()
+    ql777_makeoffer2 = Parser_jl777_makeoffer2()
+    ql777_processjumptrade= Parser_jl777_processjumptrade()
+    ql777_jumptrades = Parser_jl777_jumptrades()
 
     # // Tradebot
     ql777_pricedb = Parser_jl777_pricedb()
@@ -944,7 +987,7 @@ class Parser_777(object):
         elif requestType2Parse == 'teleport':
             parsed = self.ql777_teleport.parse(data2parse)
 
-    # // InstantDEX 10
+    # // InstantDEX 18
 
         elif requestType2Parse == 'allorderbooks':
             parsed = self.ql777_allorderbooks.parse(data2parse)
@@ -975,6 +1018,30 @@ class Parser_777(object):
 
         elif requestType2Parse == 'ask':
             parsed = self.ql777_ask.parse(data2parse)
+
+        elif requestType2Parse == 'allsignals':
+            parsed = self.ql777_allsignals.parse(data2parse)
+
+        elif requestType2Parse == 'lottostats':
+            parsed = self.ql777_lottostats.parse(data2parse)
+
+        elif requestType2Parse == 'tradehistory':
+            parsed = self.ql777_tradehistory.parse(data2parse)
+
+        elif requestType2Parse == 'getsignal':
+            parsed = self.ql777_getsignal.parse(data2parse)
+
+        elif requestType2Parse == 'cancelquote':
+            parsed = self.ql777_cancelquote.parse(data2parse)
+
+        elif requestType2Parse == 'makeoffer2':
+            parsed = self.ql777_makeoffer2.parse(data2parse)
+
+        elif requestType2Parse == 'processjumptrade':
+            parsed = self.ql777_processjumptrade.parse(data2parse)
+
+        elif requestType2Parse == 'jumptrades':
+            parsed = self.ql777_jumptrades.parse(data2parse)
 
 
     # // Tradebot 3

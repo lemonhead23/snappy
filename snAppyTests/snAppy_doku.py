@@ -205,7 +205,9 @@ Currently:
 
 
 ~~~~~~~~~~~~~~~~~~~
-in file Parsers.py:
+
+                        in file Parsers.py:
+
 ~~~~~~~~~~~~~~~~~~~
 
 
@@ -241,11 +243,6 @@ class Parser_777(object):
 
 
 
-
-
-
-
-
 3 add elif case for requestType in def parse_777()
 --------------------------------------------------
 
@@ -258,7 +255,11 @@ class Parser_777(object):
 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-in file QueryCOmposers.py:
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        in file QueryCOmposers.py:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -3203,7 +3204,17 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *telepodacct[] = { (char *)telepodacct_func, "telepodacct", "V", "amount", "contact", "coin", "comment", "cmd", "withdraw", 0 };
     static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
 
-    // InstantDEX 8
+
+
+    // InstantDEX NEW 030815 <------------
+    static char *allsignals[] = { (char *)allsignals_func, "allsignals", "V", 0 };
+    static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
+    static char *tradehistory[] = { (char *)tradehistory_func, "tradehistory", "V", "timestamp", 0 };
+    static char *getsignal[] = { (char *)getsignal_func, "getsignal", "V", "signal", "start", "end", "resolution", "baseid", "relid", "base", "rel", "exchange", 0 };
+    static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
+    static char *makeoffer2[] = { (char *)makeoffer2_func, "makeoffer2", "V", "baseid", "baseamount", "jumpaddr", "jumpasset", "jumpamount", "other", "relid", "relamount", 0 };
+    static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V", "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid", "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", 0 };
+    static char *jumptrades[] = { (char *)jumptrades_func, "jumptrades", "V", 0 };
     static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
     static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
     static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };

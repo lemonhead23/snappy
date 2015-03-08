@@ -2985,7 +2985,360 @@ individual treatment of requests and their parms here """#
             P8= ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 }
+
+
+
+    def allsignals(self, reqDict):
+        """
+
+
+
+         static char *allsignals[] = { (char *)allsignals_func, "allsignals", "V", 0 };
+
+
+        """#
+        K0 = 'requestType'
+        P0 = 'allsignals'
+
+
+        return  { K0 : P0  }
+
+
+
+
+
+    def lottostats(self, reqDict):
+        """
+
+
+    static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
+
+        """#
+        K0 = 'requestType'
+        P0 = 'lottostats'
+        try:
+            K1 = 'timestamp'
+            P1 = reqDict['timestamp']
+        except:
+            P1 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1  }
+
+
+
+    def tradehistory(self, reqDict):
+        """
+
+
+    static char *tradehistory[] = { (char *)tradehistory_func, "tradehistory", "V", "timestamp", 0 };
+
+
+        """#
+        K0 = 'requestType'
+        P0 = 'tradehistory'
+        try:
+            K1 = 'timestamp'
+            P1 = reqDict['timestamp']
+        except:
+            P1 = ''
+
+
+        return  { K0 : P0 , K1 : P1   }
+
+
+
+    def getsignal(self, reqDict):
+        """
+
+
+    static char *getsignal[] = { (char *)getsignal_func, "getsignal", "V", "signal", "start", "end", "resolution", "baseid",
+     "relid", "base", "rel", "exchange", 0 };
+
+
+        """#
+        K0 = 'requestType'
+        P0 = 'getsignal'
+        try:
+            K1 = 'signal'
+            P1 = reqDict['signal']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'start'
+            P2 = reqDict['start']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'end'
+            P3 = reqDict['end']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'resolution'
+            P4 = reqDict['resolution']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'baseid'
+            P5 = reqDict['baseid']
+        except:
+            P5= ''
+
+
+        try:
+            K6 = 'relid'
+            P6 = reqDict['relid']
+        except:
+            P6 = ''
+
+        try:
+            K7 = 'base'
+            P7 = reqDict['base']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'rel'
+            P8 = reqDict['rel']
+        except:
+            P8= ''
+
+
+
+        try:
+            K8 = 'exchange'
+            P8 = reqDict['exchange']
+        except:
+            P8= ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 }
+
+
+
+    def cancelquote(self, reqDict):
+        """
+
+
+
+    static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
+
+        """#
+        K0 = 'requestType'
+        P0 = 'cancelquote'
+        try:
+            K1 = 'quoteid'
+            P1 = reqDict['quoteid']
+        except:
+            P1 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1   }
+
+
+
+    def makeoffer2(self, reqDict):
+        """
+
+
+    static char *makeoffer2[] = { (char *)makeoffer2_func, "makeoffer2", "V",
+    "baseid", "baseamount", "jumpaddr", "jumpasset", "jumpamount",
+     "other", "relid", "relamount", 0 };
+
+
+        """#
+        K0 = 'requestType'
+        P0 = 'makeoffer2'
+        try:
+            K1 = 'baseid'
+            P1 = reqDict['baseid']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'baseamount'
+            P2 = reqDict['baseamount']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'jumpaddr'
+            P3 = reqDict['jumpaddr']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'jumpasset'
+            P4 = reqDict['jumpasset']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'jumpamount'
+            P5 = reqDict['jumpamount']
+        except:
+            P5= ''
+
+
+        try:
+            K6 = 'other'
+            P6 = reqDict['other']
+        except:
+            P6 = ''
+
+        try:
+            K7 = 'relid'
+            P7 = reqDict['relid']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'relamount'
+            P8 = reqDict['relamount']
+        except:
+            P8= ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 }
+
+
+
+    def processjumptrade(self, reqDict):
+        """
+
+    static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V",
+    "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid",
+     "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", 0 };
+
+
+        """#
+        K0 = 'requestType'
+        P0 = 'processjumptrade'
+        try:
+            K1 = 'assetA'
+            P1 = reqDict['assetA']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'amountA'
+            P2 = reqDict['amountA']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'other'
+            P3 = reqDict['other']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'assetB'
+            P4 = reqDict['assetB']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'amountB'
+            P5 = reqDict['amountB']
+        except:
+            P5= ''
+
+
+        try:
+            K6 = 'feeA'
+            P6 = reqDict['feeA']
+        except:
+            P6 = ''
+
+        try:
+            K7 = 'feeAtxid'
+            P7 = reqDict['feeAtxid']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'triggerhash'
+            P8 = reqDict['triggerhash']
+        except:
+            P8= ''
+
+
+
+        try:
+            K9 = 'jumper'
+            P9 = reqDict['jumper']
+        except:
+            P9= ''
+
+        try:
+            K10 = 'jumpasset'
+            P10 = reqDict['jumpasset']
+        except:
+            P10 = ''
+
+        try:
+            K11 = 'jumpamount'
+            P11 = reqDict['jumpamount']
+        except:
+            P11 = ''
+
+        try:
+            K12 = 'balancing'
+            P12 = reqDict['balancing']
+        except:
+            P12 = ''
+
+        try:
+            K13 = 'balancetxid'
+            P13 = reqDict['balancetxid']
+        except:
+            P13 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 }
+
+
+    def jumptrades(self, reqDict):
+        """
+
+
+
+ static char *jumptrades[] = { (char *)jumptrades_func, "jumptrades", "V", 0 };
+
+
+        """#
+        K0 = 'requestType'
+        P0 = 'jumptrades'
+
+
+
+        return  { K0 : P0   }
+
+
 
 
 
@@ -3310,7 +3663,7 @@ This is the wrapper class
                    'maketelepods',\
                    'telepodacct',\
                    'teleport',\
-                                       'InstantDEX 10',\
+                                       'InstantDEX 18',\
                    'allorderbooks',\
                    'openorders',\
                    'orderbook',\
@@ -3321,6 +3674,14 @@ This is the wrapper class
                    'processutx',\
                    'bid',\
                    'ask',\
+                   'allsignals',\
+                   'lottostats',\
+                   'tradehistory',\
+                   'getsignal',\
+                   'cancelquote',\
+                   'makeoffer2',\
+                   'processjumptrade',\
+                   'jumptrades',\
                    '                   Tradebot 3',\
                    'pricedb',\
                    'getquotes',\
@@ -3587,17 +3948,14 @@ This is the wrapper class
             jsonSpecs = self.jl777_aAll.teleport(reqDict)
             return jsonSpecs
 
-        #     // InstantDEX 10
+        #     // InstantDEX 18
 
         elif reqDict['requestType'] == 'allorderbooks':
             jsonSpecs = self.jl777_aAll.allorderbooks(reqDict)
             return jsonSpecs
-
         elif reqDict['requestType'] == 'openorders':
             jsonSpecs = self.jl777_aAll.openorders(reqDict)
             return jsonSpecs
-
-
         elif reqDict['requestType'] == 'orderbook':
             jsonSpecs = self.jl777_aAll.orderbook(reqDict)
             return jsonSpecs
@@ -3621,6 +3979,30 @@ This is the wrapper class
             return jsonSpecs
         elif reqDict['requestType'] == 'ask':
             jsonSpecs = self.jl777_aAll.ask(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'allsignals':
+            jsonSpecs = self.jl777_aAll.allsignals(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'lottostats':
+            jsonSpecs = self.jl777_aAll.lottostats(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'tradehistory':
+            jsonSpecs = self.jl777_aAll.tradehistory(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'getsignal':
+            jsonSpecs = self.jl777_aAll.getsignal(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'cancelquote':
+            jsonSpecs = self.jl777_aAll.cancelquote(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'makeoffer2':
+            jsonSpecs = self.jl777_aAll.makeoffer2(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'processjumptrade':
+            jsonSpecs = self.jl777_aAll.processjumptrade(reqDict)
+            return jsonSpecs
+        elif reqDict['requestType'] == 'jumptrades':
+            jsonSpecs = self.jl777_aAll.jumptrades(reqDict)
             return jsonSpecs
 
         #     // Tradebot 3
