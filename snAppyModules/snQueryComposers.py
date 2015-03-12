@@ -2675,7 +2675,36 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
+        try:###
+            K5 = 'maxdepth'
+            P5 = reqDict['maxdepth']
+        except:
+            P5 = ''
+
+
+        try:
+            K6 = 'base'
+            P6 = reqDict['base']
+        except:
+            P6 = ''
+
+
+        try:
+            K7 = 'rel'
+            P7 = reqDict['rel']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'gui'
+            P8 = reqDict['gui']
+        except:
+            P8 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+
+
 
 
     def placebid(self, reqDict):
@@ -2713,7 +2742,38 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,   }
+
+
+        try:###
+            K5 = 'timestamp'
+            P5 = reqDict['timestamp']
+        except:
+            P5 = ''
+
+
+        try:
+            K6 = 'baseamount'
+            P6 = reqDict['baseamount']
+        except:
+            P6 = ''
+
+
+        try:
+            K7 = 'relamount'
+            P7 = reqDict['relamount']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'gui'
+            P8 = reqDict['gui']
+        except:
+            P8 = ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+
 
 
     def placeask(self, reqDict):
@@ -2751,7 +2811,36 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P4 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  }
+
+
+        try:###
+            K5 = 'timestamp'
+            P5 = reqDict['timestamp']
+        except:
+            P5 = ''
+
+
+        try:
+            K6 = 'baseamount'
+            P6 = reqDict['baseamount']
+        except:
+            P6 = ''
+
+
+        try:
+            K7 = 'relamount'
+            P7 = reqDict['relamount']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'gui'
+            P8 = reqDict['gui']
+        except:
+            P8 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
 
 
 
@@ -2803,7 +2892,14 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P6 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,   }
+        try:
+            K7 = 'quoteid'
+            P7 = reqDict['quoteid']
+        except:
+            P7 = ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6 , K7 : P7  }
 
 
     def respondtx(self, reqDict):
@@ -2818,7 +2914,32 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P1 = ''
 
-        return  { K0 : P0 , K1 : P1 , }
+
+        try:
+            K2 = 'feeB'
+            P2 = reqDict['feeB']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'feetxid'
+            P3 = reqDict['feetxid']
+        except:
+            P3 = ''
+
+
+        try:
+            K4 = 'quoteid'
+            P4 = reqDict['quoteid']
+        except:
+            P4 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4   }
+
+
 
 
     def processutx(self, reqDict):
@@ -2848,7 +2969,20 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
             P3 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, }
+        try:
+            K4 = 'feeAtxid'
+            P4 = reqDict['feeAtxid']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'quoteid'
+            P5 = reqDict['quoteid']
+        except:
+            P5 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5   }
 
 
 
@@ -2917,8 +3051,16 @@ individual treatment of requests and their parms here """#
             P8= ''
 
 
+        try:
+            K9 = 'gui'
+            P9 = reqDict['gui']
+        except:
+            P9 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 ,  K9 : P9  }
 
 
 
@@ -2984,8 +3126,15 @@ individual treatment of requests and their parms here """#
         except:
             P8= ''
 
+        try:
+            K9 = 'gui'
+            P9 = reqDict['gui']
+        except:
+            P9 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 }
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 ,  K9 : P9 }
 
 
 
@@ -3217,7 +3366,22 @@ individual treatment of requests and their parms here """#
             P8= ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 }
+
+        try:
+            K9 = 'gui'
+            P9 = reqDict['gui']
+        except:
+            P9 = ''
+
+        try:
+            K10 = 'quoteid'
+            P10 = reqDict['quoteid']
+        except:
+            P10 = ''
+
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 ,  K9 : P9,  K10: P10  }
 
 
 
@@ -3318,8 +3482,26 @@ individual treatment of requests and their parms here """#
         except:
             P13 = ''
 
+
+
+
+        try:
+            K14 = 'gui'
+            P14 = reqDict['gui']
+        except:
+            P14 = ''
+
+        try:
+            K15 = 'quoteid'
+            P15 = reqDict['quoteid']
+        except:
+            P15 = ''
+
+
+
+
         return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
-                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 }
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15 }
 
 
     def jumptrades(self, reqDict):
@@ -3471,8 +3653,20 @@ individual treatment of requests and their parms here """#
         except:
             P2 = ''
 
+        try:
+            K3 = 'lottoseed'
+            P3 = reqDict['lottoseed']
+        except:
+            P3 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2 , }
+        try:
+            K4 = 'prizefund'
+            P4 = reqDict['prizefund']
+        except:
+            P4 = ''
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2 , K3 : P3,  K4 : P4,   }
 
 
 
