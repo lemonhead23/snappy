@@ -3281,71 +3281,6 @@ result
 
 
 
-class SNET_makeoffer(SNET_BaseTest):
-    """makeoffer
-Makeoffer is under construction, not currently working.
-The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
-static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
-example
-./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
-result
-{
-	"key":		"7646303683960469163",
-	"baseid":	"11060861818140490423",
- 	"relid":	"17554243582654188572",
- 	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
-	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
-}
-Each entry now includes the NXT address of the user that submitted it (here in bold).
-For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
-example
-./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
-result
-{"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
-
-    def setUp(self):
-        print(" test setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_makeoffer()
-
-
-    def test_makeoffer(self):
-
-        query_json = {
-                        'requestType': 'makeoffer',\
-                        'relid': '17554243582654188572',\
-                        'other': '8279528579993996036', \
-                        'baseamount': '101111100',\
-                        'relamount': '617900', \
-                        'type': '', \
-                        'baseid': '11060861818140490423',\
-                        'subscribe':  1,\
-                        }
-
-# {'result': 'invalid makeoffer_func request'}
-
-
-
-        print(5*"\n++++++++++++","test_makeoffer")
-        test_RQ_ = {'requestType': 'makeoffer'}
-        test_RQ_ = query_json
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        print(testReq.text)
-
-        rpl777_string =testReq.text #  eval(
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777_string:\n\n", rpl777_string)
-
-
-        self.assertTrue('comment' in rpl777_string )
-
 
 
 class SNET_respondtx(SNET_BaseTest):
@@ -3868,8 +3803,80 @@ class SNET_syscall(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+##############################################
+##############################################
+#
+#	DEPRECATED
+#
+#
+##############################################
+##############################################
+class SNET_makeoffer(SNET_BaseTest):
+    """makeoffer
+Makeoffer is under construction, not currently working.
+The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
+static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
+example
+./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
+result
+{
+	"key":		"7646303683960469163",
+	"baseid":	"11060861818140490423",
+ 	"relid":	"17554243582654188572",
+ 	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
+	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
+}
+Each entry now includes the NXT address of the user that submitted it (here in bold).
+For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
+example
+./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
+result
+{"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
 
 
+
+    def runTest(self):
+        self.test_makeoffer()
+
+
+    def test_makeoffer(self):
+
+        query_json = {
+                        'requestType': 'makeoffer',\
+                        'relid': '17554243582654188572',\
+                        'other': '8279528579993996036', \
+                        'baseamount': '101111100',\
+                        'relamount': '617900', \
+                        'type': '', \
+                        'baseid': '11060861818140490423',\
+                        'subscribe':  1,\
+                        }
+
+# {'result': 'invalid makeoffer_func request'}
+
+
+
+        print(5*"\n++++++++++++","test_makeoffer")
+        test_RQ_ = {'requestType': 'makeoffer'}
+        test_RQ_ = query_json
+        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        print(testReq.text)
+
+        rpl777_string =testReq.text #  eval(
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777_string:\n\n", rpl777_string)
+
+
+        self.assertTrue('comment' in rpl777_string )
+        
+        
 ##############################################
 ##############################################
 ##############################################
