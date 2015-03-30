@@ -3492,34 +3492,6 @@ class SNET_cancelquote(SNET_BaseTest):
 
 
 
-class SNET_makeoffer2(SNET_BaseTest):
-
-
-    def setUp(self):
-        print(" test makeoffer2 setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_makeoffer2()
-
-
-    def test_makeoffer2(self):
-#
-        print(5*"\n++++++++++++","test_makeoffer2")
-        test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        self.assertTrue('result' in rpl777.keys() )
-
-
 
 class SNET_processjumptrade(SNET_BaseTest):
 
@@ -3803,6 +3775,42 @@ class SNET_syscall(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+##############################################
+##############################################
+#
+#	DEPRECATED
+#
+#
+##############################################
+##############################################
+class SNET_makeoffer2(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test makeoffer2 setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_makeoffer2()
+
+
+    def test_makeoffer2(self):
+#
+        print(5*"\n++++++++++++","test_makeoffer2")
+        test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+        
+        
 ##############################################
 ##############################################
 #
