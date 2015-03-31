@@ -3824,10 +3824,10 @@ class SNET_idex_new(SNET_BaseTest):
 
 
     def setUp(self):
-        print(" test setUp func here")
+        print("test setUp func here")
         
     def runTest(self):
-		self.lottotest_result()
+        self.lottotest_result()
         self.placebid_result()
         self.placebid_result_a()
 
@@ -3894,115 +3894,15 @@ class SNET_idex_new(SNET_BaseTest):
         self.assertTrue('result' in apiResponse.keys() )
         
         
-
-##############################################
-##############################################
-#
-#	DEPRECATED
-#
-#
-##############################################
-##############################################
-class SNET_makeoffer2(SNET_BaseTest):
-
-
-    def setUp(self):
-        print(" test makeoffer2 setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_makeoffer2()
-
-
-    def test_makeoffer2(self):
-#
-        print(5*"\n++++++++++++","test_makeoffer2")
-        test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        self.assertTrue('result' in rpl777.keys() )
         
+#class InstantDEXTestSuite(unittest.TestSuite):
+
+	#def suite():
+		#suite = unittest.TestSuite()                                            
+		#suite.addTest(SNET_idex_new())
+		#suite.addTest(SNET_lotto())                  
+		#self.run(suite)
         
-##############################################
-##############################################
-#
-#	DEPRECATED
-#
-#
-##############################################
-##############################################
-class SNET_makeoffer(SNET_BaseTest):
-    """makeoffer
-Makeoffer is under construction, not currently working.
-The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
-static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
-example
-./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
-result
-{
-	"key":		"7646303683960469163",
-	"baseid":	"11060861818140490423",
- 	"relid":	"17554243582654188572",
- 	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
-	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
-}
-Each entry now includes the NXT address of the user that submitted it (here in bold).
-For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
-example
-./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
-result
-{"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
-
-    def setUp(self):
-        print(" test setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_makeoffer()
-
-
-    def test_makeoffer(self):
-
-        query_json = {
-                        'requestType': 'makeoffer',\
-                        'relid': '17554243582654188572',\
-                        'other': '8279528579993996036', \
-                        'baseamount': '101111100',\
-                        'relamount': '617900', \
-                        'type': '', \
-                        'baseid': '11060861818140490423',\
-                        'subscribe':  1,\
-                        }
-
-# {'result': 'invalid makeoffer_func request'}
-
-
-
-        print(5*"\n++++++++++++","test_makeoffer")
-        test_RQ_ = {'requestType': 'makeoffer'}
-        test_RQ_ = query_json
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        print(testReq.text)
-
-        rpl777_string =testReq.text #  eval(
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777_string:\n\n", rpl777_string)
-
-
-        self.assertTrue('comment' in rpl777_string )
         
         
 ##############################################
@@ -4011,7 +3911,11 @@ result
 ##############################################
 ##############################################
 
-
+def suite_idexSuite():
+    suite = unittest.TestSuite()
+    suite.addTest(SNET_idex_new())
+    suite.addTest(SNET_lotto())
+    return suite
 
 def suite_baseSetup():
     suite = unittest.TestSuite()
@@ -4142,7 +4046,7 @@ class TestCollector(object):
         testClasses['SNET_placebid'] = SNET_placebid # *
         testClasses['SNET_placeask'] = SNET_placeask # *
         testClasses['SNET_placeask_lemon'] = SNET_placeask_lemon # 
-        testClasses['SNET_makeoffer'] = SNET_makeoffer # *?
+       #testClasses['SNET_makeoffer'] = SNET_makeoffer # *?
         testClasses['SNET_respondtx'] = SNET_respondtx  # * ?
         testClasses['SNET_processutx'] = SNET_processutx  # * ?
         testClasses['SNET_bid'] = SNET_bid # *
@@ -4152,7 +4056,7 @@ class TestCollector(object):
         testClasses['SNET_tradehistory'] = SNET_tradehistory # *
         testClasses['SNET_getsignal'] = SNET_getsignal # *
         testClasses['SNET_cancelquote'] = SNET_cancelquote # *
-        testClasses['SNET_makeoffer2'] = SNET_makeoffer2 # *
+        #testClasses['SNET_makeoffer2'] = SNET_makeoffer2 # *
         testClasses['SNET_processjumptrade'] = SNET_processjumptrade # *
         testClasses['SNET_jumptrades'] = SNET_jumptrades # *
 
@@ -4172,10 +4076,11 @@ class TestCollector(object):
     def  getTestSuitesDict(self, ):
 
         testSuites = {}
-        testSuites['base'] = suite_baseSetup
-        testSuites['base1'] = suite_baseSetup
-        testSuites['base2'] = suite_baseSetup
-        testSuites['sg'] = suite_SG
+        #testSuites['base'] = suite_baseSetup
+        testSuites['idex'] = suite_idexSuite
+        #testSuites['base1'] = suite_baseSetup
+        #testSuites['base2'] = suite_baseSetup
+        #testSuites['sg'] = suite_SG
         return testSuites
 
     def getTestList(self, testListName):
@@ -4376,7 +4281,7 @@ def main():
 
         elif testCase in testSuites:
 
-             suite  = testSuites[test]()
+             suite  = testSuites[testCase]()
              runner = unittest.TextTestRunner()
              runner.run(suite)
 
@@ -4602,4 +4507,114 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
 #
 # blackyblack [11:17 PM]
 # for networking you create another test suite and test it separately from client/server
+
+
+##############################################
+##############################################
+#
+#	DEPRECATED
+#
+#
+##############################################
+##############################################
+class SNET_makeoffer2(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test makeoffer2 setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_makeoffer2()
+
+
+    def test_makeoffer2(self):
+#
+        print(5*"\n++++++++++++","test_makeoffer2")
+        test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
+        
+        
+##############################################
+##############################################
+#
+#	DEPRECATED
+#
+#
+##############################################
+##############################################
+class SNET_makeoffer(SNET_BaseTest):
+    """makeoffer
+Makeoffer is under construction, not currently working.
+The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
+static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
+example
+./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
+result
+{
+	"key":		"7646303683960469163",
+	"baseid":	"11060861818140490423",
+ 	"relid":	"17554243582654188572",
+ 	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
+	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
+}
+Each entry now includes the NXT address of the user that submitted it (here in bold).
+For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
+example
+./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
+result
+{"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_makeoffer()
+
+
+    def test_makeoffer(self):
+
+        query_json = {
+                        'requestType': 'makeoffer',\
+                        'relid': '17554243582654188572',\
+                        'other': '8279528579993996036', \
+                        'baseamount': '101111100',\
+                        'relamount': '617900', \
+                        'type': '', \
+                        'baseid': '11060861818140490423',\
+                        'subscribe':  1,\
+                        }
+
+# {'result': 'invalid makeoffer_func request'}
+
+
+
+        print(5*"\n++++++++++++","test_makeoffer")
+        test_RQ_ = {'requestType': 'makeoffer'}
+        test_RQ_ = query_json
+        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        print(testReq.text)
+
+        rpl777_string =testReq.text #  eval(
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777_string:\n\n", rpl777_string)
+
+
+        self.assertTrue('comment' in rpl777_string )
 
