@@ -3825,11 +3825,11 @@ class SNET_idex_new(SNET_BaseTest):
 
     def setUp(self):
         print(" test setUp func here")
-        pass
         
-
     def runTest(self):
+		self.lottotest_result()
         self.placebid_result()
+        self.placebid_result_a()
 
 
     def lottocall(self):
@@ -3854,32 +3854,14 @@ class SNET_idex_new(SNET_BaseTest):
         apiResponse = self.lottocall()
         self.assertTrue('result' in apiResponse.keys() )
         
-    def placebidcall(self):
+    def placebidcall(self,volume,price,baseid,relid):
         query_json = {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
-
-        # SPECIFICS:
-        volumeA = '1.00'
-        priceA = '0.014'
-
-        volumeB = '1.00'
-        priceB = '0.004'
-
-        baseid = '1106086181814049042'
-        relid = '455105891325210530'
-
-        baseamount =''
-        relamount =''
-        other =''
-        type =''
-
 
         print(5*"\n++++++++++++","test_placebid")
         testRQ_placebid = {'requestType': 'placebid'}
 
-
-
-        testRQ_placebid['volume'] = volumeA
-        testRQ_placebid['price'] =  priceA
+        testRQ_placebid['volume'] = volume
+        testRQ_placebid['price'] =  price
         testRQ_placebid['baseid'] = baseid
         testRQ_placebid['relid'] =  relid
 
@@ -3891,10 +3873,24 @@ class SNET_idex_new(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
-        return repl777
+        return rpl777
         
     def placebid_result(self):
-        apiResponse = self.placebidcall()
+        price = '0.014'
+        volume = '1.00'
+
+        baseid = '1106086181814049042'
+        relid = '455105891325210530'
+        apiResponse = self.placebidcall(volume,price,baseid,relid)
+        self.assertTrue('result' in apiResponse.keys() )
+        
+    def placebid_result_a(self):
+        price = '0.00014'
+        volume = '1.00001'
+
+        baseid = '1106086181814049042'
+        relid = '455105891325210530'
+        apiResponse = self.placebidcall(volume,price,baseid,relid)
         self.assertTrue('result' in apiResponse.keys() )
         
         
