@@ -25,16 +25,16 @@ environ = {}
 STONEFISH_IP = '178.62.185.131'
 BOXFISH_IP   = 'localhost'
 
-SNET_port = '7778'
-SNET_url = 'http://' + STONEFISH_IP + ":" + SNET_port
-#SNET_url = 'http://' + BOXFISH_IP + ":" + SNET_port
+SNET_port = '7777'
+#SNET_url = 'http://' + STONEFISH_IP + ":" + SNET_port
+SNET_url = 'http://' + BOXFISH_IP + ":" + SNET_port
 
 
 #SERVER_ADDR_jl777 = BOXFISH_IP
 #SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
-SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
+SERVER_PORT_SUPERNETHTTP = 7777 # http  14632 twisted wants int
 
 SCHEME = 'http://'
 #FULL_URL = SCHEME + SERVER_ADDR_jl777 + ":" + str(SERVER_PORT_SUPERNETHTTP)
