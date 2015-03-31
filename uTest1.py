@@ -3279,6 +3279,50 @@ result
         self.assertTrue('result' in rpl777.keys() )
 
 
+class SNET_placeask_lemon(SNET_BaseTest):
+    """placeask
+placeask adds an ask (sell order) to the InstantDEX orderbook.
+static char placeask[] = { (char )placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
+example
+./BitcoinDarkd SuperNET '{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
+This places a Sell order for 80 BTCD at 0.0065 BTC each
+result
+{"result":"success","txid":"15021359626299573695"}"""
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+
+
+    def runTest(self):
+        self.test_placeask()
+
+
+    def test_placeask(self):
+        query_json =  {'relid': '', 'requestType': 'placeask', 'baseid': '', 'volume': '', 'price': ''}
+        
+        args = sys.argv[1:]
+        
+        print(test[2])
+
+        print(5*"\n++++++++++++","test_placeask")
+        testRQ_placeask = {'requestType': 'placeask'}
+
+        testRQ_placeask['volume'] = volume
+        testRQ_placeask['price'] =  price
+        testRQ_placeask['baseid'] = baseid
+        testRQ_placeask['relid'] =  relid
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_placeask)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        self.assertTrue('result' in rpl777.keys() )
 
 
 
@@ -3774,6 +3818,86 @@ class SNET_syscall(SNET_BaseTest):
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         self.assertTrue('result' in rpl777.keys() )
+        
+        
+class SNET_idex_new(SNET_BaseTest):
+
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+        
+
+    def runTest(self):
+        self.placebid_result()
+
+
+    def lottocall(self):
+
+        #query_json = {'requestType': 'lottostats'}
+		# {'error': 'illegal lotto parms'}
+		#{"result":"lottostats","totaltickets":"0","NXT":"8418687609572182360","numtickets":"0","odds":"0.00","topMM":"0"}
+
+        print(5*"\n++++++++++++","lotto call")
+        test_RQ_ = {'requestType': 'lottostats'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+		
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+        return rpl777
+        
+        
+    def lottotest_result(self):
+        apiResponse = self.lottocall()
+        self.assertTrue('result' in apiResponse.keys() )
+        
+    def placebidcall(self):
+        query_json = {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
+
+        # SPECIFICS:
+        volumeA = '1.00'
+        priceA = '0.014'
+
+        volumeB = '1.00'
+        priceB = '0.004'
+
+        baseid = '1106086181814049042'
+        relid = '455105891325210530'
+
+        baseamount =''
+        relamount =''
+        other =''
+        type =''
+
+
+        print(5*"\n++++++++++++","test_placebid")
+        testRQ_placebid = {'requestType': 'placebid'}
+
+
+
+        testRQ_placebid['volume'] = volumeA
+        testRQ_placebid['price'] =  priceA
+        testRQ_placebid['baseid'] = baseid
+        testRQ_placebid['relid'] =  relid
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_placebid)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        return repl777
+        
+    def placebid_result(self):
+        apiResponse = self.placebidcall()
+        self.assertTrue('result' in apiResponse.keys() )
+        
+        
 
 ##############################################
 ##############################################
@@ -3940,18 +4064,7 @@ class TestCollector(object):
 
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
-
-        """#
-#
-#  static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
-#
-#
-# static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
-# static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
-#
-# static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-# static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-
+        """
 
         testClasses = {}
         #
@@ -4024,11 +4137,15 @@ class TestCollector(object):
         testClasses['SNET_telepodacct'] = SNET_telepodacct # ?
         testClasses['SNET_teleport'] = SNET_teleport # ?
         # idex
+        testClasses['SNET_idex_new'] = SNET_idex_new
+        
+        
         testClasses['SNET_allorderbooks'] = SNET_allorderbooks # *
         testClasses['SNET_openorders'] = SNET_openorders       # *
         testClasses['SNET_orderbook'] = SNET_orderbook # *
         testClasses['SNET_placebid'] = SNET_placebid # *
         testClasses['SNET_placeask'] = SNET_placeask # *
+        testClasses['SNET_placeask_lemon'] = SNET_placeask_lemon # 
         testClasses['SNET_makeoffer'] = SNET_makeoffer # *?
         testClasses['SNET_respondtx'] = SNET_respondtx  # * ?
         testClasses['SNET_processutx'] = SNET_processutx  # * ?
@@ -4145,6 +4262,7 @@ class TestCollector(object):
                         SNET_orderbook ,\
                         SNET_placebid ,\
                         SNET_placeask ,\
+                        SNET_placeask_lemon ,\
                         SNET_makeoffer ,\
                         SNET_respondtx  ,\
                         SNET_processutx  ,\
