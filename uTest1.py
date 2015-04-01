@@ -3373,6 +3373,7 @@ class SNET_idex_placebid(SNET_BaseTest, SNET_apicalls):
     def runTest(self):
         self.test_placebid()
         self.test_placebid_a()
+        self.test_placebid_check_orderbook()
         
     def test_placebid(self):
         price = '0.014'
@@ -3391,6 +3392,27 @@ class SNET_idex_placebid(SNET_BaseTest, SNET_apicalls):
         relid = '455105891325210530'
         apiResponse = self.placebid(volume,price,baseid,relid)
         self.assertTrue('result' in apiResponse.keys() )
+        
+        
+    def test_placebid_check_orderbook(self):
+        price = '0.00014'
+        volume = '1.00001'
+
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        apiResponse = self.placebid(volume,price,baseid,relid)
+        print('\nCheck if response is ok\n')
+        self.assertTrue('result' in apiResponse.keys())
+        
+        apiResponse = self.orderbook(baseid,relid)
+        print('\nCheck orderbook if bid is there\n')
+        
+        found = False
+        for bid in apiResponse['bids']:
+            if float(bid['price']) == float(price):
+                found = True
+        
+        self.assertTrue(found)
         
         
 class SNET_idex_allorderbooks(SNET_BaseTest, SNET_apicalls):
