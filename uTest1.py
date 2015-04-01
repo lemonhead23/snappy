@@ -3820,7 +3820,31 @@ class SNET_syscall(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
         
         
-class SNET_idex_new(SNET_BaseTest):
+class SNET_apicalls():
+
+
+    def placebidcall(self,volume,price,baseid,relid):
+        query_json = {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
+
+        print(5*"\n++++++++++++","test_placebid")
+        testRQ_placebid = {'requestType': 'placebid'}
+
+        testRQ_placebid['volume'] = volume
+        testRQ_placebid['price'] =  price
+        testRQ_placebid['baseid'] = baseid
+        testRQ_placebid['relid'] =  relid
+
+        payload= self.qComp_777.make_777POST_Request(testRQ_placebid)
+        print("query json is: ", payload)
+        headers = {'content-type': 'application/json'}
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+
+        rpl777 = eval(testReq.text)
+        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+
+        return rpl777
+        
+class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
 
 
     def setUp(self):
@@ -3854,26 +3878,6 @@ class SNET_idex_new(SNET_BaseTest):
         apiResponse = self.lottocall()
         self.assertTrue('result' in apiResponse.keys() )
         
-    def placebidcall(self,volume,price,baseid,relid):
-        query_json = {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
-
-        print(5*"\n++++++++++++","test_placebid")
-        testRQ_placebid = {'requestType': 'placebid'}
-
-        testRQ_placebid['volume'] = volume
-        testRQ_placebid['price'] =  price
-        testRQ_placebid['baseid'] = baseid
-        testRQ_placebid['relid'] =  relid
-
-        payload= self.qComp_777.make_777POST_Request(testRQ_placebid)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        return rpl777
         
     def placebid_result(self):
         price = '0.014'
