@@ -3716,39 +3716,6 @@ class SNET_tradebot(SNET_BaseTest):
 class ___Privatebet():
     pass
 
-class SNET_lotto(SNET_BaseTest):
-
-
-    def setUp(self):
-        print(" test setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_lotto()
-
-
-    def test_lotto(self):
-
-        #query_json = {'asset': '', 'refacct': '', 'requestType': 'lotto'}
-
-# {'error': 'illegal lotto parms'}
-
-
-        print(5*"\n++++++++++++","test_lotto")
-        test_RQ_ = {'requestType': 'lotto'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        self.assertTrue('result' in rpl777.keys() )
-
-
 
     # // Embedded Langs
 class ___EmLang():
@@ -3820,9 +3787,38 @@ class SNET_syscall(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
         
         
+class SNET_lotto(SNET_BaseTest):
+
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+    def runTest(self):
+        self.test_lotto()
+        
+    def test_lotto(self):
+        apiResponse = self.lotto()
+        self.assertTrue('result' in apiResponse.keys() )
+
+        
+##############################################
+##############################################
+#
+#	All SuperNET API Calls
+#
+#
+##############################################
+##############################################
 class SNET_apicalls():
 
-
+	##############################################
+	##############################################
+	#
+	#	InstantDEX API Calls
+	#
+	#
+	##############################################
+	##############################################
     def placebid(self,volume,price,baseid,relid):
         query_json = {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
 
@@ -3843,24 +3839,21 @@ class SNET_apicalls():
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         return rpl777
-        
-class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
-
-
-    def setUp(self):
-        print("test setUp func here")
-        
-    def runTest(self):
-        self.lottotest_result()
-        self.placebid_result()
-        self.placebid_result_a()
-
-
-    def lottocall(self):
-
-        #query_json = {'requestType': 'lottostats'}
-		# {'error': 'illegal lotto parms'}
-		#{"result":"lottostats","totaltickets":"0","NXT":"8418687609572182360","numtickets":"0","odds":"0.00","topMM":"0"}
+    
+    
+    ##############################################
+	##############################################
+	#
+	#	todo: Other API Calls
+	#
+	#
+	##############################################
+	##############################################
+    
+    #query_json = {'requestType': 'lottostats'}
+	# {'error': 'illegal lotto parms'}
+	#{"result":"lottostats","totaltickets":"0","NXT":"8418687609572182360","numtickets":"0","odds":"0.00","topMM":"0"}
+    def lotto(self):
 
         print(5*"\n++++++++++++","lotto call")
         test_RQ_ = {'requestType': 'lottostats'}
@@ -3874,12 +3867,24 @@ class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
         return rpl777
         
         
-    def lottotest_result(self):
-        apiResponse = self.lottocall()
-        self.assertTrue('result' in apiResponse.keys() )
+##############################################
+##############################################
+#
+#	InstantDEX Tests
+#
+#
+##############################################
+##############################################
+class SNET_idex_placebid(SNET_BaseTest, SNET_apicalls):
+
+    def setUp(self):
+        print("test setUp func here")
         
+    def runTest(self):
+        self.test_placebid()
+        self.test_placebid_a()
         
-    def placebid_result(self):
+    def test_placebid(self):
         price = '0.014'
         volume = '1.00'
 
@@ -3888,7 +3893,7 @@ class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
         apiResponse = self.placebid(volume,price,baseid,relid)
         self.assertTrue('result' in apiResponse.keys() )
         
-    def placebid_result_a(self):
+    def test_placebid_a(self):
         price = '0.00014'
         volume = '1.00001'
 
@@ -3907,8 +3912,8 @@ class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
 
 def suite_idexSuite():
     suite = unittest.TestSuite()
-    suite.addTest(SNET_idex_new())
-    suite.addTest(SNET_lotto())
+    suite.addTest(SNET_idex_placebid())
+    #suite.addTest(SNET_lotto())
     return suite
 
 def suite_baseSetup():
@@ -4031,7 +4036,7 @@ class TestCollector(object):
         testClasses['SNET_telepodacct'] = SNET_telepodacct # ?
         testClasses['SNET_teleport'] = SNET_teleport # ?
         # idex
-        testClasses['SNET_idex_new'] = SNET_idex_new
+        testClasses['SNET_idex_placebid'] = SNET_idex_placebid
         
         
         testClasses['SNET_allorderbooks'] = SNET_allorderbooks # *
