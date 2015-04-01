@@ -3823,7 +3823,7 @@ class SNET_syscall(SNET_BaseTest):
 class SNET_apicalls():
 
 
-    def placebidcall(self,volume,price,baseid,relid):
+    def placebid(self,volume,price,baseid,relid):
         query_json = {'price': '', 'volume': '', 'requestType': 'placebid', 'baseid': '', 'relid': ''}
 
         print(5*"\n++++++++++++","test_placebid")
@@ -3885,7 +3885,7 @@ class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
 
         baseid = '1106086181814049042'
         relid = '455105891325210530'
-        apiResponse = self.placebidcall(volume,price,baseid,relid)
+        apiResponse = self.placebid(volume,price,baseid,relid)
         self.assertTrue('result' in apiResponse.keys() )
         
     def placebid_result_a(self):
@@ -3894,18 +3894,8 @@ class SNET_idex_new(SNET_BaseTest, SNET_apicalls):
 
         baseid = '1106086181814049042'
         relid = '455105891325210530'
-        apiResponse = self.placebidcall(volume,price,baseid,relid)
+        apiResponse = self.placebid(volume,price,baseid,relid)
         self.assertTrue('result' in apiResponse.keys() )
-        
-        
-        
-#class InstantDEXTestSuite(unittest.TestSuite):
-
-	#def suite():
-		#suite = unittest.TestSuite()                                            
-		#suite.addTest(SNET_idex_new())
-		#suite.addTest(SNET_lotto())                  
-		#self.run(suite)
         
         
         
