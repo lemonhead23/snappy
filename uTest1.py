@@ -4083,8 +4083,8 @@ class TestCollector(object):
         #testSuites['base'] = suite_baseSetup
         testSuites['idex'] = suite_idexSuite
         #testSuites['base1'] = suite_baseSetup
-        #testSuites['base2'] = suite_baseSetup
-        #testSuites['sg'] = suite_SG
+        testSuites['base'] = suite_baseSetup
+        testSuites['sg'] = suite_SG
         return testSuites
 
     def getTestList(self, testListName):
@@ -4272,22 +4272,29 @@ def main():
     testClasses = testCollector.getTestClassDict()
     testSuites = testCollector.getTestSuitesDict()
 
+
+    multiSuite = ['sg', 'base'] # extend as needed
+
+
     args = sys.argv[1:]
 
 
     for  testCase in args:
 
         if testCase in testClasses:
-
             runner = unittest.TextTestRunner()
             runner.run(testClasses[testCase]())
 
-
         elif testCase in testSuites:
-
              suite  = testSuites[testCase]()
              runner = unittest.TextTestRunner()
              runner.run(suite)
+
+        elif testCase == 'sList':
+            for singleSuite in multiSuite:
+                 suite  = testSuites[singleSuite]() # this returns a callable!
+                 runner = unittest.TextTestRunner()
+                 runner.run(suite)
 
         else:
 
