@@ -3335,14 +3335,14 @@ class SNET_apicalls():
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
         
         return rpl777
-        
-    def processutx2(self):
-
-        test_RQ_ = {'requestType': 'processutx'}
-        rpl777 = apicall(test_RQ)
-        
-        return rpl777
-        
+    #
+    # def processutx2(self):
+    #
+    #     test_RQ_ = {'requestType': 'processutx'}
+    #     rpl777 = apicall(test_RQ)
+    #
+    #     return rpl777
+    #
     def apicall(self, query):
         null = None
         print(5*"\n++++++++++++","running API call")
@@ -3887,8 +3887,8 @@ class TestCollector(object):
         testClasses['SNET_idex_jumptrades'] = SNET_idex_jumptrades # *
 
         # tbot
-        testClasses['SNET_idex_pricedb'] = SNET_idex_pricedb   # ?
-        testClasses['SNET_idex_getquotes'] = SNET_idex_getquotes   # ?
+        testClasses['SNET_pricedb'] = SNET_pricedb   # ?
+        testClasses['SNET_getquotes'] = SNET_getquotes   # ?
         testClasses['SNET_tradebot'] = SNET_tradebot   # ?
         # pbet
         testClasses['SNET_lotto'] = SNET_lotto  # ?
@@ -4003,8 +4003,8 @@ class TestCollector(object):
                         SNET_idex_processjumptrade ,\
                         SNET_idex_jumptrades ,\
                         # tbot
-                        SNET_idex_pricedb   ,\
-                        SNET_idex_getquotes   ,\
+                        SNET_pricedb   ,\
+                        SNET_getquotes   ,\
                         SNET_tradebot   ,\
                         # pbet
                         SNET_lotto  ,\
