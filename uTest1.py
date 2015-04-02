@@ -3342,7 +3342,7 @@ class SNET_apicalls():
     #     rpl777 = apicall(test_RQ)
     #
     #     return rpl777
-    #     
+    #
     def apicall(self, query):
         null = None
         print(5*"\n++++++++++++","running API call")
@@ -4003,8 +4003,8 @@ class TestCollector(object):
                         SNET_idex_processjumptrade ,\
                         SNET_idex_jumptrades ,\
                         # tbot
-                        SNET_idex_pricedb   ,\
-                        SNET_idex_getquotes   ,\
+                        SNET_pricedb   ,\
+                        SNET_getquotes   ,\
                         SNET_tradebot   ,\
                         # pbet
                         SNET_lotto  ,\
