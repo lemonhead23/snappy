@@ -2863,55 +2863,6 @@ class SNET_teleport(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
-#########################
-#    InstantDEX 8
-#########################
-
-class ___InstantDex():
-    """
-orderbooks are created dynamically when placebid or placeask is called. this is then sent to the network as bid or ask API calls with the price/volume pair changed to base and rel satoshi amounts for the assets.
-
-allorderbooks returns an array of, yes you guess it!, all the orderbooks
-
-orderbook returns, yes!, an orderbook with base -> rel. So the base NXT, rel BTC orderbook is NXT/BTC
-but you can ask for it with base BTC and rel NXT and it will return it with the prices as BTC/NXT
-
-a bunch of gory details regarding asset decimal places and other mundane things, but in my tests it is propagating pretty fast to other nodes. still need to get more timing results to know if I need to optimize it more.
-
-now that the orderbooks are back online, next up is ordermatching. This is pretty tricky as I need to make it do an atomic swap of any two assets, with NXT itself treated as a special case asset. Good thing this was done last summer, but still need to get it ported into the new codebase and get it debugged.
-
-I remember it was quite touchy, so I will plan for just achieving this automated orderfilling triggered with a makeoffer API. it actually needs at least two more internal ones to match the state transitions.
-
-At that point, the low level InstantDEX API would basically be done for asset<->asset and other than supporting the GUI port to use this, I dont foresee too much more at this level. However, this is only the lowest level. After this step I need to add another layer for the tradebots. But I like to just do one step at a time as often when I do that next step I can see a bit better what is best to do next
-
-
-char *assetmap[][2] =
-{
-    { "5527630", "NXT" },
-    { "17554243582654188572", "BTC" },
-    { "4551058913252105307", "BTC" },
-    { "12659653638116877017", "BTC" },
-    { "11060861818140490423", "BTCD" },
-    { "6918149200730574743", "BTCD" },
-    { "13120372057981370228", "BITS" },
-    { "2303962892272487643", "DOGE" },
-    { "16344939950195952527", "DOGE" },
-    { "6775076774325697454", "OPAL" },
-    { "7734432159113182240", "VPN" },
-    { "9037144112883608562", "VRC" },
-    { "1369181773544917037", "BBR" },
-    { "17353118525598940144", "DRK" },
-    { "2881764795164526882", "LTC" },
-    { "7117580438310874759", "BC" },
-    { "275548135983837356", "VIA" },
-};
-
-
-"""#
-    pass
-
-
-
 
 
     #     Tradebot 3
@@ -2921,7 +2872,7 @@ class ___Tradebot():
     pass
 
 
-class SNET_idex_pricedb(SNET_BaseTest):
+class SNET_pricedb(SNET_BaseTest):
 
 
     def setUp(self):
@@ -2956,7 +2907,7 @@ class SNET_idex_pricedb(SNET_BaseTest):
 
 
 
-class SNET_idex_getquotes(SNET_BaseTest):
+class SNET_getquotes(SNET_BaseTest):
 
 
     def setUp(self):
@@ -3036,6 +2987,58 @@ class ___Privatebet():
     # // Embedded Langs
 class ___EmLang():
     pass
+
+
+
+
+
+#########################
+#    InstantDEX 8
+#########################
+
+class ___InstantDex():
+    """
+orderbooks are created dynamically when placebid or placeask is called. this is then sent to the network as bid or ask API calls with the price/volume pair changed to base and rel satoshi amounts for the assets.
+
+allorderbooks returns an array of, yes you guess it!, all the orderbooks
+
+orderbook returns, yes!, an orderbook with base -> rel. So the base NXT, rel BTC orderbook is NXT/BTC
+but you can ask for it with base BTC and rel NXT and it will return it with the prices as BTC/NXT
+
+a bunch of gory details regarding asset decimal places and other mundane things, but in my tests it is propagating pretty fast to other nodes. still need to get more timing results to know if I need to optimize it more.
+
+now that the orderbooks are back online, next up is ordermatching. This is pretty tricky as I need to make it do an atomic swap of any two assets, with NXT itself treated as a special case asset. Good thing this was done last summer, but still need to get it ported into the new codebase and get it debugged.
+
+I remember it was quite touchy, so I will plan for just achieving this automated orderfilling triggered with a makeoffer API. it actually needs at least two more internal ones to match the state transitions.
+
+At that point, the low level InstantDEX API would basically be done for asset<->asset and other than supporting the GUI port to use this, I dont foresee too much more at this level. However, this is only the lowest level. After this step I need to add another layer for the tradebots. But I like to just do one step at a time as often when I do that next step I can see a bit better what is best to do next
+
+
+char *assetmap[][2] =
+{
+    { "5527630", "NXT" },
+    { "17554243582654188572", "BTC" },
+    { "4551058913252105307", "BTC" },
+    { "12659653638116877017", "BTC" },
+    { "11060861818140490423", "BTCD" },
+    { "6918149200730574743", "BTCD" },
+    { "13120372057981370228", "BITS" },
+    { "2303962892272487643", "DOGE" },
+    { "16344939950195952527", "DOGE" },
+    { "6775076774325697454", "OPAL" },
+    { "7734432159113182240", "VPN" },
+    { "9037144112883608562", "VRC" },
+    { "1369181773544917037", "BBR" },
+    { "17353118525598940144", "DRK" },
+    { "2881764795164526882", "LTC" },
+    { "7117580438310874759", "BC" },
+    { "275548135983837356", "VIA" },
+};
+
+
+"""#
+    pass
+
 
 
 class SNET_python(SNET_BaseTest):
