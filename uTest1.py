@@ -15,6 +15,7 @@ import time
 import sys
 import argparse
 
+
 class SNET_BaseTest(unittest.TestCase):
 
     """
@@ -3286,7 +3287,7 @@ class SNET_apicalls():
         return rpl777
         
         
-    def placeask(self,baseid,relid,volume,price):
+    def placeask(self,volume,price,baseid,relid):
         query_json =  {'relid': '', 'requestType': 'placeask', 'baseid': '', 'volume': '', 'price': ''}
 
         print(5*"\n++++++++++++","test_placeask")
@@ -3355,7 +3356,55 @@ class SNET_apicalls():
         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
         
         return rpl777
-		
+        
+
+    def placebid_full(self,volume,price,baseid,relid):
+        #price = '0.00014'
+        #volume = '1.00001'
+
+        #baseid = '17554243582654188572'
+        #relid = '5527630'
+        placebidResponse = self.placebid(volume,price,baseid,relid)
+        print('\nCheck if response is ok\n')
+        self.assertTrue('quoteid' in placebidResponse.keys())
+        #print('\nblaaatest\n');
+        #print(placebidResponse['quoteid']);
+        
+        orderbookResponse = self.orderbook(baseid,relid)
+        print('\nCheck orderbook if bid is there\n')
+        #print(orderbookResponse);
+        
+        found = False
+        for bid in orderbookResponse['bids']:
+            if float(bid['price']) == float(price):
+                found = True
+        self.assertTrue(found)
+        
+        
+        openordersResponse = self.openorders()
+        print('\nCheck if bid is in openorders\n')
+        #print(openordersResponse)
+        
+        found = False
+        for openorder in openordersResponse['openorders']:
+            if openorder['quoteid'] == placebidResponse['quoteid']:
+                found = True
+        self.assertTrue(found)
+        
+        cancelquoteResponse = self.apicall({'requestType': 'cancelquote','quoteid':placebidResponse['quoteid']})
+        print('\nCheck cancelquote works\n')
+        self.assertTrue(cancelquoteResponse['result']=='quote cancelled')
+        
+        
+        openordersResponse = self.openorders()
+        print('\nCheck if bid is not in openorders\n')
+        #print(openordersResponse)
+        
+        found = False
+        for openorder in openordersResponse['openorders']:
+            if openorder['quoteid'] == placebidResponse['quoteid']:
+                found = True
+        self.assertFalse(found)
         
         
         
@@ -3368,54 +3417,192 @@ class SNET_apicalls():
 #
 ##############################################
 ##############################################
+#{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
+#{"result":"success","txid":"15021359626299573695"}
+class SNET_idex_placeask(SNET_BaseTest, SNET_apicalls):
+	
+    def setUp(self):
+        print(" test setUp func here")
+        pass
+
+    def runTest(self):
+        self.test_placeask()
+        self.test_placeask_a()
+        self.test_placeask_full()
+
+    def test_placeask(self):
+        price = '0.014'
+        volume = '1.00'
+
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        apiResponse = self.placeask(volume,price,baseid,relid)
+        #print(apiResponse);
+        self.assertTrue('quoteid' in apiResponse.keys() )
+        
+    def test_placeask_a(self):
+        price = '0.00014'
+        volume = '1.00001'
+
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        apiResponse = self.placeask(volume,price,baseid,relid)
+        self.assertTrue('quoteid' in apiResponse.keys() )
+        
+        
+    def test_placeask_full(self):
+        price = '0.00014'
+        volume = '1.00001'
+
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        placeaskResponse = self.placeask(volume,price,baseid,relid)
+        print('\nCheck if response is ok\n')
+        self.assertTrue('quoteid' in placeaskResponse.keys())
+        #print('\nblaaatest\n');
+        #print(placeaskResponse['quoteid']);
+        
+        orderbookResponse = self.orderbook(baseid,relid)
+        print('\nCheck orderbook if bid is there\n')
+        #print(orderbookResponse);
+        
+        found = False
+        for bid in orderbookResponse['bids']:
+            if float(bid['price']) == float(price):
+                found = True
+        self.assertTrue(found)
+        
+        
+        openordersResponse = self.openorders()
+        print('\nCheck if ask is in openorders\n')
+        #print(openordersResponse)
+        
+        found = False
+        for openorder in openordersResponse['openorders']:
+            if openorder['quoteid'] == placeaskResponse['quoteid']:
+                found = True
+        self.assertTrue(found)
+        
+        cancelquoteResponse = self.apicall({'requestType': 'cancelquote','quoteid':placeaskResponse['quoteid']})
+        print('\nCheck cancelquote works\n')
+        self.assertTrue(cancelquoteResponse['result']=='quote cancelled')
+        
+
+        openordersResponse = self.openorders()
+        print('\nCheck if ask is not in openorders\n')
+        #print(openordersResponse)
+        
+        found = False
+        for openorder in openordersResponse['openorders']:
+            if openorder['quoteid'] == placeaskResponse['quoteid']:
+                found = True
+        self.assertFalse(found)
+
+
 class SNET_idex_placebid(SNET_BaseTest, SNET_apicalls):
 
     def setUp(self):
-        print("test setUp func here")
+        print("test placebid")
         
     def runTest(self):
         self.test_placebid()
         self.test_placebid_a()
-        self.test_placebid_check_orderbook()
+        self.test_placebid_full()
+        self.test_placebid_range()
         
     def test_placebid(self):
         price = '0.014'
         volume = '1.00'
 
-        baseid = '1106086181814049042'
-        relid = '455105891325210530'
+        baseid = '17554243582654188572'
+        relid = '5527630'
         apiResponse = self.placebid(volume,price,baseid,relid)
-        self.assertTrue('result' in apiResponse.keys() )
+        #print(apiResponse);
+        self.assertTrue('quoteid' in apiResponse.keys() )
         
     def test_placebid_a(self):
-        price = '0.00014'
-        volume = '1.00001'
-
-        baseid = '1106086181814049042'
-        relid = '455105891325210530'
-        apiResponse = self.placebid(volume,price,baseid,relid)
-        self.assertTrue('result' in apiResponse.keys() )
-        
-        
-    def test_placebid_check_orderbook(self):
         price = '0.00014'
         volume = '1.00001'
 
         baseid = '17554243582654188572'
         relid = '5527630'
         apiResponse = self.placebid(volume,price,baseid,relid)
-        print('\nCheck if response is ok\n')
-        self.assertTrue('result' in apiResponse.keys())
+        self.assertTrue('quoteid' in apiResponse.keys() )
         
-        apiResponse = self.orderbook(baseid,relid)
+        
+    def test_placebid_full(self):
+        price = '0.00014'
+        volume = '1.00001'
+
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        placebidResponse = self.placebid(volume,price,baseid,relid)
+        print('\nCheck if response is ok\n')
+        self.assertTrue('quoteid' in placebidResponse.keys())
+        #print('\nblaaatest\n');
+        #print(placebidResponse['quoteid']);
+        
+        orderbookResponse = self.orderbook(baseid,relid)
         print('\nCheck orderbook if bid is there\n')
+        #print(orderbookResponse);
         
         found = False
-        for bid in apiResponse['bids']:
+        for bid in orderbookResponse['bids']:
             if float(bid['price']) == float(price):
                 found = True
-        
         self.assertTrue(found)
+        
+        
+        openordersResponse = self.openorders()
+        print('\nCheck if bid is in openorders\n')
+        #print(openordersResponse)
+        
+        found = False
+        for openorder in openordersResponse['openorders']:
+            if openorder['quoteid'] == placebidResponse['quoteid']:
+                found = True
+        self.assertTrue(found)
+        
+        cancelquoteResponse = self.apicall({'requestType': 'cancelquote','quoteid':placebidResponse['quoteid']})
+        print('\nCheck cancelquote works\n')
+        self.assertTrue(cancelquoteResponse['result']=='quote cancelled')
+        
+        
+        openordersResponse = self.openorders()
+        print('\nCheck if bid is not in openorders\n')
+        #print(openordersResponse)
+        
+        found = False
+        for openorder in openordersResponse['openorders']:
+            if openorder['quoteid'] == placebidResponse['quoteid']:
+                found = True
+        self.assertFalse(found)
+        
+        
+    def test_placebid_range(self):
+        i = 1
+        while i <= 100:
+            print(round(i,2))
+            self.placebid_full(round(i,2),11111,17554243582654188572,5527630)
+            i += 1
+        
+        
+        
+class SNET_idex_placebid_full(SNET_BaseTest, SNET_apicalls):
+
+    def setUp(self):
+        print("test placebid")
+        
+    def runTest(self):
+        self.test_placebid()
+        
+    def test_placebid(self):
+        i = 1
+        while i <= 100000:
+            print(round(i,2))
+            self.placebid_full(round(i,2),11111,17554243582654188572,5527630)
+            i += 1
+        
         
         
 class SNET_idex_allorderbooks(SNET_BaseTest, SNET_apicalls):
@@ -3522,31 +3709,6 @@ class SNET_idex_ask(SNET_BaseTest, SNET_apicalls):
             self.fail("Got an Error Response!")
         else:
             self.assertTrue('result' in rpl777.keys() )
-
-
-#{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
-#{"result":"success","txid":"15021359626299573695"}
-#
-class SNET_idex_placeask(SNET_BaseTest, SNET_apicalls):
-	
-    def setUp(self):
-        print(" test setUp func here")
-        pass
-
-    def runTest(self):
-        self.test_placeask()
-
-    def test_placeask(self):
-        
-        volume = '1.00'
-        price = '0.014'
-
-        baseid = '1106086181814049042'
-        relid = '455105891325210530'
-        
-        rpl777 = self.placeask(baseid,relid,volume,price)
-
-        self.assertTrue('result' in rpl777.keys() )
 
 
 class SNET_idex_allsignals(SNET_BaseTest, SNET_apicalls):
@@ -3872,6 +4034,7 @@ class TestCollector(object):
         testClasses['SNET_idex_orderbook'] = SNET_idex_orderbook # *
         testClasses['SNET_idex_placebid'] = SNET_idex_placebid # *
         testClasses['SNET_idex_placeask'] = SNET_idex_placeask # *
+        testClasses['SNET_idex_placebid_full'] = SNET_idex_placebid_full
        #testClasses['SNET_idex_makeoffer'] = SNET_idex_makeoffer # *? deprecated
         testClasses['SNET_idex_respondtx'] = SNET_idex_respondtx  # * ?
         testClasses['SNET_idex_processutx'] = SNET_idex_processutx  # * ?
