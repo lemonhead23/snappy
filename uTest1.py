@@ -4073,9 +4073,16 @@ class SNET_idex_placebid(SNET_BaseTest, SNET_apicalls):
         self.assertFalse(found)
         
         
-    def test_placebid_range(self):
+        
+class SNET_idex_placebid_full(SNET_BaseTest, SNET_apicalls):
 
-
+    def setUp(self):
+        print("test placebid")
+        
+    def runTest(self):
+        self.test_placebid()
+        
+    def test_placebid(self):
         #i = 1000
         #while i >= 1:
             #print(round(i,2))
@@ -4111,23 +4118,6 @@ class SNET_idex_placebid(SNET_BaseTest, SNET_apicalls):
                         #print(round(i,2))
                         #self.placebid_full(22,round(i,0),assetinfo1['asset'],assetinfo2['asset'])
                         #i /= 10
-        
-        
-        
-class SNET_idex_placebid_full(SNET_BaseTest, SNET_apicalls):
-
-    def setUp(self):
-        print("test placebid")
-        
-    def runTest(self):
-        self.test_placebid()
-        
-    def test_placebid(self):
-        i = 1
-        while i <= 100000:
-            print(round(i,2))
-            self.placebid_full(round(i,2),11111,17554243582654188572,5527630)
-            i += 1
         
         
         
