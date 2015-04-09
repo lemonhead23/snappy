@@ -2612,8 +2612,8 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
     def allorderbooks(self, reqDict):
         """ individual treatment of requests and their parms here
 
+static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
 
-    static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
     """#
         K0 = 'requestType'
         P0 = 'allorderbooks'
@@ -2629,6 +2629,9 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         """ individual treatment of requests and their parms here
  static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
 
+   static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
+
+
     """#
         K0 = 'requestType'
         P0 = 'openorders'
@@ -2643,7 +2646,9 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
     def orderbook(self, reqDict):
         """ individual treatment of requests and their parms here
 
-   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
+
+   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
+
 """#
         K0 = 'requestType'
         P0 = 'orderbook'
@@ -2709,7 +2714,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
     def placebid(self, reqDict):
         """ individual treatment of requests and their parms here
-    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
+    old static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
+
+
+   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", 0 };
+
 
  """#
         K0 = 'requestType'
@@ -2720,13 +2729,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P1 = ''
 
-
         try:
             K2 = 'relid'
             P2 = reqDict['relid']
         except:
             P2 = ''
-
 
         try:
             K3 = 'volume'
@@ -2734,15 +2741,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P3 = ''
 
-
         try:
             K4 = 'price'
             P4 = reqDict['price']
         except:
             P4 = ''
-
-
-
 
         try:###
             K5 = 'timestamp'
@@ -2750,13 +2753,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P5 = ''
 
-
         try:
             K6 = 'baseamount'
             P6 = reqDict['baseamount']
         except:
             P6 = ''
-
 
         try:
             K7 = 'relamount'
@@ -2764,21 +2765,34 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P7 = ''
 
-
         try:
             K8 = 'gui'
             P8 = reqDict['gui']
         except:
             P8 = ''
 
+        try:
+            K9 = 'automatch'
+            P9 = reqDict['automatch']
+        except:
+            P9 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+        try:
+            K10 = 'minperc'
+            P10 = reqDict['minperc']
+        except:
+            P10 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10  }
 
 
 
     def placeask(self, reqDict):
         """ individual treatment of requests and their parms here
     static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
+
+   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", 0 };
+
 
 """#
         K0 = 'requestType'
@@ -2789,13 +2803,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P1 = ''
 
-
         try:
             K2 = 'relid'
             P2 = reqDict['relid']
         except:
             P2 = ''
-
 
         try:
             K3 = 'volume'
@@ -2803,15 +2815,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P3 = ''
 
-
         try:
             K4 = 'price'
             P4 = reqDict['price']
         except:
             P4 = ''
-
-
-
 
         try:###
             K5 = 'timestamp'
@@ -2819,13 +2827,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P5 = ''
 
-
         try:
             K6 = 'baseamount'
             P6 = reqDict['baseamount']
         except:
             P6 = ''
-
 
         try:
             K7 = 'relamount'
@@ -2833,14 +2839,25 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
         except:
             P7 = ''
 
-
         try:
             K8 = 'gui'
             P8 = reqDict['gui']
         except:
             P8 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+        try:
+            K9 = 'automatch'
+            P9 = reqDict['automatch']
+        except:
+            P9 = ''
+
+        try:
+            K10 = 'minperc'
+            P10 = reqDict['minperc']
+        except:
+            P10 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10  }
 
 
 
@@ -3160,7 +3177,6 @@ individual treatment of requests and their parms here """#
     def lottostats(self, reqDict):
         """
 
-
     static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
 
         """#
@@ -3182,6 +3198,7 @@ individual treatment of requests and their parms here """#
         """
 
 
+
     static char *tradehistory[] = { (char *)tradehistory_func, "tradehistory", "V", "timestamp", 0 };
 
 
@@ -3201,11 +3218,7 @@ individual treatment of requests and their parms here """#
 
     def getsignal(self, reqDict):
         """
-
-
-    static char *getsignal[] = { (char *)getsignal_func, "getsignal", "V", "signal", "start", "end", "resolution", "baseid",
-     "relid", "base", "rel", "exchange", 0 };
-
+    static char *getsignal[] = { (char *)getsignal_func, "getsignal", "V", "signal", "start", "width", "resolution", "baseid", "relid", "base", "rel", "exchange", 0 };
 
         """#
         K0 = 'requestType'
@@ -3216,20 +3229,17 @@ individual treatment of requests and their parms here """#
         except:
             P1 = ''
 
-
         try:
             K2 = 'start'
             P2 = reqDict['start']
         except:
             P2 = ''
 
-
         try:
-            K3 = 'end'
-            P3 = reqDict['end']
+            K3 = 'width'
+            P3 = reqDict['width']
         except:
             P3 = ''
-
 
         try:
             K4 = 'resolution'
@@ -3237,13 +3247,11 @@ individual treatment of requests and their parms here """#
         except:
             P4 = ''
 
-
         try:
             K5 = 'baseid'
             P5 = reqDict['baseid']
         except:
             P5= ''
-
 
         try:
             K6 = 'relid'
@@ -3257,29 +3265,25 @@ individual treatment of requests and their parms here """#
         except:
             P7 = ''
 
-
         try:
             K8 = 'rel'
             P8 = reqDict['rel']
         except:
             P8= ''
 
-
-
         try:
-            K8 = 'exchange'
-            P8 = reqDict['exchange']
+            K9 = 'exchange'
+            P9 = reqDict['exchange']
         except:
-            P8= ''
+            P9 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 ,  K9 : P9 }
 
 
 
     def cancelquote(self, reqDict):
         """
-
 
 
     static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
