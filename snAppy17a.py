@@ -202,10 +202,10 @@ class ProxyServerProtocolSuperNET(protocol.Protocol):
             self.clientFactory.server = self #
             self.clientFactory.requestType = reqDict['requestType'] # just put it in here to be available for the Parser!
             reactor.connectTCP( SERVER_ADDR_jl777, SERVER_PORT_SUPERNETHTTP, self.clientFactory)
-            print(12*"\nreqDict:", reqDict)
+            print(6*"\nreqDict:", reqDict)
 
             self.newQuery = self.proxyServerFactory.qComp_777.make_777POST_Request(reqDict)
-            print(12*"\nquers:", self.newQuery)
+            print(6*"\nquery:", self.newQuery)
 
 
         elif reqDict['requestType'] in  ["start","stop" ]:
@@ -341,7 +341,7 @@ class ProxyClientProtocol777(protocol.Protocol):
 
     def rcvPOSTERR(self,retPOSTERR):
         log.msg(10*"\n++++++++++ERRR in ProxyClientProtocol777+++", retPOSTERR, str(retPOSTERR))
-        self.factory.server.write("TTTTTTTTTTTTTTTT")#str(retPOSTERR)) #data_777_parsed)
+        self.factory.server.write("rcvPOSTERR() ERROR")
         self.transport.loseConnection()
         return None
 

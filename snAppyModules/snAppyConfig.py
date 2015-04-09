@@ -29,7 +29,7 @@ SERVER_ADDR_jl777 = 'localhost'
 #SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
-SERVER_PORT_SUPERNETHTTP = 7778 # http  14632 twisted wants int
+SERVER_PORT_SUPERNETHTTP = 7777 #8 # http  14632 twisted wants int
 
 SCHEME = 'http://'
 FULL_URL = SCHEME + SERVER_ADDR_jl777 + ":" + str(SERVER_PORT_SUPERNETHTTP)
