@@ -23,10 +23,10 @@ environ = {}
 # SuperNET configuration
 
 STONEFISH_IP = '178.62.185.131'   #
-BOXFISH_IP   =  'localhost' # '85.xx'   #
+#BOXFISH_IP   =  'localhost' # '85.xx'   #
 
-SERVER_ADDR_jl777 = 'localhost'
-#SERVER_ADDR_jl777 =  STONEFISH_IP
+#SERVER_ADDR_jl777 = 'localhost'
+SERVER_ADDR_jl777 =  STONEFISH_IP
 
 
 SERVER_PORT_SUPERNETHTTP = 7777 #8 # http  14632 twisted wants int
