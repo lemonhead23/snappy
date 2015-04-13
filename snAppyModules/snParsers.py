@@ -483,6 +483,11 @@ class Parser_jl777_makeoffer(Parser_JL777_Base):
     def parse(self, data2parse):
         return data2parse
 
+class Parser_jl777_makeoffer3(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
 
 class Parser_jl777_respondtx(Parser_JL777_Base):
 
@@ -699,6 +704,9 @@ class Parser_777(object):
     ql777_placebid = Parser_jl777_placebid()
     ql777_placeask = Parser_jl777_placeask()
     ql777_makeoffer = Parser_jl777_makeoffer()
+    ql777_makeoffer3 = Parser_jl777_makeoffer3()
+
+
     ql777_respondtx = Parser_jl777_respondtx()
     ql777_processutx = Parser_jl777_processutx()
     ql777_bid = Parser_jl777_bid()
@@ -1007,6 +1015,9 @@ class Parser_777(object):
         elif requestType2Parse == 'makeoffer':
             parsed = self.ql777_makeoffer.parse(data2parse)
 
+        elif requestType2Parse == 'makeoffer3':
+            parsed = self.ql777_makeoffer3.parse(data2parse)
+
         elif requestType2Parse == 'respondtx':
             parsed = self.ql777_respondtx.parse(data2parse)
 
@@ -1042,6 +1053,8 @@ class Parser_777(object):
 
         elif requestType2Parse == 'jumptrades':
             parsed = self.ql777_jumptrades.parse(data2parse)
+
+
 
 
     # // Tradebot 3
