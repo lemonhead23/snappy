@@ -4833,8 +4833,32 @@ if __name__ == '__main__':
     """
 
 
+
+STONEFISH
+
+STONEFISH_IP = '178.62.185.131'   #
+
+
+ ./BitcoinDarkd dumpprivkey RWW6FPcopt5va8TtGkPsPTK9GEr8r8QS9Q
+NXT-FMMS-4QHR-VEJ9-DYXU9
+702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171
+
+
+ ./BitcoinDarkd dumpprivkey RTib4uLAc9DfP2x6tGsQ9SZzFfXmcgGqZm
+NXT-CXAS-P5SG-EUVZ-BQ3H5
+020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d
+
+
+
+
+
+
+api.h: list of all calls. date: 0413515:
+
+
 char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *origargjson,char *sender,int32_t valid,char *origargstr)
- // local glue 7
+{
+    // local glue 7
     static char *gotjson[] = { (char *)gotjson_func, "BTCDjson", "V", "json", 0 };
     static char *gotpacket[] = { (char *)gotpacket_func, "gotpacket", "V", "msg", "dur", "ip_port", 0 };
     static char *gotnewpeer[] = { (char *)gotnewpeer_func, "gotnewpeer", "V", "ip_port", 0 };
@@ -4916,22 +4940,32 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *telepodacct[] = { (char *)telepodacct_func, "telepodacct", "V", "amount", "contact", "coin", "comment", "cmd", "withdraw", 0 };
     static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
 
-    // InstantDEX 8
+
+
+    // InstantDEX
     static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
+    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
+    static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
+    static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
     static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
-    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", 0 };
-    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
-    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
-    static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
-    static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
-    static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
-    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", 0 };
+    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *makeoffer3[] = { (char *)makeoffer3_func, "makeoffer3", "V", "baseid", "relid", "quoteid", "perc", "deprecated", "baseiQ", "reliQ", "askoffer", "price", "volume", "exchange", "baseamount", "relamount", "offerNXT", "minperc", "jumpasset", 0 };
+    static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "cmd", "assetid", "quantityQNT", "priceNQT", "triggerhash", "quoteid", "sig", "data", "minperc", "offerNXT", "otherassetid", "otherqty", 0 };
+    static char *jumptrades[] = { (char *)jumptrades_func, "jumptrades", "V", 0 };
+    static char *tradehistory[] = { (char *)tradehistory_func, "tradehistory", "V", "timestamp", 0 };
+  //static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V", "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid", "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", "gui", "quoteid", 0 };
+    //static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", "feeAtxid", "quoteid", 0 };
+    //static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", "quoteid", 0 };
+    //static char *makeoffer2[] = { (char *)makeoffer2_func, "makeoffer2", "V", "baseid", "baseamount", "jumpaddr", "jumpasset", "jumpamount", "other", "relid", "relamount", "gui", "quoteid", 0 };
 
-
-    // Tradebot 3
-    static char *pricedb[] = { (char *)pricedb_func, "pricedb", "V", "exchange", "base", "rel", "stop", 0 };
-    static char *getquotes[] = { (char *)getquotes_func, "getquotes", "V", "exchange", "base", "rel", "oldest", 0 };
+    // Tradebot
+    static char *allsignals[] = { (char *)allsignals_func, "allsignals", "V", 0 };
+    static char *getsignal[] = { (char *)getsignal_func, "getsignal", "V", "signal", "start", "width", "resolution", "baseid", "relid", "base", "rel", "exchange", 0 };
+    //static char *pricedb[] = { (char *)pricedb_func, "pricedb", "V", "exchange", "base", "rel", "stop", 0 };
+    //static char *getquotes[] = { (char *)getquotes_func, "getquotes", "V", "exchange", "base", "rel", "oldest", 0 };
     static char *tradebot[] = { (char *)tradebot_func, "tradebot", "V", "code", 0 };
 
     // Privatbet 1
@@ -4940,6 +4974,17 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     // EmLang 2
     static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
     static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
+
+
+
+
+    static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy, addcontact,
+    dispcontact, removecontact, findaddress, puzzles, nonces, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, python, syscall,
+    getpeers, maketelepods, tradebot, respondtx, checkmsg, openorders, allorderbooks, placebid, bid, placeask, ask, sendmsg, sendbinary, orderbook,
+    teleport, telepodacct, savefile, restorefile, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGWaddr, MGWresponse, sendfrag, gotfrag,
+     startxfer, lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist,
+     rampyramid, ramresponse, getfile, allsignals, getsignal, jumptrades, cancelquote, lottostats, tradehistory, makeoffer3 };
+
 
     """ #
 
@@ -5047,34 +5092,36 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
 #
 ##############################################
 ##############################################
-class SNET_idex_makeoffer2(SNET_BaseTest, SNET_apicalls):
-
-
-    def setUp(self):
-        print(" test makeoffer2 setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_makeoffer2()
-
-
-    def test_makeoffer2(self):
 #
-        print(5*"\n++++++++++++","test_makeoffer2")
-        test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        self.assertTrue('result' in rpl777.keys() )
-        
-        
+#
+# class SNET_idex_makeoffer2(SNET_BaseTest, SNET_apicalls):
+#
+#
+#     def setUp(self):
+#         print(" test makeoffer2 setUp func here")
+#         pass
+#
+#
+#
+#     def runTest(self):
+#         self.test_makeoffer2()
+#
+#
+#     def test_makeoffer2(self):
+# #
+#         print(5*"\n++++++++++++","test_makeoffer2")
+#         test_RQ_makeoffer2 = {'requestType': 'makeoffer2'}
+#         payload= self.qComp_777.make_777POST_Request(test_RQ_makeoffer2)
+#         print("query json is: ", payload)
+#         headers = {'content-type': 'application/json'}
+#         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+#
+#         rpl777 = eval(testReq.text)
+#         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+#
+#         self.assertTrue('result' in rpl777.keys() )
+#
+#
 ##############################################
 ##############################################
 #
@@ -5083,68 +5130,70 @@ class SNET_idex_makeoffer2(SNET_BaseTest, SNET_apicalls):
 #
 ##############################################
 ##############################################
-class SNET_idex_makeoffer(SNET_BaseTest, SNET_apicalls):
-    """makeoffer
-Makeoffer is under construction, not currently working.
-The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
-static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
-example
-./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
-result
-{
-	"key":		"7646303683960469163",
-	"baseid":	"11060861818140490423",
- 	"relid":	"17554243582654188572",
- 	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
-	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
-}
-Each entry now includes the NXT address of the user that submitted it (here in bold).
-For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
-example
-./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
-result
-{"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
-
-    def setUp(self):
-        print(" test setUp func here")
-        pass
-
-
-
-    def runTest(self):
-        self.test_makeoffer()
-
-
-    def test_makeoffer(self):
-
-        query_json = {
-                        'requestType': 'makeoffer',\
-                        'relid': '17554243582654188572',\
-                        'other': '8279528579993996036', \
-                        'baseamount': '101111100',\
-                        'relamount': '617900', \
-                        'type': '', \
-                        'baseid': '11060861818140490423',\
-                        'subscribe':  1,\
-                        }
-
-# {'result': 'invalid makeoffer_func request'}
-
-
-
-        print(5*"\n++++++++++++","test_makeoffer")
-        test_RQ_ = {'requestType': 'makeoffer'}
-        test_RQ_ = query_json
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
-        print("query json is: ", payload)
-        headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        print(testReq.text)
-
-        rpl777_string =testReq.text #  eval(
-        print(5*"\n~~~~~~~~~~~~","SuperNET rpl777_string:\n\n", rpl777_string)
-
-
-        self.assertTrue('comment' in rpl777_string )
-
+#
+#
+# class SNET_idex_makeoffer(SNET_BaseTest, SNET_apicalls):
+#     """makeoffer
+# Makeoffer is under construction, not currently working.
+# The orderbook contains additional information required to send a makeoffer call to meet another user's bid/ask. Use allfields in orderbook to show this information for each orderbook entry.
+# static char makeoffer[] = { (char )makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 }'
+# example
+# ./BitcoinDarkd SuperNET '{"requestType":"orderbook","baseid":"11060861818140490423","relid":"17554243582654188572","allfields":1}'
+# result
+# {
+# 	"key":		"7646303683960469163",
+# 	"baseid":	"11060861818140490423",
+#  	"relid":	"17554243582654188572",
+#  	"bids":		"0.00550000000", "100.00000000", 0, "'''6249611027680999354'''",
+# 	"asks":		[["0.00500000000", "50.00000000", 0, "6249611027680999354"], ["0.00500000000", "50.00000000", 0, "6249611027680999354"]]
+# }
+# Each entry now includes the NXT address of the user that submitted it (here in bold).
+# For makeoffer, other = the NXT address of the account the posted the bid/ask. Currently type = 0 by default.
+# example
+# ./BitcoinDarkd SuperNET '{"requestType":"makeoffer","baseid":"11060861818140490423","relid":"17554243582654188572","baseamount":"10","relamount":"0.055","other":"6249611027680999354","type":0 }'
+# result
+# {"error":"illegal parameter","descr":"NXT.6249611027680999354 makeoffer to NXT.11060861818140490423 10.00000000 asset.17554243582654188572 for 0.00000000 asset.0, type.0 }'"""
+#
+#     def setUp(self):
+#         print(" test setUp func here")
+#         pass
+#
+#
+#
+#     def runTest(self):
+#         self.test_makeoffer()
+#
+#
+#     def test_makeoffer(self):
+#
+#         query_json = {
+#                         'requestType': 'makeoffer',\
+#                         'relid': '17554243582654188572',\
+#                         'other': '8279528579993996036', \
+#                         'baseamount': '101111100',\
+#                         'relamount': '617900', \
+#                         'type': '', \
+#                         'baseid': '11060861818140490423',\
+#                         'subscribe':  1,\
+#                         }
+#
+# # {'result': 'invalid makeoffer_func request'}
+#
+#
+#
+#         print(5*"\n++++++++++++","test_makeoffer")
+#         test_RQ_ = {'requestType': 'makeoffer'}
+#         test_RQ_ = query_json
+#         payload= self.qComp_777.make_777POST_Request(test_RQ_)
+#         print("query json is: ", payload)
+#         headers = {'content-type': 'application/json'}
+#         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+#
+#         print(testReq.text)
+#
+#         rpl777_string =testReq.text #  eval(
+#         print(5*"\n~~~~~~~~~~~~","SuperNET rpl777_string:\n\n", rpl777_string)
+#
+#
+#         self.assertTrue('comment' in rpl777_string )
+#

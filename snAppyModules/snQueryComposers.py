@@ -2645,9 +2645,7 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
 
     def orderbook(self, reqDict):
         """ individual treatment of requests and their parms here
-
-
-   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
+    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
 
 """#
         K0 = "requestType"
@@ -2679,12 +2677,20 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         except:
             P4 = ''
 
+<<<<<<< HEAD
 
         #try:###
             #K5 = "maxdepth"
             #P5 = reqDict['maxdepth']
         #except:
             #P5 = ''
+=======
+        try:
+            K5 = 'maxdepth'
+            P5 = reqDict['maxdepth']
+        except:
+            P5 = ''
+>>>>>>> f17ea90d397fa78dbe90d99c8af27ed3e5957afa
 
 
         try:
@@ -2714,10 +2720,8 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
 
     def placebid(self, reqDict):
         """ individual treatment of requests and their parms here
-    old static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", 0 };
 
-
-   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", 0 };
+   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
 
 
  """#
@@ -2783,15 +2787,21 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         except:
             P10 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10  }
+
+        try:
+            K11 = 'duration'
+            P11 = reqDict['duration']
+        except:
+            P11 = ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10 ,  K11 : P11  }
 
 
 
     def placeask(self, reqDict):
         """ individual treatment of requests and their parms here
-    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price",0 };
-
-   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", 0 };
+ static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", 0 };
 
 
 """#
@@ -2856,23 +2866,91 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
             P10 = reqDict['minperc']
         except:
             P10 = ''
+        try:
+            K11 = 'duration'
+            P11 = reqDict['duration']
+        except:
+            P11 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10  }
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10 ,  K11 : P11  }
 
 
 
-    def makeoffer(self, reqDict):
+ #
+ #    def makeoffer(self, reqDict):
+ #        """ individual treatment of requests and their parms here
+ #    static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
+ #
+ # """#
+ #        K0 = 'requestType'
+ #        P0 = 'makeoffer'
+ #        try:
+ #            K1 = 'baseid'
+ #            P1 = reqDict['baseid']
+ #        except:
+ #            P1 = ''
+ #
+ #        try:
+ #            K2 = 'relid'
+ #            P2 = reqDict['relid']
+ #        except:
+ #            P2 = ''
+ #
+ #
+ #        try:
+ #            K3 = 'baseamount'
+ #            P3 = reqDict['baseamount']
+ #        except:
+ #            P3 = ''
+ #
+ #
+ #        try:
+ #            K4 = 'relamount'
+ #            P4 = reqDict['relamount']
+ #        except:
+ #            P4 = ''
+ #
+ #
+ #        try:
+ #            K5 = 'other'
+ #            P5 = reqDict['other']
+ #        except:
+ #            P5 = ''
+ #
+ #
+ #        try:
+ #            K6 = 'type'
+ #            P6 = reqDict['type']
+ #        except:
+ #            P6 = ''
+ #
+ #
+ #        try:
+ #            K7 = 'quoteid'
+ #            P7 = reqDict['quoteid']
+ #        except:
+ #            P7 = ''
+ #
+ #
+ #        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6 , K7 : P7  }
+
+
+    def makeoffer3(self, reqDict):
         """ individual treatment of requests and their parms here
-    static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
+       static char *makeoffer3[] = { (char *)makeoffer3_func, "makeoffer3", "V", "baseid", "relid", "quoteid", "perc", "deprecated", "baseiQ", "reliQ", "askoffer", "price", "volume", "exchange", "baseamount", "relamount", "offerNXT", "minperc", "jumpasset", 0 };
+
+
 
  """#
         K0 = 'requestType'
-        P0 = 'makeoffer'
+        P0 = 'makeoffer3'
         try:
             K1 = 'baseid'
             P1 = reqDict['baseid']
         except:
             P1 = ''
+
 
         try:
             K2 = 'relid'
@@ -2882,133 +2960,248 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
 
 
         try:
-            K3 = 'baseamount'
-            P3 = reqDict['baseamount']
+            K3 = 'quoteid'
+            P3 = reqDict['quoteid']
         except:
             P3 = ''
 
-
         try:
-            K4 = 'relamount'
-            P4 = reqDict['relamount']
+            K4 = 'perc'
+            P4 = reqDict['perc']
         except:
             P4 = ''
 
 
         try:
-            K5 = 'other'
-            P5 = reqDict['other']
+            K5 = 'deprecated'
+            P5 = reqDict['deprecated']
         except:
-            P5 = ''
+            P5= ''
 
 
         try:
-            K6 = 'type'
-            P6 = reqDict['type']
+            K6 = 'baseiQ'
+            P6 = reqDict['baseiQ']
         except:
             P6 = ''
 
-
         try:
-            K7 = 'quoteid'
-            P7 = reqDict['quoteid']
+            K7 = 'reliQ'
+            P7 = reqDict['reliQ']
         except:
             P7 = ''
 
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6 , K7 : P7  }
+        try:
+            K8 = 'askoffer'
+            P8 = reqDict['askoffer']
+        except:
+            P8= ''
+
+
+        try:
+            K9 = 'price'
+            P9 = reqDict['price']
+        except:
+            P9= ''
+
+        try:
+            K10 = 'volume'
+            P10 = reqDict['volume']
+        except:
+            P10 = ''
+
+        try:
+            K11 = 'exchange'
+            P11 = reqDict['exchange']
+        except:
+            P11 = ''
+
+
+        try:
+            K12 = 'baseamount'
+            P12 = reqDict['baseamount']
+        except:
+            P12 = ''
+
+        try:
+            K13 = 'relamount'
+            P13 = reqDict['relamount']
+        except:
+            P13 = ''
+
+        try:
+            K14 = 'offerNXT'
+            P14 = reqDict['offerNXT']
+        except:
+            P14 = ''
+
+        try:
+            K15 = 'minperc'
+            P15 = reqDict['minperc']
+        except:
+            P15 = ''
+
+
+        try:
+            K16 = 'jumpasset'
+            P16 = reqDict['jumpasset']
+        except:
+            P16 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15,  K16 : P16  }
+
+
+
+
 
 
     def respondtx(self, reqDict):
         """ individual treatment of requests and their parms here
-    static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", 0 };
- """#
+
+
+    static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "cmd", "assetid", "quantityQNT", "priceNQT", "triggerhash", "quoteid", "sig", "data", "minperc", "offerNXT", "otherassetid", "otherqty", 0 };
+
+
+         """#
         K0 = 'requestType'
         P0 = 'respondtx'
         try:
-            K1 = 'signedtx'
-            P1 = reqDict['signedtx']
+            K1 = 'cmd'
+            P1 = reqDict['cmd']
         except:
             P1 = ''
 
 
         try:
-            K2 = 'feeB'
-            P2 = reqDict['feeB']
+            K2 = 'assetid'
+            P2 = reqDict['assetid']
         except:
             P2 = ''
 
 
         try:
-            K3 = 'feetxid'
-            P3 = reqDict['feetxid']
+            K3 = 'quantityQNT'
+            P3 = reqDict['quantityQNT']
         except:
             P3 = ''
 
-
         try:
-            K4 = 'quoteid'
-            P4 = reqDict['quoteid']
-        except:
-            P4 = ''
-
-
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4   }
-
-
-
-
-    def processutx(self, reqDict):
-        """ individual treatment of requests and their parms here
-    static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
-"""#
-        K0 = 'requestType'
-        P0 = 'processutx'
-        try:
-            K1 = 'utx'
-            P1 = reqDict['utx']
-        except:
-            P1 = ''
-
-
-        try:
-            K2 = 'sig'
-            P2 = reqDict['sig']
-        except:
-            P2 = ''
-
-
-        try:
-            K3 = 'full'
-            P3 = reqDict['full']
-        except:
-            P3 = ''
-
-
-        try:
-            K4 = 'feeAtxid'
-            P4 = reqDict['feeAtxid']
+            K4 = 'priceNQT'
+            P4 = reqDict['priceNQT']
         except:
             P4 = ''
 
 
         try:
-            K5 = 'quoteid'
-            P5 = reqDict['quoteid']
+            K5 = 'triggerhash'
+            P5 = reqDict['triggerhash']
         except:
-            P5 = ''
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5   }
+            P5= ''
 
 
+        try:
+            K6 = 'quoteid'
+            P6 = reqDict['quoteid']
+        except:
+            P6 = ''
+
+        try:
+            K7 = 'sig'
+            P7 = reqDict['sig']
+        except:
+            P7 = ''
+
+
+        try:
+            K8 = 'data'
+            P8 = reqDict['data']
+        except:
+            P8= ''
+
+
+        try:
+            K9 = 'minperc'
+            P9 = reqDict['minperc']
+        except:
+            P9= ''
+
+        try:
+            K10 = 'offerNXT'
+            P10 = reqDict['offerNXT']
+        except:
+            P10 = ''
+
+        try:
+            K11 = 'otherassetid'
+            P11 = reqDict['otherassetid']
+        except:
+            P11 = ''
+
+
+        try:
+            K12 = 'otherqty'
+            P12 = reqDict['otherqty']
+        except:
+            P12 = ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12    }
+
+
+#
+#
+#     def processutx(self, reqDict):
+#         """ individual treatment of requests and their parms here
+#     static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", 0 };
+# """#
+#         K0 = 'requestType'
+#         P0 = 'processutx'
+#         try:
+#             K1 = 'utx'
+#             P1 = reqDict['utx']
+#         except:
+#             P1 = ''
+#
+#
+#         try:
+#             K2 = 'sig'
+#             P2 = reqDict['sig']
+#         except:
+#             P2 = ''
+#
+#
+#         try:
+#             K3 = 'full'
+#             P3 = reqDict['full']
+#         except:
+#             P3 = ''
+#
+#
+#         try:
+#             K4 = 'feeAtxid'
+#             P4 = reqDict['feeAtxid']
+#         except:
+#             P4 = ''
+#
+#
+#         try:
+#             K5 = 'quoteid'
+#             P5 = reqDict['quoteid']
+#         except:
+#             P5 = ''
+#
+#         return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5   }
+#
+#
 
 
     def bid(self, reqDict):
         """
 
-
-static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
 
 individual treatment of requests and their parms here """#
         K0 = 'requestType'
@@ -3074,19 +3267,41 @@ individual treatment of requests and their parms here """#
         except:
             P9 = ''
 
+        try:
+            K10 = 'automatch'
+            P10 = reqDict['automatch']
+        except:
+            P10 = ''
+
+        try:
+            K11 = 'minperc'
+            P11 = reqDict['minperc']
+        except:
+            P11 = ''
 
 
+        try:
+            K12 = 'duration'
+            P12 = reqDict['duration']
+        except:
+            P12 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 ,  K9 : P9  }
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12    }
+
 
 
 
     def ask(self, reqDict):
         """
 
-static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
+static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
 
-individual treatment of requests and their parms here """#
+
+individual treatment of requests and their parms here
+
+"""#
         K0 = 'requestType'
         P0 = 'ask'
         try:
@@ -3150,8 +3365,29 @@ individual treatment of requests and their parms here """#
             P9 = ''
 
 
+        try:
+            K10 = 'automatch'
+            P10 = reqDict['automatch']
+        except:
+            P10 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 ,  K9 : P9 }
+        try:
+            K11 = 'minperc'
+            P11 = reqDict['minperc']
+        except:
+            P11 = ''
+
+
+        try:
+            K12 = 'duration'
+            P12 = reqDict['duration']
+        except:
+            P12 = ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12    }
+
 
 
 
@@ -3388,124 +3624,124 @@ individual treatment of requests and their parms here """#
         return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 ,  K9 : P9,  K10: P10  }
 
 
-
-    def processjumptrade(self, reqDict):
-        """
-
-    static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V",
-    "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid",
-     "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", 0 };
-
-
-        """#
-        K0 = 'requestType'
-        P0 = 'processjumptrade'
-        try:
-            K1 = 'assetA'
-            P1 = reqDict['assetA']
-        except:
-            P1 = ''
-
-
-        try:
-            K2 = 'amountA'
-            P2 = reqDict['amountA']
-        except:
-            P2 = ''
-
-
-        try:
-            K3 = 'other'
-            P3 = reqDict['other']
-        except:
-            P3 = ''
-
-
-        try:
-            K4 = 'assetB'
-            P4 = reqDict['assetB']
-        except:
-            P4 = ''
-
-
-        try:
-            K5 = 'amountB'
-            P5 = reqDict['amountB']
-        except:
-            P5= ''
-
-
-        try:
-            K6 = 'feeA'
-            P6 = reqDict['feeA']
-        except:
-            P6 = ''
-
-        try:
-            K7 = 'feeAtxid'
-            P7 = reqDict['feeAtxid']
-        except:
-            P7 = ''
-
-
-        try:
-            K8 = 'triggerhash'
-            P8 = reqDict['triggerhash']
-        except:
-            P8= ''
-
-
-
-        try:
-            K9 = 'jumper'
-            P9 = reqDict['jumper']
-        except:
-            P9= ''
-
-        try:
-            K10 = 'jumpasset'
-            P10 = reqDict['jumpasset']
-        except:
-            P10 = ''
-
-        try:
-            K11 = 'jumpamount'
-            P11 = reqDict['jumpamount']
-        except:
-            P11 = ''
-
-        try:
-            K12 = 'balancing'
-            P12 = reqDict['balancing']
-        except:
-            P12 = ''
-
-        try:
-            K13 = 'balancetxid'
-            P13 = reqDict['balancetxid']
-        except:
-            P13 = ''
-
-
-
-
-        try:
-            K14 = 'gui'
-            P14 = reqDict['gui']
-        except:
-            P14 = ''
-
-        try:
-            K15 = 'quoteid'
-            P15 = reqDict['quoteid']
-        except:
-            P15 = ''
-
-
-
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
-                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15 }
+    #
+    # def processjumptrade(self, reqDict):
+    #     """
+    #
+    # static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V",
+    # "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid",
+    #  "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", 0 };
+    #
+    #
+    #     """#
+    #     K0 = 'requestType'
+    #     P0 = 'processjumptrade'
+    #     try:
+    #         K1 = 'assetA'
+    #         P1 = reqDict['assetA']
+    #     except:
+    #         P1 = ''
+    #
+    #
+    #     try:
+    #         K2 = 'amountA'
+    #         P2 = reqDict['amountA']
+    #     except:
+    #         P2 = ''
+    #
+    #
+    #     try:
+    #         K3 = 'other'
+    #         P3 = reqDict['other']
+    #     except:
+    #         P3 = ''
+    #
+    #
+    #     try:
+    #         K4 = 'assetB'
+    #         P4 = reqDict['assetB']
+    #     except:
+    #         P4 = ''
+    #
+    #
+    #     try:
+    #         K5 = 'amountB'
+    #         P5 = reqDict['amountB']
+    #     except:
+    #         P5= ''
+    #
+    #
+    #     try:
+    #         K6 = 'feeA'
+    #         P6 = reqDict['feeA']
+    #     except:
+    #         P6 = ''
+    #
+    #     try:
+    #         K7 = 'feeAtxid'
+    #         P7 = reqDict['feeAtxid']
+    #     except:
+    #         P7 = ''
+    #
+    #
+    #     try:
+    #         K8 = 'triggerhash'
+    #         P8 = reqDict['triggerhash']
+    #     except:
+    #         P8= ''
+    #
+    #
+    #
+    #     try:
+    #         K9 = 'jumper'
+    #         P9 = reqDict['jumper']
+    #     except:
+    #         P9= ''
+    #
+    #     try:
+    #         K10 = 'jumpasset'
+    #         P10 = reqDict['jumpasset']
+    #     except:
+    #         P10 = ''
+    #
+    #     try:
+    #         K11 = 'jumpamount'
+    #         P11 = reqDict['jumpamount']
+    #     except:
+    #         P11 = ''
+    #
+    #     try:
+    #         K12 = 'balancing'
+    #         P12 = reqDict['balancing']
+    #     except:
+    #         P12 = ''
+    #
+    #     try:
+    #         K13 = 'balancetxid'
+    #         P13 = reqDict['balancetxid']
+    #     except:
+    #         P13 = ''
+    #
+    #
+    #
+    #
+    #     try:
+    #         K14 = 'gui'
+    #         P14 = reqDict['gui']
+    #     except:
+    #         P14 = ''
+    #
+    #     try:
+    #         K15 = 'quoteid'
+    #         P15 = reqDict['quoteid']
+    #     except:
+    #         P15 = ''
+    #
+    #
+    #
+    #
+    #     return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
+    #                K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15 }
 
 
     def jumptrades(self, reqDict):
@@ -3868,6 +4104,7 @@ This is the wrapper class
                    'placebid',\
                    'placeask',\
                    'makeoffer',\
+                   'makeoffer3',\
                    'respondtx',\
                    'processutx',\
                    'bid',\
@@ -4165,6 +4402,8 @@ This is the wrapper class
             return jsonSpecs
         elif reqDict['requestType'] == 'makeoffer':
             jsonSpecs = self.jl777_aAll.makeoffer(reqDict)
+        elif reqDict['requestType'] == 'makeoffer3':
+            jsonSpecs = self.jl777_aAll.makeoffer3(reqDict)
             return jsonSpecs
         elif reqDict['requestType'] == 'respondtx':
             jsonSpecs = self.jl777_aAll.respondtx(reqDict)
