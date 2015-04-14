@@ -2677,20 +2677,13 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         except:
             P4 = ''
 
-<<<<<<< HEAD
 
-        #try:###
-            #K5 = "maxdepth"
-            #P5 = reqDict['maxdepth']
-        #except:
-            #P5 = ''
-=======
         try:
             K5 = 'maxdepth'
             P5 = reqDict['maxdepth']
         except:
             P5 = ''
->>>>>>> f17ea90d397fa78dbe90d99c8af27ed3e5957afa
+
 
 
         try:
