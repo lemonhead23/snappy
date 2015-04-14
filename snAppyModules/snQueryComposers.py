@@ -2608,7 +2608,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-
     def allorderbooks(self, reqDict):
         """ individual treatment of requests and their parms here
 
@@ -2648,34 +2647,35 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
     static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
 
 """#
-        K0 = 'requestType'
-        P0 = 'orderbook'
+        K0 = "requestType"
+        P0 = "orderbook"
         try:
-            K1 = 'baseid'
+            K1 = "baseid"
             P1 = reqDict['baseid']
         except:
             P1 = ''
 
 
         try:
-            K2 = 'relid'
+            K2 = "relid"
             P2 = reqDict['relid']
         except:
             P2 = ''
 
 
         try:
-            K3 = 'allfields'
+            K3 = "allfields"
             P3 = reqDict['allfields']
         except:
             P3 = ''
 
 
         try:
-            K4 = 'oldest'
+            K4 = "oldest"
             P4 = reqDict['oldest']
         except:
             P4 = ''
+
 
         try:
             K5 = 'maxdepth'
@@ -2684,27 +2684,28 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
             P5 = ''
 
 
+
         try:
-            K6 = 'base'
+            K6 = "base"
             P6 = reqDict['base']
         except:
             P6 = ''
 
 
         try:
-            K7 = 'rel'
+            K7 = "rel"
             P7 = reqDict['rel']
         except:
             P7 = ''
 
 
         try:
-            K8 = 'gui'
+            K8 = "gui"
             P8 = reqDict['gui']
         except:
             P8 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K6 : P6,  K7 : P7, K8 : P8 }
 
 
 
