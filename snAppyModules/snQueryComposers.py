@@ -2683,8 +2683,6 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         except:
             P5 = ''
 
-
-
         try:
             K6 = "base"
             P6 = reqDict['base']
@@ -2705,7 +2703,7 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         except:
             P8 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K6 : P6,  K7 : P7, K8 : P8 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
 
 
 
@@ -2868,64 +2866,6 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8,  K9 : P9,  K10 : P10 ,  K11 : P11  }
 
 
-
- #
- #    def makeoffer(self, reqDict):
- #        """ individual treatment of requests and their parms here
- #    static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
- #
- # """#
- #        K0 = 'requestType'
- #        P0 = 'makeoffer'
- #        try:
- #            K1 = 'baseid'
- #            P1 = reqDict['baseid']
- #        except:
- #            P1 = ''
- #
- #        try:
- #            K2 = 'relid'
- #            P2 = reqDict['relid']
- #        except:
- #            P2 = ''
- #
- #
- #        try:
- #            K3 = 'baseamount'
- #            P3 = reqDict['baseamount']
- #        except:
- #            P3 = ''
- #
- #
- #        try:
- #            K4 = 'relamount'
- #            P4 = reqDict['relamount']
- #        except:
- #            P4 = ''
- #
- #
- #        try:
- #            K5 = 'other'
- #            P5 = reqDict['other']
- #        except:
- #            P5 = ''
- #
- #
- #        try:
- #            K6 = 'type'
- #            P6 = reqDict['type']
- #        except:
- #            P6 = ''
- #
- #
- #        try:
- #            K7 = 'quoteid'
- #            P7 = reqDict['quoteid']
- #        except:
- #            P7 = ''
- #
- #
- #        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6 , K7 : P7  }
 
 
     def makeoffer3(self, reqDict):
@@ -3912,8 +3852,8 @@ individual treatment of requests and their parms here
 
     def python(self, reqDict):
         """ individual treatment of requests and their parms here
- #static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
 
+ static char *python[] = { (char *)python_func, "python", "V",  "name", "launch", 0 };
 """#
         K0 = 'requestType'
         P0 = 'python'
@@ -3923,9 +3863,14 @@ individual treatment of requests and their parms here
         except:
             P1 = ''
 
+        try:
+            K2 = 'launch'
+            P2 = reqDict['launch']
+        except:
+            P2 = ''
 
 
-        return  { K0 : P0 , K1 : P1   }
+        return  { K0 : P0 , K1 : P1 , K2 : P2 , }
 
 
 
@@ -3934,6 +3879,8 @@ individual treatment of requests and their parms here
         """ individual treatment of requests and their parms here
 
     #static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
+
+    static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", "launch", 0 };
 
 
 """#
@@ -3950,8 +3897,15 @@ individual treatment of requests and their parms here
         except:
             P2 = ''
 
+        try:
+            K3 = 'launch'
+            P3 = reqDict['launch']
+        except:
+            P3 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2 , }
+
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2 , K3 : P3  }
 
 
 

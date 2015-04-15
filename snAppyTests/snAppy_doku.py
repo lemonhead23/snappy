@@ -6,6 +6,32 @@ SuperNET_api_controller_doku = """
 
 
 
+make python
+make onetime
+make ramchains
+
+m_unix
+
+static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "daemonid", 0 };
+NEW MESSAGES
+
+jl777 [8:00 AM]
+
+
+
+
+
+conf snytax:
+
+"exchanges":[{"name":"nameofexchangefromlistthatmustmatchoneoftheentries","key":"apikey","secret":"apisecret"},...]
+
+jl777 [5:51 AM]5:51
+i pushed a version that shows "bids" or "asks" for rambook json
+
+jl777 [5:51 AM]
+I also reenabled order purging in more paths
+
+
 
 
 temp:stonefish path bitches
@@ -125,6 +151,9 @@ cd
     ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
 
 ./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+
+
+
 
 
 
