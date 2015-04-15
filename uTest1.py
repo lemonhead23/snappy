@@ -1979,8 +1979,11 @@ class SNET_savefile(SNET_BaseTest):
 
 
 
-class SNET_restorefile(SNET_BaseTest):
 
+
+
+class SNET_restorefile(SNET_BaseTest):
+    """ this may require MASSIVE calulation, don't do this in ALL for now  """
 
     def setUp(self):
         print(" test setUp func here")
@@ -4535,8 +4538,10 @@ class TestCollector(object):
         testClasses['SNET_nonces'] = SNET_nonces # *
         # mofns
         testClasses['SNET_savefile'] = SNET_savefile # ?
-        testClasses['SNET_restorefile'] = SNET_restorefile # ?
+        #""" this may require MASSIVE calulation, don't do this in ALL for now  """
+        #testClasses['SNET_restorefile'] = SNET_restorefile # ?
         testClasses['SNET_publish'] = SNET_publish # ?
+
         # telepa
         testClasses['SNET_getpeers'] = SNET_getpeers # *
         testClasses['SNET_addcontact'] = SNET_addcontact # ?
@@ -4706,7 +4711,6 @@ class TestCollector(object):
         elif testListName == 'idex':
 
             testList = [
-                        SNET_idex_makeoffer,\
                         SNET_idex_allorderbooks ,\
                         SNET_idex_openorders,\
                         SNET_idex_orderbook,\
@@ -4721,10 +4725,11 @@ class TestCollector(object):
                         SNET_idex_tradehistory,\
                         SNET_idex_getsignal,\
                         SNET_idex_cancelquote,\
-                        SNET_idex_makeoffer2 ,\
+                        SNET_idex_makeoffer3 ,\
                         SNET_idex_processjumptrade,\
                         SNET_idex_jumptrades
                         ]
+#SNET_idex_makeoffer,\
 
         elif testListName == 'contacts':
 
