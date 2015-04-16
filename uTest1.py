@@ -4,6 +4,7 @@
 import unittest
 import requests
 import json
+import math
 from random import randint
 
 import binascii
@@ -3713,6 +3714,7 @@ class SNET_apicalls():
     def orderbook(self, base, rel):
         test_RQ_orderbook = {
                             'allfields': '1', \
+                            'maxdepth': '25', \
                             'baseid': base, \
                             'relid': rel, \
                             'requestType': 'orderbook', \
@@ -3964,6 +3966,43 @@ class SNET_apicalls():
 #
 ##############################################
 ##############################################
+class SNET_idex_makeoffer(SNET_BaseTest, SNET_apicalls):
+	
+    def setUp(self):
+        print("test makeoffer")
+        pass
+
+    def runTest(self):
+        self.test_makeoffer_a()
+        
+    def test_makeoffer_a(self):
+        baseid = '11060861818140490423'
+        relid = '5527630'
+        
+        #Max NXT Amount
+        maxAmount=50
+        
+        orderbookResponse = self.orderbook(baseid,relid)
+        print('\nCheck orderbook\n')
+        print(orderbookResponse['bids'][0],'\n')
+        
+        #get first bid
+        query_json = orderbookResponse['bids'][0]
+        
+        
+        query_json['perc']=100
+        query_json['askoffer']=1
+        
+        totalAmount = orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price']
+        
+        print(totalAmount, orderbookResponse['bids'][0]['rel'])
+        
+        if(totalAmount<maxAmount):
+            print('ok total Amount of Order is in Range. Proceeding.\n')
+            self.apicall(query_json)
+
+
+
 #{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
 #{"result":"success","txid":"15021359626299573695"}
 class SNET_idex_placeask(SNET_BaseTest, SNET_apicalls):
@@ -4565,7 +4604,7 @@ class TestCollector(object):
         testClasses['SNET_idex_placeask'] = SNET_idex_placeask # *
         testClasses['SNET_idex_placeask_full'] = SNET_idex_placeask_full
         testClasses['SNET_idex_placebid_full'] = SNET_idex_placebid_full
-       #testClasses['SNET_idex_makeoffer'] = SNET_idex_makeoffer # *? deprecated
+        testClasses['SNET_idex_makeoffer'] = SNET_idex_makeoffer # *? 
         testClasses['SNET_idex_respondtx'] = SNET_idex_respondtx  # * ?
         testClasses['SNET_idex_processutx'] = SNET_idex_processutx  # * ?
         testClasses['SNET_idex_bid'] = SNET_idex_bid # *
@@ -4682,7 +4721,7 @@ class TestCollector(object):
                         SNET_idex_orderbook ,\
                         SNET_idex_placebid ,\
                         SNET_idex_placeask ,\
-                #       SNET_idex_makeoffer ,\ deprecated
+                        SNET_idex_makeoffer ,\
                         SNET_idex_respondtx  ,\
                         SNET_idex_processutx  ,\
                         SNET_idex_bid ,\
@@ -4713,21 +4752,21 @@ class TestCollector(object):
             testList = [
                         SNET_idex_allorderbooks ,\
                         SNET_idex_openorders,\
-                        SNET_idex_orderbook,\
+                        #SNET_idex_orderbook,\
                         SNET_idex_placebid,\
                         SNET_idex_placeask,\
-                        SNET_idex_bid,\
-                        SNET_idex_ask,\
-                        SNET_idex_respondtx,\
-                        SNET_idex_processutx,\
+                        #SNET_idex_bid,\
+                        #SNET_idex_ask,\
+                        #SNET_idex_respondtx,\
+                        #SNET_idex_processutx,\
                         SNET_idex_allsignals ,\
                         SNET_idex_lottostats ,\
                         SNET_idex_tradehistory,\
                         SNET_idex_getsignal,\
                         SNET_idex_cancelquote,\
-                        SNET_idex_makeoffer3 ,\
-                        SNET_idex_processjumptrade,\
-                        SNET_idex_jumptrades
+                        SNET_idex_makeoffer ,\
+                        #SNET_idex_processjumptrade,\
+                        #SNET_idex_jumptrades
                         ]
 #SNET_idex_makeoffer,\
 
