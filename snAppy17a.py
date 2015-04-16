@@ -202,11 +202,9 @@ class ProxyServerProtocolSuperNET(protocol.Protocol):
             self.clientFactory.server = self #
             self.clientFactory.requestType = reqDict['requestType'] # just put it in here to be available for the Parser!
             reactor.connectTCP( SERVER_ADDR_jl777, SERVER_PORT_SUPERNETHTTP, self.clientFactory)
-            print(6*"\nreqDict:", reqDict)
-
+            #print(6*"\nreqDict:", reqDict)
             self.newQuery = self.proxyServerFactory.qComp_777.make_777POST_Request(reqDict)
-            print(6*"\nquery:", self.newQuery)
-
+            #print(6*"\nquery:", self.newQuery)
 
         elif reqDict['requestType'] in  ["start","stop" ]:
         # direct to BTCD RPC, use that parser ONLY for START and stop call that must go through BTCD

@@ -419,12 +419,6 @@ class Parser_jl777_sendbinary(Parser_JL777_Base):
     def parse(self, data2parse):
         return data2parse
 
-class Parser_jl777_checkmsg(Parser_JL777_Base):
-
-    def parse(self, data2parse):
-        return data2parse
-
-
 
 #  // Teleport 3
 
@@ -446,6 +440,13 @@ class Parser_jl777_teleport(Parser_JL777_Base):
 
 
 #InstantDEX 18
+
+
+
+class Parser_jl777_trollbox(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
 
 
 class Parser_jl777_allorderbooks(Parser_JL777_Base):
@@ -477,11 +478,6 @@ class Parser_jl777_placeask(Parser_JL777_Base):
     def parse(self, data2parse):
         return data2parse
 
-
-class Parser_jl777_makeoffer(Parser_JL777_Base):
-
-    def parse(self, data2parse):
-        return data2parse
 
 class Parser_jl777_makeoffer3(Parser_JL777_Base):
 
@@ -532,10 +528,7 @@ class Parser_jl777_cancelquote(Parser_JL777_Base):
 
     def parse(self, data2parse):
         return data2parse
-class Parser_jl777_makeoffer2(Parser_JL777_Base):
 
-    def parse(self, data2parse):
-        return data2parse
 class Parser_jl777_processjumptrade(Parser_JL777_Base):
 
     def parse(self, data2parse):
@@ -589,6 +582,12 @@ class Parser_jl777_syscall(Parser_JL777_Base):
 
 
 
+class Parser_jl777_checkmsg(Parser_JL777_Base):
+
+    def parse(self, data2parse):
+        return data2parse
+
+
 
   
 ##########################
@@ -622,10 +621,6 @@ class Parser_777(object):
     ql777_settings = Parser_jl777_settings()
     ql777_stop = Parser_jl777_stop()
     ql777_settings = Parser_jl777_settings()
-
-    #// passthru
-    ql777_passthru = Parser_jl777_passthru()
-    ql777_remote = Parser_jl777_remote()
 
     #// ramchains   13
 
@@ -689,7 +684,6 @@ class Parser_777(object):
     ql777_getdb = Parser_jl777_getdb()
     ql777_sendmessage = Parser_jl777_sendmessage()
     ql777_sendbinary = Parser_jl777_sendbinary()
-    ql777_checkmsg = Parser_jl777_checkmsg()
 
     # // Teleport
     ql777_maketelepods = Parser_jl777_maketelepods()
@@ -698,15 +692,14 @@ class Parser_777(object):
 
     # // InstantDEX 18
 
+    ql777_trollbox = Parser_jl777_trollbox()
     ql777_allorderbooks = Parser_jl777_allorderbooks()
     ql777_openorders = Parser_jl777_openorders()
     ql777_orderbook = Parser_jl777_orderbook()
     ql777_placebid = Parser_jl777_placebid()
     ql777_placeask = Parser_jl777_placeask()
-    ql777_makeoffer = Parser_jl777_makeoffer()
+    # ql777_makeoffer = Parser_jl777_makeoffer()
     ql777_makeoffer3 = Parser_jl777_makeoffer3()
-
-
     ql777_respondtx = Parser_jl777_respondtx()
     ql777_processutx = Parser_jl777_processutx()
     ql777_bid = Parser_jl777_bid()
@@ -717,7 +710,7 @@ class Parser_777(object):
     ql777_tradehistory = Parser_jl777_tradehistory()
     ql777_getsignal = Parser_jl777_getsignal()
     ql777_cancelquote = Parser_jl777_cancelquote()
-    ql777_makeoffer2 = Parser_jl777_makeoffer2()
+
     ql777_processjumptrade= Parser_jl777_processjumptrade()
     ql777_jumptrades = Parser_jl777_jumptrades()
 
@@ -729,6 +722,11 @@ class Parser_777(object):
     # // # privatebet
     ql777_lotto = Parser_jl777_lotto()
 
+    #// passthru
+    ql777_passthru = Parser_jl777_passthru()
+    ql777_remote = Parser_jl777_remote()
+
+    ql777_checkmsg = Parser_jl777_checkmsg()
 
     # // Embedded Langs
     ql777_python = Parser_jl777_python()
@@ -814,15 +812,6 @@ class Parser_777(object):
 
         elif requestType2Parse == 'settings':
             parsed = self.ql777_settings.parse(data2parse)
-
-    # // passthru 2
-
-
-        elif requestType2Parse == 'passthru':
-            parsed = self.ql777_passthru.parse(data2parse)
-
-        elif requestType2Parse == 'remote':
-            parsed = self.ql777_remote.parse(data2parse)
 
 
     # // ramchains   13
@@ -997,6 +986,9 @@ class Parser_777(object):
 
     # // InstantDEX 18
 
+        elif requestType2Parse == 'trollbox':
+            parsed = self.ql777_trollbox.parse(data2parse)
+
         elif requestType2Parse == 'allorderbooks':
             parsed = self.ql777_allorderbooks.parse(data2parse)
 
@@ -1012,8 +1004,6 @@ class Parser_777(object):
         elif requestType2Parse == 'placeask':
             parsed = self.ql777_placeask.parse(data2parse)
 
-        elif requestType2Parse == 'makeoffer':
-            parsed = self.ql777_makeoffer.parse(data2parse)
 
         elif requestType2Parse == 'makeoffer3':
             parsed = self.ql777_makeoffer3.parse(data2parse)
@@ -1073,6 +1063,15 @@ class Parser_777(object):
 
         elif requestType2Parse == 'lotto':
             parsed = self.ql777_lotto.parse(data2parse)
+
+    # // passthru 2
+
+
+        elif requestType2Parse == 'passthru':
+            parsed = self.ql777_passthru.parse(data2parse)
+
+        elif requestType2Parse == 'remote':
+            parsed = self.ql777_remote.parse(data2parse)
 
     # // embedded langs
         elif requestType2Parse == 'python':

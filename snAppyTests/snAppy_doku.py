@@ -6,10 +6,15 @@ SuperNET_api_controller_doku = """
 
 
 
+CONF FILE
+"PYTHONPATH":"/home/lemon/btcd/btcd/libjl777/Python-3.4.3",
+
+
+
 make python
 make onetime
 make ramchains
-
+make nanomessage
 m_unix
 
 static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "daemonid", 0 };
@@ -138,6 +143,14 @@ twisted - Event-driven networking engine written in Python.
  List of manual commands for quick function tests // often used
 
 
+ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"syscall\",\"name\":\"./echo\",\"launch\":1,\"websocket\":8080}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
+ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"syscall\",\"name\":\"./echo\",\"websocket\":8080}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
+{"result":"launched","daemonid":"25696436000"}
+
+
+
 
 cd
 
@@ -150,10 +163,15 @@ cd
 
     ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
 
-./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+    ./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+
+./BitcoinDarkd  SuperNET '{"requestType":"ping","destip":"178.62.185.131" }'
+
+./BitcoinDarkd  SuperNET '{"requestType":"ping","destip":"85.178.201.73" }'
 
 
-
+STONEFISH_IP = '178.62.185.131'   #
+BOXFISH_IP   =  'localhost' # '85.xx'   #
 
 
 
@@ -168,13 +186,39 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=79.245.52.39'
 
- #178.62.185.131'
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=85.178.201.73'
 
+ #178.62.185.
+
+
+IDEX
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"allorderbooks"}'
+
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"openorders"}'
+
+ ()
 
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/stop?'
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/start?'
+
+
+
+
+    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
+    static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
+    static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
+    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", 0 };
+    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *makeoffer3[] = { (char *)makeoffer3_func, "makeoffer3", "V", "baseid", "relid", "quoteid", "perc", "deprecated", "baseiQ", "reliQ", "askoffer", "price", "volume", "exchange", "baseamount", "relamount", "offerNXT", "minperc", "jumpasset", 0 };
+    static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "cmd", "assetid", "quantityQNT", "priceNQT", "triggerhash", "quoteid", "sig", "data", "minperc", "offerNXT", "otherassetid", "otherqty", 0 };
+    static char *jumptrades[] = { (char *)jumptrades_func, "jumptrades", "V", 0 };
+    static char *tradehistory[] = { (char *)tradehistory_func, "tradehistory", "V", "timestamp", 0 };
 
 
 
@@ -2502,45 +2546,11 @@ At that point I will have just a few more things needed to have InstantDEX into 
 
 
 
-
-
 ##################################################################################################
 
                     'InstantDEX 6',\
 
 
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-
-
-static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
-   static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
-   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", 0 };
-   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
-   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
-   static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-   static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-   static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
-   static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", "feeB", "feetxid", 0 };
-   static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", "feeAtxid", 0 };
 
 
 allorderbooks returns all orderbooks
@@ -3131,7 +3141,6 @@ calls only as inventory
 
 
 // glue 7
-// passthru 2
 // ramchains   13
 // MGW 6
 // IP comms 5
@@ -3143,6 +3152,7 @@ calls only as inventory
 // Tradebot 3
 // privatebet 1
 // EmLang 2
+// passthru 2
 
 
 http://jnxt.org/init/?requestType=status&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&coin=BTCD
@@ -3162,10 +3172,6 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *GUIpoll[] = { (char *)GUIpoll_func, "GUIpoll", "V", 0 };
     static char *stop[] = { (char *)stop_func, "stop", "V", 0 };
     static char *settings[] = { (char *)settings_func, "settings", "V", "field", "value", "reinit", 0 };
-
-    // passthru 2
-    static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
-    static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
 
 
     // remotable ramchains
@@ -3239,23 +3245,30 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
 
 
     // InstantDEX
+    static char *trollbox[] = { (char *)trollbox_func, "trollbox", "V", "post", "whaleindex", 0 };
     static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
-    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
+    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", "showall", 0 };
     static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
     static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
     static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
-    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
-    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", 0 };
-    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
-    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", "exchange", 0 };
+    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", "exchange", 0 };
+    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", "exchange", 0 };
+    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", "exchange", 0 };
     static char *makeoffer3[] = { (char *)makeoffer3_func, "makeoffer3", "V", "baseid", "relid", "quoteid", "perc", "deprecated", "baseiQ", "reliQ", "askoffer", "price", "volume", "exchange", "baseamount", "relamount", "offerNXT", "minperc", "jumpasset", 0 };
     static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "cmd", "assetid", "quantityQNT", "priceNQT", "triggerhash", "quoteid", "sig", "data", "minperc", "offerNXT", "otherassetid", "otherqty", 0 };
     static char *jumptrades[] = { (char *)jumptrades_func, "jumptrades", "V", 0 };
     static char *tradehistory[] = { (char *)tradehistory_func, "tradehistory", "V", "timestamp", 0 };
-  //static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V", "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid", "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", "gui", "quoteid", 0 };
-    //static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", "feeAtxid", "quoteid", 0 };
-    //static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", "quoteid", 0 };
-    //static char *makeoffer2[] = { (char *)makeoffer2_func, "makeoffer2", "V", "baseid", "baseamount", "jumpaddr", "jumpasset", "jumpamount", "other", "relid", "relamount", "gui", "quoteid", 0 };
+
+
+
+    // plugins
+    static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", "daemonid", 0 };
+    static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
+    static char *python[] = { (char *)python_func, "python", "V",  "name", "launch", "websocket", 0 };
+    static char *syscall[] = { (char *)syscall_func, "syscall", "V", "name", "launch", "websocket", "arg", 0 };
+    static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "daemonid", 0 };
+
 
     // Tradebot
     static char *allsignals[] = { (char *)allsignals_func, "allsignals", "V", 0 };
@@ -3267,20 +3280,15 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     // Privatbet 1
     static char *lotto[] = { (char *)lotto_func, "lotto", "V", "refacct", "asset", 0 };
 
-    // EmLang 2
-    static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
-    static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
 
-
-
-
-    static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy, addcontact,
-    dispcontact, removecontact, findaddress, puzzles, nonces, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, python, syscall,
-    getpeers, maketelepods, tradebot, respondtx, checkmsg, openorders, allorderbooks, placebid, bid, placeask, ask, sendmsg, sendbinary, orderbook,
-    teleport, telepodacct, savefile, restorefile, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGWaddr, MGWresponse, sendfrag, gotfrag,
-     startxfer, lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist,
-     rampyramid, ramresponse, getfile, allsignals, getsignal, jumptrades, cancelquote, lottostats, tradehistory, makeoffer3 };
-
+ static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned,
+ telepathy, addcontact, dispcontact, removecontact, findaddress, puzzles, nonces, ping, pong, store, findnode, havenode,
+  havenodeB, findvalue, publish, python, syscall, getpeers, maketelepods, tradebot, respondtx, checkmsg, openorders,
+   allorderbooks, placebid, bid, placeask, ask, sendmsg, sendbinary, orderbook, teleport, telepodacct, savefile,
+    restorefile, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGWaddr, MGWresponse, sendfrag,
+    gotfrag, startxfer, lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist,
+    ramrichlist, rambalances, ramstatus, ramaddrlist, rampyramid, ramresponse, getfile, allsignals, getsignal,
+    jumptrades, cancelquote, lottostats, tradehistory, makeoffer3, trollbox };
 
 
 

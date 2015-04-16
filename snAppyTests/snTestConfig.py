@@ -26,8 +26,8 @@ STONEFISH_IP = '178.62.185.131'
 BOXFISH_IP   = 'localhost'
 
 SNET_port = '7777'
-#SNET_url = 'http://' + STONEFISH_IP + ":" + SNET_port
-SNET_url = 'http://' + BOXFISH_IP + ":" + SNET_port
+SNET_url = 'http://' + STONEFISH_IP + ":" + SNET_port
+#SNET_url = 'http://' + BOXFISH_IP + ":" + SNET_port
 
 
 #SERVER_ADDR_jl777 = BOXFISH_IP
