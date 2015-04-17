@@ -139,6 +139,8 @@ twisted/twisted
 twisted - Event-driven networking engine written in Python.
 
 
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"getpeers\"}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
 
  List of manual commands for quick function tests // often used
 
@@ -149,6 +151,12 @@ twisted - Event-driven networking engine written in Python.
 
 {"result":"launched","daemonid":"25696436000"}
 
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"placebid\",\"baseid\":\"5527630\",\"relid\":\"6932037131189568014\",\"volume\":\"1\",\"price\":\"2.88\"}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
+curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"placebid\",\"relid\":\"5527630\",\"baseid\":\"6932037131189568014\",\"volume\":\"1\",\"price\":\"2.88\"}"]  }' -H 'content-type: text/plain;' https://127.0.0.1:7777/
+
+jl777 [9:23 PM]
+worked
 
 
 
