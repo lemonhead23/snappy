@@ -4459,6 +4459,8 @@ class TestCollector(object):
                         SNET_placebid,\
                         SNET_allorderbooks,\
                         SNET_openorders,\
+                        SNET_ask,\
+                        SNET_bid,\
                         ]
 
         elif testListName == 'idexSmoketest':
@@ -4480,7 +4482,6 @@ class TestCollector(object):
                         SNET_respondtx,\
                         SNET_lottostats ,\
                         SNET_tradehistory,\
-                        SNET_getsignal,\
                         SNET_cancelquote,\
                         SNET_makeoffer3 ,\
                         SNET_jumptrades
