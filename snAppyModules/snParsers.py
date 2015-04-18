@@ -698,7 +698,6 @@ class Parser_777(object):
     ql777_orderbook = Parser_jl777_orderbook()
     ql777_placebid = Parser_jl777_placebid()
     ql777_placeask = Parser_jl777_placeask()
-    # ql777_makeoffer = Parser_jl777_makeoffer()
     ql777_makeoffer3 = Parser_jl777_makeoffer3()
     ql777_respondtx = Parser_jl777_respondtx()
     ql777_processutx = Parser_jl777_processutx()
@@ -1004,7 +1003,6 @@ class Parser_777(object):
         elif requestType2Parse == 'placeask':
             parsed = self.ql777_placeask.parse(data2parse)
 
-
         elif requestType2Parse == 'makeoffer3':
             parsed = self.ql777_makeoffer3.parse(data2parse)
 
@@ -1034,9 +1032,6 @@ class Parser_777(object):
 
         elif requestType2Parse == 'cancelquote':
             parsed = self.ql777_cancelquote.parse(data2parse)
-
-        elif requestType2Parse == 'makeoffer2':
-            parsed = self.ql777_makeoffer2.parse(data2parse)
 
         elif requestType2Parse == 'processjumptrade':
             parsed = self.ql777_processjumptrade.parse(data2parse)

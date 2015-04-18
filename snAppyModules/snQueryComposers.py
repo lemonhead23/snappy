@@ -3374,91 +3374,6 @@ individual treatment of requests and their parms here
 
 
 
-    def makeoffer2(self, reqDict):
-        """
-
-
-    static char *makeoffer2[] = { (char *)makeoffer2_func, "makeoffer2", "V",
-    "baseid", "baseamount", "jumpaddr", "jumpasset", "jumpamount",
-     "other", "relid", "relamount", 0 };
-
-
-        """#
-        K0 = 'requestType'
-        P0 = 'makeoffer2'
-        try:
-            K1 = 'baseid'
-            P1 = reqDict['baseid']
-        except:
-            P1 = ''
-
-
-        try:
-            K2 = 'baseamount'
-            P2 = reqDict['baseamount']
-        except:
-            P2 = ''
-
-
-        try:
-            K3 = 'jumpaddr'
-            P3 = reqDict['jumpaddr']
-        except:
-            P3 = ''
-
-
-        try:
-            K4 = 'jumpasset'
-            P4 = reqDict['jumpasset']
-        except:
-            P4 = ''
-
-
-        try:
-            K5 = 'jumpamount'
-            P5 = reqDict['jumpamount']
-        except:
-            P5= ''
-
-
-        try:
-            K6 = 'other'
-            P6 = reqDict['other']
-        except:
-            P6 = ''
-
-        try:
-            K7 = 'relid'
-            P7 = reqDict['relid']
-        except:
-            P7 = ''
-
-
-        try:
-            K8 = 'relamount'
-            P8 = reqDict['relamount']
-        except:
-            P8= ''
-
-
-
-        try:
-            K9 = 'gui'
-            P9 = reqDict['gui']
-        except:
-            P9 = ''
-
-        try:
-            K10 = 'quoteid'
-            P10 = reqDict['quoteid']
-        except:
-            P10 = ''
-
-
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 ,  K9 : P9,  K10: P10  }
-
-
 
     def jumptrades(self, reqDict):
         """
@@ -3935,7 +3850,6 @@ This is the wrapper class
                    'gotfrag',\
                    'startxfer',\
                    'getfile',\
-
                    '                   Kademlia DHT 8',\
                    'store',\
                    'findvalue',\
@@ -3945,7 +3859,6 @@ This is the wrapper class
                    'findaddress',\
                    'puzzles',\
                    'nonces',\
-
                    '                   MofNfs 3',\
                    'savefile',\
                    'restorefile',\
@@ -3963,13 +3876,13 @@ This is the wrapper class
                    'maketelepods',\
                    'telepodacct',\
                    'teleport',\
-                                       'InstantDEX 18',\
+                                       'InstantDEX 17',\
+                   'trollbox',\
                    'allorderbooks',\
                    'openorders',\
                    'orderbook',\
                    'placebid',\
                    'placeask',\
-                   'makeoffer',\
                    'makeoffer3',\
                    'respondtx',\
                    'processutx',\
@@ -3980,8 +3893,6 @@ This is the wrapper class
                    'tradehistory',\
                    'getsignal',\
                    'cancelquote',\
-                   'makeoffer2',\
-                   'processjumptrade',\
                    'jumptrades',\
                    '                   Tradebot 3',\
                    'pricedb',\
@@ -3993,7 +3904,6 @@ This is the wrapper class
                     'checkmsg',\
                    'passthru',\
                    'remote',\
-                    'python',\
                     'syscall',\
                    ]
 
@@ -4241,6 +4151,8 @@ This is the wrapper class
 
         #     // InstantDEX 18
 
+        elif reqDict['requestType'] == 'trollbox':
+            jsonSpecs = self.jl777_aAll.trollbox(reqDict)
         elif reqDict['requestType'] == 'allorderbooks':
             jsonSpecs = self.jl777_aAll.allorderbooks(reqDict)
             return jsonSpecs
@@ -4256,8 +4168,6 @@ This is the wrapper class
         elif reqDict['requestType'] == 'placeask':
             jsonSpecs = self.jl777_aAll.placeask(reqDict)
             return jsonSpecs
-        elif reqDict['requestType'] == 'makeoffer':
-            jsonSpecs = self.jl777_aAll.makeoffer(reqDict)
         elif reqDict['requestType'] == 'makeoffer3':
             jsonSpecs = self.jl777_aAll.makeoffer3(reqDict)
             return jsonSpecs
@@ -4287,12 +4197,6 @@ This is the wrapper class
             return jsonSpecs
         elif reqDict['requestType'] == 'cancelquote':
             jsonSpecs = self.jl777_aAll.cancelquote(reqDict)
-            return jsonSpecs
-        elif reqDict['requestType'] == 'makeoffer2':
-            jsonSpecs = self.jl777_aAll.makeoffer2(reqDict)
-            return jsonSpecs
-        elif reqDict['requestType'] == 'processjumptrade':
-            jsonSpecs = self.jl777_aAll.processjumptrade(reqDict)
             return jsonSpecs
         elif reqDict['requestType'] == 'jumptrades':
             jsonSpecs = self.jl777_aAll.jumptrades(reqDict)
