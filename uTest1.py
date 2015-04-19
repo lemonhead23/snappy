@@ -3589,18 +3589,18 @@ class SNET_ask(SNET_BaseTest,):
     """
 
     ++++++++++++
-++++++++++++ test_ask
-query json is:  {'minperc': '', 'timestamp': '', 'relamount': '', 'type': '', 'baseamount': '', 'requestType': 'ask', 'duration': '', 'baseid': '11060861818140490423', 'volume': '1', 'relid': '17554243582654188572', 'automatch': '', 'gui': '', 'price': '1'}
+    ++++++++++++ test_ask
+    query json is:  {'minperc': '', 'timestamp': '', 'relamount': '', 'type': '', 'baseamount': '', 'requestType': 'ask', 'duration': '', 'baseid': '11060861818140490423', 'volume': '1', 'relid': '17554243582654188572', 'automatch': '', 'gui': '', 'price': '1'}
 
-~~~~~~~~~~~~
-~~~~~~~~~~~~ SuperNET rpl777y:
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y:
 
- {'minperc': 75, 'relid': '17554243582654188572', 'exchange': 'InstantDEX', 'relamount': '100000000', 'offerNXT': '10501328530345129240', 'rel': 'BTC', 'askoffer': 1, 'timestamp': 1429359379, 'requestType': 'ask', 'baseamount': '100000000', 'quoteid': '2136393601792993271', 'duration': 3600, 'NXT': '10501328530345129240', 'volume': 1, 'base': 'BTCD', 'age': 0, 'price': 1, 'baseid': '11060861818140490423'}
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.271s
+     {'minperc': 75, 'relid': '17554243582654188572', 'exchange': 'InstantDEX', 'relamount': '100000000', 'offerNXT': '10501328530345129240', 'rel': 'BTC', 'askoffer': 1, 'timestamp': 1429359379, 'requestType': 'ask', 'baseamount': '100000000', 'quoteid': '2136393601792993271', 'duration': 3600, 'NXT': '10501328530345129240', 'volume': 1, 'base': 'BTCD', 'age': 0, 'price': 1, 'baseid': '11060861818140490423'}
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.271s
 
-OK
+    OK
 
 
         """#
@@ -3984,7 +3984,6 @@ class SNET_placeask_full(SNET_BaseTest, ):
     SNET_placeask = SNET_placeask
     SNET_orderbook = SNET_orderbook
     SNET_openorders = SNET_openorders
-
 
 
     def setUp(self):

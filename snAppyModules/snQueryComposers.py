@@ -1,14 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from twisted.python import log
 import base64
-#import time
-#import os
-#import requests
-#import json
-#from snApiModules.snApiConfig import *
-#from requests import Session, Request
+
 
 ##################
 ##################
@@ -121,7 +115,7 @@ class QueryComposer_XML(QC_XMLBase):
         self.environ = environ
         super(QueryComposer_XML, self).__init__()
         #self.scheduler = scheduler
-        log.msg("here we compose the specific details of the query that is sent to the data provider service")
+        print("here we compose the specific details of the query that is sent to the data provider service")
         ok=True
 
 
@@ -3917,7 +3911,7 @@ This is the wrapper class
 
         self.BitcoinDarkRPCCreds = environ['BitcoinDarkRPCCreds']
         #self.create_base64_encoded_Creds()
-        log.msg("here we compose the specific details of the query that is sent to the data provider service")
+        print("here we compose the specific details of the query that is sent to the data provider service")
 
         self.jl777_pBet = QC_777_pBet(environ)
         self.jl777_iDex = QC_777_iDex(environ)
@@ -4280,7 +4274,7 @@ This is the wrapper class
         #reqString = reqBase + str(contLen) + '\r\n\r\n' + jsonPayL4
         reqFull = reqString.encode("utf-8")
         newQuery = reqFull
-        log.msg( 3*"\nself.newQuery ---> ",str(newQuery))
+        print( 3*"\nself.newQuery ---> ",str(newQuery))
         #log.msg("POST. making newQuery  query_jl777---> ",str(reqDict))
         return newQuery
 
@@ -4299,7 +4293,7 @@ class QueryComposer_LOC(object):
     API_calls = [ 'soccer_schedule', 'MORE', ]
 
     def __init__(self, environ = {}):
-        log.msg("here we compose the specific details of the query that is sent to the data provider service")
+        print("here we compose the specific details of the query that is sent to the data provider service")
         self.environ = environ
         self.CACHE_DIR = environ['localCacheDir']
         self.CACHE_FILENAMES = environ['CACHE_FILENAMES']

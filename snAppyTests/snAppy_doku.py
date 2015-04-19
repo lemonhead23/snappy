@@ -5,7 +5,7 @@
 SuperNET_api_controller_doku = """
 
 
-
+NXT-JLCS-SVFS-6Q7E-9HBPB
 CONF FILE
 "PYTHONPATH":"/home/lemon/btcd/btcd/libjl777/Python-3.4.3",
 
