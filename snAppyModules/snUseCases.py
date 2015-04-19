@@ -541,16 +541,11 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
          It iterates over all schedules in the UseCase class, checks if they are due to be called,
          adds the ones due to a list and passes that list on to runSchedules(). """#
 
-
-
-
         log.msg("pongers:"  )
         for ponger in self.pongers.keys():
             log.msg(ponger, " - ", self.pongers[ponger])
 
         schedulesDue =[]
-
-
 
         for schedule in self.schedules.keys():
             schedule = self.schedules[schedule]
@@ -783,7 +778,7 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=set
         repl=dataFrom777.json()
         repl=dataFrom777.content.decode("utf-8")
         repl=eval(repl)
-        #log.msg( 1 * "ping sent", repl)
+        log.msg( 1 * "ping sent", repl)
 
 
 
@@ -1017,12 +1012,7 @@ kademlia_havenode
     , 'from': '89.212.19.49'}
 
 
-
-
-
     """#
-
-        #log.msg("GUIpoll ---> kademlia_havenode",rpl777, type(rpl777),"\n")
 
 
         try:
@@ -1061,8 +1051,6 @@ kademlia_havenode
         except Exception as e:
             #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
             log.msg("Error rpl777_GUIpoll_kademlia_havenode >>> {0}".format(str(e)))
-
-
 
         for peer in peersList:
         #            ping and findnode!
@@ -1133,11 +1121,19 @@ kademlia_havenode
             """
 
         try:
+             # <class 'dict'>
+            # This is the OUTER wrapper:
+            # GUIpoll -----> kademlia_pong
             fromIp = rpl777['from']
             port = rpl777['port']
             args = rpl777['args']
             rpl777 = rpl777['result']
             rpl777 = json.loads(rpl777)
+            # {'args': '[{"requestType":"ping","NXT":"9572159016638540187","timestamp":1429166463,"MMatrix":0,"pubkey":"ecfb95f6180d771bcc26d021c9a9a967f8747b1183d4c81369ef6b5130aeab75","ipaddr":"127.0.0.1","ver":"0.599"},{"token":"33r9buvc4r61mtodl6ksi8eg25tn9u37d49shl43loo52qvfjlnk0tdbm87dm4o23lngecabtpf6jb7ijbp558p3b8fs4e9dka4t9pr64nkg67qchldqovv4gniskfirui50vtq73h41627r50r6ppq8vfqh2ur9"}]',
+            # 'from': '184.175.25.117',
+            # 'result': '{"result":"kademlia_pong to (184.175.25.117/0)","txid":"4823120878544405612"}',
+            # 'port': 0}
+
 
         except Exception as e:
             #log.msg("GUIpoll ---> kademlia_pong",rpl777, type(rpl777),"\n")
@@ -1146,12 +1142,29 @@ kademlia_havenode
         try:
             rplArgs = json.loads(args) # <class 'list'> !!
             rplArgsRQ = rplArgs[0] # <class 'dict'>
-            rplArgsTK = rplArgs[1]   #<class 'dict'>
+            rplArgsTK = rplArgs[1]   #<class 'dict'> only the token:# {"token":"33r9buv...8vfqh2ur9"}]',
+            # rplArgsRQ
+            # {"requestType":"ping",
+            # "NXT":"9572159016638540187",
+            # "timestamp":1429166463,
+            # "MMatrix":0,
+            # "pubkey":"ecfb95f6180d771bcc26d021c9a9a967f8747b1183d4c81369ef6b5130aeab75",
+            # "ipaddr":"127.0.0.1",
+            # "ver":"0.599"},
+
+
         except Exception as e:
             log.msg("Error rpl777_GUIpoll_kademlia_pong {0}".format(str(e)))
 
         try:
             log.msg(1*"\n~~~~ rplArgsRQ", rplArgsRQ)
+            #~~~~ rplArgsRQ
+            #  {'pubkey': 'ecfb95f6180d771bcc26d021c9a9a967f8747b1183d4c81369ef6b5130aeab75',
+            # 'NXT': '9572159016638540187',
+            # 'MMatrix': 0,
+            # 'requestType': 'ping',
+            # 'timestamp': 1429166463, 'ver': '0.599', 'ipaddr': '127.0.0.1'}
+
             #pubkeyDi = eval(rplArgsRQ['pubkey']) # check that this is really pubkey and not DHT key
             #print(pubkey)
             pubkey = rplArgsRQ['pubkey'] # check that this is really pubkey and not DHT key
@@ -1173,7 +1186,7 @@ kademlia_havenode
             ipaddr =rplArgsRQ['ipaddr']
 
         except Exception as e:
-            log.msg("GUIpoll Error ---> kademlia_pong",rpl777, type(rpl777),"\n")
+            log.msg("GUIpoll Error UC2---> kademlia_pong",rpl777, type(rpl777),"\n")
             log.msg("Error rplArgsRQ {0}".format(str(e)))
 
         try:

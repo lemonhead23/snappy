@@ -440,85 +440,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=GUI
 
 
 
-    #     // passthru 2
-    #########################
-
-
-
-
-    def passthru(self, reqDict):
-        """ individual treatment of requests and their parms here
-
-  static char *passthru[] = { (char *)passthru_func, "passthru", "", "coin", "method", "params", 0 };
- """#
-        K0 = 'requestType'
-        P0 = 'passthru'
-        try:
-            K1 = 'coin'
-            P1 = reqDict['coin']
-        except:
-            P1 = ''
-
-
-        try:
-            K2 = 'method'
-            P2 = reqDict['method']
-        except:
-            P2 = ''
-
-
-        try:
-            K3 = 'params'
-            P3 = reqDict['params']
-        except:
-            P3 = ''
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,}
-
-
-
-
-
-    def remote(self, reqDict):
-        """ individual treatment of requests and their parms here
-
-static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
- """#
-        K0 = 'requestType'
-        P0 = 'remote'
-        try:
-            K1 = 'coin'
-            P1 = reqDict['coin']
-        except:
-            P1 = ''
-
-
-        try:
-            K2 = 'method'
-            P2 = reqDict['method']
-        except:
-            P2 = ''
-
-
-        try:
-            K3 = 'result'
-            P3 = reqDict['result']
-        except:
-            P3 = ''
-
-        try:
-            K4 = 'tag'
-            P4 = reqDict['tag']
-        except:
-            P4 = ''
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, K4 : P4,}
-
-
-    #########################
-
-
-
     #     // ramchains 13
     #########################
 
@@ -2443,24 +2364,6 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=sen
 
 
 
-
-    def checkmsg(self, reqDict):
-        """ individual treatment of requests and their parms here
-    static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "sender", 0 };
-
-"""#
-        K0 = 'requestType'
-        P0 = 'checkmsg'
-        try:
-            K1 = 'sender'
-            P1 = reqDict['sender']
-        except:
-            P1 = ''
-
-
-        return  { K0 : P0 , K1 : P1 , }
-
-
     #########################
 
 
@@ -3471,210 +3374,6 @@ individual treatment of requests and their parms here
 
 
 
-    def makeoffer2(self, reqDict):
-        """
-
-
-    static char *makeoffer2[] = { (char *)makeoffer2_func, "makeoffer2", "V",
-    "baseid", "baseamount", "jumpaddr", "jumpasset", "jumpamount",
-     "other", "relid", "relamount", 0 };
-
-
-        """#
-        K0 = 'requestType'
-        P0 = 'makeoffer2'
-        try:
-            K1 = 'baseid'
-            P1 = reqDict['baseid']
-        except:
-            P1 = ''
-
-
-        try:
-            K2 = 'baseamount'
-            P2 = reqDict['baseamount']
-        except:
-            P2 = ''
-
-
-        try:
-            K3 = 'jumpaddr'
-            P3 = reqDict['jumpaddr']
-        except:
-            P3 = ''
-
-
-        try:
-            K4 = 'jumpasset'
-            P4 = reqDict['jumpasset']
-        except:
-            P4 = ''
-
-
-        try:
-            K5 = 'jumpamount'
-            P5 = reqDict['jumpamount']
-        except:
-            P5= ''
-
-
-        try:
-            K6 = 'other'
-            P6 = reqDict['other']
-        except:
-            P6 = ''
-
-        try:
-            K7 = 'relid'
-            P7 = reqDict['relid']
-        except:
-            P7 = ''
-
-
-        try:
-            K8 = 'relamount'
-            P8 = reqDict['relamount']
-        except:
-            P8= ''
-
-
-
-        try:
-            K9 = 'gui'
-            P9 = reqDict['gui']
-        except:
-            P9 = ''
-
-        try:
-            K10 = 'quoteid'
-            P10 = reqDict['quoteid']
-        except:
-            P10 = ''
-
-
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7,  K8: P8 ,  K9 : P9,  K10: P10  }
-
-
-    #
-    # def processjumptrade(self, reqDict):
-    #     """
-    #
-    # static char *processjumptrade[] = { (char *)processjumptrade_func, "processjumptrade", "V",
-    # "assetA", "amountA", "other", "assetB", "amountB", "feeA", "feeAtxid",
-    #  "triggerhash", "jumper", "jumpasset", "jumpamount", "balancing", "balancetxid", 0 };
-    #
-    #
-    #     """#
-    #     K0 = 'requestType'
-    #     P0 = 'processjumptrade'
-    #     try:
-    #         K1 = 'assetA'
-    #         P1 = reqDict['assetA']
-    #     except:
-    #         P1 = ''
-    #
-    #
-    #     try:
-    #         K2 = 'amountA'
-    #         P2 = reqDict['amountA']
-    #     except:
-    #         P2 = ''
-    #
-    #
-    #     try:
-    #         K3 = 'other'
-    #         P3 = reqDict['other']
-    #     except:
-    #         P3 = ''
-    #
-    #
-    #     try:
-    #         K4 = 'assetB'
-    #         P4 = reqDict['assetB']
-    #     except:
-    #         P4 = ''
-    #
-    #
-    #     try:
-    #         K5 = 'amountB'
-    #         P5 = reqDict['amountB']
-    #     except:
-    #         P5= ''
-    #
-    #
-    #     try:
-    #         K6 = 'feeA'
-    #         P6 = reqDict['feeA']
-    #     except:
-    #         P6 = ''
-    #
-    #     try:
-    #         K7 = 'feeAtxid'
-    #         P7 = reqDict['feeAtxid']
-    #     except:
-    #         P7 = ''
-    #
-    #
-    #     try:
-    #         K8 = 'triggerhash'
-    #         P8 = reqDict['triggerhash']
-    #     except:
-    #         P8= ''
-    #
-    #
-    #
-    #     try:
-    #         K9 = 'jumper'
-    #         P9 = reqDict['jumper']
-    #     except:
-    #         P9= ''
-    #
-    #     try:
-    #         K10 = 'jumpasset'
-    #         P10 = reqDict['jumpasset']
-    #     except:
-    #         P10 = ''
-    #
-    #     try:
-    #         K11 = 'jumpamount'
-    #         P11 = reqDict['jumpamount']
-    #     except:
-    #         P11 = ''
-    #
-    #     try:
-    #         K12 = 'balancing'
-    #         P12 = reqDict['balancing']
-    #     except:
-    #         P12 = ''
-    #
-    #     try:
-    #         K13 = 'balancetxid'
-    #         P13 = reqDict['balancetxid']
-    #     except:
-    #         P13 = ''
-    #
-    #
-    #
-    #
-    #     try:
-    #         K14 = 'gui'
-    #         P14 = reqDict['gui']
-    #     except:
-    #         P14 = ''
-    #
-    #     try:
-    #         K15 = 'quoteid'
-    #         P15 = reqDict['quoteid']
-    #     except:
-    #         P15 = ''
-    #
-    #
-    #
-    #
-    #     return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
-    #                K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15 }
-
 
     def jumptrades(self, reqDict):
         """
@@ -3842,18 +3541,134 @@ individual treatment of requests and their parms here
 
 
 
+    def trollbox(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+
+    static char *trollbox[] = { (char *)trollbox_func, "trollbox", "V", "post", "whaleindex", 0 };
+
+
+    """#
+        K0 = 'requestType'
+        P0 = 'trollbox'
+        try:
+            K1 = 'post'
+            P1 = reqDict['post']
+        except:
+            P1 = ''
+        try:
+            K2 = 'whaleindex'
+            P2 = reqDict['whaleindex']
+        except:
+            P2 = ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, }
 
 
 
 
-    # // Embedded Langs
 
+
+    #########################
+
+
+
+    #     // plugins 5
+    #########################
+
+
+
+
+    def passthru(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+     static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", "daemonid", 0 };
+
+ """#
+        K0 = 'requestType'
+        P0 = 'passthru'
+        try:
+            K1 = 'coin'
+            P1 = reqDict['coin']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'method'
+            P2 = reqDict['method']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'params'
+            P3 = reqDict['params']
+        except:
+            P3 = ''
+
+        try:
+            K4 = 'tag'
+            P4 = reqDict['tag']
+        except:
+            P4 = ''
+
+
+        try:
+            K5 = 'daemonid'
+            P5 = reqDict['daemonid']
+        except:
+            P5= ''
+
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,   K4 : P4, K5 : P5  }
+
+
+
+
+
+    def remote(self, reqDict):
+        """ individual treatment of requests and their parms here
+
+    static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
+
+ """#
+        K0 = 'requestType'
+        P0 = 'remote'
+        try:
+            K1 = 'coin'
+            P1 = reqDict['coin']
+        except:
+            P1 = ''
+
+
+        try:
+            K2 = 'method'
+            P2 = reqDict['method']
+        except:
+            P2 = ''
+
+
+        try:
+            K3 = 'result'
+            P3 = reqDict['result']
+        except:
+            P3 = ''
+
+        try:
+            K4 = 'tag'
+            P4 = reqDict['tag']
+        except:
+            P4 = ''
+
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, K4 : P4,}
 
 
     def python(self, reqDict):
         """ individual treatment of requests and their parms here
+   static char *python[] = { (char *)python_func, "python", "V",  "name", "launch", "websocket", 0 };
 
- static char *python[] = { (char *)python_func, "python", "V",  "name", "launch", 0 };
 """#
         K0 = 'requestType'
         P0 = 'python'
@@ -3870,17 +3685,20 @@ individual treatment of requests and their parms here
             P2 = ''
 
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2 , }
+        try:
+            K3 = 'websocket'
+            P3 = reqDict['websocket']
+        except:
+            P3 = ''
+
+        return  { K0 : P0 , K1 : P1 , K2 : P2 , K3  : P3 }
 
 
 
 
     def syscall(self, reqDict):
         """ individual treatment of requests and their parms here
-
-    #static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
-
-    static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", "launch", 0 };
+    static char *syscall[] = { (char *)syscall_func, "syscall", "V", "name", "launch", "websocket", "arg", 0 };
 
 
 """#
@@ -3904,10 +3722,33 @@ individual treatment of requests and their parms here
             P3 = ''
 
 
+        try:
+            K4 = 'arg'
+            P4 = reqDict['arg']
+        except:
+            P4 = ''
 
-        return  { K0 : P0 , K1 : P1 , K2 : P2 , K3 : P3  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3, K4 : P4,}
 
 
+
+
+
+    def checkmsg(self, reqDict):
+        """ individual treatment of requests and their parms here
+       static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "daemonid", 0 };
+
+    """#
+        K0 = 'requestType'
+        P0 = 'checkmessages'
+        try:
+            K1 = 'daemonid'
+            P1 = reqDict['daemonid']
+        except:
+            P1 = ''
+
+
+        return  { K0 : P0 , K1 : P1 , }
 
 
     #
@@ -3915,8 +3756,6 @@ individual treatment of requests and their parms here
 ##########################
 ##########################
 ##########################
-
-
 
 
 
@@ -3982,9 +3821,6 @@ This is the wrapper class
                    'stop',\
                    'start',\
                    'settings',\
-                   '                   passthru 2'
-                   'passthru',\
-                   'remote',\
                    '                  ramchains 13',\
                    'ramstatus',\
                    'ramaddrlist',\
@@ -4014,7 +3850,6 @@ This is the wrapper class
                    'gotfrag',\
                    'startxfer',\
                    'getfile',\
-
                    '                   Kademlia DHT 8',\
                    'store',\
                    'findvalue',\
@@ -4024,7 +3859,6 @@ This is the wrapper class
                    'findaddress',\
                    'puzzles',\
                    'nonces',\
-
                    '                   MofNfs 3',\
                    'savefile',\
                    'restorefile',\
@@ -4038,18 +3872,17 @@ This is the wrapper class
                    'getdb',\
                    'sendmessage',\
                    'sendbinary',\
-                   'checkmsg',\
                    '                   Teleport 3',\
                    'maketelepods',\
                    'telepodacct',\
                    'teleport',\
-                                       'InstantDEX 18',\
+                                       'InstantDEX 17',\
+                   'trollbox',\
                    'allorderbooks',\
                    'openorders',\
                    'orderbook',\
                    'placebid',\
                    'placeask',\
-                   'makeoffer',\
                    'makeoffer3',\
                    'respondtx',\
                    'processutx',\
@@ -4060,8 +3893,6 @@ This is the wrapper class
                    'tradehistory',\
                    'getsignal',\
                    'cancelquote',\
-                   'makeoffer2',\
-                   'processjumptrade',\
                    'jumptrades',\
                    '                   Tradebot 3',\
                    'pricedb',\
@@ -4069,8 +3900,10 @@ This is the wrapper class
                    'tradebot',\
                     '                     Privatebet',\
                     'lotto',\
-                    '                     embeddedLangs',\
-                    'python',\
+                    '                     plugins'\
+                    'checkmsg',\
+                   'passthru',\
+                   'remote',\
                     'syscall',\
                    ]
 
@@ -4132,16 +3965,6 @@ This is the wrapper class
 
         elif reqDict['requestType'] == 'settings':
             jsonSpecs = self.jl777_aAll.settings(reqDict)
-            return jsonSpecs
-
-        # // passthru
-
-        elif reqDict['requestType'] == 'passthru':
-            jsonSpecs = self.jl777_aAll.passthru(reqDict)
-            return jsonSpecs
-
-        elif reqDict['requestType'] == 'remote':
-            jsonSpecs = self.jl777_aAll.remote(reqDict)
             return jsonSpecs
 
         # ramchains 13
@@ -4313,9 +4136,6 @@ This is the wrapper class
         elif reqDict['requestType'] == 'sendbinary':
             jsonSpecs = self.jl777_aAll.sendbinary(reqDict)
             return jsonSpecs
-        elif reqDict['requestType'] == 'checkmsg':
-            jsonSpecs = self.jl777_aAll.checkmsg(reqDict)
-            return jsonSpecs
 
         #     // Teleport 3
 
@@ -4331,6 +4151,8 @@ This is the wrapper class
 
         #     // InstantDEX 18
 
+        elif reqDict['requestType'] == 'trollbox':
+            jsonSpecs = self.jl777_aAll.trollbox(reqDict)
         elif reqDict['requestType'] == 'allorderbooks':
             jsonSpecs = self.jl777_aAll.allorderbooks(reqDict)
             return jsonSpecs
@@ -4346,8 +4168,6 @@ This is the wrapper class
         elif reqDict['requestType'] == 'placeask':
             jsonSpecs = self.jl777_aAll.placeask(reqDict)
             return jsonSpecs
-        elif reqDict['requestType'] == 'makeoffer':
-            jsonSpecs = self.jl777_aAll.makeoffer(reqDict)
         elif reqDict['requestType'] == 'makeoffer3':
             jsonSpecs = self.jl777_aAll.makeoffer3(reqDict)
             return jsonSpecs
@@ -4378,12 +4198,6 @@ This is the wrapper class
         elif reqDict['requestType'] == 'cancelquote':
             jsonSpecs = self.jl777_aAll.cancelquote(reqDict)
             return jsonSpecs
-        elif reqDict['requestType'] == 'makeoffer2':
-            jsonSpecs = self.jl777_aAll.makeoffer2(reqDict)
-            return jsonSpecs
-        elif reqDict['requestType'] == 'processjumptrade':
-            jsonSpecs = self.jl777_aAll.processjumptrade(reqDict)
-            return jsonSpecs
         elif reqDict['requestType'] == 'jumptrades':
             jsonSpecs = self.jl777_aAll.jumptrades(reqDict)
             return jsonSpecs
@@ -4400,7 +4214,19 @@ This is the wrapper class
             jsonSpecs = self.jl777_aAll.tradebot(reqDict)
             return jsonSpecs
 
-        #// embedLangs
+        # // plugins
+        elif reqDict['requestType'] == 'checkmsg':
+            jsonSpecs = self.jl777_aAll.checkmsg(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'passthru':
+            jsonSpecs = self.jl777_aAll.passthru(reqDict)
+            return jsonSpecs
+
+        elif reqDict['requestType'] == 'remote':
+            jsonSpecs = self.jl777_aAll.remote(reqDict)
+            return jsonSpecs
+
         elif reqDict['requestType'] == 'python':
             jsonSpecs = self.jl777_aAll.python(reqDict)
             return jsonSpecs

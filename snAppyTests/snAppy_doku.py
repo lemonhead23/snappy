@@ -6,10 +6,15 @@ SuperNET_api_controller_doku = """
 
 
 
+CONF FILE
+"PYTHONPATH":"/home/lemon/btcd/btcd/libjl777/Python-3.4.3",
+
+
+
 make python
 make onetime
 make ramchains
-
+make nanomessage
 m_unix
 
 static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "daemonid", 0 };
@@ -71,14 +76,6 @@ UC4_sendMSG
 UC5_sendBIN
 UC6_checkMSG
 
-UC7_
-UC8_
-UC9_
-UC10_
-UC11_
-UC12_
-
-
 
 
 
@@ -134,8 +131,24 @@ twisted/twisted
 twisted - Event-driven networking engine written in Python.
 
 
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"getpeers\"}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
 
  List of manual commands for quick function tests // often used
+
+
+ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"syscall\",\"name\":\"./echo\",\"launch\":1,\"websocket\":8080}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
+ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"syscall\",\"name\":\"./echo\",\"websocket\":8080}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
+{"result":"launched","daemonid":"25696436000"}
+
+curl --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"placebid\",\"baseid\":\"5527630\",\"relid\":\"6932037131189568014\",\"volume\":\"1\",\"price\":\"2.88\"}"]  }' -H 'content-type: text/plain;' http://127.0.0.1:7777/
+
+curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET", "params": ["{\"requestType\":\"placebid\",\"relid\":\"5527630\",\"baseid\":\"6932037131189568014\",\"volume\":\"1\",\"price\":\"2.88\"}"]  }' -H 'content-type: text/plain;' https://127.0.0.1:7777/
+
+jl777 [9:23 PM]
+worked
 
 
 
@@ -150,10 +163,15 @@ cd
 
     ./BitcoinDarkd  SuperNET '{"requestType":"settings"}'
 
-./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+    ./BitcoinDarkd  SuperNET '{"requestType":"getpeers"}'
+
+./BitcoinDarkd  SuperNET '{"requestType":"ping","destip":"178.62.185.131" }'
+
+./BitcoinDarkd  SuperNET '{"requestType":"ping","destip":"85.178.201.73" }'
 
 
-
+STONEFISH_IP = '178.62.185.131'   #
+BOXFISH_IP   =  'localhost' # '85.xx'   #
 
 
 
@@ -168,68 +186,24 @@ curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=get
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=79.245.52.39'
 
- #178.62.185.131'
+curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/nxt?requestType=ping&destip=85.178.201.73'
 
+ #178.62.185.
+
+
+IDEX
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"allorderbooks"}'
+
+
+    ./BitcoinDarkd  SuperNET '{"requestType":"openorders"}'
+
+ ()
 
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/stop?'
 
 curl   -H 'content-type: text/plain;' 'http://127.0.0.1:7800/start?'
-
-
-
-#########################################################
-
-
-Running use cases and scripts:
-
- ./snappy.py UCxyz
-
-
-Adding of test cases and scripts:
-
-- make a class
-- make schedule(s)
-- add launch param in init functions
-
-
-##########################################################
-
-
-
-communication with SuperNET server:
-
- Done using python requests POST and deferred.
-
- Can also use compose POST requests on a raw bytes level (unused but kept).
-
-Could be done with twisted agent. Works as is.
-
-
-
-###########################################################
-
-
-This SuperNET api controller has different operations modi.
-
-This is achieved by instantiating different twisted protocols.
-
-Currently:
-
-- Protocol for querying xml feed getpage
-- Protocol for querying SuperNET with POST
-- Protocol for querying BitcoindarkD with RPC
-- Twisted Scheduler for timer controlled operations
-- direct loading from a locally cached file
-
-
-
-
-
-###########################################################
-
-
-
 
 
 
@@ -356,8 +330,7 @@ class QueryComposer_777(QC_777Base):
 ###########################################################
 
 Output of 'settings' command:
-
-
+ cat SuperNET.conf
 {
   "debug":2,
   "whitelist":[
@@ -379,8 +352,17 @@ Output of 'settings' command:
     "128.199.183.249",
     "190.10.10.145"
   ],
+   "commands":["BTCDjson", "stop", "GUIpoll", "BTCDpoll", "settings", "gotjson", "gotpacket", "gotnewpeer", "getdb", "cosign", "cosigned", "telepathy", "addcontact", "dispcontact", "removecontact", "findaddress", "puzzles", "nonces", "ping", "pong", "store", "findnode", "havenode", "havenodeB", "findvalue", "publish", "python", "syscall", "getpeers", "maketelepods", "tradebot", "respondtx", "processutx", "checkmsg", "openorders", "allorderbooks", "placebid", "bid", "placeask", "ask", "makeoffer", "sendmsg", "sendbinary", "orderbook", "teleport", "telepodacct", "savefile", "restorefile", "pricedb", "getquotes", "passthru", "remote", "genmultisig", "getmsigpubkey", "setmsigpubkey", "MGWaddr", "MGWresponse", "sendfrag", "gotfrag", "startxfer", "lotto", "ramstring", "ramrawind", "ramblock", "ramcompress", "ramexpand", "ramscript", "ramtxlist", "ramrichlist", "rambalances", "ramstatus", "ramaddrlist", "rampyramid", "ramresponse", "getfile", "makeoffer2", "processjumptrade", "allsignals", "getsignal", "jumptrades", "cancelquote", "lottostats", "tradehistory", "trollbox" ],
+    "exchanges":[{"name":"poloniex","key":"apikey","secret":"apisecret"},{"name":"bitfinex","key":"apikey","secret":"apisecret"},{"name":"btce"},{"name":"bittrex"},{"name":"bitstamp"},{"name":"okcoin"},{"name":"huobi"},{"name":"bityes"},{"name":"lakebtc"},{"name":"exmo"},{"name":"btc38"}],
+  "MMatrix":1,
+  "GUIPOLL":0,
   "MAINNET":1,
   "MIN_NXTCONFIRMS":13,
+  "UPNP":0,
+  "MULTIPORT":1,
+  "LIBTEST":1,
+ "MGWROOT":"/var/www",
+ "EXTERNALACCESS":1 ,
   "active":[
     "BTCD"
   ],
@@ -409,10 +391,10 @@ Output of 'settings' command:
       ],
       "clonesmear":1,
       "privacyServer":"127.0.0.1",
-      "pubaddr":"RHwBRZzbETNR3nyQjuVWgaLdaBNBu3gwbw",
-      "srvpubaddr":"RWfwbc25mPTcSN4WgDXZeMnf3SFT1rN8tM",
-      "al5":"RWW6FPcopt5va8TtGkPsPTK9GEr8r8QS9Q",
-      "basil2":"RTib4uLAc9DfP2x6tGsQ9SZzFfXmcgGqZm",
+      "pubaddrBOX":"RHwBRZzbETNR3nyQjuVWgaLdaBNBu3gwbw",
+      "srvpubaddrBOX":"RWfwbc25mPTcSN4WgDXZeMnf3SFT1rN8tM",
+      "pubaddr":"RWW6FPcopt5va8TtGkPsPTK9GEr8r8QS9Q",
+      "srvpubaddr":"RTib4uLAc9DfP2x6tGsQ9SZzFfXmcgGqZm",
       "grind1":"RMwvWWWRVgp7QBJuAwCpvmP6Q27kAYhnAc",
       "rarah4":"RVYtALDy7WspnvxFrdDDoVafAdTNuqipyH",
       "Lfactor":3
@@ -488,6 +470,62 @@ RAW bytes through socket:
 
 
 ##################################################################################################
+
+
+
+
+#########################################################
+
+
+Running use cases and scripts:
+
+ ./snappy.py UCxyz
+
+
+Adding of test cases and scripts:
+
+- make a class
+- make schedule(s)
+- add launch param in init functions
+
+
+##########################################################
+
+
+
+communication with SuperNET server:
+
+ Done using python requests POST and deferred.
+
+ Can also use compose POST requests on a raw bytes level (unused but kept).
+
+Could be done with twisted agent. Works as is.
+
+
+
+###########################################################
+
+
+This SuperNET api controller has different operations modi.
+
+This is achieved by instantiating different twisted protocols.
+
+Currently:
+
+- Protocol for querying xml feed getpage
+- Protocol for querying SuperNET with POST
+- Protocol for querying BitcoindarkD with RPC
+- Twisted Scheduler for timer controlled operations
+- direct loading from a locally cached file
+
+
+
+
+
+###########################################################
+
+
+
 
 
 
@@ -2502,45 +2540,11 @@ At that point I will have just a few more things needed to have InstantDEX into 
 
 
 
-
-
 ##################################################################################################
 
                     'InstantDEX 6',\
 
 
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-##################################################################################################
-
-                    'InstantDEX 6',\
-
-
-
-
-static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
-   static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
-   static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", 0 };
-   static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
-   static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", 0 };
-   static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-   static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
-   static char *makeoffer[] = { (char *)makeoffer_func, "makeoffer", "V", "baseid", "relid", "baseamount", "relamount", "other", "type", 0 };
-   static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "signedtx", "feeB", "feetxid", 0 };
-   static char *processutx[] = { (char *)processutx_func, "processutx", "V", "utx", "sig", "full", "feeAtxid", 0 };
 
 
 allorderbooks returns all orderbooks
@@ -3053,7 +3057,7 @@ for cryptsy, I have a horrible hard coded list that maps symbol to their id#
                                                 pricedb
 
 
-39 call_NOT_TESTED
+39
     static char *pricedb[] = { (char *)pricedb_func, "pricedb", "V", "exchange", "base", "rel", "stop", 0 };
 
 
@@ -3085,7 +3089,7 @@ James
 
 
 
-40 call_NOT_TESTED
+40
 
     static char *getquotes[] = { (char *)getquotes_func, "getquotes", "V", "exchange", "base", "rel", "oldest", 0 };
 
@@ -3110,7 +3114,7 @@ curl -k --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "SuperNET",
 
 
 
-41 call_NOT_TESTED
+41
 
     static char *tradebot[] = { (char *)tradebot_func, "tradebot", "V", "code", 0 };
 
@@ -3131,7 +3135,6 @@ calls only as inventory
 
 
 // glue 7
-// passthru 2
 // ramchains   13
 // MGW 6
 // IP comms 5
@@ -3143,6 +3146,7 @@ calls only as inventory
 // Tradebot 3
 // privatebet 1
 // EmLang 2
+// passthru 2
 
 
 http://jnxt.org/init/?requestType=status&pubkey=734b83479469164e6059b98c1679043a278c1ba8d18d1d42d348d255baf2f656&NXT=NXT-MEXA-RJSP-NKDU-FWWHM&coin=BTCD
@@ -3151,10 +3155,9 @@ http://jnxt.org/init/?requestType=newbie&pubkey=734b83479469164e6059b98c1679043a
 
 api.h: list of all calls. date: 0413515:
 
-
 char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *origargjson,char *sender,int32_t valid,char *origargstr)
 {
-    // local glue 7
+    // local glue
     static char *gotjson[] = { (char *)gotjson_func, "BTCDjson", "V", "json", 0 };
     static char *gotpacket[] = { (char *)gotpacket_func, "gotpacket", "V", "msg", "dur", "ip_port", 0 };
     static char *gotnewpeer[] = { (char *)gotnewpeer_func, "gotnewpeer", "V", "ip_port", 0 };
@@ -3162,11 +3165,6 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *GUIpoll[] = { (char *)GUIpoll_func, "GUIpoll", "V", 0 };
     static char *stop[] = { (char *)stop_func, "stop", "V", 0 };
     static char *settings[] = { (char *)settings_func, "settings", "V", "field", "value", "reinit", 0 };
-
-    // passthru 2
-    static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", 0 };
-    static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
-
 
     // remotable ramchains
     static char *rampyramid[] = { (char *)rampyramid_func, "rampyramid", "V", "destip", "port", "coin", "blocknum", "type", 0 };
@@ -3184,30 +3182,27 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *ramcompress[] = { (char *)ramcompress_func, "ramcompress", "V", "coin", "data", 0 };
     static char *ramexpand[] = { (char *)ramexpand_func, "ramexpand", "V", "coin", "data", 0 };
 
-
-    // MGW 7
+    // MGW
     static char *genmultisig[] = { (char *)genmultisig_func, "genmultisig", "", "userpubkey", "coin", "refcontact", "M", "N", "contacts", "destip", "destport", "email", "buyNXT", 0 };
     static char *getmsigpubkey[] = { (char *)getmsigpubkey_func, "getmsigpubkey", "V", "coin", "refNXTaddr", "myaddr", "mypubkey", 0 };
     static char *MGWaddr[] = { (char *)MGWaddr_func, "MGWaddr", "V", 0 };
-    static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };     static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
+    static char *MGWresponse[] = { (char *)MGWresponse_func, "MGWresponse", "V", 0 };
+    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
+    //static char *MGW[] = { (char *)MGW_func, "MGW", "", "NXT0", "NXT1", "NXT2", "ip0", "ip1", "ip2", "coin", "asset", "rescan", "actionflag", "specialNXT", "exclude0", "exclude1", "exclude2", "destip", "destport", "userpubkey", "email", "destNXT", 0 };
     static char *cosign[] = { (char *)cosign_func, "cosign", "V", "otheracct", "seed", "text", 0 };
     static char *cosigned[] = { (char *)cosigned_func, "cosigned", "V", "seed", "result", "privacct", "pubacct", 0 };
-    static char *setmsigpubkey[] = { (char *)setmsigpubkey_func, "setmsigpubkey", "V", "coin", "refNXTaddr", "addr", "userpubkey", 0 };
 
-
-    // IP comms 6
+    // IP comms
     static char *ping[] = { (char *)ping_func, "ping", "V", "pubkey", "ipaddr", "port", "destip", "MMatrix", 0 };
     static char *pong[] = { (char *)pong_func, "pong", "V", "pubkey", "ipaddr", "port", "yourip", "yourport", "tag", "MMatrix", 0 };
-    static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", 0 };
-    static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", 0 };
-    static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", 0 };
+    static char *sendfrag[] = { (char *)sendfrag_func, "sendfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "data", "totallen", "blocksize", "handler", "syncmem", 0 };
+    static char *gotfrag[] = { (char *)gotfrag_func, "gotfrag", "V", "pubkey", "name", "fragi", "numfrags", "ipaddr", "totalcrc", "datacrc", "totallen", "blocksize", "count", "handler", "syncmem", "snapshotcrc", 0 };
+    static char *startxfer[] = { (char *)startxfer_func, "startxfer", "V", "fname", "dest", "data", "timeout", "handler", "syncmem", 0 };
     static char *getfile[] = { (char *)getfile_func, "getfile", "V", "name", "handler", 0 };
 
-
-    // Kademlia DHT 8
+    // Kademlia DHT
     static char *puzzles[] = { (char *)challenge_func, "puzzles", "V", "reftime", "duration", "threshold", 0 };
     static char *nonces[] = { (char *)response_func, "nonces", "V", "reftime", "threshold", "nonces", 0 };
-
     static char *store[] = { (char *)store_func, "store", "V", "pubkey", "key", "name", "data", 0 };
     static char *findvalue[] = { (char *)findvalue_func, "findvalue", "V", "pubkey", "key", "name", "data", 0 };
     static char *findnode[] = { (char *)findnode_func, "findnode", "V", "pubkey", "key", "name", "data", 0 };
@@ -3215,12 +3210,12 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *havenodeB[] = { (char *)havenodeB_func, "havenodeB", "V", "pubkey", "key", "name", "data", 0 };
     static char *findaddress[] = { (char *)findaddress_func, "findaddress", "V", "refaddr", "list", "dist", "duration", "numthreads", 0 };
 
-    // MofNfs 3
+    // MofNfs
     static char *savefile[] = { (char *)savefile_func, "savefile", "V", "fname", "L", "M", "N", "backup", "password", "pin", 0 };
     static char *restorefile[] = { (char *)restorefile_func, "restorefile", "V", RESTORE_ARGS, 0 };
     static char *publish[] = { (char *)publish_func, "publish", "V", "files", "L", "M", "N", "backup", "password", "pin", 0  };
 
-    // Telepathy 9
+    // Telepathy
     static char *getpeers[] = { (char *)getpeers_func, "getpeers", "V",  "scan", 0 };
     static char *addcontact[] = { (char *)addcontact_func, "addcontact", "V",  "handle", "acct", 0 };
     static char *removecontact[] = { (char *)removecontact_func, "removecontact", "V",  "contact", 0 };
@@ -3229,25 +3224,23 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     static char *getdb[] = { (char *)getdb_func, "getdb", "V",  "contact", "id", "key", "dir", "destip", 0 };
     static char *sendmsg[] = { (char *)sendmsg_func, "sendmessage", "V", "dest", "msg", "L", 0 };
     static char *sendbinary[] = { (char *)sendbinary_func, "sendbinary", "V", "dest", "data", "L", 0 };
-    static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "sender", 0 };
 
-    // Teleport 3
+    // Teleport
     static char *maketelepods[] = { (char *)maketelepods_func, "maketelepods", "V", "amount", "coin", 0 };
     static char *telepodacct[] = { (char *)telepodacct_func, "telepodacct", "V", "amount", "contact", "coin", "comment", "cmd", "withdraw", 0 };
     static char *teleport[] = { (char *)teleport_func, "teleport", "V", "amount", "contact", "coin", "minage", "withdraw", 0 };
 
-
-
     // InstantDEX
+    static char *trollbox[] = { (char *)trollbox_func, "trollbox", "V", "post", "whaleindex", 0 };
     static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V", 0 };
-    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", 0 };
+    static char *orderbook[] = { (char *)orderbook_func, "orderbook", "V", "baseid", "relid", "allfields", "oldest", "maxdepth", "base", "rel", "gui", "showall", 0 };
     static char *lottostats[] = { (char *)lottostats_func, "lottostats", "V", "timestamp", 0 };
     static char *cancelquote[] = { (char *)cancelquote_func, "cancelquote", "V", "quoteid", 0 };
     static char *openorders[] = { (char *)openorders_func, "openorders", "V", 0 };
-    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
-    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", 0 };
-    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
-    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", 0 };
+    static char *placebid[] = { (char *)placebid_func, "placebid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", "exchange", 0 };
+    static char *placeask[] = { (char *)placeask_func, "placeask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", ",gui", "automatch", "minperc", "duration", "exchange", 0 };
+    static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", "exchange", 0 };
+    static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "gui", "automatch", "minperc", "duration", "exchange", 0 };
     static char *makeoffer3[] = { (char *)makeoffer3_func, "makeoffer3", "V", "baseid", "relid", "quoteid", "perc", "deprecated", "baseiQ", "reliQ", "askoffer", "price", "volume", "exchange", "baseamount", "relamount", "offerNXT", "minperc", "jumpasset", 0 };
     static char *respondtx[] = { (char *)respondtx_func, "respondtx", "V", "cmd", "assetid", "quantityQNT", "priceNQT", "triggerhash", "quoteid", "sig", "data", "minperc", "offerNXT", "otherassetid", "otherqty", 0 };
     static char *jumptrades[] = { (char *)jumptrades_func, "jumptrades", "V", 0 };
@@ -3264,24 +3257,17 @@ char *SuperNET_json_commands(struct NXThandler_info *mp,char *previpaddr,cJSON *
     //static char *getquotes[] = { (char *)getquotes_func, "getquotes", "V", "exchange", "base", "rel", "oldest", 0 };
     static char *tradebot[] = { (char *)tradebot_func, "tradebot", "V", "code", 0 };
 
-    // Privatbet 1
-    static char *lotto[] = { (char *)lotto_func, "lotto", "V", "refacct", "asset", 0 };
+    // Privatbet
+    static char *lotto[] = { (char *)lotto_func, "lotto", "V", "refacct", "asset", "lottoseed", "prizefund", 0 };
 
-    // EmLang 2
-    static char *python[] = { (char *)python_func, "python", "V",  "name", 0 };
-    static char *syscall[] = { (char *)syscall_func, "syscall", "V",  "name", "cmd", 0 };
+    // plugins
+    static char *passthru[] = { (char *)passthru_func, "passthru", "V", "coin", "method", "params", "tag", "daemonid", 0 };
+    static char *remote[] = { (char *)remote_func, "remote", "V",  "coin", "method", "result", "tag", 0 };
+    //static char *python[] = { (char *)python_func, "python", "V",  "name", "launch", "websocket", 0 };
+    static char *syscall[] = { (char *)syscall_func, "syscall", "V", "name", "launch", "websocket", "jsonargs", 0 };
+    static char *checkmsg[] = { (char *)checkmsg_func, "checkmessages", "V", "daemonid", 0 };
 
-
-
-
-    static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy, addcontact,
-    dispcontact, removecontact, findaddress, puzzles, nonces, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, python, syscall,
-    getpeers, maketelepods, tradebot, respondtx, checkmsg, openorders, allorderbooks, placebid, bid, placeask, ask, sendmsg, sendbinary, orderbook,
-    teleport, telepodacct, savefile, restorefile, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGWaddr, MGWresponse, sendfrag, gotfrag,
-     startxfer, lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist,
-     rampyramid, ramresponse, getfile, allsignals, getsignal, jumptrades, cancelquote, lottostats, tradehistory, makeoffer3 };
-
-
+    static char **commands[] = { stop, GUIpoll, BTCDpoll, settings, gotjson, gotpacket, gotnewpeer, getdb, cosign, cosigned, telepathy, addcontact, dispcontact, removecontact, findaddress, puzzles, nonces, ping, pong, store, findnode, havenode, havenodeB, findvalue, publish, syscall, getpeers, maketelepods, tradebot, respondtx, checkmsg, openorders, allorderbooks, placebid, bid, placeask, ask, sendmsg, sendbinary, orderbook, teleport, telepodacct, savefile, restorefile, passthru, remote, genmultisig, getmsigpubkey, setmsigpubkey, MGWaddr, MGWresponse, sendfrag, gotfrag, startxfer, lotto, ramstring, ramrawind, ramblock, ramcompress, ramexpand, ramscript, ramtxlist, ramrichlist, rambalances, ramstatus, ramaddrlist, rampyramid, ramresponse, getfile, allsignals, getsignal, jumptrades, cancelquote, lottostats, tradehistory, makeoffer3, trollbox };
 
 
 """
