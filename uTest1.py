@@ -65,14 +65,68 @@ class SNET_BaseTest(unittest.TestCase):
 
 
 
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     glue
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
 
 class ___glue():
     pass
 
 class SNET_getpeers(SNET_BaseTest):
+
+
     """
-    has basic test
-    """#
+    r.apparent_encoding = ascii
+    r.headers
+    CaseInsensitiveDict({'content-length': '1032', 'access-control-allow-headers': 'Authorization, Content-Type', 'server': 'SuperNET', 'content-type': 'text/html', 'access-control-allow-origin': '*', 'access-control-allow-credentials': 'true', 'access-control-allow-methods': 'GET, POST, OPTIONS'})
+
+    '{\n\t"peers":\t[{\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777\n\t\t\t},\n\t\t\t"privateNXT":\t"12964664952395058808",\n\t\t\t"RS":\t"NXT-FMMS-4QHR-VEJ9-DYXU9",\n\t\t\t"pubkey":\t"702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t55238,\n\t\t\t\t"recv":\t1,\n\t\t\t\t"lastrecv":\t81.13409642\n\t\t\t},\n\t\t\t"srvNXT":\t"10501328530345129240",\n\t\t\t"srvipaddr":\t"178.62.185.131",\n\t\t\t"srvport":\t"55238",\n\t\t\t"recv":\t1,\n\t\t\t"RS":\t"NXT-CXAS-P5SG-EUVZ-BQ3H5",\n\t\t\t"pubkey":\t"020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777,\n\t\t\t\t"sent":\t93,\n\t\t\t\t"lastsent":\t0.28231793,\n\t\t\t\t"recv":\t276,\n\t\t\t\t"lastrecv":\t0.27922627,\n\t\t\t\t"pings":\t19,\n\t\t\t\t"pongs":\t92,\n\t\t\t\t"pingtime":\t25518.50000000,\n\t\t\t\t"avetime":\t316085.26991836\n\t\t\t},\n\t\t\t"srvNXT":\t"1978065578067355462",\n\t\t\t"srvipaddr":\t"89.212.19.49",\n\t\t\t"sent":\t93,\n\t\t\t"recv":\t276,\n\t\t\t"RS":\t"NXT-5TU8-78XL-W2CW-32WWQ",\n\t\t\t"pubkey":\t"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40"\n\t\t}],\n\t"num":\t2,\n\t"Numpservers":\t3,\n\t"Numnxtaccts":\t0\n}'
+    r.status_code 200
+
+    r.raw
+    <urllib3.response.HTTPResponse at 0x7f4ac7c652e8>
+    rep=eval(r.text)
+
+    {'Numnxtaccts': 0,
+    'Numpservers': 3,
+    'num': 2,
+    'peers': [{'RS': 'NXT-FMMS-4QHR-VEJ9-DYXU9',
+      'privateNXT': '12964664952395058808',
+      'pserver': {'port': 7777},
+      'pubkey': '702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171'},
+    {'RS': 'NXT-CXAS-P5SG-EUVZ-BQ3H5',
+      'pserver': {'lastrecv': 81.13409642, 'port': 55238, 'recv': 1},
+      'pubkey': '020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d',
+      'recv': 1,
+      'srvNXT': '10501328530345129240',
+      'srvipaddr': '178.62.185.131',
+      'srvport': '55238'},
+    {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ',
+      'pserver': {'avetime': 316085.26991836,
+       'lastrecv': 0.27922627,
+       'lastsent': 0.28231793,
+       'pings': 19,
+       'pingtime': 25518.5,
+       'pongs': 92,
+       'port': 7777,
+       'recv': 276,
+       'sent': 93},
+      'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40',
+      'recv': 276,
+      'sent': 93,
+      'srvNXT': '1978065578067355462',
+      'srvipaddr': '89.212.19.49'}]}
+
+      """#
 
     def setUp(self):
         print("SNET_getpeers setUp here- NOP")
@@ -84,71 +138,23 @@ class SNET_getpeers(SNET_BaseTest):
 
 
     def test_getpeers(self):
-
         """
         self.assertTrue('peers' in rpl777.keys())
 
         """ #
-                #query_json = {'scan': '', 'requestType': 'getpeers'}
-
-
-        print(2*"\n++++++++++++","test_getpeers")
-        test_RQ_ = {'requestType': 'getpeers'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
-        print("query json is: ", payload)
-        #headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
-
+        rpl777 = self.getpeers()
         self.assertTrue('peers' in rpl777.keys())
 
 
-
-
-        details_of_expected_SuperNET_reply = """
-        r.apparent_encoding = ascii
-        r.headers
-        CaseInsensitiveDict({'content-length': '1032', 'access-control-allow-headers': 'Authorization, Content-Type', 'server': 'SuperNET', 'content-type': 'text/html', 'access-control-allow-origin': '*', 'access-control-allow-credentials': 'true', 'access-control-allow-methods': 'GET, POST, OPTIONS'})
-
-        '{\n\t"peers":\t[{\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777\n\t\t\t},\n\t\t\t"privateNXT":\t"12964664952395058808",\n\t\t\t"RS":\t"NXT-FMMS-4QHR-VEJ9-DYXU9",\n\t\t\t"pubkey":\t"702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t55238,\n\t\t\t\t"recv":\t1,\n\t\t\t\t"lastrecv":\t81.13409642\n\t\t\t},\n\t\t\t"srvNXT":\t"10501328530345129240",\n\t\t\t"srvipaddr":\t"178.62.185.131",\n\t\t\t"srvport":\t"55238",\n\t\t\t"recv":\t1,\n\t\t\t"RS":\t"NXT-CXAS-P5SG-EUVZ-BQ3H5",\n\t\t\t"pubkey":\t"020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777,\n\t\t\t\t"sent":\t93,\n\t\t\t\t"lastsent":\t0.28231793,\n\t\t\t\t"recv":\t276,\n\t\t\t\t"lastrecv":\t0.27922627,\n\t\t\t\t"pings":\t19,\n\t\t\t\t"pongs":\t92,\n\t\t\t\t"pingtime":\t25518.50000000,\n\t\t\t\t"avetime":\t316085.26991836\n\t\t\t},\n\t\t\t"srvNXT":\t"1978065578067355462",\n\t\t\t"srvipaddr":\t"89.212.19.49",\n\t\t\t"sent":\t93,\n\t\t\t"recv":\t276,\n\t\t\t"RS":\t"NXT-5TU8-78XL-W2CW-32WWQ",\n\t\t\t"pubkey":\t"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40"\n\t\t}],\n\t"num":\t2,\n\t"Numpservers":\t3,\n\t"Numnxtaccts":\t0\n}'
-        r.status_code 200
-
-        r.raw
-        <urllib3.response.HTTPResponse at 0x7f4ac7c652e8>
-        rep=eval(r.text)
-
-        {'Numnxtaccts': 0,
-        'Numpservers': 3,
-        'num': 2,
-        'peers': [{'RS': 'NXT-FMMS-4QHR-VEJ9-DYXU9',
-          'privateNXT': '12964664952395058808',
-          'pserver': {'port': 7777},
-          'pubkey': '702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171'},
-        {'RS': 'NXT-CXAS-P5SG-EUVZ-BQ3H5',
-          'pserver': {'lastrecv': 81.13409642, 'port': 55238, 'recv': 1},
-          'pubkey': '020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d',
-          'recv': 1,
-          'srvNXT': '10501328530345129240',
-          'srvipaddr': '178.62.185.131',
-          'srvport': '55238'},
-        {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ',
-          'pserver': {'avetime': 316085.26991836,
-           'lastrecv': 0.27922627,
-           'lastsent': 0.28231793,
-           'pings': 19,
-           'pingtime': 25518.5,
-           'pongs': 92,
-           'port': 7777,
-           'recv': 276,
-           'sent': 93},
-          'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40',
-          'recv': 276,
-          'sent': 93,
-          'srvNXT': '1978065578067355462',
-          'srvipaddr': '89.212.19.49'}]}
-          """
+    def getpeers(self):
+        print(2*"\n++++++++++++","test_getpeers")
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
 
 
 
@@ -159,7 +165,6 @@ class SNET_gotjson(SNET_BaseTest):
     def setUp(self):
         print(" test setUp func here")
         pass
-
 
 
     def runTest(self):
@@ -187,6 +192,8 @@ class SNET_gotjson(SNET_BaseTest):
         #
 
         self.assertTrue('result' in rpl777.keys() )
+
+
 
 
 
@@ -435,13 +442,18 @@ class SNET_settings(SNET_BaseTest):
 
         """
 
+
     #########################
-
-
-
-    #     // ramchains 13
     #########################
-
+    #########################
+    #########################
+    #
+    #     ramchains
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
 
 
 class ___Ramchains():
@@ -893,6 +905,18 @@ class SNET_ramresponse(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     MGW
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
 
 
 class ___MGW():
@@ -1129,15 +1153,18 @@ class SNET_cosigned(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
-#ping
+
 
     #########################
-
-
-
-
-    #     // IPcomms 5
-
+    #########################
+    #########################
+    #########################
+    #
+    #     ipComms
+    #########################
+    #########################
+    #########################
+    #########################
     #########################
 
 
@@ -1368,16 +1395,20 @@ class SNET_getfile(SNET_BaseTest):
 
 
 
-    #########################
-
-
-
-
-    #     // Kademlia DHT 8
 
     #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     Kademlia
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
 
-class __Kademlia():
+class ___Kademlia():
     pass
 
 class SNET_store(SNET_BaseTest):
@@ -1705,7 +1736,21 @@ class SNET_nonces(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
-    # // MofNfs
+
+
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     MofNs
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
+
 
 class ___MofNs():
     pass
@@ -1809,13 +1854,18 @@ class SNET_publish(SNET_BaseTest):
 
 
 
-
-
-    # // Telepathy
-
     #########################
-    #     // Telepathy 9
     #########################
+    #########################
+    #########################
+    #
+    #     Telepathy
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
 
 
 class ___Telepathy():
@@ -2401,14 +2451,20 @@ class SNET_sendbinary(SNET_BaseTest):
         self.assertTrue('sends encrypted sendmessage to' in rpl777['status'] )
 
 
+
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #      Teleport
+    #########################
+    #########################
+    #########################
+    #########################
     #########################
 
 
-
-
-
-    #     // Teleport 3
-    #########################
 
 class ___Teleport():
     pass
@@ -2508,6 +2564,19 @@ class SNET_teleport(SNET_BaseTest):
 
 
 
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     Privatebet
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
+
 
 
 
@@ -2552,6 +2621,18 @@ class SNET_lotto(SNET_BaseTest, ):
 
 
 
+
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     Tradebot
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
 
 
 
@@ -2811,7 +2892,19 @@ class SNET_tradebot(SNET_BaseTest):
 
 
 
-    # // Embedded Langs
+
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     plugins
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
 class ___plugins():
     pass
 
@@ -3030,9 +3123,17 @@ class SNET_remote(SNET_BaseTest):
 
 
 
-#########################
-#    InstantDEX 8
-#########################
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     InstantDEX
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
 
 
 
@@ -3117,16 +3218,7 @@ class SNET_orderbook(SNET_BaseTest, ):
     def test_orderbook(self):
         baseid = '11060861818140490423'
         relid = '17554243582654188572'
-        example_test_RQ_orderbook = {
-                            'allfields': '1', \
-                            'maxdepth': '25', \
-                            'baseid': baseid, \
-                            'relid': relid, \
-                            'requestType': 'orderbook', \
-                            'oldest': ''
-        }
-
-        rpl777 = self.orderbook(baseid, relid)
+        rpl777 = self.orderbook(baseid, relid) # param passing can be done a bit better here
         self.assertTrue('NXT' in rpl777.keys() )
 
 
@@ -3143,12 +3235,26 @@ class SNET_orderbook(SNET_BaseTest, ):
         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
         return rpl777
 
+    #{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
+    #{"result":"success","txid":"15021359626299573695"}
 
-#{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
-#{"result":"success","txid":"15021359626299573695"}
+
 class SNET_placeask(SNET_BaseTest,  ):
     """
-    {'baseid': '17554243582654188572', 'rel': 'NXT', 'volume': 1, 'askoffer': 1, 'baseamount': '100000000', 'relamount': '1400000', 'requestType': 'ask', 'price': 0.014, 'duration': 3600, 'quoteid': '4465316289681108136', 'exchange': 'InstantDEX', 'offerNXT': '10501328530345129240', 'relid': '5527630', 'base': 'BTC', 'timestamp': 1429353104, 'age': 0, 'NXT': '10501328530345129240', 'minperc': 75}
+
+   ./uTest1.py SNET_placeask
+ test setUp func here
+query json is:  {'timestamp': '', 'relamount': '', 'requestType': 'placeask', 'volume': '1.00', 'baseid': '17554243582654188572', 'minperc': '', 'price': '0.014', 'duration': '', 'relid': '5527630', 'gui': '', 'baseamount': '', 'automatch': ''}
+test_placeask:  {'timestamp': 1429429594, 'baseamount': '100000000', 'relamount': '1400000', 'requestType': 'ask', 'base': 'BTC', 'NXT': '10501328530345129240', 'minperc': 75, 'baseid': '17554243582654188572', 'price': 0.014, 'quoteid': '6191161196027104713', 'duration': 3600, 'exchange': 'InstantDEX', 'age': 0, 'relid': '5527630', 'rel': 'NXT', 'askoffer': 1, 'volume': 1, 'offerNXT': '10501328530345129240'}
+query json is:  {'timestamp': '', 'relamount': '', 'requestType': 'placeask', 'volume': '1.00001', 'baseid': '17554243582654188572', 'minperc': '', 'price': '0.00014', 'duration': '', 'relid': '5527630', 'gui': '', 'baseamount': '', 'automatch': ''}
+test_placeask_a:  {'timestamp': 1429429594, 'baseamount': '100001000', 'relamount': '14000', 'requestType': 'ask', 'base': 'BTC', 'NXT': '10501328530345129240', 'minperc': 75, 'baseid': '17554243582654188572', 'price': 0.00014, 'quoteid': '18108422846743312101', 'duration': 3600, 'exchange': 'InstantDEX', 'age': 0, 'relid': '5527630', 'rel': 'NXT', 'askoffer': 1, 'volume': 1.00001, 'offerNXT': '10501328530345129240'}
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.977s
+
+OK
+
+
     """#
     def setUp(self):
         print(" test setUp func here")
@@ -3544,6 +3650,21 @@ OK
 
 
 class SNET_cancelquote(SNET_BaseTest, ):
+    """
+        ++++++++++++
+    ++++++++++++ test_cancelquote
+    query json is:  {'quoteid': '123', 'requestType': 'cancelquote'}
+
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y: {'result': 'you can only cancel your InstantDEX orders'}
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.140s
+
+    OK
+
+
+        """#
 
     def setUp(self):
         print(" test cancelquote setUp func here")
@@ -3553,16 +3674,43 @@ class SNET_cancelquote(SNET_BaseTest, ):
         self.test_cancelquote()
 
     def test_cancelquote(self):
-        null = None
-        rpl777 = self.apicall({'requestType': 'cancelquote','quoteid':'123'})
-
+        qId = '123'
+        rpl777 = self.cancelquote(qId)
         self.assertTrue('result' in rpl777.keys() )
 
-    def cancelquote(self):
-        pass
+    def cancelquote(self,qId):
+        print(2*"\n++++++++++++","test_cancelquote")
+        test_RQ_cancelquote = {'requestType': 'cancelquote'}
+        test_RQ_cancelquote['quoteid'] = qId
+        payload= self.qComp_777.make_777POST_Request(test_RQ_cancelquote)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+
+
 
 class SNET_lottostats(SNET_BaseTest, ):
+    """
+         ./uTest1.py SNET_lottostats
+     test lottostats setUp func here
 
+    ++++++++++++
+    ++++++++++++ lottostats call
+    query json is:  {'timestamp': '', 'requestType': 'lottostats'}
+
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y:
+
+     {'NXT': '10501328530345129240', 'odds': '0.00', 'result': 'lottostats', 'totaltickets': '200', 'numtickets': '0', 'topMM': '13632947951045332845'}
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.263s
+
+    OK
+
+    """#
     def setUp(self):
         print(" test lottostats setUp func here")
         pass
@@ -3571,24 +3719,18 @@ class SNET_lottostats(SNET_BaseTest, ):
         self.test_lottostats()
 
     def test_lottostats(self):
-        null = None
-        rpl777 = self.apicall({'requestType': 'lottostats'})
-
+        rpl777 = self.lottostats()
         self.assertTrue('result' in rpl777.keys() )
+        self.assertTrue('numtickets' in rpl777.keys() )
+        self.assertTrue(rpl777['result']  == 'lottostats')
 
-
-    #query_json = {'requestType': 'lottostats'}
-	# {'error': 'illegal lotto parms'}
-	#{"result":"lottostats","totaltickets":"0","NXT":"8418687609572182360","numtickets":"0","odds":"0.00","topMM":"0"}
-    def lotto(self):
-
-        print(2*"\n++++++++++++","lotto call")
-        test_RQ_ = {'requestType': 'lottostats'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+    def lottostats(self):
+        null = None
+        print(2*"\n++++++++++++","lottostats call")
+        test_RQ_lottostats = {'requestType': 'lottostats'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_lottostats)
         print("query json is: ", payload)
-        #headers = {'content-type': 'application/json'}
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
         rpl777 = eval(testReq.text)
         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
         return rpl777
@@ -3596,7 +3738,35 @@ class SNET_lottostats(SNET_BaseTest, ):
 
 
 class SNET_tradehistory(SNET_BaseTest, ):
+    """
+       azure@boxfish:~/workbench/nxtDev/snappy$ ./uTest1.py SNET_tradehistory
+     test tradehistory setUp func here
 
+    ++++++++++++
+    ++++++++++++ tradehistory call
+    query json is:  {'requestType': 'tradehistory', 'timestamp': ''}
+
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y:
+
+     {}
+    F
+    ======================================================================
+    FAIL: runTest (__main__.SNET_tradehistory)
+    ----------------------------------------------------------------------
+    Traceback (most recent call last):
+      File "./uTest1.py", line 3741, in runTest
+        self.test_tradehistory()
+      File "./uTest1.py", line 3746, in test_tradehistory
+        self.assertTrue('result' in rpl777.keys() )
+    AssertionError: False is not true
+
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.181s
+
+    FAILED (failures=1)
+
+    """#
     def setUp(self):
         print(" test tradehistory setUp func here")
         pass
@@ -3604,18 +3774,42 @@ class SNET_tradehistory(SNET_BaseTest, ):
     def runTest(self):
         self.test_tradehistory()
 
-    def test_tradehistory(self):
-        null = None
-        rpl777 = self.apicall({'requestType': 'tradehistory'})
 
+    def test_tradehistory(self):
+        rpl777 = self.tradehistory()
         self.assertTrue('result' in rpl777.keys() )
 
+    def tradehistory(self):
+        null = None
+        print(2*"\n++++++++++++","tradehistory call")
+        test_RQ_tradehistory = {'requestType': 'tradehistory'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_tradehistory)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+        return rpl777
 
 
 
 
 class SNET_jumptrades(SNET_BaseTest, ):
+    """
+        ./uTest1.py SNET_jumptrades
+     test jumptrades setUp func here
 
+    ++++++++++++
+    ++++++++++++ jumptrades call
+    query json is:  {'requestType': 'jumptrades'}
+
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y:
+
+     {}
+    F
+
+
+    """#
     def setUp(self):
         print(" test jumptrades setUp func here")
         pass
@@ -3624,13 +3818,19 @@ class SNET_jumptrades(SNET_BaseTest, ):
         self.test_jumptrades()
 
     def test_jumptrades(self):
-        null = None
-        rpl777 = self.apicall({'requestType': 'jumptrades'})
+        rpl777 = self.jumptrades( )
+        self.assertTrue('result' in rpl777.keys() )
 
-        if rpl777:
-            print("not empty")
-        else:
-            print("empty")
+    def jumptrades(self):
+        null = None
+        print(2*"\n++++++++++++","jumptrades call")
+        test_RQ_jumptrades = {'requestType': 'jumptrades'}
+        payload = self.qComp_777.make_777POST_Request(test_RQ_jumptrades)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+        return rpl777
 
 
 
@@ -3658,7 +3858,6 @@ class SNET_makeoffer(SNET_BaseTest, ):
         #get first bid
         query_json = orderbookResponse['bids'][0]
 
-
         query_json['perc']=100
         query_json['askoffer']=1
 
@@ -3670,6 +3869,17 @@ class SNET_makeoffer(SNET_BaseTest, ):
             print('ok total Amount of Order is in Range. Proceeding.\n')
             self.apicall(query_json)
 
+#-----------------> go to makeoffer3 from makeoffer here!
+#
+
+#-----------------> go to makeoffer3 from makeoffer here!
+#
+
+#-----------------> go to makeoffer3 from makeoffer here!
+#
+
+#-----------------> go to makeoffer3 from makeoffer here!
+#
 
 
 class SNET_makeoffer3(SNET_BaseTest):
@@ -3707,50 +3917,25 @@ class SNET_makeoffer3(SNET_BaseTest):
     def makeoffer3(self):
         pass # perform the reuquest
 
-#-----------------> go to makeoffer3 from makeoffer here!
-#
-# class SNET_makeoffer(SNET_BaseTest, ):
-#
-#     def setUp(self):
-#         print("test makeoffer")
-#         pass
-#
-#     def runTest(self):
-#         self.test_makeoffer_a()
-#
-#     def test_makeoffer_a(self):
-#         baseid = '11060861818140490423'
-#         relid = '5527630'
-#         null = None
-#         #Max NXT Amount
-#         maxAmount=50
-#
-#         orderbookResponse = self.orderbook(baseid,relid)
-#         print('\nCheck orderbook\n')
-#         print(orderbookResponse['bids'][0],'\n')
-#
-#         #get first bid
-#         query_json = orderbookResponse['bids'][0]
-#
-#
-#         query_json['perc']=100
-#         query_json['askoffer']=1
-#
-#         totalAmount = orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price']
-#
-#         print(totalAmount, orderbookResponse['bids'][0]['rel'])
-#
-#         if(totalAmount<maxAmount):
-#             print('ok total Amount of Order is in Range. Proceeding.\n')
-#             self.apicall(query_json)
-#
-#
-
 
 
 class SNET_trollbox(SNET_BaseTest):
     """
     #static char *trollbox[] = { (char *)trollbox_func, "trollbox", "V", "post", "whaleindex", 0 };
+     ./uTest1.py SNET_trollbox
+     test setUp func here
+
+    ++++++++++++
+    ++++++++++++ test_trollbox
+    query json is:  None
+
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y:
+
+     {'error': 'command disabled'}
+    {'error': 'command disabled'}
+    F
+
     """#
 
     def setUp(self):
@@ -3775,6 +3960,20 @@ class SNET_trollbox(SNET_BaseTest):
         rpl777 = eval(testReq.text)
         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
         return rpl777
+
+
+    #########################
+    #########################
+    #########################
+    #########################
+    #
+    #     composites
+    #########################
+    #########################
+    #########################
+    #########################
+    #########################
+
 
 
 class ___composites():
@@ -4447,13 +4646,21 @@ class TestCollector(object):
                         SNET_checkmessages ,\
                         ]
 
-        elif testListName == 'tradeBotOK':
-                        [
+        elif testListName == 'contacts':
+
+            testList = [
+                       SNET_addcontact,\
+                        SNET_dispcontact,\
+                        SNET_removecontact
+                        ]
+
+        elif testListName == 'tradebotOK':
+            testList =  [
                         SNET_allsignals,\
                                 ]
 
         elif testListName == 'idexOK':
-                        [
+            testList =          [
                         SNET_orderbook,\
                         SNET_placeask,\
                         SNET_placebid,\
@@ -4461,16 +4668,23 @@ class TestCollector(object):
                         SNET_openorders,\
                         SNET_ask,\
                         SNET_bid,\
+                        SNET_lottostats,\
                         ]
 
         elif testListName == 'idexSmoketest':
-                        [
+            testList =     [
+                        SNET_cancelquote,\
                         SNET_respondtx,\
 
                         ]
 
-        elif testListName == 'idexAll':
+        elif testListName == 'idexFail':
+            testList =     [
+                        SNET_tradehistory,\
+                        SNET_trollbox,\
+                        ]
 
+        elif testListName == 'idexAll':
             testList = [
                         SNET_allorderbooks ,\
                         SNET_openorders,\
@@ -4484,19 +4698,9 @@ class TestCollector(object):
                         SNET_tradehistory,\
                         SNET_cancelquote,\
                         SNET_makeoffer3 ,\
-                        SNET_jumptrades
+                        SNET_jumptrades,\
+                        SNET_trollbox
                         ]
-
-
-        elif testListName == 'contacts':
-
-            testList = [
-                       SNET_addcontact,\
-                        SNET_dispcontact,\
-                        SNET_removecontact
-                        ]
-
-
 
 
         else:
