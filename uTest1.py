@@ -81,82 +81,6 @@ class SNET_BaseTest(unittest.TestCase):
 class ___glue():
     pass
 
-class SNET_getpeers(SNET_BaseTest):
-
-
-    """
-    r.apparent_encoding = ascii
-    r.headers
-    CaseInsensitiveDict({'content-length': '1032', 'access-control-allow-headers': 'Authorization, Content-Type', 'server': 'SuperNET', 'content-type': 'text/html', 'access-control-allow-origin': '*', 'access-control-allow-credentials': 'true', 'access-control-allow-methods': 'GET, POST, OPTIONS'})
-
-    '{\n\t"peers":\t[{\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777\n\t\t\t},\n\t\t\t"privateNXT":\t"12964664952395058808",\n\t\t\t"RS":\t"NXT-FMMS-4QHR-VEJ9-DYXU9",\n\t\t\t"pubkey":\t"702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t55238,\n\t\t\t\t"recv":\t1,\n\t\t\t\t"lastrecv":\t81.13409642\n\t\t\t},\n\t\t\t"srvNXT":\t"10501328530345129240",\n\t\t\t"srvipaddr":\t"178.62.185.131",\n\t\t\t"srvport":\t"55238",\n\t\t\t"recv":\t1,\n\t\t\t"RS":\t"NXT-CXAS-P5SG-EUVZ-BQ3H5",\n\t\t\t"pubkey":\t"020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777,\n\t\t\t\t"sent":\t93,\n\t\t\t\t"lastsent":\t0.28231793,\n\t\t\t\t"recv":\t276,\n\t\t\t\t"lastrecv":\t0.27922627,\n\t\t\t\t"pings":\t19,\n\t\t\t\t"pongs":\t92,\n\t\t\t\t"pingtime":\t25518.50000000,\n\t\t\t\t"avetime":\t316085.26991836\n\t\t\t},\n\t\t\t"srvNXT":\t"1978065578067355462",\n\t\t\t"srvipaddr":\t"89.212.19.49",\n\t\t\t"sent":\t93,\n\t\t\t"recv":\t276,\n\t\t\t"RS":\t"NXT-5TU8-78XL-W2CW-32WWQ",\n\t\t\t"pubkey":\t"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40"\n\t\t}],\n\t"num":\t2,\n\t"Numpservers":\t3,\n\t"Numnxtaccts":\t0\n}'
-    r.status_code 200
-
-    r.raw
-    <urllib3.response.HTTPResponse at 0x7f4ac7c652e8>
-    rep=eval(r.text)
-
-    {'Numnxtaccts': 0,
-    'Numpservers': 3,
-    'num': 2,
-    'peers': [{'RS': 'NXT-FMMS-4QHR-VEJ9-DYXU9',
-      'privateNXT': '12964664952395058808',
-      'pserver': {'port': 7777},
-      'pubkey': '702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171'},
-    {'RS': 'NXT-CXAS-P5SG-EUVZ-BQ3H5',
-      'pserver': {'lastrecv': 81.13409642, 'port': 55238, 'recv': 1},
-      'pubkey': '020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d',
-      'recv': 1,
-      'srvNXT': '10501328530345129240',
-      'srvipaddr': '178.62.185.131',
-      'srvport': '55238'},
-    {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ',
-      'pserver': {'avetime': 316085.26991836,
-       'lastrecv': 0.27922627,
-       'lastsent': 0.28231793,
-       'pings': 19,
-       'pingtime': 25518.5,
-       'pongs': 92,
-       'port': 7777,
-       'recv': 276,
-       'sent': 93},
-      'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40',
-      'recv': 276,
-      'sent': 93,
-      'srvNXT': '1978065578067355462',
-      'srvipaddr': '89.212.19.49'}]}
-
-      """#
-
-    def setUp(self):
-        print("SNET_getpeers setUp here- NOP")
-        pass
-
-
-    def runTest(self):
-        self.test_getpeers()
-
-
-    def test_getpeers(self):
-        """
-        self.assertTrue('peers' in rpl777.keys())
-
-        """ #
-        rpl777 = self.getpeers()
-        self.assertTrue('peers' in rpl777.keys())
-
-
-    def getpeers(self):
-        print(2*"\n++++++++++++","test_getpeers")
-        test_RQ_getpeers = {'requestType': 'getpeers'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
-        print("query json is: ", payload)
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-        rpl777 = eval(testReq.text)
-        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
-        return rpl777
-
-
 
 
 class SNET_gotjson(SNET_BaseTest):
@@ -195,6 +119,29 @@ class SNET_gotjson(SNET_BaseTest):
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_gotpacket(SNET_BaseTest):
@@ -231,6 +178,29 @@ class SNET_gotpacket(SNET_BaseTest):
             self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_gotnewpeer(SNET_BaseTest):
 
@@ -262,10 +232,31 @@ class SNET_gotnewpeer(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
-    #// passthru
 
 
 class SNET_BTCDpoll(SNET_BaseTest):
@@ -301,6 +292,29 @@ class SNET_BTCDpoll(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_GUIpoll(SNET_BaseTest):
     """{'result': 'nothing pending'}
@@ -331,6 +345,29 @@ class SNET_GUIpoll(SNET_BaseTest):
         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         self.assertTrue('result' in rpl777.keys() )
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -442,6 +479,29 @@ class SNET_settings(SNET_BaseTest):
 
         """
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
     #########################
     #########################
@@ -494,6 +554,29 @@ class SNET_ramstatus(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_ramaddrlist(SNET_BaseTest):
@@ -532,6 +615,29 @@ class SNET_ramaddrlist(SNET_BaseTest):
         else:
             self.assertTrue('result' in rpl777.keys() )
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_ramstring(SNET_BaseTest):
@@ -568,6 +674,29 @@ class SNET_ramstring(SNET_BaseTest):
             self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_ramrawind(SNET_BaseTest):
 
@@ -603,6 +732,29 @@ class SNET_ramrawind(SNET_BaseTest):
             self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 class SNET_ramblock(SNET_BaseTest):
 
 
@@ -634,6 +786,29 @@ class SNET_ramblock(SNET_BaseTest):
             print(2*"\n~~~~~~~~~~~~","error in SuperNET rpl777y:\n\n", rpl777)
         else:
             self.assertTrue('result' in rpl777.keys() )
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -672,6 +847,29 @@ class SNET_ramscript(SNET_BaseTest):
             self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_ramtxlist(SNET_BaseTest):
 
@@ -702,6 +900,29 @@ class SNET_ramtxlist(SNET_BaseTest):
 
 
         self.assertTrue('result' in rpl777.keys() )
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -736,6 +957,29 @@ class SNET_ramrichlist(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_ramcompress(SNET_BaseTest):
 
@@ -768,6 +1012,29 @@ class SNET_ramcompress(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_ramexpand(SNET_BaseTest):
 
@@ -799,6 +1066,29 @@ class SNET_ramexpand(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_rambalances(SNET_BaseTest):
@@ -833,6 +1123,29 @@ class SNET_rambalances(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_rampyramid(SNET_BaseTest):
 
@@ -866,10 +1179,31 @@ class SNET_rampyramid(SNET_BaseTest):
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
-    # // MGW
 
 
 class SNET_ramresponse(SNET_BaseTest):
@@ -904,6 +1238,29 @@ class SNET_ramresponse(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
     #########################
     #########################
@@ -953,6 +1310,29 @@ class SNET_genmultisig(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_getmsigpubkey(SNET_BaseTest):
 
@@ -984,6 +1364,29 @@ class SNET_getmsigpubkey(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_MGWaddr(SNET_BaseTest):
@@ -1017,6 +1420,29 @@ class SNET_MGWaddr(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_MGWresponse(SNET_BaseTest):
 
@@ -1049,6 +1475,29 @@ class SNET_MGWresponse(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_setmsigpubkey(SNET_BaseTest):
@@ -1084,6 +1533,29 @@ class SNET_setmsigpubkey(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_cosign(SNET_BaseTest):
 
@@ -1117,10 +1589,31 @@ class SNET_cosign(SNET_BaseTest):
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
-    # // IPcomms(MGW)
 
 
 class SNET_cosigned(SNET_BaseTest):
@@ -1153,6 +1646,29 @@ class SNET_cosigned(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
     #########################
@@ -1205,6 +1721,29 @@ class SNET_ping(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_pong(SNET_BaseTest):
 
@@ -1238,6 +1777,29 @@ class SNET_pong(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -1276,6 +1838,29 @@ Sendfrag allows to send files. This function is low level and not practical for 
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_gotfrag(SNET_BaseTest):
 
@@ -1307,8 +1892,29 @@ class SNET_gotfrag(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
 
-    # // Kademlia DHT
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_startxfer(SNET_BaseTest):
@@ -1360,6 +1966,29 @@ result
         # {'result': 'pending SuperNET API call', 'txid': '2466605655551381573'}
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_getfile(SNET_BaseTest):
 
@@ -1394,6 +2023,29 @@ class SNET_getfile(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
     #########################
@@ -1469,6 +2121,29 @@ class SNET_store(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_findvalue(SNET_BaseTest):
@@ -1511,6 +2186,29 @@ class SNET_findvalue(SNET_BaseTest):
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_findnode(SNET_BaseTest):
@@ -1541,6 +2239,29 @@ class SNET_findnode(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_havenode(SNET_BaseTest):
@@ -1573,6 +2294,29 @@ class SNET_havenode(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 class SNET_findaddress(SNET_BaseTest):
 
@@ -1634,6 +2378,29 @@ class SNET_findaddress(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_havenodeB(SNET_BaseTest):
 
@@ -1666,9 +2433,30 @@ class SNET_havenodeB(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
 
 
-###
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+
+
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_puzzles(SNET_BaseTest):
@@ -1702,6 +2490,33 @@ class SNET_puzzles(SNET_BaseTest):
 
 
         self.assertTrue('result' in rpl777.keys() )
+
+
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
+
 
 class SNET_nonces(SNET_BaseTest):
 
@@ -1737,6 +2552,29 @@ class SNET_nonces(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
     #########################
     #########################
@@ -1786,6 +2624,29 @@ class SNET_savefile(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 
@@ -1822,6 +2683,29 @@ class SNET_restorefile(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_publish(SNET_BaseTest):
 
@@ -1853,6 +2737,29 @@ class SNET_publish(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
     #########################
     #########################
@@ -1871,6 +2778,104 @@ class SNET_publish(SNET_BaseTest):
 class ___Telepathy():
     pass
 
+
+
+class SNET_getpeers(SNET_BaseTest):
+
+
+    """
+    r.apparent_encoding = ascii
+    r.headers
+    CaseInsensitiveDict({'content-length': '1032', 'access-control-allow-headers': 'Authorization, Content-Type', 'server': 'SuperNET', 'content-type': 'text/html', 'access-control-allow-origin': '*', 'access-control-allow-credentials': 'true', 'access-control-allow-methods': 'GET, POST, OPTIONS'})
+
+    '{\n\t"peers":\t[{\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777\n\t\t\t},\n\t\t\t"privateNXT":\t"12964664952395058808",\n\t\t\t"RS":\t"NXT-FMMS-4QHR-VEJ9-DYXU9",\n\t\t\t"pubkey":\t"702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t55238,\n\t\t\t\t"recv":\t1,\n\t\t\t\t"lastrecv":\t81.13409642\n\t\t\t},\n\t\t\t"srvNXT":\t"10501328530345129240",\n\t\t\t"srvipaddr":\t"178.62.185.131",\n\t\t\t"srvport":\t"55238",\n\t\t\t"recv":\t1,\n\t\t\t"RS":\t"NXT-CXAS-P5SG-EUVZ-BQ3H5",\n\t\t\t"pubkey":\t"020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d"\n\t\t}, {\n\t\t\t"pserver":\t{\n\t\t\t\t"port":\t7777,\n\t\t\t\t"sent":\t93,\n\t\t\t\t"lastsent":\t0.28231793,\n\t\t\t\t"recv":\t276,\n\t\t\t\t"lastrecv":\t0.27922627,\n\t\t\t\t"pings":\t19,\n\t\t\t\t"pongs":\t92,\n\t\t\t\t"pingtime":\t25518.50000000,\n\t\t\t\t"avetime":\t316085.26991836\n\t\t\t},\n\t\t\t"srvNXT":\t"1978065578067355462",\n\t\t\t"srvipaddr":\t"89.212.19.49",\n\t\t\t"sent":\t93,\n\t\t\t"recv":\t276,\n\t\t\t"RS":\t"NXT-5TU8-78XL-W2CW-32WWQ",\n\t\t\t"pubkey":\t"c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40"\n\t\t}],\n\t"num":\t2,\n\t"Numpservers":\t3,\n\t"Numnxtaccts":\t0\n}'
+    r.status_code 200
+
+    r.raw
+    <urllib3.response.HTTPResponse at 0x7f4ac7c652e8>
+    rep=eval(r.text)
+
+    {'Numnxtaccts': 0,
+    'Numpservers': 3,
+    'num': 2,
+    'peers': [{'RS': 'NXT-FMMS-4QHR-VEJ9-DYXU9',
+      'privateNXT': '12964664952395058808',
+      'pserver': {'port': 7777},
+      'pubkey': '702f4bc8d955a4f5053b245ee9a40199ff8fca2bd304c13f77bb3c863e792171'},
+    {'RS': 'NXT-CXAS-P5SG-EUVZ-BQ3H5',
+      'pserver': {'lastrecv': 81.13409642, 'port': 55238, 'recv': 1},
+      'pubkey': '020ad74d2c6ce659a64ac0e7fc5415559ca56a3a233be0af73cded476fd0747d',
+      'recv': 1,
+      'srvNXT': '10501328530345129240',
+      'srvipaddr': '178.62.185.131',
+      'srvport': '55238'},
+    {'RS': 'NXT-5TU8-78XL-W2CW-32WWQ',
+      'pserver': {'avetime': 316085.26991836,
+       'lastrecv': 0.27922627,
+       'lastsent': 0.28231793,
+       'pings': 19,
+       'pingtime': 25518.5,
+       'pongs': 92,
+       'port': 7777,
+       'recv': 276,
+       'sent': 93},
+      'pubkey': 'c269a8b4567c0b3062e6c4be859d845c4b808a405dd03d0d1ac7b4d9cb725b40',
+      'recv': 276,
+      'sent': 93,
+      'srvNXT': '1978065578067355462',
+      'srvipaddr': '89.212.19.49'}]}
+
+      """#
+
+    def setUp(self):
+        print("SNET_getpeers setUp here- NOP")
+        pass
+
+
+    def runTest(self):
+        self.test_getpeers()
+
+
+    def test_getpeers(self):
+        """
+        self.assertTrue('peers' in rpl777.keys())
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def getpeers(self):
+        print(2*"\n++++++++++++","test_getpeers")
+        test_RQ_getpeers = {'requestType': 'getpeers'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_getpeers)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+
+
+
+
+    def test_APICALL(self):
+        """
+        self.assertTrue('peers' in rpl777.keys())
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
 
 
 class SNET_addcontact(SNET_BaseTest):
@@ -1981,6 +2986,29 @@ Note that the parameter is handle for addcontact, but contact for removecontact 
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_removecontact(SNET_BaseTest):
     """removecontact
@@ -2084,6 +3112,29 @@ result
         self.assertTrue('result' in rpl777.keys() )
         self.assertTrue('deleted' in testReq.text )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_dispcontact(SNET_BaseTest):
@@ -2195,6 +3246,29 @@ result
         self.assertTrue('deleted' in testReq.text )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_telepathy(SNET_BaseTest):
     """telepathy
@@ -2234,6 +3308,29 @@ example
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_getdb(SNET_BaseTest):
@@ -2278,6 +3375,29 @@ GETDB.({"requestType":"dbret","NXT":"6249611027680999354","key":"103147095212543
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 class SNET_sendmessage(SNET_BaseTest):
@@ -2359,6 +3479,29 @@ class SNET_sendmessage(SNET_BaseTest):
         self.assertTrue('sends encrypted sendmessage to' in rpl777['status'] )
 
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -2451,6 +3594,29 @@ class SNET_sendbinary(SNET_BaseTest):
         self.assertTrue('sends encrypted sendmessage to' in rpl777['status'] )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
     #########################
     #########################
@@ -2503,6 +3669,29 @@ class SNET_maketelepods(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 class SNET_telepodacct(SNET_BaseTest):
 
 
@@ -2535,6 +3724,29 @@ class SNET_telepodacct(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 class SNET_teleport(SNET_BaseTest):
 
@@ -2562,6 +3774,29 @@ class SNET_teleport(SNET_BaseTest):
         self.assertTrue('result' in rpl777.keys() )
 
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
     #########################
@@ -2620,6 +3855,29 @@ class SNET_lotto(SNET_BaseTest, ):
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
     #########################
@@ -2639,105 +3897,6 @@ class SNET_lotto(SNET_BaseTest, ):
 
 class ___Tradebot():
     pass
-
-#
-# class SNET_pricedb(SNET_BaseTest):
-#
-#
-#     def setUp(self):
-#         print(" test setUp func here")
-#         pass
-#
-#
-#
-#     def runTest(self):
-#         self.test_pricedb()
-#
-#
-#     def test_pricedb(self):
-#
-#         #query_json = {'rel': '', 'stop': '', 'requestType': 'pricedb', 'exchange': '', 'base': ''}
-#
-# # {'error': 'bad pricedb paramater'}
-#         null = None
-#
-#         print(2*"\n++++++++++++","test_pricedb")
-#         test_RQ_ = {'requestType': 'pricedb'}
-#         payload= self.qComp_777.make_777POST_Request(test_RQ_)
-#         print("query json is: ", payload)
-#         #headers = {'content-type': 'application/json'}
-#         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-#
-#         rpl777 = eval(testReq.text)
-#         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-#
-#
-#         self.assertTrue('result' in rpl777.keys() )
-#
-#
-#
-# class SNET_getquotes(SNET_BaseTest):
-#
-#
-#     def setUp(self):
-#         print(" test setUp func here")
-#         pass
-#
-#
-#
-#     def runTest(self):
-#         self.test_getquotes()
-#
-#
-#     def test_getquotes(self):
-#
-#         #query_json = {'requestType': 'getquotes', 'base': '', 'rel': '', 'oldest': '', 'exchange': ''}
-#
-#         null = None
-#         print(2*"\n++++++++++++","test_getquotes")
-#         test_RQ_ = {'requestType': 'getquotes'}
-#         payload= self.qComp_777.make_777POST_Request(test_RQ_)
-#         print("query json is: ", payload)
-#         #headers = {'content-type': 'application/json'}
-#         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-#
-#         rpl777 = eval(testReq.text)
-#         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-#
-#         self.assertTrue('result' in rpl777.keys() )
-#
-
-
-#
-#
-# class SNET_allsignals_OBS(SNET_BaseTest, ):
-#     """
-#         query json is:  {'requestType': 'allsignals'}
-#
-#     ~~~~~~~~~~~~ SuperNET rpl777y:
-#
-#      {'signals': [{'signal': 'firstbid', 'scale': 'price'}, {'signal': 'firstask', 'scale': 'price'}, {'signal': 'lowbid', 'scale': 'price'}, {'signal': 'highask', 'scale': 'price'}, {'signal': 'highbid', 'scale': 'price'}, {'signal': 'lowask', 'scale': 'price'}, {'signal': 'lowbid', 'scale': 'price'}, {'signal': 'lastask', 'scale': 'price'}, {'signal': 'arbbid', 'scale': 'price'}, {'signal': 'arbask', 'scale': 'price'}, {'signal': 'virtbid', 'scale': 'price'}, {'signal': 'virtask', 'scale': 'price'}, {'signal': 'avebid', 'scale': 'price'}, {'signal': 'aveask', 'scale': 'price'}, {'signal': 'median', 'scale': 'price'}, {'signal': 'aveprice', 'scale': 'price'}, {'signal': 'ohlc', 'scale': 'price', 'n': 4}, {'signal': 'volume', 'scale': 'positive'}]}
-#     .
-#     ----------------------------------------------------------------------
-#     Ran 1 test in 0.137s
-#
-#     OK
-#
-#         """#
-#     def setUp(self):
-#         print(" test allsignals setUp func here")
-#         pass
-#
-#     def runTest(self):
-#         self.test_allsignals()
-#
-#     def test_allsignals(self):
-#         null = None
-#         rpl777 = self.apicall({'requestType': 'allsignals'})
-#
-#         self.assertTrue('signals' in rpl777.keys() )
-#
-
 
 
 
@@ -2789,6 +3948,29 @@ OK
         return rpl777
 
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -2854,6 +4036,29 @@ class SNET_getsignal(SNET_BaseTest,  ):
 #         self.assertTrue('result' in rpl777.keys() )
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_tradebot(SNET_BaseTest):
@@ -2889,6 +4094,29 @@ class SNET_tradebot(SNET_BaseTest):
 
         self.assertTrue('result' in rpl777.keys() )
 
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
@@ -3021,6 +4249,31 @@ class SNET_checkmessages(SNET_BaseTest):
 
 
 
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
+
+
 class SNET_syscall(SNET_BaseTest):
 
 
@@ -3049,6 +4302,31 @@ class SNET_syscall(SNET_BaseTest):
         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         self.assertTrue('result' in rpl777.keys() )
+
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_passthru(SNET_BaseTest):
@@ -3085,7 +4363,29 @@ class SNET_passthru(SNET_BaseTest):
 
 
 
-    #// ramchains   13
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
 
 
 class SNET_remote(SNET_BaseTest):
@@ -3120,6 +4420,31 @@ class SNET_remote(SNET_BaseTest):
         else:
             self.assertTrue('result' in rpl777.keys() )
 
+
+
+
+    def test_APICALL(self):
+        """
+
+        """ #
+        rpl777 = self.getpeers()
+        self.assertTrue('peers' in rpl777.keys())
+
+
+    def APICALL(self):
+        print(2*"\n++++++++++++","test_APICALL")
+        test_RQ_APICALL = {'requestType': 'APICALL'}
+        payload= self.qComp_777.make_777POST_Request(test_RQ_APICALL)
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:", rpl777)
+        return rpl777
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
 
 
 
