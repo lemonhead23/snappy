@@ -115,7 +115,7 @@ class QueryComposer_XML(QC_XMLBase):
         self.environ = environ
         super(QueryComposer_XML, self).__init__()
         #self.scheduler = scheduler
-        print("here we compose the specific details of the query that is sent to the data provider service")
+        #print("here we compose the specific details of the query that is sent to the data provider service")
         ok=True
 
 
@@ -3911,7 +3911,7 @@ This is the wrapper class
 
         self.BitcoinDarkRPCCreds = environ['BitcoinDarkRPCCreds']
         #self.create_base64_encoded_Creds()
-        print("here we compose the specific details of the query that is sent to the data provider service")
+        #print("here we compose the specific details of the query that is sent to the data provider service")
 
         self.jl777_pBet = QC_777_pBet(environ)
         self.jl777_iDex = QC_777_iDex(environ)
@@ -4293,7 +4293,7 @@ class QueryComposer_LOC(object):
     API_calls = [ 'soccer_schedule', 'MORE', ]
 
     def __init__(self, environ = {}):
-        print("here we compose the specific details of the query that is sent to the data provider service")
+        #print("here we compose the specific details of the query that is sent to the data provider service")
         self.environ = environ
         self.CACHE_DIR = environ['localCacheDir']
         self.CACHE_FILENAMES = environ['CACHE_FILENAMES']

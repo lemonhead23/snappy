@@ -96,9 +96,21 @@ class SNET_gotjson(SNET_BaseTest):
 
 
     def test_gotjson(self):
+        """ test_gotjson
+
+            call sequence:
+
+            1. gotjson
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'result'
+
+
         """
 
-        """ #
         rpl777 = self.gotjson()
         self.assertTrue('result' in rpl777.keys())
 
@@ -122,8 +134,13 @@ class SNET_gotjson(SNET_BaseTest):
 
 
 class SNET_gotpacket(SNET_BaseTest):
+    """
+            query json is:  {'ip_port': '', 'msg': '', 'requestType': 'gotpacket', 'dur': ''}
 
- #query_json = {'ip_port': '', 'msg': '', 'requestType': 'gotpacket', 'dur': ''}
+        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~ SuperNET rpl777y: {'error': 'duplicate msg'}
+        F
+    """
 
     def setUp(self):
         print(" test setUp func here")
@@ -136,9 +153,21 @@ class SNET_gotpacket(SNET_BaseTest):
 
 
     def test_gotpacket(self):
+        """ test_gotjson
+
+            call sequence:
+
+            1. test_gotpacket
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'result'
+
+
         """
 
-        """ #
         rpl777 = self.gotpacket()
         self.assertTrue('result' in rpl777.keys())
 
@@ -173,9 +202,21 @@ class SNET_gotnewpeer(SNET_BaseTest):
 
 
     def test_gotnewpeer(self):
+        """ test_gotnewpeer
+
+            call sequence:
+
+            1. gotnewpeer
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'result'
+
+
         """
 
-        """ #
         rpl777 = self.gotnewpeer()
         self.assertTrue('result' in rpl777.keys())
 
@@ -201,8 +242,6 @@ class SNET_gotnewpeer(SNET_BaseTest):
 
 
 class SNET_BTCDpoll(SNET_BaseTest):
-    """{'result': 'nothing pending'}
-    """
 
     def setUp(self):
         print(" test setUp func here")
@@ -215,28 +254,20 @@ class SNET_BTCDpoll(SNET_BaseTest):
 
 
     def test_BTCDpoll(self):
-#        null = None #  b'{"result":null}' for when null is sent back, which py doenst know
+        """ test_BTCDpoll
+
+            call sequence:
+
+            1. BTCDpoll
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'result'
 
 
-        #query_json = {'requestType': 'BTCDpoll'}
-
-
-        print(2*"\n++++++++++++","test_BTCDpoll")
-        test_RQ_ = {'requestType': 'BTCDpoll'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
-        print("query json is: ", payload)
-        #headers = {'content-type': 'application/json'}
-        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
-        rpl777 = eval(testReq.text)
-        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        self.assertTrue('result' in rpl777.keys() )
-
-    def test_BTCDpoll(self):
         """
-
-        """ #
         rpl777 = self.BTCDpoll()
         self.assertTrue('result' in rpl777.keys())
 
@@ -259,8 +290,6 @@ class SNET_BTCDpoll(SNET_BaseTest):
 
 
 class SNET_GUIpoll(SNET_BaseTest):
-    """{'result': 'nothing pending'}
-    """
 
 
     def setUp(self):
@@ -274,9 +303,21 @@ class SNET_GUIpoll(SNET_BaseTest):
 
 
     def test_GUIpoll(self):
+        """ test_gotjson
+
+            call sequence:
+
+            1. gotjson
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'result'
+
+
         """
 
-        """ #
         rpl777 = self.GUIpoll()
         self.assertTrue('result' in rpl777.keys())
         self.assertTrue( rpl777['result'] == 'nothing pending')
@@ -386,9 +427,21 @@ class SNET_settings(SNET_BaseTest):
         self.test_settings()
 
     def test_settings(self):
+        """ test_settings
+
+            call sequence:
+
+            1. settings
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'coins'
+
+
         """
 
-        """ #
         rpl777 = self.settings()
 
 
@@ -4490,37 +4543,103 @@ char *assetmap[][2] =
 
 class SNET_orderbook(SNET_BaseTest, ):
     """
-    ++++++++++++ test_orderbook
-    query json is:  {'baseid': '11060861818140490423', 'base': '', 'relid': '17554243582654188572', 'gui': '', 'rel': '', 'allfields': '', 'oldest': '', 'maxdepth': '', 'requestType': 'orderbook'}
+       ++++++++++++
+    ++++++++++++ orderbook
+    query json is:  {'oldest': '', 'rel': '', 'allfields': '', 'base': '', 'relid': '17554243582654188572', 'gui': '', 'maxdepth': '', 'baseid': '11060861818140490423', 'requestType': 'orderbook'}
 
     ~~~~~~~~~~~~
     ~~~~~~~~~~~~ SuperNET rpl777y:
 
-     {'obookid': '7646303683960469163', 'bids': [], 'relid': '17554243582654188572', 'baseid': '11060861818140490423', 'asks': [], 'NXT': '10501328530345129240', 'timestamp': 1429355745, 'maxdepth': 0, 'pair': 'BTCD/BTC'}
+     {'error': 'empty orderbook'}
+    query json is:  {'volume': '1.00', 'duration': '', 'baseid': '17554243582654188572', 'timestamp': '', 'baseamount': '', 'relamount': '', 'minperc': '', 'price': '0.014', 'relid': '5527630', 'automatch': '', 'requestType': 'placeask', 'gui': ''}
+
+    ++++++++++++
+    ++++++++++++ orderbook
+    query json is:  {'oldest': '', 'rel': '', 'allfields': '', 'base': '', 'relid': '5527630', 'gui': '', 'maxdepth': '', 'baseid': '17554243582654188572', 'requestType': 'orderbook'}
+
+    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~ SuperNET rpl777y:
+
+     {'bids': [], 'NXT': '10501328530345129240', 'timestamp': 1429600604, 'relid': '5527630', 'baseid': '17554243582654188572', 'asks': [{'volume': '1.00001000', 'price': '0.00014000'}, {'volume': '1.00001000', 'price': '0.00014000'}, {'volume': '1.00000000', 'price': '0.01400000'}, {'volume': '1.00000000', 'price': '0.01400000'}, {'volume': '1.00000000', 'price': '0.01400000'}, {'volume': '1.00000000', 'price': '0.01400000'}], 'maxdepth': 0, 'pair': 'BTC/NXT', 'obookid': '17554243582651323474'}
     .
     ----------------------------------------------------------------------
-    Ran 1 test in 0.136s
+    Ran 1 test in 0.448s
 
     OK
-    """#
+
+
+    """
+
 
     def setUp(self):
         print(" test setUp func here")
         pass
 
     def runTest(self):
+        self.test_orderbook_empty()
         self.test_orderbook()
 
-    def test_orderbook(self):
+
+    def test_orderbook_empty(self):
+        """ test_orderbook_empty
+
+            call sequence:
+
+            1. orderbook
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'error'
+            2.  error message is 'empty orderbook'
+
+
+        """
         baseid = '11060861818140490423'
         relid = '17554243582654188572'
         rpl777 = self.orderbook(baseid, relid) # param passing can be done a bit better here
-        self.assertTrue('NXT' in rpl777.keys() )
+        self.assertTrue(rpl777['error']=='empty orderbook')
+        self.assertTrue('error' in rpl777.keys() )
 
+
+    def test_orderbook(self):
+        """ test_orderbook
+
+            call sequence:
+
+            1. place order
+            2. orderbook
+
+            ---------
+
+            asserts
+
+            1.  reply has correct orderbook with key 'NXT'
+
+
+        """
+        price = '0.014'
+        volume = '1.00'
+        baseid = '17554243582654188572'
+        relid = '5527630'
+
+        testRQ_placeask = {'requestType': 'placeask'}
+        payload= self.qComp_777.make_777POST_Request(testRQ_placeask)
+        payload['volume'] = volume
+        payload['price'] =  price
+        payload['baseid'] = baseid
+        payload['relid'] =  relid
+        print("query json is: ", payload)
+        testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
+        rpl777 = eval(testReq.text)
+
+        rpl777 = self.orderbook(baseid, relid) # param passing can be done a bit better here
+        self.assertTrue('NXT' in rpl777.keys() )
 
     def orderbook(self, baseid, relid):
         null = None
-        print(2*"\n++++++++++++","test_orderbook")
+        print(2*"\n++++++++++++","orderbook")
         test_RQ_orderbook = {'requestType': 'orderbook'}
         payload= self.qComp_777.make_777POST_Request(test_RQ_orderbook)
         payload['baseid'] = baseid
@@ -4535,23 +4654,27 @@ class SNET_orderbook(SNET_BaseTest, ):
     #{"result":"success","txid":"15021359626299573695"}
 
 
+    # http://docs.pylonsproject.org/en/latest/community/testing.html
+
+
+
 class SNET_placeask(SNET_BaseTest,  ):
     """
 
-   ./uTest1.py SNET_placeask
- test setUp func here
-query json is:  {'timestamp': '', 'relamount': '', 'requestType': 'placeask', 'volume': '1.00', 'baseid': '17554243582654188572', 'minperc': '', 'price': '0.014', 'duration': '', 'relid': '5527630', 'gui': '', 'baseamount': '', 'automatch': ''}
-test_placeask:  {'timestamp': 1429429594, 'baseamount': '100000000', 'relamount': '1400000', 'requestType': 'ask', 'base': 'BTC', 'NXT': '10501328530345129240', 'minperc': 75, 'baseid': '17554243582654188572', 'price': 0.014, 'quoteid': '6191161196027104713', 'duration': 3600, 'exchange': 'InstantDEX', 'age': 0, 'relid': '5527630', 'rel': 'NXT', 'askoffer': 1, 'volume': 1, 'offerNXT': '10501328530345129240'}
-query json is:  {'timestamp': '', 'relamount': '', 'requestType': 'placeask', 'volume': '1.00001', 'baseid': '17554243582654188572', 'minperc': '', 'price': '0.00014', 'duration': '', 'relid': '5527630', 'gui': '', 'baseamount': '', 'automatch': ''}
-test_placeask_a:  {'timestamp': 1429429594, 'baseamount': '100001000', 'relamount': '14000', 'requestType': 'ask', 'base': 'BTC', 'NXT': '10501328530345129240', 'minperc': 75, 'baseid': '17554243582654188572', 'price': 0.00014, 'quoteid': '18108422846743312101', 'duration': 3600, 'exchange': 'InstantDEX', 'age': 0, 'relid': '5527630', 'rel': 'NXT', 'askoffer': 1, 'volume': 1.00001, 'offerNXT': '10501328530345129240'}
-.
-----------------------------------------------------------------------
-Ran 1 test in 0.977s
+       ./uTest1.py SNET_placeask
+     test setUp func here
+    query json is:  {'timestamp': '', 'relamount': '', 'requestType': 'placeask', 'volume': '1.00', 'baseid': '17554243582654188572', 'minperc': '', 'price': '0.014', 'duration': '', 'relid': '5527630', 'gui': '', 'baseamount': '', 'automatch': ''}
+    test_placeask:  {'timestamp': 1429429594, 'baseamount': '100000000', 'relamount': '1400000', 'requestType': 'ask', 'base': 'BTC', 'NXT': '10501328530345129240', 'minperc': 75, 'baseid': '17554243582654188572', 'price': 0.014, 'quoteid': '6191161196027104713', 'duration': 3600, 'exchange': 'InstantDEX', 'age': 0, 'relid': '5527630', 'rel': 'NXT', 'askoffer': 1, 'volume': 1, 'offerNXT': '10501328530345129240'}
+    query json is:  {'timestamp': '', 'relamount': '', 'requestType': 'placeask', 'volume': '1.00001', 'baseid': '17554243582654188572', 'minperc': '', 'price': '0.00014', 'duration': '', 'relid': '5527630', 'gui': '', 'baseamount': '', 'automatch': ''}
+    test_placeask_a:  {'timestamp': 1429429594, 'baseamount': '100001000', 'relamount': '14000', 'requestType': 'ask', 'base': 'BTC', 'NXT': '10501328530345129240', 'minperc': 75, 'baseid': '17554243582654188572', 'price': 0.00014, 'quoteid': '18108422846743312101', 'duration': 3600, 'exchange': 'InstantDEX', 'age': 0, 'relid': '5527630', 'rel': 'NXT', 'askoffer': 1, 'volume': 1.00001, 'offerNXT': '10501328530345129240'}
+    .
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.977s
 
-OK
+    OK
 
 
-    """#
+        """#
     def setUp(self):
         print(" test setUp func here")
         pass
@@ -4561,23 +4684,37 @@ OK
         self.test_placeask_a()
 
     def test_placeask(self):
-        #null = None
+        """ test_placeask
+
+            call sequence:
+
+            1. placeask with fixed params
+
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'quoteid'
+
+
+        """
         price = '0.014'
         volume = '1.00'
         baseid = '17554243582654188572'
         relid = '5527630'
-        apiResponse = self.placeask(volume,price,baseid,relid)
-        print("test_placeask: ", apiResponse)
-        self.assertTrue('quoteid' in apiResponse.keys() )
+        rpl777 = self.placeask(volume,price,baseid,relid)
+        print("test_placeask: ", rpl777)
+        self.assertTrue('quoteid' in rpl777.keys() )
 
     def test_placeask_a(self): #??
         price = '0.00014'
         volume = '1.00001'
         baseid = '17554243582654188572'
         relid = '5527630'
-        apiResponse = self.placeask(volume,price,baseid,relid)
-        print("test_placeask_a: ", apiResponse)
-        self.assertTrue('quoteid' in apiResponse.keys() )
+        rpl777 = self.placeask(volume,price,baseid,relid)
+        print("test_placeask_a: ", rpl777)
+        self.assertTrue('quoteid' in rpl777.keys() )
 
     def placeask(self, volume, price, baseid, relid):
         """ args for these calls can be extended w/ defaults   """#
@@ -4638,20 +4775,35 @@ class SNET_placebid(SNET_BaseTest, ):
         self.test_placebid_a(volume,price,baseid,relid)
 
     def test_placebid(self):
+        """ test_placebid
+
+            call sequence:
+
+            1. placebid  with fixed params
+
+
+            ---------
+
+            asserts
+
+            1.  reply has key 'quoteid'
+
+
+        """
         null = None
         price = '0.014'
         volume = '1.00'
 
         baseid = '17554243582654188572'
         relid = '5527630'
-        apiResponse = self.placebid(volume,price,baseid,relid)
+        rpl777 = self.placebid(volume,price,baseid,relid)
         #print(apiResponse);
-        self.assertTrue('quoteid' in apiResponse.keys() )
+        self.assertTrue('quoteid' in rpl777.keys() )
 
     def test_placebid_a(self,volume,price,baseid,relid):
 
-        apiResponse = self.placebid(volume,price,baseid,relid)
-        self.assertTrue('quoteid' in apiResponse.keys() )
+        rpl777 = self.placebid(volume,price,baseid,relid)
+        self.assertTrue('quoteid' in rpl777.keys() )
 
 
 
@@ -4714,7 +4866,21 @@ OK
         self.test_allorderbooks()
 
     def test_allorderbooks(self):
+        """ test_placebid
 
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         rpl777 = self.allorderbooks()
         self.assertTrue('orderbooks' in rpl777.keys() )
 
@@ -4766,9 +4932,24 @@ class SNET_openorders(SNET_BaseTest, ):
         self.test_openorders()
 
     def test_openorders(self):
+        """ test_openorders
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
 
         rpl777 = self.openorders()
-        #{'result': 'no openorders'}
+
         self.assertTrue('openorders' in rpl777.keys() )
 
 
@@ -4803,6 +4984,21 @@ class SNET_respondtx(SNET_BaseTest, ):
         self.test_respondtx()
 
     def test_respondtx(self):
+        """ test_respondtx
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         rpl777 = self.respondtx()
         self.assertTrue('result' in rpl777.keys() )
 
@@ -4847,6 +5043,21 @@ class SNET_bid(SNET_BaseTest,):
 	# {'txid': '14590711946411376684', 'result': 'success'}
 	# static char *bid[] = { (char *)bid_func, "bid", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
     def test_bid(self):
+        """ test_bid
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         baseid = '11060861818140490423'
         relid = '17554243582654188572'
         rpl777 = self.bid(baseid, relid)
@@ -4911,6 +5122,21 @@ class SNET_ask(SNET_BaseTest,):
 	# {'txid': '14590711946411376684', 'result': 'success'}
 	# static char *ask[] = { (char *)ask_func, "ask", "V", "baseid", "relid", "volume", "price", "timestamp", "baseamount", "relamount", "type", 0 };
     def test_ask(self):
+        """ test_ask
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         baseid = '11060861818140490423'
         relid = '17554243582654188572'
         rpl777 = self.ask(baseid, relid)
@@ -4970,6 +5196,21 @@ class SNET_cancelquote(SNET_BaseTest, ):
         self.test_cancelquote()
 
     def test_cancelquote(self):
+        """ test_cancelquote
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         qId = '123'
         rpl777 = self.cancelquote(qId)
         self.assertTrue('result' in rpl777.keys() )
@@ -5015,6 +5256,21 @@ class SNET_lottostats(SNET_BaseTest, ):
         self.test_lottostats()
 
     def test_lottostats(self):
+        """ test_lottostats
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         rpl777 = self.lottostats()
         self.assertTrue('result' in rpl777.keys() )
         self.assertTrue('numtickets' in rpl777.keys() )
@@ -5072,6 +5328,21 @@ class SNET_tradehistory(SNET_BaseTest, ):
 
 
     def test_tradehistory(self):
+        """ test_tradehistory
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         rpl777 = self.tradehistory()
         self.assertTrue('result' in rpl777.keys() )
 
@@ -5114,6 +5385,21 @@ class SNET_jumptrades(SNET_BaseTest, ):
         self.test_jumptrades()
 
     def test_jumptrades(self):
+        """ test_jumptrades
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         rpl777 = self.jumptrades( )
         self.assertTrue('result' in rpl777.keys() )
 
@@ -5194,7 +5480,21 @@ class SNET_makeoffer3(SNET_BaseTest):
 
 
     def test_makeoffer3(self):
+        """ test_makeoffer3
 
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know
 
         print(2*"\n++++++++++++","test_makeoffer3")
@@ -5242,6 +5542,21 @@ class SNET_trollbox(SNET_BaseTest):
         self.test_trollbox()
 
     def test_trollbox(self):
+        """ test_trollbox
+
+            call sequence:
+
+            1.
+
+
+            ---------
+
+            asserts
+
+            1.  reply has
+
+
+        """
         rpl777 = self.trollbox()
         print(rpl777)
         self.assertTrue('result' in rpl777.keys() )
@@ -5280,6 +5595,7 @@ class SNET_placeask_full(SNET_BaseTest, ):
     SNET_placeask = SNET_placeask
     SNET_orderbook = SNET_orderbook
     SNET_openorders = SNET_openorders
+    SNET_cancelquote = SNET_cancelquote
 
 
     def setUp(self):
@@ -5300,12 +5616,27 @@ class SNET_placeask_full(SNET_BaseTest, ):
                     while i >= 1:
                         print(round(i,2))
 
-                        self.placeask_full(22,round(i,0),assetinfo['asset'],coininfo['id'])
+                        self.test_placeask_full(22,round(i,0),assetinfo['asset'],coininfo['id'])
 
                         i /= 10
 
 
-    def placeask_full(self,volume,price,baseid,relid):
+    def test_placeask_full(self,volume,price,baseid,relid):
+        """ placeask_full
+
+            call sequence:
+
+            1.
+            2.
+            3.
+            ---------
+
+            asserts
+
+            1.  reply has
+            2.
+            3.
+        """
         print(relid)
         placeaskResponse = self.SNET_placeask.placeask(self, volume,price,baseid,relid)
         print('\nCheck if response is ok\n')
@@ -5384,12 +5715,27 @@ class SNET_placebid_full(SNET_BaseTest, ):
                     i = 100
                     while i >= 1:
                         print(round(i,2))
-                        self.placebid_full(22,round(i,0),assetinfo['asset'],coininfo['id'])
+                        self.test_placebid_full(22,round(i,0),assetinfo['asset'],coininfo['id'])
                         i /= 10
 
 
-    def placebid_full(self,volume,price,baseid,relid):
-        #price = '0.00014'
+    def test_placebid_full(self,volume,price,baseid,relid):
+        """ test_placebid_full
+
+            call sequence:
+
+            1.
+            2.
+            3.
+            ---------
+
+            asserts
+
+            1.  reply has
+            2.
+            3.
+        """
+                #price = '0.00014'
         #volume = '1.00001'
 
         #baseid = '17554243582654188572'
@@ -5970,6 +6316,7 @@ class TestCollector(object):
             testList =     [
                         SNET_cancelquote,\
                         SNET_respondtx,\
+                        SNET_jumptrades,\
 
                         ]
 
