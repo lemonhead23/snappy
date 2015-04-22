@@ -3551,7 +3551,7 @@ class SNET_sendbinary(SNET_BaseTest):
 
 
     def test_sendbinary(self):
-        
+
         query_json = {'data': '', 'L': '', 'requestType': 'sendbinary', 'dest': ''}
 
 
@@ -4543,30 +4543,23 @@ char *assetmap[][2] =
 
 class SNET_orderbook(SNET_BaseTest, ):
     """
-       ++++++++++++
-    ++++++++++++ orderbook
-    query json is:  {'oldest': '', 'rel': '', 'allfields': '', 'base': '', 'relid': '17554243582654188572', 'gui': '', 'maxdepth': '', 'baseid': '11060861818140490423', 'requestType': 'orderbook'}
+             ./uTest1.py SNET_orderbook
+         test setUp func here
+        query json is:  {'duration': '', 'relid': '5527630', 'baseamount': '', 'automatch': '', 'gui': '', 'timestamp': '', 'price': '0.014', 'volume': '1.00', 'minperc': '', 'baseid': '17554243582654188572', 'requestType': 'placeask', 'relamount': ''}
 
-    ~~~~~~~~~~~~
-    ~~~~~~~~~~~~ SuperNET rpl777y:
+        ++++++++++++
+        ++++++++++++ orderbook
+        query json is:  {'allfields': '', 'rel': '', 'base': '', 'maxdepth': '', 'baseid': '17554243582654188572', 'requestType': 'orderbook', 'relid': '5527630', 'oldest': '', 'gui': ''}
 
-     {'error': 'empty orderbook'}
-    query json is:  {'volume': '1.00', 'duration': '', 'baseid': '17554243582654188572', 'timestamp': '', 'baseamount': '', 'relamount': '', 'minperc': '', 'price': '0.014', 'relid': '5527630', 'automatch': '', 'requestType': 'placeask', 'gui': ''}
+        ~~~~~~~~~~~~
+        ~~~~~~~~~~~~ SuperNET rpl777y:
 
-    ++++++++++++
-    ++++++++++++ orderbook
-    query json is:  {'oldest': '', 'rel': '', 'allfields': '', 'base': '', 'relid': '5527630', 'gui': '', 'maxdepth': '', 'baseid': '17554243582654188572', 'requestType': 'orderbook'}
+         {'obookid': '17554243582651323474', 'NXT': '10501328530345129240', 'timestamp': 1429679438, 'asks': [{'price': '0.00014000', 'volume': '1.00001000'}, {'price': '0.01400000', 'volume': '1.00000000'}, {'price': '0.01400000', 'volume': '1.00000000'}], 'bids': [{'price': '0.01400000', 'volume': '1.00000000'}], 'baseid': '17554243582654188572', 'maxdepth': 0, 'relid': '5527630', 'pair': 'BTC/NXT'}
+        .
+        ----------------------------------------------------------------------
+        Ran 1 test in 0.384s
 
-    ~~~~~~~~~~~~
-    ~~~~~~~~~~~~ SuperNET rpl777y:
-
-     {'bids': [], 'NXT': '10501328530345129240', 'timestamp': 1429600604, 'relid': '5527630', 'baseid': '17554243582654188572', 'asks': [{'volume': '1.00001000', 'price': '0.00014000'}, {'volume': '1.00001000', 'price': '0.00014000'}, {'volume': '1.00000000', 'price': '0.01400000'}, {'volume': '1.00000000', 'price': '0.01400000'}, {'volume': '1.00000000', 'price': '0.01400000'}, {'volume': '1.00000000', 'price': '0.01400000'}], 'maxdepth': 0, 'pair': 'BTC/NXT', 'obookid': '17554243582651323474'}
-    .
-    ----------------------------------------------------------------------
-    Ran 1 test in 0.448s
-
-    OK
-
+        OK
 
     """
 
@@ -4576,7 +4569,7 @@ class SNET_orderbook(SNET_BaseTest, ):
         pass
 
     def runTest(self):
-        self.test_orderbook_empty()
+        #self.test_orderbook_empty()
         self.test_orderbook()
 
 
@@ -4599,6 +4592,7 @@ class SNET_orderbook(SNET_BaseTest, ):
         baseid = '11060861818140490423'
         relid = '17554243582654188572'
         rpl777 = self.orderbook(baseid, relid) # param passing can be done a bit better here
+
         self.assertTrue(rpl777['error']=='empty orderbook')
         self.assertTrue('error' in rpl777.keys() )
 
@@ -4632,10 +4626,12 @@ class SNET_orderbook(SNET_BaseTest, ):
         payload['relid'] =  relid
         print("query json is: ", payload)
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-        rpl777 = eval(testReq.text)
+        #rpl777 = eval(testReq.text)
 
         rpl777 = self.orderbook(baseid, relid) # param passing can be done a bit better here
         self.assertTrue('NXT' in rpl777.keys() )
+
+
 
     def orderbook(self, baseid, relid):
         null = None
@@ -4653,9 +4649,21 @@ class SNET_orderbook(SNET_BaseTest, ):
     #{"requestType":"placeask","baseid":"11060861818140490423","relid":"17554243582654188572","volume":"80","price":"0.0065"}'
     #{"result":"success","txid":"15021359626299573695"}
 
-
-    # http://docs.pylonsproject.org/en/latest/community/testing.html
-
+    #
+    #     # http://docs.pylonsproject.org/en/latest/community/testing.html
+    # Tips for Avoiding Bad Unit Tests
+    #
+    # Some folks have drunk the “don’t repeat yourself” KoolAid: we agree that not repeating code is a virtue in most cases, but unit test code is an exception: cleverness in a test both obscures the intent of the test and makes a subsequent failure massively harder to diagnose.
+    # Others want to avoid writing both tests and documentation: they try to write test cases (almost invariably as “doctests”) which do the work of real tests, while at the same time trying to make “readable” docs.
+    # Most of the issues involved with the first motive are satisfactorily addressed later in this document: refusing to share code between test modules makes most temptations to cleverness go away. Where the temptation remains, the cure is to look at an individual test and ask the following questions:
+    #
+    # Is the intent of the test clearly explained by the name of the testcase?
+    #
+    # Does the test follow the “canonical” form for a unit test? I.e., does it:
+    # set up the preconditions for the method/function being tested.
+    # call the method/function exactly one time, passing in the values established in the first step.
+    # make assertions about the return value, and/or any side effects.
+    # do absolutely nothing else.
 
 
 class SNET_placeask(SNET_BaseTest,  ):
@@ -4681,7 +4689,9 @@ class SNET_placeask(SNET_BaseTest,  ):
 
     def runTest(self):
         self.test_placeask()
-        self.test_placeask_a()
+        #self.test_placeask_a()
+
+
 
     def test_placeask(self):
         """ test_placeask
@@ -4750,7 +4760,7 @@ class SNET_placebid(SNET_BaseTest, ):
 
         OK
 
-    """#
+    """
 
     def setUp(self):
         print("test placebid")
@@ -4948,9 +4958,15 @@ class SNET_openorders(SNET_BaseTest, ):
 
         """
 
-        rpl777 = self.openorders()
+        openorders = self.openorders()
 
-        self.assertTrue('openorders' in rpl777.keys() )
+
+        self.assertTrue('openorders' in openorders.keys() )
+
+        openordersLi=openorders['openorders']
+        for order in openordersLi:
+            print("\n",order)
+
 
 
     def openorders(self):
@@ -4963,7 +4979,7 @@ class SNET_openorders(SNET_BaseTest, ):
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
 
         rpl777 = eval(testReq.text)
-        print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
+        #print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
 
         return rpl777
 
@@ -5597,104 +5613,73 @@ class SNET_placeask_full(SNET_BaseTest, ):
     SNET_openorders = SNET_openorders
     SNET_cancelquote = SNET_cancelquote
 
-
     def setUp(self):
         print("test placeask")
 
     def runTest(self):
         self.test_placeask()
 
+
+
     def test_placeask(self):
         null = None
 
-        #Asset <-> Coin
-        for assetinfo in self.NXTASSETS:
-            for coininfo in self.COINS:
-                #print(coininfo)
-                if(assetinfo['asset']!=coininfo['id']):#&(not(assetinfo['name'][0].isdigit())):
-                    i = 100
-                    while i >= 1:
-                        print(round(i,2))
+# query json is:  {'duration': '', 'relid': '5527630', 'relamount': '', 'minperc': '', 'volume': '1.00', 'requestType': 'placeask', 'price': '0.014', 'automatch': '', 'baseid': '17554243582654188572', 'baseamount': '', 'timestamp': '', 'gui': ''}
+# test_placeask:  {'rel': 'NXT', 'duration': 3600, 'offerNXT': '10501328530345129240', 'relamount': '1400000', 'exchange': 'InstantDEX', 'age': 0, 'askoffer': 1, 'base': 'BTC', 'volume': 1, 'NXT': '10501328530345129240', 'requestType': 'ask', 'quoteid': '3340965897362686873', 'baseamount': '100000000', 'baseid': '17554243582654188572', 'relid': '5527630', 'minperc': 75, 'timestamp': 1429679816, 'price': 0.014}
+# .
+        price = '0.014'
+        volume = '1.00'
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        placeask = self.SNET_placeask.placeask(self, volume,price,baseid,relid)
 
-                        self.test_placeask_full(22,round(i,0),assetinfo['asset'],coininfo['id'])
+        self.assertTrue('quoteid' in placeask.keys())
+        self.quoteID=placeask['quoteid']
+        self.exchange = placeask['exchange']
 
-                        i /= 10
+        time.sleep(0.2)
+        orderbook = self.SNET_orderbook.orderbook(self, baseid,relid)
 
+        self.assertTrue('obookid' in orderbook.keys())
 
-    def test_placeask_full(self,volume,price,baseid,relid):
-        """ placeask_full
+        self.asks = orderbook['asks']
 
-            call sequence:
+        oBook={'maxdepth': 0,
+               'obookid': '17554243582651323474',
+               'NXT': '10501328530345129240',
+               'baseid': '17554243582654188572',
+               'asks':
+                   [{'price': '0.00014000', 'volume': '1.00001000'}, {'price': '0.00014000', 'volume': '1.00001000'}, {'price': '0.01400000', 'volume': '1.00000000'}, {'price': '0.01400000', 'volume': '1.00000000'}, {'price': '0.01400000', 'volume': '1.00000000'}, {'price': '0.01400000', 'volume': '1.00000000'}, {'price': '0.01400000', 'volume': '1.00000000'}, {'price': '0.01400000', 'volume': '1.00000000'}],
+               'bids': [{'price': '0.01400000', 'volume': '1.00000000'}],
+               'timestamp': 1429681910,
+               'relid': '5527630',
+               'pair': 'BTC/NXT'}
 
-            1.
-            2.
-            3.
-            ---------
-
-            asserts
-
-            1.  reply has
-            2.
-            3.
-        """
-        print(relid)
-        placeaskResponse = self.SNET_placeask.placeask(self, volume,price,baseid,relid)
-        print('\nCheck if response is ok\n')
-        self.assertTrue('quoteid' in placeaskResponse.keys())
-
-
-        orderbookResponse = self.SNET_orderbook.orderbook(self, baseid,relid)
-        print('\nCheck orderbook if ask is there\n', orderbookResponse)
-        #print(orderbookResponse);
+        time.sleep(0.2)
+        openorders1 = self.SNET_openorders.openorders(self)
 
         found = False
-        if not('error' in orderbookResponse):
-            for ask in orderbookResponse['asks']:
-                if float(ask['price']) == float(price):
-                    found = True
-        self.assertTrue(found)
+        for openorder in openorders1['openorders']:
 
-
-
-
-        openordersResponse = self.SNET_openorders.openorders(self)
-        print('\nCheck if ask is in openorders\n')
-        #print(openordersResponse)
-
-        found = False
-        for openorder in openordersResponse['openorders']:
-            if openorder['quoteid'] == placeaskResponse['quoteid']:
+            if openorder['quoteid'] == self.quoteID:
+                print(openorder)
                 found = True
         self.assertTrue(found)
 
-
-
-        # TODO HERE
-        cancelquoteResponse = self.apicall({'requestType': 'cancelquote','quoteid':placeaskResponse['quoteid']})
-
+        time.sleep(0.2)
+        cancelquote = self.SNET_cancelquote.cancelquote(self, self.quoteID )
 
         print('\nCheck cancelquote works\n')
-        self.assertTrue(cancelquoteResponse['result']=='quote cancelled')
-
-
-
-
-        openordersResponse = self.SNET_openorders.openorders()
-        print('\nCheck if ask is not in openorders\n')
-        #print(openordersResponse)
-
-        found = False
-        if not('error' in openordersResponse):
-            for openorder in openordersResponse['openorders']:
-                if openorder['quoteid'] == placeaskResponse['quoteid']:
-                    found = True
-        self.assertFalse(found)
-
-
+        self.assertTrue(cancelquote['result']=='quote cancelled')
 
 
 
 class SNET_placebid_full(SNET_BaseTest, ):
+
+    SNET_placebid = SNET_placebid
+    SNET_orderbook = SNET_orderbook
+    SNET_openorders = SNET_openorders
+    SNET_cancelquote = SNET_cancelquote
 
     def setUp(self):
         print("test placebid")
@@ -5702,87 +5687,45 @@ class SNET_placebid_full(SNET_BaseTest, ):
     def runTest(self):
         self.test_placebid()
 
+
+
     def test_placebid(self):
         null = None
 
+        price = '0.014'
+        volume = '0.010'
+        baseid = '17554243582654188572'
+        relid = '5527630'
+        placebid = self.SNET_placebid.placebid(self, volume,price,baseid,relid)
 
+        self.assertTrue('quoteid' in placebid.keys())
+        self.quoteID=placebid['quoteid']
+        self.exchange = placebid['exchange']
 
-        #Asset <-> Coin
-        for assetinfo in self.NXTASSETS:
-            for coininfo in self.COINS:
-                #print(coininfo)
-                if(assetinfo['asset']!=coininfo['id']):#&(not(assetinfo['name'][0].isdigit())):
-                    i = 100
-                    while i >= 1:
-                        print(round(i,2))
-                        self.test_placebid_full(22,round(i,0),assetinfo['asset'],coininfo['id'])
-                        i /= 10
+        time.sleep(0.2)
+        orderbook = self.SNET_orderbook.orderbook(self, baseid,relid)
 
+        self.assertTrue('obookid' in orderbook.keys())
 
-    def test_placebid_full(self,volume,price,baseid,relid):
-        """ test_placebid_full
+        self.bids = orderbook['bids']
 
-            call sequence:
-
-            1.
-            2.
-            3.
-            ---------
-
-            asserts
-
-            1.  reply has
-            2.
-            3.
-        """
-                #price = '0.00014'
-        #volume = '1.00001'
-
-        #baseid = '17554243582654188572'
-        #relid = '5527630'
-        placebidResponse = self.placebid(volume,price,baseid,relid)
-        print('\nCheck if response is ok\n')
-        self.assertTrue('quoteid' in placebidResponse.keys())
-        #print('\nblaaatest\n');
-        #print(placebidResponse['quoteid']);
-
-        orderbookResponse = self.orderbook(baseid,relid)
-        print('\nCheck orderbook if bid is there\n')
-        #print(orderbookResponse);
+        time.sleep(0.2)
+        openorders1 = self.SNET_openorders.openorders(self)
 
         found = False
-        if not('error' in orderbookResponse):
-            for bid in orderbookResponse['bids']:
-                if float(bid['price']) == float(price):
-                    found = True
-        self.assertTrue(found)
+        for openorder in openorders1['openorders']:
 
-
-        openordersResponse = self.openorders()
-        print('\nCheck if bid is in openorders\n')
-        #print(openordersResponse)
-
-        found = False
-        for openorder in openordersResponse['openorders']:
-            if openorder['quoteid'] == placebidResponse['quoteid']:
+            if openorder['quoteid'] == self.quoteID:
+                print(openorder)
                 found = True
         self.assertTrue(found)
 
-        cancelquoteResponse = self.apicall({'requestType': 'cancelquote','quoteid':placebidResponse['quoteid']})
+        time.sleep(0.2)
+        cancelquote = self.SNET_cancelquote.cancelquote(self, self.quoteID )
+
         print('\nCheck cancelquote works\n')
-        self.assertTrue(cancelquoteResponse['result']=='quote cancelled')
+        self.assertTrue(cancelquote['result']=='quote cancelled')
 
-
-        openordersResponse = self.openorders()
-        print('\nCheck if bid is not in openorders\n')
-        #print(openordersResponse)
-
-        found = False
-        if not('error' in openordersResponse):
-            for openorder in openordersResponse['openorders']:
-                if openorder['quoteid'] == placebidResponse['quoteid']:
-                    found = True
-        self.assertFalse(found)
 
 
 
@@ -6003,7 +5946,10 @@ class SNET_baseSetup(SNET_BaseTest):
 ##############################################
 ##############################################
 
+# no Suites for single calls! Suites only to run multiple tests and get 'ran 5 of 5 tests 0 fails'
+
 def suite_idexSuite():
+
     suite = unittest.TestSuite()
     suite.addTest(SNET_placebid())
     suite.addTest(SNET_placeask())
@@ -6013,14 +5959,18 @@ def suite_idexSuite():
     suite.addTest(SNET_respondtx())
     suite.addTest(SNET_bid())
     suite.addTest(SNET_ask())
-    suite.addTest(SNET_allsignals())
     suite.addTest(SNET_lottostats())
-    suite.addTest(SNET_tradehistory())
-    suite.addTest(SNET_getsignal())
     suite.addTest(SNET_cancelquote())
-    suite.addTest(SNET_jumptrades())
+    suite.addTest(SNET_placebid_full())
+    suite.addTest(SNET_placeask_full())
+    #suite.addTest(SNET_jumptrades()) FUTURE!
+    #suite.addTest(SNET_tradehistory()) FUTURE!
+    # TRADEBOT
+    #suite.addTest(SNET_allsignals())
+    #suite.addTest(SNET_getsignal())
 
     return suite
+
 
 def suite_baseSetup():
     suite = unittest.TestSuite()
@@ -6028,30 +5978,12 @@ def suite_baseSetup():
     suite.addTest(SNET_baseSetup('test_SNET_baseSetup'))
     return suite
 
-def suite_getpeers():
-    suite = unittest.TestSuite()
-    #suite.addTest(SNET_getpeers('setUp'))
-    suite.addTest(SNET_getpeers('test_getpeers'))
-    return suite
-
-def suite_settings():
-    suite = unittest.TestSuite()
-    #suite.addTest(SNET_getpeers('setUp'))
-    suite.addTest(SNET_settings('test_settings'))
-
-    return suite
-
-def suite_gotjson():
-    suite = unittest.TestSuite()
-    #suite.addTest(SNET_getpeers('setUp'))
-    suite.addTest(SNET_gotjson('test_gotjson'))
-    return suite
-
 def suite_SG():
     suite = unittest.TestSuite()
     suite.addTest(SNET_getpeers('test_getpeers'))
     suite.addTest(SNET_settings('test_settings'))
     return suite
+
 
 
 
@@ -6312,18 +6244,16 @@ class TestCollector(object):
                         SNET_lottostats,\
                         ]
 
-        elif testListName == 'idexSmoketest':
-            testList =     [
-                        SNET_cancelquote,\
-                        SNET_respondtx,\
-                        SNET_jumptrades,\
-
-                        ]
-
-        elif testListName == 'idexFail':
+        elif testListName == 'idexFuture':
             testList =     [
                         SNET_tradehistory,\
                         SNET_trollbox,\
+                        SNET_jumptrades,\
+                        ]
+
+        elif testListName == 'idexInternals':
+            testList =     [
+                         SNET_respondtx,\
                         ]
 
         elif testListName == 'idexAll':
@@ -6337,11 +6267,8 @@ class TestCollector(object):
                         SNET_ask,\
                         SNET_respondtx,\
                         SNET_lottostats ,\
-                        SNET_tradehistory,\
                         SNET_cancelquote,\
                         SNET_makeoffer3 ,\
-                        SNET_jumptrades,\
-                        SNET_trollbox
                         ]
 
         elif testListName == 'err':
@@ -6355,7 +6282,6 @@ class TestCollector(object):
                         SNET_gotnewpeer,\
                         SNET_BTCDpoll,\
                         ]
-
 
         elif testListName == 'okALL':
             testList =     [
@@ -6418,7 +6344,7 @@ def main():
     testClasses = testCollector.getTestClassDict() # enter className as arg
     testSuites = testCollector.getTestSuitesDict() # enter suitename as arg
 
-    multiSuite = ['sg', 'base'] # this is a list of suites that can be run with 'sList'
+    suiteList = ['sg', 'base'] # this is a list of suites that can be run with 'sList'
 
     args = sys.argv[1:]
 
@@ -6434,7 +6360,7 @@ def main():
              runner.run(suite)
 
         elif testCase == 'sList': # list of suites
-            for singleSuite in multiSuite:
+            for singleSuite in suiteList:
                  suite  = testSuites[singleSuite]() # this returns a callable!
                  runner = unittest.TextTestRunner()
                  runner.run(suite)
