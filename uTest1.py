@@ -5486,6 +5486,7 @@ class SNET_makeoffer3(SNET_BaseTest):
 
 
     """#
+    SNET_orderbook = SNET_orderbook
 
     def setUp(self):
         print(" test setUp func here")
@@ -5496,38 +5497,41 @@ class SNET_makeoffer3(SNET_BaseTest):
 
 
     def test_makeoffer3(self):
-        """ test_makeoffer3
+        null = None
+        baseid = '11060861818140490423'
+        relid = '5527630'
 
-            call sequence:
+        #Max NXT Amount
+        maxAmount=50
 
-            1.
+        orderbookResponse = self.SNET_orderbook.orderbook(self, baseid,relid)
+        print('\nCheck orderbook\n')
+        print(orderbookResponse['bids'][0],'\n')
 
+        #get first bid
+        query_json = orderbookResponse['bids'][0]
 
-            ---------
+        query_json['perc']=100
+        query_json['askoffer']=1
 
-            asserts
+        totalAmount = orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price']
 
-            1.  reply has
+        print(totalAmount, orderbookResponse['bids'][0]['rel'])
 
+        if(totalAmount<maxAmount):
+            print('ok total Amount of Order is in Range. Proceeding.\n')
+            self.makeoffer3(query_json)
 
-        """
+    def makeoffer3(self, query):
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know
-
         print(2*"\n++++++++++++","test_makeoffer3")
-        test_RQ_ = {'requestType': 'makeoffer3'}
-        payload= self.qComp_777.make_777POST_Request(test_RQ_)
+        query['requestType'] = 'makeoffer3'
+        payload= self.qComp_777.make_777POST_Request(query)
         print("query json is: ", payload)
-        #headers = {'content-type': 'application/json'}
-
         testReq = requests.post(self.url, data=json.dumps(payload), headers=self.headers)
-
         rpl777 = eval(testReq.text)
         print(2*"\n~~~~~~~~~~~~","SuperNET rpl777y:\n\n", rpl777)
-
-        self.assertTrue('result' in rpl777.keys() )
-
-    def makeoffer3(self):
-        pass # perform the reuquest
+        return rpl777
 
 
 
