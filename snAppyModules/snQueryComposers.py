@@ -2552,55 +2552,26 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         except:
             P1 = ''
 
-
         try:
             K2 = "relid"
             P2 = reqDict['relid']
         except:
             P2 = ''
 
-
         try:
             K3 = "allfields"
             P3 = reqDict['allfields']
         except:
-            P3 = ''
-
-
-        try:
-            K4 = "oldest"
-            P4 = reqDict['oldest']
-        except:
-            P4 = ''
-
+            P3 = '1'
 
         try:
-            K5 = 'maxdepth'
-            P5 = reqDict['maxdepth']
+            K4 = 'maxdepth'
+            P4 = reqDict['maxdepth']
         except:
-            P5 = ''
-
-        try:
-            K6 = "base"
-            P6 = reqDict['base']
-        except:
-            P6 = ''
+            P4 = '25'
 
 
-        try:
-            K7 = "rel"
-            P7 = reqDict['rel']
-        except:
-            P7 = ''
-
-
-        try:
-            K8 = "gui"
-            P8 = reqDict['gui']
-        except:
-            P8 = ''
-
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7, K8 : P8 }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4 }
 
 
 
