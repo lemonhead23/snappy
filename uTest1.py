@@ -5516,7 +5516,7 @@ class SNET_makeoffer3(SNET_BaseTest):
 
         totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
 
-        print('Trade will be a total of: 'totalAmount, orderbookResponse['bids'][0]['rel'])
+        print('Trade will be a total of: ',totalAmount, orderbookResponse['bids'][0]['rel'])
 
         if(totalAmount<maxAmount):
             print('ok total Amount of Order is in Range. Proceeding.\n')
