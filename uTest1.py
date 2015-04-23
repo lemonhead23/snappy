@@ -5517,7 +5517,7 @@ class SNET_makeoffer3(SNET_BaseTest):
         totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
         
         while(totalAmount>maxAmount):
-            query_json['perc']--
+            query_json['perc']-=1
             totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
         
         print('Trade will be a total of: ',totalAmount, orderbookResponse['bids'][0]['rel'])
