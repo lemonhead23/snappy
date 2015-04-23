@@ -5500,7 +5500,7 @@ class SNET_makeoffer3(SNET_BaseTest):
     def test_makeoffer3(self):
         baseid=0
         if(sys.argv[2:]):
-            baseid = sys.argv[2:]
+            baseid = sys.argv[2:][0]
         
         null = None
         if(baseid==0):
