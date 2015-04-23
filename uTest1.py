@@ -5486,9 +5486,6 @@ class SNET_makeoffer3(SNET_BaseTest):
 
 
     """#
-    baseid=0
-    if(sys.argv[2:]):
-        baseid = sys.argv[2:]
     
     SNET_orderbook = SNET_orderbook
 
@@ -5501,9 +5498,13 @@ class SNET_makeoffer3(SNET_BaseTest):
 
 
     def test_makeoffer3(self):
+        baseid=0
+        if(sys.argv[2:]):
+            baseid = sys.argv[2:]
+        
         null = None
-        if(self.baseid==0):
-            baseid = self.baseid = '11060861818140490423'
+        if(baseid==0):
+            baseid = '11060861818140490423'
         relid = '5527630'
 
         #Max NXT Amount
@@ -6366,7 +6367,7 @@ def main():
 
     for  testCase in args:
 
-        if testCase == 'makeoffer3'
+        if testCase == 'makeoffer3':
             runner = unittest.TextTestRunner()
             runner.run(SNET_makeoffer3())
         
