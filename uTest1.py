@@ -5480,12 +5480,16 @@ class SNET_makeoffer(SNET_BaseTest, ):
 #
 
 
-class SNET_makeoffer3(SNET_BaseTest, baseid=0):
+class SNET_makeoffer3(SNET_BaseTest):
     """
        static char *makeoffer3[] = { (char *)makeoffer3_func, "makeoffer3", "V", "baseid", "relid", "quoteid", "perc", "deprecated", "baseiQ", "reliQ", "askoffer", "price", "volume", "exchange", "baseamount", "relamount", "offerNXT", "minperc", "jumpasset", 0 };
 
 
     """#
+    baseid=0
+    if(sys.argv[2:]):
+        baseid = sys.argv[2:]
+    
     SNET_orderbook = SNET_orderbook
 
     def setUp(self):
@@ -5498,7 +5502,7 @@ class SNET_makeoffer3(SNET_BaseTest, baseid=0):
 
     def test_makeoffer3(self):
         null = None
-        if(baseid=0):
+        if(baseid==0):
             baseid = '11060861818140490423'
         relid = '5527630'
 
@@ -6363,9 +6367,8 @@ def main():
     for  testCase in args:
 
         if testCase == 'makeoffer3'
-            param = sys.argv[2:]
             runner = unittest.TextTestRunner()
-            runner.run(SNET_makeoffer3(param))
+            runner.run(SNET_makeoffer3())
         
         elif testCase in testClasses: # dict of classes
             runner = unittest.TextTestRunner()
