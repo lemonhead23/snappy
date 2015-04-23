@@ -5506,21 +5506,21 @@ class SNET_makeoffer3(SNET_BaseTest):
 
         orderbookResponse = self.SNET_orderbook.orderbook(self, baseid,relid)
         print('\nCheck orderbook\n')
-        print(orderbookResponse['bids'][0],'\n')
+        print(orderbookResponse['asks'][0],'\n')
 
-        #get first bid
-        query_json = orderbookResponse['bids'][0]
+        #get first ask
+        query_json = orderbookResponse['asks'][0]
 
         query_json['perc']=100
-        query_json['askoffer']=0
+        query_json['askoffer']=1
         
-        totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
+        totalAmount = ((orderbookResponse['asks'][0]['volume']*orderbookResponse['asks'][0]['price'])/100)*query_json['perc']
         
         while(totalAmount>maxAmount):
             query_json['perc']-=1
-            totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
+            totalAmount = ((orderbookResponse['asks'][0]['volume']*orderbookResponse['asks'][0]['price'])/100)*query_json['perc']
         
-        print('Trade will be a total of: ',totalAmount, orderbookResponse['bids'][0]['rel'])
+        print('Trade will be a total of: ',totalAmount, orderbookResponse['asks'][0]['rel'])
         print('Perc is set to: ',query_json['perc'])
 
         if(totalAmount<maxAmount):
