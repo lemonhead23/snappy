@@ -5502,8 +5502,8 @@ class SNET_makeoffer3(SNET_BaseTest):
 
     def test_makeoffer3(self):
         null = None
-        if(baseid==0):
-            baseid = '11060861818140490423'
+        if(self.baseid==0):
+            baseid = self.baseid = '11060861818140490423'
         relid = '5527630'
 
         #Max NXT Amount
