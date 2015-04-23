@@ -5502,7 +5502,7 @@ class SNET_makeoffer3(SNET_BaseTest):
         relid = '5527630'
 
         #Max NXT Amount
-        maxAmount=25
+        maxAmount=15
 
         orderbookResponse = self.SNET_orderbook.orderbook(self, baseid,relid)
         print('\nCheck orderbook\n')
@@ -5511,12 +5511,17 @@ class SNET_makeoffer3(SNET_BaseTest):
         #get first bid
         query_json = orderbookResponse['bids'][0]
 
-        query_json['perc']=10
-        query_json['askoffer']=1
-
+        query_json['perc']=100
+        query_json['askoffer']=0
+        
         totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
-
+        
+        while(totalAmount>maxAmount):
+            query_json['perc']--
+            totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
+        
         print('Trade will be a total of: ',totalAmount, orderbookResponse['bids'][0]['rel'])
+        print('Perc is set to: ',query_json['perc'])
 
         if(totalAmount<maxAmount):
             print('ok total Amount of Order is in Range. Proceeding.\n')
