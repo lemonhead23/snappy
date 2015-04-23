@@ -2772,11 +2772,11 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
             P4 = ''
 
 
-        try:
-            K5 = 'deprecated'
-            P5 = reqDict['deprecated']
-        except:
-            P5= ''
+        #try:
+            #K5 = 'deprecated'
+            #P5 = reqDict['deprecated']
+        #except:
+            #P5= ''
 
 
         #try:
@@ -2849,7 +2849,7 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
         #except:
             #P16 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, \
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  \
                    K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15  }
 
 
