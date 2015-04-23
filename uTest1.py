@@ -5502,7 +5502,7 @@ class SNET_makeoffer3(SNET_BaseTest):
         relid = '5527630'
 
         #Max NXT Amount
-        maxAmount=50
+        maxAmount=25
 
         orderbookResponse = self.SNET_orderbook.orderbook(self, baseid,relid)
         print('\nCheck orderbook\n')
@@ -5511,16 +5511,18 @@ class SNET_makeoffer3(SNET_BaseTest):
         #get first bid
         query_json = orderbookResponse['bids'][0]
 
-        query_json['perc']=100
+        query_json['perc']=10
         query_json['askoffer']=1
 
-        totalAmount = orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price']
+        totalAmount = ((orderbookResponse['bids'][0]['volume']*orderbookResponse['bids'][0]['price'])/100)*query_json['perc']
 
-        print(totalAmount, orderbookResponse['bids'][0]['rel'])
+        print('Trade will be a total of: 'totalAmount, orderbookResponse['bids'][0]['rel'])
 
         if(totalAmount<maxAmount):
             print('ok total Amount of Order is in Range. Proceeding.\n')
             self.makeoffer3(query_json)
+        else:
+            print('Total Amount out of Range. Aborting.\n')
 
     def makeoffer3(self, query):
         null = None #  b'{"result":null}' for when null is sent back, which py doenst know

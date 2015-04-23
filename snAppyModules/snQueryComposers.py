@@ -2779,17 +2779,17 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
             P5= ''
 
 
-        try:
-            K6 = 'baseiQ'
-            P6 = reqDict['baseiQ']
-        except:
-            P6 = ''
+        #try:
+            #K6 = 'baseiQ'
+            #P6 = reqDict['baseiQ']
+        #except:
+            #P6 = ''
 
-        try:
-            K7 = 'reliQ'
-            P7 = reqDict['reliQ']
-        except:
-            P7 = ''
+        #try:
+            #K7 = 'reliQ'
+            #P7 = reqDict['reliQ']
+        #except:
+            #P7 = ''
 
 
         try:
@@ -2843,14 +2843,14 @@ static char *allorderbooks[] = { (char *)allorderbooks_func, "allorderbooks", "V
             P15 = ''
 
 
-        try:
-            K16 = 'jumpasset'
-            P16 = reqDict['jumpasset']
-        except:
-            P16 = ''
+        #try:
+            #K16 = 'jumpasset'
+            #P16 = reqDict['jumpasset']
+        #except:
+            #P16 = ''
 
-        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, K6 : P6,  K7 : P7 ,\
-                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15,  K16 : P16  }
+        return  { K0 : P0 , K1 : P1 ,K2 : P2, K3 : P3,  K4 : P4,  K5 : P5, \
+                   K8 : P8 ,  K9 : P9 ,  K10 : P10 ,  K11 : P11 ,  K12 : P12 ,  K13 : P13 ,  K14 : P14 ,  K15 : P15  }
 
 
 
